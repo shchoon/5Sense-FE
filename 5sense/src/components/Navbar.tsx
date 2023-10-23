@@ -1,8 +1,9 @@
+'use client'
 import Link from 'next/link'
 
 const menu = [
   {
-    href: '/',
+    href: '/class',
     title: '클래스 관리'
   },
   {

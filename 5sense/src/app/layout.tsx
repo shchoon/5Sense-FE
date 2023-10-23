@@ -20,8 +20,8 @@ export default function RootLayout({
     <html lang="en">
       <body className="flex w-full overflow-auto justify-center ">
         <main className="w-full max-w-screen-3xl min-w-screen-md bg-primary max-h-screen-h-3xl">
-          <div className="Sidebar w-[1920px] h-[469px] relative bg-gradient-to-b from-indigo-500 to-violet-500">
-            <div className="Info w-[40.67px] h-[40.67px] left-[24px] top-[48px] absolute">
+          <div className="w-[1920px] h-[469px] relative flex flex-row bg-gradient-to-b from-indigo-500 to-violet-500">
+            <section className="Info w-[40.67px] h-[40.67px] left-[24px] top-[48px] absolute">
               <div className="Logo flex flex-row items-center gap-[6px]">
                 <Image
                   src={mainlogo}
@@ -54,17 +54,14 @@ export default function RootLayout({
                 </div>
                 <ProfileBtn />
               </div>
-            </div>
-          </div>
-
-          <section className="flex flex-row">
-            <div>
+            </section>
+            <section className="flex flex-col left-[336px] top-[72px] absolute">
               <Navbar />
-              <div className="w-[1490px] h-[874px] bg-white pt-10 pl-10">
+              <div className="w-[1536px] h-[990px] bg-white rounded-tr-2xl rounded-bl-2xl rounded-br-2xl shadow">
                 {children}
               </div>
-            </div>
-          </section>
+            </section>
+          </div>
         </main>
       </body>
     </html>
