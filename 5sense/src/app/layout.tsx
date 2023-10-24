@@ -30,7 +30,7 @@ export default function RootLayout({
                   alt="mainlogo"
                 ></Image>
                 <span className="Sense text-slate-50 text-xl font-bold font-['Poppins']">
-                  5sense
+                  5sens
                 </span>
               </div>
               <div className="UserInfo flex flex-col items-center w-[288px] h-[251px] mt-20">
