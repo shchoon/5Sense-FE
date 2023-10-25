@@ -45,7 +45,6 @@ export default function RootLayout({
                   <h3 className="Text text-center text-white text-[21px] font-bold font-['Pretendard'] leading-loose">
                     매직기구필라테스
                   </h3>
-                  <a href='/myCenter'>마이센터등록</a>
                   <span className="Text text-center text-indigo-50 text-sm font-medium font-['Pretendard'] leading-[14px]">
                     031-706-1281
                   </span>
