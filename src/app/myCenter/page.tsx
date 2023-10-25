@@ -39,15 +39,16 @@ export default function MyCenter() {
             <div className='w-[430px] h-[60px] flex items-center border rounded-lg border-[#E5E7EB]'>
                 <input className='w-full px-3 py-5  rounded-lg border  outline-[#7354E8] '  placeholder='센터명' />
             </div>
-            <div className='relative w-[430px] h-[62px]  flex flex-col items-center  rounded-lg border border-[#6B7280] bg-[#FFF]' onClick={onClickAdd}>
-                <input className=' flex w-full py-[20px] h-[21px] rounded-lg' placeholder='typing' value={address} />
+            <div className='relative w-[430px] h-[60px]  flex items-center  rounded-lg border border-[#E5E7EB]' onClick={onClickAdd}>
+                <input className='w-full px-3 py-5 rounded-lg border outline-[#7354E8]' placeholder='typing' value={address} />
+                <div className='absolute left-3 top-[-12px] bg-[#FFF] focus: text-[#563AC0]' >주소</div>
             </div>
             <div className='w-[430px] h-[60px] border rounded-lg border-[#E5E7EB]'>
-                <input className='w-full px-3 py-5 rounded-lg border border-[#6B7280]' placeholder='대표번호' />
+                <input className='w-full px-4 py-5 rounded-lg border outline-[#7354E8]' placeholder='대표번호' />
             </div>
         </div>
         <div className='flex justify-center items-center'>
-        <button className='w-[200px] px-6 py-[10px] mt-[15px] rounded-lg bg-[#7354E8] text-[#FFF] font-semibold'>등록</button>
+        <button className='w-[200px] px-6 py-[10px] rounded-lg bg-[#7354E8] text-[#FFF] font-semibold'>등록</button>
         </div>
         </>
     )

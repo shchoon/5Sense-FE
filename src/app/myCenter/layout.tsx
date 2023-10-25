@@ -19,7 +19,7 @@ export default function myCenterLayout({
                         </div>
                 </div>
             </div>
-            <div className="w-[430px] h-[297px]">
+            <div className="flex flex-col w-[430px] h-[297px] gap-5">
                 {children}
             </div>
         </div>
