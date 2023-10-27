@@ -16,6 +16,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
   return (
     <html lang="en">
       <body className="flex w-full overflow-auto justify-center ">

@@ -2,6 +2,7 @@
 import '../globals.css'
 import Image from 'next/image'
 import Script from 'next/script';
+import SocialLogin from '@/components/SocialLogin';
 import kakaoLogo from '../../assets/logo/kakaoLogo.svg';
 import naverLogo from '../../assets/logo/naverLogo.svg';
 import googleLogo from '../../assets/logo/googleLogo.svg';
@@ -46,21 +47,7 @@ export default function Login() {
         <Script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charSet="utf-8"></Script>
         <Script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></Script>
         <div className='w-[430px] h-[250px] flex flex-col items-start gap-2'>
-            <a href={KAKAO_AUTH_URL}>
-            <div className='flex w-[430px] h-[52px] rounded-md bg-[#FFE812]'>
-                <Image src={kakaoLogo} width={48} height={48} alt='kakaoLogo' />
-                <div className='font-semibold w-[190px] h-[16px] leading-4 mt-[18px] mx-auto' >카카오 계정으로 로그인</div>
-            </div>
-            </a>
-            <div className='flex w-[430px] h-[52px] rounded-md border border-[#2BB500]' onClick={naverLogin}>
-                <Image src={naverLogo} width={48} height={48} alt='naverLogo' />
-                <div className='mx-auto font-semibold h-[16px] leading-4 mt-[18px] text-[#2BB500]' >네이버 계정으로 로그인</div>
-            </div>
-            <div className='flex w-[430px] h-[52px] rounded-md border border-[#6B7280]'>
-                <Image className='p-[15px]' src={googleLogo} width={48} height={48} alt='googleLogo' />
-                <div className='mx-auto font-semibold h-[16px] leading-4 mt-[18px]'>구글 계정으로 로그인</div>
-            </div>
-            <div className='w-[430px] h-[52px] rounded-md border border-[#6B7280]'>애플 계정으로 로그인</div>
+            <SocialLogin />
         </div>
         </>    
     )
