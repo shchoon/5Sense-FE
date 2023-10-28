@@ -3,33 +3,35 @@ import Link from 'next/link'
 
 const menu = [
   {
-    href: '/class',
+    id: 1,
+    slug: 'class',
     title: '클래스 관리'
   },
   {
-    href: '/student',
+    id: 2,
+    slug: 'student',
     title: '수강생 관리'
   },
   {
-    href: '/instructor',
+    id: 3,
+    slug: 'instructor',
     title: '강사 관리'
   },
   {
-    href: '/pay',
+    id: 4,
+    slug: 'pay',
     title: '청구/납부'
   }
 ]
 
 export default function Navbar() {
   return (
-    <div className="flex">
-      {menu.map(({ href, title }) => (
-        <li key={href}>
-          <Link href={href} aria-label={title}>
-            {title}
-          </Link>
+    <ul>
+      {menu.map(post => (
+        <li key={post.id}>
+          <Link href={`/main/${post.slug}`}>{post.title}</Link>
         </li>
       ))}
-    </div>
+    </ul>
   )
 }
