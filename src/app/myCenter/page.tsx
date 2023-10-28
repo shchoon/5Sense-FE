@@ -3,6 +3,7 @@ import '../globals.css'
 import Image from 'next/image'
 import Script from 'next/script'
 import { useState } from 'react';
+import { isString } from 'util';
 
 declare global {
     interface Window {
@@ -30,7 +31,14 @@ export default function MyCenter() {
 
     let [address, setAddress] = useState<string>('');
     let [centerName, setCenterName] = useState<string>('');
-    let [userNum, setUserNum] = useState<string>('');
+    let [userNum, setUserNum] = useState<number>();
+    let [inputWarn, setInputWarn] = useState<string>('outline-[#7354E8]');
+
+    function allowOnlyNum(e: any) {
+        if(isNaN(e.key) && e.key !== 'Backspace') {
+            e.preventDefault();
+          }
+    }
 
     return(
         <>
@@ -62,7 +70,7 @@ export default function MyCenter() {
         
         <div className='w-[430px] h-[209px] flex flex-col items-center gap-4'>
             <div className='w-[430px] h-[60px] flex items-center border rounded-lg border-[#E5E7EB]'>
-                <input className='w-full px-3 py-5  rounded-lg border  outline-[#7354E8] '  placeholder='센터명' value={centerName} onChange={e => {
+                <input type='text' className='w-full px-3 py-5  rounded-lg border  outline-[#7354E8] '  placeholder='센터명' value={centerName} onChange={e => {
                     setCenterName(e.target.value);
                     
                 }}/>
@@ -72,8 +80,13 @@ export default function MyCenter() {
                 <div className='absolute left-3 top-[-12px] bg-[#FFF] focus:text-[#563AC0]' >주소</div>
             </div>
             <div className='w-[430px] h-[60px] border rounded-lg border-[#E5E7EB]'>
-                <input className='w-full px-4 py-5 rounded-lg border outline-[#7354E8]' placeholder='대표번호' value={userNum} onChange={e => {
-                    setUserNum(e.target.value);
+                <input className={`w-full px-4 py-5 rounded-lg border ${inputWarn}`}  placeholder="대표번호( '-' 없이 입력해주세요.)" value={userNum} onKeyDown={allowOnlyNum} onChange={e => {
+                    console.log(e.target.value);
+                    if(e.target.value.length > 11){
+                        setInputWarn('outline-[red]');
+                    }else {
+                        setInputWarn('outline-[#7354E8]')
+                    }
                 }} />
             </div>
         </div>
@@ -84,4 +97,3 @@ export default function MyCenter() {
         </>
     )
 }
-
