@@ -9,9 +9,9 @@ import { useRouter } from 'next/navigation';
 
 export default function SocialLoginBtn({socialLogo} :any) {
 
-    const NEXT_PUBLIC_KAKAO_REST_API_KEY = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
-    const NEXT_PUBLIC_KAKAO_REDIRECT_URI = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI;
-    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${NEXT_PUBLIC_KAKAO_REDIRECT_URI}`
+    const KAKAO_REST_API_KEY = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
+    const KAKAO_REDIRECT_URI = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI;
+    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}`
     const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
     const GOOGLE_REDIRECT_URL = process.env.GOOGLE_REDIRECT_URI;
 
@@ -25,7 +25,8 @@ export default function SocialLoginBtn({socialLogo} :any) {
             textColor: 'text-[#374151]',
             alt: 'kakao',
             login: async function kakaoLogin() {
-                router.push('/loading');
+                window.location.href = (KAKAO_AUTH_URL);
+                //router.push('/loading');
                 //window.location.href = 'http://13.209.77.49:4000/auth/kakao/login'
 
                 //const res = await fetch('http://13.209.77.49:4000/auth/kakao/login');
