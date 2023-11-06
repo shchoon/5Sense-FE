@@ -92,9 +92,9 @@ export default function MyCenter() {
                 peer-focus:-translate-y-4 left-1">주소</label>
             </div>
             <div className='relative w-[430px] h-[60px]  flex items-center  rounded-lg border border-[#E5E7EB]'>
-                <input type="text" id="floating_outlined" className="block px-2.5 pb-2.5 pt-4 w-full h-full text-sm text-gray-900 bg-transparent 
+                <input type="text" id="floating_outlined" className={`${inputWarn} block px-2.5 pb-2.5 pt-4 w-full h-full text-sm text-gray-900 bg-transparent 
                 rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600
-                 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " value={userNum} onKeyDown={allowOnlyNum} onChange={e => {
+                 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer`} placeholder=" " value={userNum} onKeyDown={allowOnlyNum} onChange={e => {
                     console.log(e.target.value);
                     if(e.target.value.length > 11){
                         setInputWarn('outline-[red]');
