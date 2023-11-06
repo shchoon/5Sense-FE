@@ -26,8 +26,10 @@ export default function SocialLoginBtn({socialLogo} :any) {
     const NAVER_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID;
     const NAVER_REDIRECT_URI = process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI;
     const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=${state}&redirect_uri=${NAVER_REDIRECT_URI}`
-    const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-    const GOOGLE_REDIRECT_URL = process.env.GOOGLE_REDIRECT_URI;
+    const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    const GOOGLE_REDIRECT_URI = process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI;
+    const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&include_granted_scopes=true&response_type=code&state=${state}&` 
+    + `redirect_uri=${GOOGLE_REDIRECT_URI}` + `&client_id=${GOOGLE_CLIENT_ID}`
 
     const router = useRouter();
     const loginBtnData:{title: string, logo: any, bgColor: any, borderColor: string, textColor:string,  alt: string, login: any}[] = [
@@ -41,11 +43,6 @@ export default function SocialLoginBtn({socialLogo} :any) {
             login: async function kakaoLogin() {
                 window.location.href = (KAKAO_AUTH_URL);
                 //router.push('/loading');
-                //window.location.href = 'http://13.209.77.49:4000/auth/kakao/login'
-
-                //const res = await fetch('http://13.209.77.49:4000/auth/kakao/login');
-                //console.log(res);
-                //window.location.href = 'https://kauth.kakao.com/oauth/authorize';
             }
         },
         {
@@ -57,9 +54,7 @@ export default function SocialLoginBtn({socialLogo} :any) {
             alt: 'naver',
             login: function naverLogin() {
                 window.location.href = NAVER_AUTH_URL;
-                router.push('/loading');
-                //window.naver('wCIY4BCK_aQX4TYCnq8T', 'http://localhost:3000/naver_login');
-                //window.location.href = 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=wCIY4BCK_aQX4TYCnq8T&state=test_STRING&redirect_uri=http://localhost:3000/naver_login'
+                //router.push('/loading');
             }
         },
         {
@@ -70,9 +65,8 @@ export default function SocialLoginBtn({socialLogo} :any) {
             textColor: 'text-[#374151]',
             alt: 'google',
             login: function googleLogin() {
+                window.location.href = GOOGLE_AUTH_URL;
                 //router.push('/loading');
-                //window.naver('wCIY4BCK_aQX4TYCnq8T', 'http://localhost:3000/naver_login');
-                window.location.href = 'https://accounts.google.com/o/oauth2/auth?client_id=1029862850093-6eekvfv1b0qulsj3stq9ldtiupivqmce.apps.googleusercontent.com&redirect_uri=http://localhost:3000/auth/google/callback&scope=profile email&response_type=code&access_type=offline'
             }
         },
         
