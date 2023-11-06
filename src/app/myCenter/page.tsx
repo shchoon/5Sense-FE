@@ -33,6 +33,8 @@ export default function MyCenter() {
     let [centerName, setCenterName] = useState<string>('');
     let [userNum, setUserNum] = useState<number>();
     let [inputWarn, setInputWarn] = useState<string>('outline-[#7354E8]');
+    let [onFocusCenterInput, setOnFocusCenterInput] = useState<boolean>(false);
+    
 
     function allowOnlyNum(e: any) {
         if(isNaN(e.key) && e.key !== 'Backspace') {
@@ -69,18 +71,30 @@ export default function MyCenter() {
         }}>
         
         <div className='w-[430px] h-[209px] flex flex-col items-center gap-4'>
-            <div className='w-[430px] h-[60px] flex items-center border rounded-lg border-[#E5E7EB]'>
-                <input type='text' className='w-full px-3 py-5  rounded-lg border  outline-[#7354E8] '  placeholder='센터명' value={centerName} onChange={e => {
-                    setCenterName(e.target.value);
-                    
-                }}/>
+            <div className='relative w-[430px] h-[60px] flex items-center border rounded-lg border-[#E5E7EB] focus:border-[#563AC0]'>
+                <input type="text" id="floating_outlined" className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent 
+                rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600
+                 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                <label htmlFor="floating_outlined" className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 
+                transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 
+                peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 
+                peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-100 
+                peer-focus:-translate-y-4 left-1">센터명</label>
             </div>
             <div className='relative w-[430px] h-[60px]  flex items-center  rounded-lg border border-[#E5E7EB]' onClick={onClickAdd}>
-                <input className='w-full px-3 py-5 rounded-lg border outline-[#7354E8]' placeholder='typing' value={address} />
-                <div className='absolute left-3 top-[-12px] bg-[#FFF] focus:text-[#563AC0]' >주소</div>
+                <input type="text" id="floating_outlined" value={address} className="block px-2.5 pb-2.5 pt-4 w-full h-full text-sm text-gray-900 bg-transparent 
+                rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600
+                 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                <label htmlFor="floating_outlined" className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 
+                transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 
+                peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 
+                peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-100 
+                peer-focus:-translate-y-4 left-1">주소</label>
             </div>
-            <div className='w-[430px] h-[60px] border rounded-lg border-[#E5E7EB]'>
-                <input className={`w-full px-4 py-5 rounded-lg border ${inputWarn}`}  placeholder="대표번호( '-' 없이 입력해주세요.)" value={userNum} onKeyDown={allowOnlyNum} onChange={e => {
+            <div className='relative w-[430px] h-[60px]  flex items-center  rounded-lg border border-[#E5E7EB]'>
+                <input type="text" id="floating_outlined" className="block px-2.5 pb-2.5 pt-4 w-full h-full text-sm text-gray-900 bg-transparent 
+                rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600
+                 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " value={userNum} onKeyDown={allowOnlyNum} onChange={e => {
                     console.log(e.target.value);
                     if(e.target.value.length > 11){
                         setInputWarn('outline-[red]');
@@ -88,6 +102,12 @@ export default function MyCenter() {
                         setInputWarn('outline-[#7354E8]')
                     }
                 }} />
+                <label htmlFor="floating_outlined" className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 
+                transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 
+                peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 
+                peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-100 
+                peer-focus:-translate-y-4 left-1">대표번호</label>
+                
             </div>
         </div>
         <div className='flex justify-center items-center'>
