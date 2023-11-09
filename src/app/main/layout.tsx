@@ -1,8 +1,6 @@
-import Navbar from '@/components/Navbar'
-import ProfileBtn from '@/components/btn/ProfileBtn'
+import Navbar from '@/components/main/Navbar'
 import Image from 'next/image'
 import mainlogo from '@/assets/logo/mainlogo.svg'
-import profile from '@/assets/images/profile.png'
 
 export default function MainLayout({
   children
@@ -10,44 +8,25 @@ export default function MainLayout({
   children: React.ReactNode
 }) {
   return (
-    <main className="w-full max-w-screen-3xl min-w-screen-md bg-primary max-h-screen-h-3xl">
-      <div className="w-[1920px] h-[469px] relative flex flex-row bg-gradient-to-b from-indigo-500 to-violet-500">
-        <section className="Info w-[40.67px] h-[40.67px] left-[24px] top-[48px] absolute">
-          <div className="Logo flex flex-row items-center gap-[6px]">
-            <Image src={mainlogo} width={52} height={52} alt="mainlogo"></Image>
-            <span className="Sense text-slate-50 text-xl font-bold font-['Poppins']">
-              5sense
-            </span>
-          </div>
-          <div className="UserInfo flex flex-col items-center w-[288px] h-[251px] mt-20">
-            <Image
-              src={profile}
-              width={88}
-              height={88}
-              alt="profile"
-              className="Profile1 w-[88px] h-[88px] rounded-full"
-            />
-            <div className="content flex flex-col items-center gap-[8px] mb-7">
-              <h3 className="Text text-center text-white text-[21px] font-bold font-['Pretendard'] leading-loose">
-                매직기구필라테스
-              </h3>
-              <span className="Text text-center text-indigo-50 text-sm font-medium font-['Pretendard'] leading-[14px]">
-                031-706-1281
-              </span>
-              <span className="Text w-72 text-center text-indigo-50 text-xs font-medium font-['Pretendard'] leading-3">
-                경기 성남시 분당구 판교로256번길 19
-              </span>
+    <div className="wrapper w-screen h-full bg-primary-50 overflow-auto">
+      <div className="topcontainer relative w-full min-w-[768px] h-[601px] xl:h-[469px] px-6 md:px-12 lg:px-0 bg-gradient-to-b from-indigo-500 to-violet-500">
+        <div className="LogoBox absolute top-[48px] left-[24px] flex flex-row items-center gap-[6px]">
+          <Image src={mainlogo} width={52} height={52} alt="mainlogo"></Image>
+          <span className="Sense text-slate-50 text-xl font-bold font-['Poppins']">
+            5sense
+          </span>
+        </div>
+        <div className="topbox flex w-full h-fullmin-w-[768px] ">
+          <div className="academyInfo hidden lg:academy-info">학원정보</div>
+          <div className="relative w-full h-full min-w-[768px] xl:mr-4 2xl:mr-8 3xl:mr-12 top-[124px] xl:top-[66px]">
+            <Navbar />
+            <div className="relative w-full h-full min-w-[720px] bg-white rounded-2xl shadow">
+              {children}
             </div>
-            <ProfileBtn />
+            <div className="relative bottom-0">footer</div>
           </div>
-        </section>
-        <section className="flex flex-col left-[336px] top-[72px] absolute">
-          <Navbar />
-          <div className="w-[1536px] h-[990px] bg-white rounded-tr-2xl rounded-bl-2xl rounded-br-2xl shadow">
-            {children}
-          </div>
-        </section>
+        </div>
       </div>
-    </main>
+    </div>
   )
 }

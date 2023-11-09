@@ -28,7 +28,7 @@ export default function ClassPage() {
   ]
   return (
     <section className="container w-full grid grid-cols-3 gap-[6px]">
-      {data.map(({ title, instructor, userCnt }) => (
+      {/* {data.map(({ title, instructor, userCnt }) => (
         <div className=" w-[464px] h-56 px-6 py-8 bg-white rounded-lg shadow border border-gray-200 flex-col justify-start items-start gap-16 inline-flex">
           <div className=" self-stretch text-gray-900 text-xl font-semibold font-['Pretendard'] leading-[30px]">
             {title}
@@ -42,7 +42,7 @@ export default function ClassPage() {
             </div>
           </div>
         </div>
-      ))}
+      ))} */}
     </section>
   )
 }
