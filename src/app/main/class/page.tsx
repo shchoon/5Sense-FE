@@ -1,4 +1,10 @@
-'use client'
+"use client"
+import { useSearchParams } from 'next/navigation';
+import dropDown from '../../../assets/icons/dropDown.svg';
+import upIcon from '../../../assets/icons/upIcon.svg';
+import Image from 'next/image';
+import ClassFilter from '@/components/classFilter/classFilter';
+
 export default function ClassPage() {
   const data = [
     {
@@ -152,6 +158,8 @@ export default function ClassPage() {
       userCnt: 50
     }
   ]
+
+
   return (
     <div className="w-full h-full px-12 py-[60px] box-border">
       <h1 className="menu-title">클래스 관리</h1>
