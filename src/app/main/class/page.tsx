@@ -1,3 +1,10 @@
+"use client"
+import { useSearchParams } from 'next/navigation';
+import dropDown from '../../../assets/icons/dropDown.svg';
+import upIcon from '../../../assets/icons/upIcon.svg';
+import Image from 'next/image';
+import ClassFilter from '@/components/classFilter/classFilter';
+
 export default function ClassPage() {
   const data = [
     {
@@ -26,7 +33,11 @@ export default function ClassPage() {
       userCnt: 50
     }
   ]
+
+
   return (
+    <>
+    <ClassFilter />
     <section className="container w-full grid grid-cols-3 gap-[6px]">
       {data.map(({ title, instructor, userCnt }) => (
         <div className=" w-[464px] h-56 px-6 py-8 bg-white rounded-lg shadow border border-gray-200 flex-col justify-start items-start gap-16 inline-flex">
@@ -44,5 +55,6 @@ export default function ClassPage() {
         </div>
       ))}
     </section>
+    </>
   )
 }
