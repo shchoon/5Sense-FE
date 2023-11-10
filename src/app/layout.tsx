@@ -13,7 +13,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="relative w-full h-full min-w-[768px] min-h-[1024px] bg-primary-50">
+        {children}
+      </body>
     </html>
   )
 }

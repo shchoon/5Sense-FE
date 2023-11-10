@@ -11,9 +11,9 @@ export default function MainLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="wrapper relative w-screen h-screen min-w-[768px] min-h-[1024px] bg-primary-50 overflow-y-auto">
+    <div className="wrapper ">
       <div className="purplebox w-full min-w-[768px] h-[601px] lg:h-[469px] bg-gradient-to-b from-[#6F53DB] to-[#875EDC]"></div>
-      <div className="fullbox absolute top-0 left-0 w-full 3xl:max-w-[1872px] px-6 md:px-12 lg:pr-6 lg:pl-0 box-border">
+      <div className="fullbox absolute top-0 left-0 w-full min-w-[768px] max-w-[1920px] px-6 md:px-12 lg:pr-6 lg:pl-0 box-border">
         <div className="header">
           <div className="logoBox absolute top-8 lg:top-12 left-6 md:left-12 lg:left-6 flex w-[52px] items-center">
             <Image className="mr-[20px] lg:hidden" src={menu} alt="메뉴" />
@@ -25,11 +25,11 @@ export default function MainLayout({
             <Image src={noticeActive} alt="활성알림" />
           </div>
         </div>
-        <div className="content flex w-full min-w-[720px] 3xl:max-w-[1872px]">
+        <div className="content flex w-full min-w-[720px] max-w-[1872px]">
           <div className="academyInfo hidden lg:academy-info">학원정보</div>
-          <div className="service relative top-[124px] lg:top-[66px] min-w-[720px] 3xl:max-w-[1872px]">
+          <div className="service relative top-[124px] lg:top-[66px] w-full">
             <Navbar />
-            <div className="relative w-full 3xl:min-h-[1271px] 2xl:min-w-[1576px] bg-white rounded-2xl">
+            <div className="relative w-full 3xl:min-h-[1271px] bg-white rounded-2xl">
               {children}
             </div>
             <div className="footer relative bottom-0 pt-12 pb-[22px]">
