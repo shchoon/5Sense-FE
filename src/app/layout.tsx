@@ -1,10 +1,5 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import Navbar from '@/components/Navbar'
-import Image from 'next/image'
-import mainlogo from '../assets/logo/mainlogo.svg'
-import profie from '../assets/images/profile.png'
-import ProfileBtn from '../components/btn/ProfileBtn'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -18,9 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="flex w-full overflow-auto justify-center ">
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   )
 }
