@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link'
-import OpenBook from '@/assets/icons/navbar/open-book.svg'
+import book from '@/assets/icons/notice-active.svg'
+import Image from 'next/image'
 
 const menu = [
   {
@@ -29,23 +30,22 @@ const menu = [
     title: '청구/납부'
   }
 ]
-
+// flex하면 부모 크기에 맞춰지나?
 export default function Navbar() {
   return (
-    <div className="flex">
+    <div className="flex translate-y-[16px]">
       {menu.map(menu => (
         <div
           key={menu.id}
-          className="w-[140px] h-14 md:w-[168px] md:h-[54px] relative bg-indigo-400 rounded-tl-[9.75px] rounded-tr-[9.75px] md:rounded-tl-xl md:rounded-tr-xl"
+          className="flex justify-center w-[168px] h-[70px] gap-[10px] bg-primary-500 md:rounded-tl-xl md:rounded-tr-xl"
         >
-          <div className="left-[26.17px] top-[13px] md:left-[44px] md:top-[16px] absolute flex flex-row justify-start items-center gap-2.5">
-            <Link
-              href={`/main/${menu.slug}`}
-              className="text-center text-purple-300 text-[13px] md:text-base font-bold font-['Pretendard']"
-            >
-              {menu.title}
-            </Link>
-          </div>
+          <Image src={book} alt="test" />
+          <Link
+            href={`/main/${menu.slug}`}
+            className="leading-[60px] text-purple-300 text-base font-bold font-['Pretendard']"
+          >
+            {menu.title}
+          </Link>
         </div>
       ))}
     </div>

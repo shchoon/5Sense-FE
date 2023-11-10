@@ -9,6 +9,10 @@
   .academy-info {
     @apply block relative top-[180px] w-[248px] h-[251px] box-content px-5 2xl:px-6 3xl:px-5 border-2 border-slate-950 border-solid;
   }
+  .menu-title {
+    @apply text-black text-3xl font-bold font-['Pretendard'];
+  }
+
   /* ... */
 }
 
