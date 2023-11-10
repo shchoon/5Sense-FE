@@ -14,8 +14,8 @@ module.exports = {
         md: '769px',
         lg: '1025px',
         xl: '1281px',
-        '2xl': '1440px',
-        '3xl': '1920px'
+        '2xl': '1441px',
+        '3xl': '1921px'
       },
       fontFamily: {
         sans: ['Pretendard']
