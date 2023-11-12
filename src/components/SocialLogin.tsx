@@ -19,7 +19,7 @@ export default function SocialLoginBtn({socialLogo} :any) {
         return result;
     }
     const state = generateState();
-
+https://github.com/PJ-5Sense/5Sense-FE/pull/14/conflict?name=src%252Fcomponents%252FSocialLogin.tsx&base_oid=9ee0e08b487ead0344f156d34adc28036e92a382&head_oid=e6fd5242456e94244bd4272d75fc52a505a80684
     const KAKAO_CLIENT_ID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
     const KAKAO_REDIRECT_URI = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI;
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_CLIENT_ID}&redirect_uri=${KAKAO_REDIRECT_URI}&state=${state}`
@@ -43,6 +43,7 @@ export default function SocialLoginBtn({socialLogo} :any) {
             login: async function kakaoLogin() {
                 window.location.href = (KAKAO_AUTH_URL);
                 //router.push('/loading');
+               
             }
         },
         {
