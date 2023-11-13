@@ -2,8 +2,8 @@
 import '../globals.css'
 import Image from 'next/image'
 import Script from 'next/script'
-import { useState } from 'react';
-import { isString } from 'util';
+import { useRef, useState } from 'react';
+import { useOnClickOutside } from '@/components/useOnclickOutside';
 
 declare global {
     interface Window {
@@ -17,6 +17,10 @@ zonecode: string;
 }
 
 export default function MyCenter() {
+
+    const phoneNumInputRef = useRef<HTMLInputElement>(null);
+
+   
       
     const onClickAdd = () => {
         new window.daum.Postcode({
@@ -31,15 +35,30 @@ export default function MyCenter() {
 
     let [address, setAddress] = useState<string>('');
     let [centerName, setCenterName] = useState<string>('');
-    let [userNum, setUserNum] = useState<number>();
+    let [userNum, setUserNum] = useState<string>('');
     let [inputWarn, setInputWarn] = useState<string>('outline-[#7354E8]');
     let [onFocusCenterInput, setOnFocusCenterInput] = useState<boolean>(false);
-    
+    let [onFocusPhoneNumInput, setOnFocusPhoneNumInput] = useState<boolean>(false);
 
+    const handleClickOutside = () => {
+        setOnFocusPhoneNumInput(false);
+    }
+
+    const handleClickInside = () => {
+        setOnFocusPhoneNumInput(true);
+        console.log('in');
+    }
+
+    useOnClickOutside(phoneNumInputRef, handleClickOutside);
+    
+    console.log(userNum)
+    /* 전화번호 입력 -> '-' &  number type 아닌 것들 입력 방지*/
     function allowOnlyNum(e: any) {
-        if(isNaN(e.key) && e.key !== 'Backspace') {
+        console.log(e.key)
+        if(isNaN(e.key) && e.key !== 'Backspace'){
             e.preventDefault();
-          }
+        }
+        
     }
 
     return(
@@ -71,10 +90,13 @@ export default function MyCenter() {
         }}>
         
         <div className='w-[430px] h-[209px] flex flex-col items-center gap-4'>
-            <div className='relative w-[430px] h-[60px] flex items-center border rounded-lg border-[#E5E7EB] focus:border-[#563AC0]'>
-                <input type="text" id="floating_outlined" className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent 
+            <div className='relative w-[430px] h-[60px] flex items-center border rounded-lg border-[#E5E7EB] '>
+            <input type="text" id="floating_outlined" value={centerName} autoComplete='off' className="block px-2.5 pb-2.5 pt-4 w-full h-full text-sm text-gray-900 bg-transparent 
                 rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600
-                 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " 
+                 onChange={(e) => {
+                    setCenterName(e.target.value);
+                 }} />
                 <label htmlFor="floating_outlined" className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 
                 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 
                 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 
@@ -82,7 +104,7 @@ export default function MyCenter() {
                 peer-focus:-translate-y-4 left-1">센터명</label>
             </div>
             <div className='relative w-[430px] h-[60px]  flex items-center  rounded-lg border border-[#E5E7EB]' onClick={onClickAdd}>
-                <input type="text" id="floating_outlined" value={address} className="block px-2.5 pb-2.5 pt-4 w-full h-full text-sm text-gray-900 bg-transparent 
+                <input type="text" id="floating_outlined" value={address} autoComplete='off' className="block px-2.5 pb-2.5 pt-4 w-full h-full text-sm text-gray-900 bg-transparent 
                 rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600
                  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
                 <label htmlFor="floating_outlined" className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 
@@ -92,21 +114,27 @@ export default function MyCenter() {
                 peer-focus:-translate-y-4 left-1">주소</label>
             </div>
             <div className='relative w-[430px] h-[60px]  flex items-center  rounded-lg border border-[#E5E7EB]'>
-                <input type="text" id="floating_outlined" className={`${inputWarn} block px-2.5 pb-2.5 pt-4 w-full h-full text-sm text-gray-900 bg-transparent 
+                <input ref={phoneNumInputRef} type="text" id="floating_outlined" autoComplete='off' className={`block px-2.5 pb-2.5 pt-4 w-full h-full text-sm text-gray-900 bg-transparent 
                 rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600
-                 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer`} placeholder=" " value={userNum} onKeyDown={allowOnlyNum} onChange={e => {
+                 dark:focus:border-blue-500 focus:outline-none focus:ring-0 ${inputWarn} peer`} placeholder=" " value={userNum} 
+                 onClick={() => {
+                    handleClickInside()
+                 }}
+                 onKeyDown={allowOnlyNum} 
+                 onChange={e => {
                     console.log(e.target.value);
                     if(e.target.value.length > 11){
-                        setInputWarn('outline-[red]');
+                        setInputWarn('focus:border-red-600');
                     }else {
-                        setInputWarn('outline-[#7354E8]')
+                        setInputWarn('focus:border-blue-600')
                     }
+                    setUserNum(e.target.value);
                 }} />
                 <label htmlFor="floating_outlined" className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 
                 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 
                 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 
                 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-100 
-                peer-focus:-translate-y-4 left-1">대표번호</label>
+                peer-focus:-translate-y-4 left-1">대표번호 { !onFocusPhoneNumInput? '(- 없이 입력해주세요)' : null}</label> 
                 
             </div>
         </div>

@@ -1,5 +1,5 @@
 import Image from "next/image"
-import mainLogo from '../../assets/logo/mainlogo.svg';
+import mainLogo from '../../assets/logo/mainLogo.svg';
 
 export default function loginLayout({
     children
@@ -9,7 +9,7 @@ export default function loginLayout({
 
     return (
       <>
-      <div className='flex justify-center h-[1080px] items-center py-[272px] w-[1920px]  bg-[#F8FAFD]'>
+      <div className='flex justify-center h-[1080px] items-center w-[1920px]  bg-[#F8FAFD]'>
         <div className='flex items-start flex-col w-[442px]  h-[476px] gap-14 px-[6px] pt-3 pb-2 border rounded-2xl border-[#E5E7EB] bg-[#FFF] shadow-[-3px_5px_20px_0px_rgba(0,0,0,0.03)]'>
             <div className='flex items-center gap-[56px] mx-auto'>
                 <div className='flex items-center flex-col w-[383px] h-[150px] gap-[30px]'>
