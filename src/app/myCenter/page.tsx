@@ -69,7 +69,9 @@ export default function MyCenter() {
             console.log(centerName);
             console.log(address);
             console.log(userNum);
-
+            if(userNum.length !== 11){
+                alert('번호를 다시 입력해주세요. ex) 010xxxxxxxx')
+            }
             /* const options = {
                 method: "POST", // *GET, POST, PUT, DELETE, etc.
                 headers: {
