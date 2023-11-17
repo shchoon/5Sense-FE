@@ -72,20 +72,26 @@ export default function MainPageWeek() {
                 <textarea placeholder="메모를 적어보세요" className="w-full border-0 pl-0 focus:ring-0" />
             </div> : null}
         </div>
+        {/* <div className="absolute top-[537px] lg:top-[391px] md:top-[537px] w-full flex xl:px-12 lg:px-6 md:px-12 px-6">
+            <div className="relative flex items-center w-full max-w-[1016px]  border h-[52px] xl:max-w-[1016px] lg:max-w-[936px] md:w-full ">
+                <div className="mx-auto z-1 max-w-[420px] w-full  h-full bg-slate-400">tab 1</div>
+                <div className="absolute z-1 right-0 w-[160px] h-[44px] bg-blue-200">tab 2</div>
+            </div>
+        </div> */}
         {/* 날짜 & 주,일,월 탭 1000px 이상*/}
         {width >= 1000 ? 
-        <div className="absolute top-[537px] lg:top-[391px] md:top-[537px] w-full flex justify-center xl:px-12 lg:px-6 md:px-12 px-6">
-            <div className="relative flex gap-[138px] items-center w-full max-w-[1016px]  border h-[52px] xl:max-w-[1016px] lg:max-w-[936px] md:w-full ">
+        <div className="absolute  top-[537px] lg:top-[391px] md:top-[537px] w-full flex xl:px-12 lg:px-6 md:px-12 px-6">
+            <div className="relative mx-auto flex gap-[138px] items-center w-full max-w-[1016px]  border h-[52px] xl:max-w-[1016px] lg:max-w-[936px] md:w-full ">
                 <div className="mx-auto w-[420px] h-full bg-slate-400">tab 1</div>
                 <div className="absolute right-0 w-[160px] h-[44px] bg-blue-200">tab 2</div>
             </div>
         </div> : null}
         {/* 날짜 & 주,일,월 탭 1000px 미만 */}
         {width < 1000 ? 
-        <div className="absolute top-[537px] w-full h-[52px] flex justify-end md:pr-12 pr-6">
-            <div className="w-[492px] h-full border flex items-center gap-5">
-                <div className="mx-auto w-[420px] h-full bg-slate-400">tab 1di</div>
-                <div className="w-[160px] h-[44px] bg-blue-200">tab 2</div>
+        <div className="absolute top-[537px] w-full h-[52px] flex md:px-12 px-6">
+            <div className="relative w-full flex">
+                <div className="mx-auto w-[312px] md:w-[300px]  h-full bg-slate-400">tab 1</div>
+                <div className="absolute right-0 w-[160px] h-[44px] bg-blue-200">tab 2</div>
             </div>
         </div>
         : null}
