@@ -52,7 +52,7 @@ export default function Navbar() {
       {menu.map(menu => (
         <Link
           className={`link ${
-            pathname === menu.slug
+            pathname.includes(menu.slug)
               ? 'nav-active'
               : 'bg-primary-400 text-primary-200 text-base rounded-tl-xl rounded-tr-xl'
           } relative flex justify-center w-[168px] h-[70px] leading-[60px] text-center font-bold font-['Pretendard']`}
