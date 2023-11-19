@@ -3,5 +3,5 @@ export default function LectureDetailLayout({
   }: {
     children: React.ReactNode
   }) {
-    return <div className="relative">{children}</div>
+    return <div>{children}</div>
   }
