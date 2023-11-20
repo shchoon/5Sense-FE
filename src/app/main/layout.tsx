@@ -4,6 +4,7 @@ import mainLogo from '@/assets/logo/mainLogo.png'
 import logout from '@/assets/icons/logout.svg'
 import noticeActive from '@/assets/icons/notice-active.svg'
 import menu from '@/assets/icons/menu.svg'
+import MainBox from '@/components/MainBox'
 
 export default function MainLayout({
   children
@@ -29,7 +30,8 @@ export default function MainLayout({
           <div className="academyInfo hidden lg:academy-info">학원정보</div>
           <div className="service relative top-[124px] lg:top-[66px] w-full">
             <Navbar />
-            <div className="relative w-full 3xl:min-h-[1271px] bg-white rounded-2xl">
+            <div className="relative w-full 3xl:min-h-[1271px] xl:px-12 lg:px-6 md:px-12 px-6 bg-white rounded-2xl">
+              <MainBox />
               {children}
             </div>
             <div className="footer relative bottom-0 pt-12 pb-[22px]">
