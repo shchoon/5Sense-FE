@@ -32,7 +32,7 @@ export default function Login() {
         integrity="sha384-mXVrIX2T/Kszp6Z0aEWaA8Nm7J6/ZeWXbL8UpGRjKwWe56Srd/iyNmWMBhcItAjH" 
         crossOrigin="anonymous" onLoad={kakaoInit}>
         </Script> */}
-        <div className='w-[430px] h-[250px] flex flex-col items-start gap-2'>
+        <div className='w-[430px] h-[200px] flex flex-col items-start gap-2'>
             <SocialLogin />
         </div>
         </>    
