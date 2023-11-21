@@ -1,5 +1,4 @@
 import { useInput } from '@/hooks/useInput'
-import { Textarea } from 'flowbite-react'
 
 export interface InputFormProps {
   title: string

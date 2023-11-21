@@ -12,6 +12,9 @@
   .menu-title {
     @apply text-black text-3xl font-bold font-['Pretendard'];
   }
+  .xs-title {
+    @apply text-gray-800 text-sm font-semibold font-['Pretendard'] leading-[21px];
+  }
   .s-title {
     @apply self-stretch text-gray-800 text-base font-semibold font-['Pretendard'] leading-normal;
   }
@@ -29,6 +32,9 @@
   }
   .class-box {
     @apply w-full flex flex-col gap-[40px] px-6 py-8 bg-white rounded-xl border border-gray-200;
+  }
+  .time-box {
+    @apply relative flex justify-center items-center w-[124px] h-[42px] p-3 bg-white rounded-lg border border-gray-300;
   }
 
   /* ... */

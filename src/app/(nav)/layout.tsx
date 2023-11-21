@@ -1,4 +1,4 @@
-import Navbar from '@/components/main/Navbar'
+import Navbar from '@/components/layout/Navbar'
 import Image from 'next/image'
 import mainLogo from '@/assets/logo/mainLogo.png'
 import logout from '@/assets/icons/logout.svg'
