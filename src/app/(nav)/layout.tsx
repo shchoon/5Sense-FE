@@ -1,4 +1,4 @@
-import Navbar from '@/components/main/Navbar'
+import Navbar from '@/components/layout/Navbar'
 import Image from 'next/image'
 import mainLogo from '@/assets/logo/mainLogo.png'
 import logout from '@/assets/icons/logout.svg'
@@ -25,11 +25,11 @@ export default function MainLayout({
             <Image src={noticeActive} alt="활성알림" />
           </div>
         </div>
-        <div className="content flex w-full min-w-[720px] max-w-[1872px]">
+        <div className="content flex w-full max-w-[1872px]">
           <div className="academyInfo hidden lg:academy-info">학원정보</div>
           <div className="service relative top-[124px] lg:top-[66px] w-full">
             <Navbar />
-            <div className="relative w-full 3xl:min-h-[1271px] bg-white rounded-2xl">
+            <div className="relative w-full 2xl:min-h-[1271px] xl:min-h-[854px] lg:min-h-[705px] md:min-h-[1098px] min-h-[752px] bg-white rounded-2xl">
               {children}
             </div>
             <div className="footer relative bottom-0 pt-12 pb-[22px]">

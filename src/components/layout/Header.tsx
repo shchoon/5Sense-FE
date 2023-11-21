@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import ProfileBtn from '../btn/ProfileBtn'
+import ProfileBtn from '../button/ProfileBtn'
 import mainlogo from '@/assets/logo/mainlogo.svg'
 import profile from '@/assets/images/profile.png'
 
