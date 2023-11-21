@@ -11,6 +11,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
   return (
     <html lang="en">
       <body className="relative w-full h-full min-w-[768px] min-h-[1024px] bg-primary-50">
