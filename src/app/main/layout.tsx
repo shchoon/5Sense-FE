@@ -32,7 +32,7 @@ export default function MainLayout({
             <Navbar />
             <div className="relative w-full 3xl:min-h-[1271px] xl:px-12 lg:px-6 md:px-12 px-6 bg-white rounded-2xl">
               <MainBox />
-              {children}
+              {/* {children} */}
             </div>
             <div className="footer relative bottom-0 pt-12 pb-[22px]">
               <span className="text-gray-300 text-xl font-bold font-['Poppins'] mr-[56px]">

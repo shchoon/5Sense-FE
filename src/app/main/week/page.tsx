@@ -202,7 +202,7 @@ export default function MainPageWeek() {
     //console.log(classData[1].classTime === undefined)
     
     return(
-        <div className="w-full h-full mx-auto max-w-[1016px] pt-8 pb-[80px]">
+        <div className="w-full h-full mx-auto xl:max-w-[1016px] pt-8 pb-[80px]">
         {/* 통계 + 메모 레이아웃  */}
         
         {/* <div className="absolute top-[537px] lg:top-[391px] md:top-[537px] w-full flex xl:px-12 lg:px-6 md:px-12 px-6">
@@ -214,18 +214,19 @@ export default function MainPageWeek() {
         
             {/* 요일 선택 탭 */}
             <div className="w-full flex justify-end pb-6">
-                <div className="max-w-[945px] flex gap-[7px]">
+                <div className="w-[51px] xl:mr-5 lg:mr-4"></div>
+                <div className="w-full grid grid-cols-7 gap-[7px]">
                     {dateData.map((date, i) => {
                         if(i == 3) {
                             return(
-                                <div key={i} className="w-[129px] h-full px-3 py-2 flex flex-col  border rounded-lg border-primary-600 bg-white">
+                                <div key={i} className="xl:max-w-[129px] lg:max-w-[119px] h-full px-3 py-2 flex flex-col  border rounded-lg border-primary-600 bg-white">
                                     <div className="text-primary-600 text-center text-sm font-medium font-['Pretendard'] leading-[21px]">{date.day}</div>
                                     <div className="text-primary-600 text-center text-xl font-bold font-['Pretendard'] leading-[30px]">{date.date}</div>
                                 </div>
                             )
                         }else {
                             return(
-                                <div key={i} className="w-[129px] h-full px-3 py-2 flex flex-col  border rounded-lg border-gray=-200 bg-white">
+                                <div key={i} className="xl:max-w-[129px] lg:max-w-[119px] h-full px-3 py-2 flex flex-col  border rounded-lg border-gray=-200 bg-white">
                                     <div className="text-gray-400 text-center text-sm font-medium font-['Pretendard'] leading-[21px]">{date.day}</div>
                                     <div className="text-gray-400 text-center text-xl font-bold font-['Pretendard'] leading-[30px]">{date.date}</div>
                                 </div>
@@ -252,8 +253,8 @@ export default function MainPageWeek() {
                 <div className="flex flex-col">
                 {classData.map((data, i) => {
                     return(
-                        <div key={i} className="w-full flex gap-5">
-                            <div className="w-[51px] text-right text-gray-800 text-base font-semibold font-['Pretendard'] leading-normal">{data.time}</div>
+                        <div key={i} className="w-full flex xl:gap-5 lg:gap-4">
+                            <div className="xl:w-[51px] lg:x-[45px] text-right text-gray-800 text-base font-semibold font-['Pretendard'] leading-normal">{data.time}</div>
                             <div className=" w-full border border-gray-100 grid grid-cols-7" >
                                 {/* 1 */}
                                 {data.classInfo.map((classData, i) => {
