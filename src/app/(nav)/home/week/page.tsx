@@ -368,7 +368,7 @@ export default function MainPageWeek() {
       </div>
 
       {/* 시간표 회차/기간 */}
-      <div className=" mx-auto xl:max-w-[1016px]  flex flex-col items-end gap-4">
+      <div className=" mx-auto xl:max-w-[1016px] lg:max-w-[936px]  flex flex-col items-end gap-4">
         <div className="w-[164px] h-4 flex gap-6 ">
           <div className="w-[70px] h-full flex gap-2 items-center justify-end">
             <span className="w-[16px] h-[16px] border rounded bg-[#FF7749]"></span>
@@ -384,25 +384,25 @@ export default function MainPageWeek() {
           </div>
         </div>
         {/* 시간표 */}
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full">
           {classData.map((data, i) => {
             return (
-              <div key={i} className="w-full flex xl:gap-5 lg:gap-4">
-                <div className="xl:w-[51px] lg:x-[45px] text-right text-gray-800 text-base font-semibold font-['Pretendard'] leading-normal">
+              <div
+                key={i}
+                className="w-full flex xl:gap-5 lg:gap-4 md:gap-[14px] gap-3.5"
+              >
+                <div className="xl:w-[51px] lg:w-[45px] md:w-12 w-[49px] text-right text-gray-800 text-base font-semibold font-['Pretendard'] leading-normal">
                   {data.time}
                 </div>
-                <div className=" w-full border border-gray-100 grid grid-cols-7">
+                <div className="xl:w-[945px] lg:w-[875px] md:w-[770px] w-[609px] outline outline-1 outline-gray-100 grid grid-cols-7">
                   {/* 1 */}
                   {data.classInfo.map((classData, i) => {
                     return (
-                      <div
-                        key={i}
-                        className="p-[5px] flex flex-col gap-1 border-e border-gray-200"
-                      >
+                      <div key={i} className="p-[6px] flex flex-col gap-1 ">
                         {classData.classTime !== undefined ? (
-                          <div className="flex flex-col p-[5px] gap-2 border rounded border-orange-200 bg-[#FDFCF8]">
+                          <div className="flex flex-col p-[5px] gap-2 outline outline-1 rounded outline-orange-200 bg-[#FDFCF8]">
                             <div className="flex flex-col gap-[2px] px-1 py-[5px] rounded bg-[#FFF0E3]">
-                              <span className="w-full text-orange-500 text-[13px] font-bold font-['Pretendard'] leading-none">
+                              <span className=" text-orange-500 text-[13px] font-bold font-['Pretendard'] leading-none">
                                 {classData.classTime.time}
                               </span>
                               <span className="w-full text-orange-400 text-xs font-semibold font-['Pretendard'] leading-[15px]">
@@ -410,9 +410,9 @@ export default function MainPageWeek() {
                               </span>
                             </div>
                             <div className="flex flex-col gap-[2px]">
-                              <span className="w-full max-h-[42px] truncate text-orange-400 text-sm font-semibold font-['Pretendard'] leading-[21px]">
+                              <div className="w-full max-h-[42px] overflow-hidden text-ellipsis line-clamp-2  text-orange-400 text-[14px] font-bold font-['Pretendard'] leading-[21px]">
                                 {classData.classTime.className}
-                              </span>
+                              </div>
                               <span className="w-full text-orange-500 text-xs font-bold font-['Pretendard'] leading-[18px]">
                                 {classData.classTime.teacherName}
                               </span>
@@ -420,7 +420,7 @@ export default function MainPageWeek() {
                           </div>
                         ) : null}
                         {classData.periodTime !== undefined ? (
-                          <div className="flex flex-col p-[5px] gap-2 border rounded border-primary-200 bg-primary-50">
+                          <div className="flex flex-col p-[5px] gap-2 outline outline-1 rounded outline-primary-200 bg-primary-50">
                             <div className="flex flex-col gap-[2px] px-1 py-[5px] rounded bg-primary-100">
                               <span className="w-full text-primary-600 text-[13px] font-bold font-['Pretendard'] leading-none">
                                 {classData.periodTime.time}
