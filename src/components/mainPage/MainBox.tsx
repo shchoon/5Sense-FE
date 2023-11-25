@@ -9,7 +9,7 @@ import { useRef, useState } from 'react'
 
 export default function MainBox() {
   const { width, height } = useWindowSize()
-  console.log(width)
+  //console.log(width)
 
   const incomeData = [
     {
