@@ -168,7 +168,7 @@ export default function MainPageDay() {
   ]
 
   return (
-    <div className="max-w-[1016px] h-full flex flex-col gap-4 mx-auto outline outline-1 pt-8 pb-[80px]">
+    <div className="h-full flex flex-col gap-4 max-w-[1480px] 2xl:max-w-[1480px] xl:max-w-[1016px] lg:max-w-[936px] pt-8 pb-[80px]">
       {/* 회차반 / 기간반 */}
       <div className="w-full h-4 flex justify-end">
         <div className="w-[164px] h-4 flex gap-6 ">
@@ -187,10 +187,10 @@ export default function MainPageDay() {
         </div>
       </div>
       {/* 일 시간표 */}
-      <div className="flex flex-col gap-7  w-full">
+      <div className="flex flex-col gap-7 w-full">
         {classData.map((data, i) => {
           return (
-            <div key={i} className="w-full flex gap-[60px]">
+            <div key={i} className="w-full flex xl:gap-[60px] md:gap-12 gap-6">
               {/* 시간 */}
               <div className="flex w-[77px] h-6 gap-5 items-center">
                 <div className="w-[51px] text-right text-indigo-500 text-base font-semibold font-['Pretendard'] leading-normal">

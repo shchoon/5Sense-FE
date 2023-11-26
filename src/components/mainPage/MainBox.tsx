@@ -254,10 +254,10 @@ export default function MainBox() {
         </div>
       ) : null}
 
-      {/* 날짜 & 주,일,월 탭 1000px 이상*/}
+      {/* 날짜 & 주,일,월 탭 950px 이상*/}
       {width > 950 ? (
-        <div className="mt-[80px] w-full flex ">
-          <div className="relative mx-auto flex gap-[138px] items-center w-full max-w-[1016px]  h-[52px]  md:w-full ">
+        <div className="mt-[80px] w-full flex max-w-[1480px] 2xl:max-w-[1480px] xl:max-w-[1016px] lg:max-w-[936px]">
+          <div className="relative mx-auto flex gap-[138px] items-center w-full  h-[52px]  md:w-full ">
             <div className="flex mx-auto w-[420px] h-full p-1.5 border rounded-md border-gray-100 bg-primary-50 ">
               <div className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center">
                 <Image src={chevronLeft} width={24} height={24} alt=" " />
@@ -292,6 +292,7 @@ export default function MainBox() {
           </div>
         </div>
       ) : (
+        /* 날짜 주,일,월 탭 950px이하 */
         <div className="mt-[80px] w-full flex justify-end">
           <div className=" flex  items-center w-[492px] gap-5 h-[52px]">
             <div className="flex mx-auto w-[312px] h-full p-1.5 border rounded-md border-gray-100 bg-primary-50 ">
