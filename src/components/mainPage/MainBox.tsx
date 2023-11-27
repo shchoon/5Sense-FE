@@ -140,7 +140,7 @@ export default function MainBox() {
               )
             })}
           </div>
-          <div className="w-full flex flex-col gap-5 p-6 2xl:max-w-[416px] xl:max-w-[296px] lg:max-w-[300px] ring-1 rounded-xl ring-gray-200">
+          <div className="w-full flex flex-col gap-5 p-6 2xl:max-w-[416px] xl:max-w-[296px] lg:max-w-[300px] outline outline-1 rounded-xl outline-gray-200">
             <div className="w-full flex flex-col gap-2 ">
               <div className="text-gray-600 text-base font-semibold font-['Pretendard'] leading-normal">
                 전체 등록 학생 수
@@ -255,80 +255,45 @@ export default function MainBox() {
       ) : null}
 
       {/* 날짜 & 주,일,월 탭 950px 이상*/}
-      {width > 950 ? (
-        <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
-          <div className="relative mx-auto flex gap-[138px] items-center w-full  h-[52px]  md:w-full ">
-            <div className="flex mx-auto w-[420px] h-full p-1.5 border rounded-md border-gray-100 bg-primary-50 ">
-              <div className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center">
-                <Image src={chevronLeft} width={24} height={24} alt=" " />
-              </div>
-              <div className="w-full px-3 py-2 flex justify-center gap-2 items-center">
-                <Image src={calender} width={18} height={18} alt=" " />
-                <span className="text-gray-900 text-base font-semibold font-['Pretendard'] leading-normal">
-                  2023년 10월 1주차
-                </span>
-              </div>
-              <div className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center">
-                <Image src={chevronRight} width={24} height={24} alt=" " />
-              </div>
+      <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
+        <div className="relative mx-auto flex gap-[138px] items-center w-full  h-[52px]  md:w-full ">
+          <div
+            className={`flex mx-auto ${
+              width > 950 ? 'w-[420px]' : 'w-[312px]'
+            }  h-full p-1.5 border rounded-md border-gray-100 bg-primary-50`}
+          >
+            <div className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center">
+              <Image src={chevronLeft} width={24} height={24} alt=" " />
             </div>
-            <div className="absolute right-0 flex items-center w-[160px] h-[44px] border rounded-full border-gray-200">
-              <div className="w-[33.33%] px-3 py-1.5 rounded-full hover:bg-primary-60">
-                <p className="text-gray-500  text-base text-center font-medium font-['Pretendard'] leading-normal ">
-                  일
-                </p>
-              </div>
-              <div className="w-[33.33%] px-3 py-1.5 rounded-full hover:bg-primary-600">
-                <p className="text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal hover:text-white">
-                  주
-                </p>
-              </div>
-              <div className="w-[33.33%] px-3 py-1.5 rounded-full hover:bg-primary-600">
-                <p className="text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal hover:text-white">
-                  월
-                </p>
-              </div>
+            <div className="w-full px-3 py-2 flex justify-center gap-2 items-center">
+              <Image src={calender} width={18} height={18} alt=" " />
+              <span className="text-gray-900 text-base font-semibold font-['Pretendard'] leading-normal">
+                2023년 10월 1주차
+              </span>
+            </div>
+            <div className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center">
+              <Image src={chevronRight} width={24} height={24} alt=" " />
+            </div>
+          </div>
+          <div className="absolute right-0 flex items-center w-[160px] h-[44px] border rounded-full border-gray-200">
+            <div className="w-[33.33%] px-3 py-1.5 rounded-full hover:bg-primary-60">
+              <p className="text-gray-500  text-base text-center font-medium font-['Pretendard'] leading-normal ">
+                일
+              </p>
+            </div>
+            <div className="w-[33.33%] px-3 py-1.5 rounded-full hover:bg-primary-600">
+              <p className="text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal hover:text-white">
+                주
+              </p>
+            </div>
+            <div className="w-[33.33%] px-3 py-1.5 rounded-full hover:bg-primary-600">
+              <p className="text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal hover:text-white">
+                월
+              </p>
             </div>
           </div>
         </div>
-      ) : (
-        /* 날짜 주,일,월 탭 950px이하 */
-        <div className="mt-[80px] w-full flex justify-end">
-          <div className=" flex  items-center w-[492px] gap-5 h-[52px]">
-            <div className="flex mx-auto w-[312px] h-full p-1.5 border rounded-md border-gray-100 bg-primary-50 ">
-              <div className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center">
-                <Image src={chevronLeft} width={24} height={24} alt=" " />
-              </div>
-              <div className="w-full px-3 py-2 flex justify-center gap-2 items-center">
-                <Image src={calender} width={18} height={18} alt=" " />
-                <span className="text-gray-900 text-base font-semibold font-['Pretendard'] leading-normal">
-                  2023년 10월 1주차
-                </span>
-              </div>
-              <div className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center">
-                <Image src={chevronRight} width={24} height={24} alt=" " />
-              </div>
-            </div>
-            <div className="flex items-center w-[160px] h-[44px] border rounded-full border-gray-200">
-              <div className="w-[33.33%] px-3 py-1.5 rounded-full hover:bg-primary-60">
-                <p className="text-gray-500  text-base text-center font-medium font-['Pretendard'] leading-normal ">
-                  일
-                </p>
-              </div>
-              <div className="w-[33.33%] px-3 py-1.5 rounded-full hover:bg-primary-600">
-                <p className="text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal hover:text-white">
-                  주
-                </p>
-              </div>
-              <div className="w-[33.33%] px-3 py-1.5 rounded-full hover:bg-primary-600">
-                <p className="text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal hover:text-white">
-                  월
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      </div>
 
       {/* 날짜 & 주,일,월 탭 1000px 미만 */}
       {/* {width < 1000 ? (
