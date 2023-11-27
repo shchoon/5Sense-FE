@@ -1,5 +1,5 @@
 'use client'
-import { useWindowSize } from '@/components/useWindowSize'
+import { useWindowSize } from '@/hooks/useWindowSize'
 import Image from 'next/image'
 import graph from '../../assets/images/graph.svg'
 import calender from '../../assets/icons/calendar.svg'
@@ -91,6 +91,7 @@ export default function MainBox() {
 
   let [cor, setCor] = useState({ cor_x: 0, cor_y: 0 })
   let [onMouse, setOnMouse] = useState(false)
+  let [tabBg, setTabBg] = useState('translate-x-0')
   //const classRefs = studentNum.map(() => useRef<HTMLDivElement>(null))
   //const classRef0 = useRef<HTMLDivElement>(null)
   //const classRef4 = useRef<HTMLDivElement>(null)
@@ -276,21 +277,43 @@ export default function MainBox() {
             </div>
           </div>
           <div className="absolute right-0 flex items-center w-[160px] h-[44px] border rounded-full border-gray-200">
-            <div className="w-[33.33%] px-3 py-1.5 rounded-full hover:bg-primary-60">
-              <p className="text-gray-500  text-base text-center font-medium font-['Pretendard'] leading-normal ">
-                일
-              </p>
-            </div>
-            <div className="w-[33.33%] px-3 py-1.5 rounded-full hover:bg-primary-600">
-              <p className="text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal hover:text-white">
-                주
-              </p>
-            </div>
-            <div className="w-[33.33%] px-3 py-1.5 rounded-full hover:bg-primary-600">
-              <p className="text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal hover:text-white">
-                월
-              </p>
-            </div>
+            <div
+              className={`absolute z-0 w-1/3 h-full bg-primary-600 rounded-full transition-transform ${tabBg}`}
+            ></div>
+            <p
+              className={`z-10 w-1/3 px-3 py-1.5 rounded-full ${
+                tabBg === 'translate-x-0' ? 'text-white' : 'text-gray-500'
+              } text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal cursor-pointer`}
+              onClick={() => {
+                setTabBg('translate-x-0')
+              }}
+            >
+              일
+            </p>
+            <p
+              className={`z-10 w-1/3 px-3 py-1.5 rounded-full ${
+                tabBg === 'translate-x-[52.62px]'
+                  ? 'text-white'
+                  : 'text-gray-500'
+              } text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal cursor-pointer`}
+              onClick={() => {
+                setTabBg('translate-x-[52.62px]')
+              }}
+            >
+              주
+            </p>
+            <p
+              className={`z-10 w-1/3 px-3 py-1.5 rounded-full ${
+                tabBg === 'translate-x-[105.24px]'
+                  ? 'text-white'
+                  : 'text-gray-500'
+              } text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal cursor-pointer`}
+              onClick={() => {
+                setTabBg('translate-x-[105.24px]')
+              }}
+            >
+              월
+            </p>
           </div>
         </div>
       </div>

@@ -398,7 +398,10 @@ export default function MainPageWeek() {
                   {/* 1 */}
                   {data.classInfo.map((classData, i) => {
                     return (
-                      <div key={i} className="p-[6px] flex flex-col gap-1 ">
+                      <div
+                        key={i}
+                        className="p-[6px] flex flex-col gap-1 outline outline-1 outline-gray-200"
+                      >
                         {classData.classTime !== undefined ? (
                           <div className="flex flex-col p-[5px] gap-2 outline outline-1 rounded outline-orange-200 bg-[#FDFCF8]">
                             <div className="flex flex-col gap-[2px] px-1 py-[5px] rounded bg-[#FFF0E3]">
