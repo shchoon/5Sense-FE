@@ -6,8 +6,9 @@
   .box-flex {
     @apply flex flex-col justify-center items-center;
   }
-  .academy-info {
-    @apply block relative top-[180px] w-[248px] h-[251px] box-content px-5 2xl:px-6 3xl:px-5 border-2 border-slate-950 border-solid;
+
+  .side-info {
+    @apply mt-[130px] max-w-[504px] lg:px-4 xl:px-6 3xl:px-0 3xl:flex-grow h-[251px] flex flex-col items-center flex-shrink-0;
   }
   .menu-title {
     @apply text-black text-3xl font-bold font-['Pretendard'];
@@ -27,14 +28,14 @@
   .m-placeholder {
     @apply text-gray-300 text-2xl font-semibold font-['Pretendard'];
   }
-  .nav-active {
-    @apply bg-white text-primary-500 text-lg;
-  }
   .class-box {
     @apply w-full flex flex-col gap-[40px] px-6 py-8 bg-white rounded-xl border border-gray-200;
   }
   .time-box {
     @apply relative flex justify-center items-center w-[124px] h-[42px] p-3 bg-white rounded-lg border border-gray-300;
+  }
+  .bold-500 {
+    @apply font-bold text-primary-600;
   }
 
   /* ... */
