@@ -5,10 +5,36 @@ import graph from '../../assets/images/graph.svg'
 import calender from '../../assets/icons/calendar.svg'
 import chevronLeft from '../../assets/icons/chevron-left.svg'
 import chevronRight from '../../assets/icons/chevron-right.svg'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
 
 export default function MainBox() {
   const { width, height } = useWindowSize()
+  const router = useRouter()
+  const currentPath = usePathname()
+  //console.log(pathName)
+  //console.log(pathName.split('/')[2])
+  //let [pathName, setPathName] = useState<undefined | string>()
+  let [tabBg, setTabBg] = useState('translate-x-0')
+  //console.log(pathName?.split('/')[2])
+
+  useEffect(() => {
+    let pathName = currentPath.split('/')[2]
+    console.log(pathName)
+    //console.log(currentPath.split('/'))
+    if (pathName === 'day' || pathName === undefined) {
+      setTabBg('translate-x-0')
+    } else if (currentPath.split('/')[2] === 'week') {
+      //console.log(currentPath.split('/')[2])
+      setTabBg('translate-x-[52.62px]')
+    } else if (pathName === 'month') {
+      setTabBg('translate-x-[105.24px]')
+    }
+  }, [])
+
+  //console.log(tabBg)
+
+  //console.log(pathName)
   //console.log(width)
 
   const incomeData = [
@@ -91,7 +117,6 @@ export default function MainBox() {
 
   let [cor, setCor] = useState({ cor_x: 0, cor_y: 0 })
   let [onMouse, setOnMouse] = useState(false)
-  let [tabBg, setTabBg] = useState('translate-x-0')
   //const classRefs = studentNum.map(() => useRef<HTMLDivElement>(null))
   //const classRef0 = useRef<HTMLDivElement>(null)
   //const classRef4 = useRef<HTMLDivElement>(null)
@@ -286,6 +311,7 @@ export default function MainBox() {
               } text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal cursor-pointer`}
               onClick={() => {
                 setTabBg('translate-x-0')
+                router.push('/home/day')
               }}
             >
               일
@@ -298,6 +324,7 @@ export default function MainBox() {
               } text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal cursor-pointer`}
               onClick={() => {
                 setTabBg('translate-x-[52.62px]')
+                router.push('/home/week')
               }}
             >
               주
@@ -310,6 +337,7 @@ export default function MainBox() {
               } text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal cursor-pointer`}
               onClick={() => {
                 setTabBg('translate-x-[105.24px]')
+                router.push('/home/month')
               }}
             >
               월

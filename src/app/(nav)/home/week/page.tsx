@@ -32,10 +32,10 @@ export default function MainPageWeek() {
     }
   ]
 
-  const classData = [
+  const classInfo = [
     {
       time: '09:00',
-      classInfo: [
+      classData: [
         {
           classTime: {
             time: '10:00',
@@ -94,7 +94,7 @@ export default function MainPageWeek() {
     },
     {
       time: '11:00',
-      classInfo: [
+      classData: [
         {
           periodTime: {
             time: '11:00',
@@ -134,7 +134,7 @@ export default function MainPageWeek() {
     },
     {
       time: '12:00',
-      classInfo: [
+      classData: [
         {},
         {
           classTime: {
@@ -180,7 +180,7 @@ export default function MainPageWeek() {
     },
     {
       time: '13:00',
-      classInfo: [
+      classData: [
         {
           classTime: {
             time: '13:00',
@@ -239,7 +239,7 @@ export default function MainPageWeek() {
     },
     {
       time: '14:00',
-      classInfo: [
+      classData: [
         {},
         {
           classTime: {
@@ -279,7 +279,7 @@ export default function MainPageWeek() {
     },
     {
       time: '15:00',
-      classInfo: [
+      classData: [
         {
           classTime: {
             time: '13:00',
@@ -367,77 +367,101 @@ export default function MainPageWeek() {
         </div>
       </div>
 
-      {/* 시간표 회차/기간 */}
-      <div className=" mx-auto xl:max-w-[1016px] lg:max-w-[936px]  flex flex-col items-end gap-4">
-        <div className="w-[164px] h-4 flex gap-6 ">
-          <div className="w-[70px] h-full flex gap-2 items-center justify-end">
-            <span className="w-[16px] h-[16px] border rounded bg-[#FF7749]"></span>
-            <span className="text-orange-500 text-[13px] font-bold font-['Pretendard'] leading-none">
-              회차반
-            </span>
-          </div>
-          <div className="w-[70px] h-full flex gap-2 items-center justify-end">
-            <span className="w-[16px] h-[16px] border rounded bg-primary-500"></span>
-            <span className="text-primary-500 text-[13px] font-bold font-['Pretendard'] leading-none">
-              기간반
-            </span>
+      {/* 회차반 / 기간반 */}
+      <div className="flex flex-col gap-4 mx-auto xl:max-w-[1016px] pt-8 pb-[80px]">
+        <div className="w-full h-4 flex justify-end">
+          <div className="w-[164px] h-4 flex gap-6 ">
+            <div className="w-[70px] h-full flex gap-2 items-center justify-end">
+              <span className="w-[16px] h-[16px] border rounded bg-[#FF7749]"></span>
+              <span className="text-orange-500 text-[13px] font-bold font-['Pretendard'] leading-none">
+                회차반
+              </span>
+            </div>
+            <div className="w-[70px] h-full flex gap-2 items-center justify-end">
+              <span className="w-[16px] h-[16px] border rounded bg-primary-500"></span>
+              <span className="text-primary-500 text-[13px] font-bold font-['Pretendard'] leading-none">
+                기간반
+              </span>
+            </div>
           </div>
         </div>
         {/* 시간표 */}
         <div className="flex flex-col w-full">
-          {classData.map((data, i) => {
+          {classInfo.map((data1, pI) => {
+            /* 시간 */
             return (
               <div
-                key={i}
+                key={pI}
                 className="w-full flex xl:gap-5 lg:gap-4 md:gap-[14px] gap-3.5"
               >
                 <div className="xl:w-[51px] lg:w-[45px] md:w-12 w-[49px] text-right text-gray-800 text-base font-semibold font-['Pretendard'] leading-normal">
-                  {data.time}
+                  {data1.time}
                 </div>
-                <div className="xl:w-[945px] lg:w-[875px] md:w-[770px] w-[609px] outline outline-1 outline-gray-100 grid grid-cols-7">
-                  {/* 1 */}
-                  {data.classInfo.map((classData, i) => {
+                <div
+                  className={`xl:w-[945px] lg:w-[875px] md:w-[770px] w-[609px] outline outline-1 ${
+                    pI === 0 ? 'rounded-t-lg' : null
+                  } ${
+                    pI === classInfo.length - 1 ? 'rounded-b-lg' : null
+                  } outline-gray-200 grid grid-cols-7`}
+                >
+                  {data1.classData.map((data2, cI) => {
+                    /* 시간표 */
                     return (
                       <div
-                        key={i}
-                        className="p-[6px] flex flex-col gap-1 outline outline-1 outline-gray-200"
+                        key={cI}
+                        className={`p-[6px] flex flex-col gap-1 outline outline-1 outline-gray-200 ${
+                          pI == 0 && cI == 0 ? 'rounded-tl-lg' : null
+                        } ${
+                          pI == 0 && cI == data1.classData.length - 1
+                            ? 'rounded-tr-lg'
+                            : null
+                        } ${
+                          pI == classInfo.length - 1 && cI == 0
+                            ? 'rounded-bl-lg'
+                            : null
+                        } ${
+                          pI == classInfo.length - 1 &&
+                          cI == data1.classData.length - 1
+                            ? 'rounded-br-lg'
+                            : null
+                        }`}
                       >
-                        {classData.classTime !== undefined ? (
+                        {data2.classTime !== undefined ? (
                           <div className="flex flex-col p-[5px] gap-2 outline outline-1 rounded outline-orange-200 bg-[#FDFCF8]">
                             <div className="flex flex-col gap-[2px] px-1 py-[5px] rounded bg-[#FFF0E3]">
-                              <span className=" text-orange-500 text-[13px] font-bold font-['Pretendard'] leading-none">
-                                {classData.classTime.time}
+                              <span className="h-4 text-orange-500 text-[13px] font-bold font-['Pretendard'] leading-none">
+                                {data2.classTime.time}
                               </span>
-                              <span className="w-full text-orange-400 text-xs font-semibold font-['Pretendard'] leading-[15px]">
-                                {classData.classTime.classTime}
+                              <span className="w-full h-[15px] text-orange-400 text-xs font-semibold font-['Pretendard'] leading-[15px]">
+                                {data2.classTime.classTime}
                               </span>
                             </div>
                             <div className="flex flex-col gap-[2px]">
                               <div className="w-full max-h-[42px] overflow-hidden text-ellipsis line-clamp-2  text-orange-400 text-[14px] font-bold font-['Pretendard'] leading-[21px]">
-                                {classData.classTime.className}
+                                {data2.classTime.className}
                               </div>
                               <span className="w-full text-orange-500 text-xs font-bold font-['Pretendard'] leading-[18px]">
-                                {classData.classTime.teacherName}
+                                {data2.classTime.teacherName}
                               </span>
                             </div>
                           </div>
                         ) : null}
-                        {classData.periodTime !== undefined ? (
+                        {data2.periodTime !== undefined ? (
                           <div className="flex flex-col p-[5px] gap-2 outline outline-1 rounded outline-primary-200 bg-primary-50">
                             <div className="flex flex-col gap-[2px] px-1 py-[5px] rounded bg-primary-100">
                               <span className="w-full text-primary-600 text-[13px] font-bold font-['Pretendard'] leading-none">
-                                {classData.periodTime.time}
+                                {data2.periodTime.time}
                               </span>
                               <span className="w-full text-[#9B81FE] text-xs font-semibold font-['Pretendard'] leading-[15px]">
-                                {classData.periodTime.classTime}
+                                {data2.periodTime.classTime}
                               </span>
                             </div>
                             <div className="flex flex-col gap-[2px]">
                               <span className="w-full text-primary-500 text-sm font-semibold font-['Pretendard'] leading-[21px]">
-                                {classData.periodTime.className}
+                                {data2.periodTime.className}
                               </span>
                               <span className="w-full text-primary-600 text-xs font-bold font-['Pretendard'] leading-[18px]">
-                                {classData.periodTime.teacherName}
+                                {data2.periodTime.teacherName}
                               </span>
                             </div>
                           </div>

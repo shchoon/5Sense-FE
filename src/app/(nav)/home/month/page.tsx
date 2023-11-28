@@ -527,7 +527,7 @@ export default function MainPageMonth() {
   ]
 
   return (
-    <div className="flex flex-col gap-4 mx-auto xl:max-w-[1016px] lg:max-w-[936px] md:max-w-[832px] pt-8 pb-[80px]">
+    <div className="flex flex-col gap-4 mx-auto xl:max-w-[1016px] pt-8 pb-[80px]">
       {/* 회차반 / 기간반 */}
       <div className="w-full h-4 flex justify-end">
         <div className="w-[164px] h-4 flex gap-6 ">
