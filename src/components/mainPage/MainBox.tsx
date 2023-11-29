@@ -129,6 +129,7 @@ export default function MainBox() {
             {incomeData.map((data, i) => {
               return (
                 <div
+                  key={i}
                   className={`w-1/2 p-6 flex flex-col gap-5 outline outline-1 ${data.rounded} outline-gray-200 h-full`}
                 >
                   <div className="w-full flex flex-col gap-2">
@@ -207,6 +208,7 @@ export default function MainBox() {
             {incomeData.map((data, i) => {
               return (
                 <div
+                  key={i}
                   className={`w-1/2 p-6 flex flex-col gap-5 outline outline-1 ${data.rounded} outline-gray-200 h-full`}
                 >
                   <div className="w-full flex flex-col gap-2">
@@ -286,7 +288,7 @@ export default function MainBox() {
           <div
             className={`flex mx-auto ${
               width > 950 ? 'w-[420px]' : 'w-[312px]'
-            }  h-full p-1.5 border rounded-md border-gray-100 bg-primary-50`}
+            }  h-full p-1.5 border rounded-md border-gray-100 bg-[#F8FAFD]`}
           >
             <div className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center">
               <Image src={chevronLeft} width={24} height={24} alt=" " />

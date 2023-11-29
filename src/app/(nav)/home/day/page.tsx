@@ -112,6 +112,33 @@ export default function MainPageDay() {
       ]
     },
     {
+      time: '14:00',
+      class: [
+        {
+          hour: '14',
+          bgColorOn: 'bg-primary-600',
+          bgColorOff: 'bg-gray-200',
+          textColorOn: 'text-gray-800',
+          textColorOff: 'text-gray-400',
+          teacherName: '조영은',
+          roomNum: '1호실',
+          className:
+            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
+        },
+        {
+          hour: '14',
+          bgColorOn: 'bg-primary-600',
+          bgColorOff: 'bg-gray-200',
+          textColorOn: 'text-gray-800',
+          textColorOff: 'text-gray-400',
+          teacherName: '엄세리',
+          roomNum: '2호실',
+          className:
+            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
+        }
+      ]
+    },
+    {
       time: '15:00',
       class: [
         {
@@ -204,6 +231,7 @@ export default function MainPageDay() {
                 </div>
                 <div className="w-full flex flex-col p-4 gap-[7px] outline outline-1 rounded-lg outline-gray-200">
                   {data.class.map((data, i) => {
+                    //console.log(currentHour, data.hour)
                     return (
                       <div key={i} className="flex gap-4 h-[45px]">
                         <div
