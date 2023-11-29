@@ -4,6 +4,7 @@ import ClassInfo from '@/components/class/register/ClassInfo'
 import ClassSub from '@/components/class/register/ClassSub'
 import ClassType from '@/components/class/register/ClassType'
 import InputForm, { InputFormProps } from '@/components/InputForm'
+import TextareaForm from '@/components/TextareaForm'
 import { ChangeEvent, useEffect, useState } from 'react'
 
 export type category = {
@@ -30,8 +31,7 @@ export default function RegisterPage() {
     title: '클래스 메모',
     placeholder: '클래스관련 메모를 적어주세요',
     name: 'classMemo',
-    maxLength: 300,
-    textarea: true
+    maxLength: 300
   }
 
   const categorydata: category[] = [
@@ -152,7 +152,7 @@ export default function RegisterPage() {
         <div className="m-title">클래스 정보</div>
         <div className="info-detail flex flex-col gap-2">
           <InputForm {...classNameProps} />
-          <InputForm {...classMemoProps} />
+          <TextareaForm {...classMemoProps} />
           <div>
             <p className="s-title">카테고리</p>
             <div className="grid grid-cols-3 w-full gap-2">
