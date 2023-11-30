@@ -613,29 +613,29 @@ export default function MainPageWeek() {
                           >
                             {mouseOverId === data2.periodTime.checkId ? (
                               <div
-                                className="absolute z-10 left-10 top-10 w-[180px] p-[5px] flex flex-col gap-2 outline outline-1 outline-orange-200 bg-stone-50 rounded "
+                                className="absolute z-10 left-10 top-10 w-[180px] p-[5px] flex flex-col gap-2 outline outline-1 outline-primary-200 bg-stone-50 rounded "
                                 style={{
                                   left: `${cursorPosition.x}px`,
                                   top: `${cursorPosition.y}px`
                                 }}
                               >
-                                <div className="flex flex-col gap-[2px] px-1 py-[5px] rounded bg-orange-500">
+                                <div className="flex flex-col gap-[2px] px-1 py-[5px] rounded bg-primary-600">
                                   <span className="h-4 text-white text-[13px] font-bold font-['Pretendard'] leading-none">
                                     {data2.periodTime.time}
                                   </span>
-                                  <span className="w-full h-[15px] text-orange-200 text-xs font-semibold font-['Pretendard'] leading-[15px]">
+                                  <span className="w-full h-[15px] text-primary-200 text-xs font-semibold font-['Pretendard'] leading-[15px]">
                                     {data2.periodTime.classTime}
                                   </span>
                                 </div>
                                 <div className="flex flex-col gap-[2px]">
-                                  <span className="w-full text-orange-400 text-[14px] font-bold font-['Pretendard'] ">
+                                  <span className="w-full text-primary-500 text-[14px] font-bold font-['Pretendard'] ">
                                     {data2.periodTime.className}
                                   </span>
                                   <div className="w-full flex flex-col">
-                                    <span className="w-full text-orange-500 text-xs font-bold font-['Pretendard'] leading-[21px]">
+                                    <span className="w-full text-primary-600 text-xs font-bold font-['Pretendard'] leading-[21px]">
                                       {data2.periodTime.teacherName}
                                     </span>
-                                    <span className="text-orange-500 text-xs font-semibold font-['Pretendard'] leading-[18px]">
+                                    <span className="text-primary-600 text-xs font-semibold font-['Pretendard'] leading-[18px]">
                                       5명
                                     </span>
                                   </div>

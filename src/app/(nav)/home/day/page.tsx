@@ -224,7 +224,13 @@ export default function MainPageDay() {
               >
                 {/* 시간 */}
                 <div className="flex w-[77px] h-6 gap-5 items-center">
-                  <div className="w-[51px] text-right text-indigo-500 text-base font-semibold font-['Pretendard'] leading-normal">
+                  <div
+                    className={`w-[51px] text-right ${
+                      currentHour === Number(data.time.split(':')[0])
+                        ? 'text-indigo-500'
+                        : 'text-black'
+                    }  text-base font-semibold font-['Pretendard'] leading-normal`}
+                  >
                     {data.time}
                   </div>
                   <div className="w-1.5 h-1.5 bg-primary-600"></div>
