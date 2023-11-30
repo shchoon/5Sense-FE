@@ -40,6 +40,9 @@
   .medium-500 {
     @apply font-medium text-primary-500 font-sans;
   }
+  .input-box {
+    @apply w-full h-auto px-4 py-3.5 rounded-lg border border-gray-200 box-border overflow-hidden text-gray-900 text-base font-normal font-sans placeholder:s-placeholder focus:outline-none focus:border focus:border-primary-700;
+  }
 
   /* ... */
 }
