@@ -256,15 +256,23 @@ export default function ClassType() {
   return (
     <div className="class-box">
       <div className="Title m-title">클래스 유형</div>
-      <div className="w-[592px] h-[52px] p-1.5 bg-white rounded-md border border-gray-300 flex justify-around items-center">
+      <div className="w-[592px] h-[52px] p-1.5 bg-white rounded-md border border-gray-300 flex">
         <button
-          className="w-[290px] h-10 px-3 py-2 rounded-md flex-col justify-center items-center"
+          className={`w-[290px] h-10 rounded-md flex justify-center items-center text-base font-sans leading-normal ${
+            tab
+              ? 'bg-primary-600 text-white font-semibold'
+              : 'text-gray-500 font-medium'
+          }`}
           onClick={() => onTabHandler('기간반')}
         >
           기간반
         </button>
         <button
-          className="w-[290px] h-10 px-3 py-2 rounded-md flex-col justify-center items-center"
+          className={`w-[290px] h-10 rounded-md flex justify-center items-center text-base font-sans leading-normal ${
+            tab
+              ? 'text-gray-500 font-medium'
+              : 'bg-primary-600 text-white font-semibold'
+          }`}
           onClick={() => onTabHandler('회차반')}
         >
           회차반
