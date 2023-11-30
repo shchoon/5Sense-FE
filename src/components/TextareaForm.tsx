@@ -1,7 +1,7 @@
 import { useInput } from '@/hooks/useInput'
 import { ChangeEvent, useCallback, useRef, useState } from 'react'
 
-export interface InputFormProps {
+export interface TextareaFormProps {
   title: string
   placeholder: string
   name: string
@@ -14,7 +14,7 @@ export default function TextareaForm({
   placeholder,
   name,
   maxLength
-}: InputFormProps) {
+}: TextareaFormProps) {
   const [inputValue, setInputValue] = useState<string>('')
   const ValueLength = inputValue.length
 

@@ -4,7 +4,7 @@ export interface InputFormProps {
   title: string
   placeholder: string
   name: string
-  maxLength: number
+  maxLength?: number
 }
 
 export default function InputForm({
@@ -16,7 +16,7 @@ export default function InputForm({
   const [inputValue, handleChange] = useInput('')
   const ValueLength = inputValue.length
   return (
-    <>
+    <div className="flex flex-col gap-2">
       <p className="s-title">{title}</p>
 
       <input
@@ -29,10 +29,13 @@ export default function InputForm({
         onChange={handleChange}
         maxLength={maxLength}
       />
-
-      <span className="text-right">
-        {ValueLength}/{maxLength}
-      </span>
-    </>
+      {maxLength ? (
+        <span className="text-right">
+          {ValueLength}/{maxLength}
+        </span>
+      ) : (
+        ''
+      )}
+    </div>
   )
 }
