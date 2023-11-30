@@ -1,7 +1,11 @@
+/* 'use client'
+
+import { testState, nameState } from '../../recoilContextProvider'
+import { useRecoilValue, useRecoilState } from 'recoil' */
+
 export default function HomePage() {
-  return (
-    <section>
-      <div>메인 홈 페이지</div>
-    </section>
-  )
+  //const [test, setTest] = useRecoilState(testState)
+  //const [name, setName] = useRecoilState(nameState)
+
+  return <div></div>
 }

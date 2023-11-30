@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require('tailwindcss/plugin')
 
 module.exports = {
   content: [
@@ -9,11 +10,40 @@ module.exports = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/**/*.{js,jsx,ts,tsx}'
   ],
-  plugins: [require('flowbite/plugin')],
+  plugins: [
+    require('flowbite/plugin'),
+    plugin(function ({ addComponents }) {
+      addComponents({
+        '.btn': {
+          padding: '.5rem 1rem',
+          borderRadius: '.25rem',
+          fontWeight: '600'
+        },
+        '.btn-blue': {
+          backgroundColor: '#3490dc',
+          color: '#fff',
+          '&:hover': {
+            backgroundColor: '#2779bd'
+          }
+        },
+        '.btn-red': {
+          backgroundColor: '#e3342f',
+          color: '#fff',
+          '&:hover': {
+            backgroundColor: '#cc1f1a'
+          }
+        }
+      })
+    })
+  ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Pretendard']
+      },
       screens: {
         md: '769px',
+        '2md': '817px',
         lg: '1025px',
         xl: '1281px',
         '2xl': '1441px',
@@ -26,8 +56,7 @@ module.exports = {
         current: 'currentColor',
         white: '#ffffff',
         primary: {
-          50: '#F8FAFD',
-          100: '#F0EFFF',
+          50: '#F0EFFF',
           200: '#D3C4F9',
           300: '#B6A3EF',
           400: '#907AE5',
@@ -36,9 +65,14 @@ module.exports = {
           700: '#5539C0'
         },
         gray: {
+          50: '#F8FAFD',
           200: '#E5E7EB',
-          400: '#9CA3AF'
+          400: '#9CA3AF',
+          500: '#6B7280'
         }
+      },
+      boxShadow: {
+        mainPage: '-3px 0px 20px 0px rgba(139, 140, 165, 0.03)'
       }
     }
   }
