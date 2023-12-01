@@ -438,8 +438,8 @@ export default function MainPageWeek() {
 
     //setCursorPosition({ x: e.clientX - 409, y: e.clientY - 381 })
     setCursorPosition({
-      x: e.clientX - minusXValue + 10,
-      y: e.clientY - minusYValue + 10
+      x: e.clientX - minusXValue + 20,
+      y: e.clientY - minusYValue + 20
     })
     //console.log(cursorPosition)
   }
