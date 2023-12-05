@@ -8,6 +8,7 @@ import chevronRight from '../../assets/icons/chevron-right.svg'
 import { useEffect, useRef, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import DateTab from './DateTab'
+import Link from 'next/link'
 
 export default function MainBox() {
   const { width, height } = useWindowSize()
