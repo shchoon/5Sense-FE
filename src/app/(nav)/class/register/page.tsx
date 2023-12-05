@@ -1,7 +1,5 @@
 'use client'
 
-import ClassInfo from '@/components/class/register/ClassInfo'
-import ClassSub from '@/components/class/register/ClassSub'
 import ClassType from '@/components/class/register/ClassType'
 import InputForm, { InputFormProps } from '@/components/InputForm'
 import TextareaForm, { TextareaFormProps } from '@/components/TextareaForm'
@@ -232,10 +230,8 @@ export default function RegisterPage() {
         </div>
       </div>
       <ClassType />
-      <div className="Button w-full h-[52px] px-6 py-3.5 bg-indigo-500 rounded-lg justify-center items-center box-border">
-        <div className="Text text-white text-base font-semibold font-['Pretendard'] leading-normal text-center">
-          등록하기
-        </div>
+      <div className="Button w-full h-[52px] px-6 py-3.5 btn-purple">
+        등록하기
       </div>
     </div>
   )

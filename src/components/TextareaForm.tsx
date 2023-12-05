@@ -33,7 +33,7 @@ export default function TextareaForm({
         ref={textarea}
         className={`${
           inputValue.length > 0 ? 'bg-gray-50' : 'bg-white'
-        } input-box`}
+        } input-line-gray resize-none overflow-hidden`}
         placeholder={placeholder}
         name={name}
         value={inputValue}

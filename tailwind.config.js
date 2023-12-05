@@ -14,23 +14,49 @@ module.exports = {
     require('flowbite/plugin'),
     plugin(function ({ addComponents }) {
       addComponents({
-        '.btn': {
-          padding: '.5rem 1rem',
-          borderRadius: '.25rem',
-          fontWeight: '600'
-        },
-        '.btn-blue': {
-          backgroundColor: '#3490dc',
-          color: '#fff',
+        '.btn-purple': {
+          boxSizing: 'border-box',
+          background: '#7354E8',
+          borderRadius: 8,
+          textAlign: 'center',
+          color: 'white',
+          fontWeight: '600',
+          cursor: 'pointer',
           '&:hover': {
-            backgroundColor: '#2779bd'
+            backgroundColor: '#563AC0'
           }
         },
-        '.btn-red': {
-          backgroundColor: '#e3342f',
-          color: '#fff',
+        '.btn-line-purple': {
+          boxSizing: 'border-box',
+          background: 'white',
+          borderRadius: 8,
+          textAlign: 'center',
+          border: '1px #7354E8 solid',
+          color: '#7354E8',
+          fontWeight: '600',
+          cursor: 'pointer',
           '&:hover': {
-            backgroundColor: '#cc1f1a'
+            background: '#563AC0',
+            color: 'white'
+          }
+        },
+        '.input-line-gray': {
+          paddingLeft: 16,
+          paddingRight: 16,
+          paddingTop: 14,
+          paddingBottom: 14,
+          boxSizing: 'border-box',
+          background: 'white',
+          borderRadius: 8,
+          border: '1px #D1D5DB solid',
+          boxSizing: 'border-box',
+          '&:placeholder': {
+            color: '#9CA3AF',
+            fontWeight: '400'
+          },
+          '&:focus-visible': {
+            outline: 'none',
+            border: '1px #5539C0 solid'
           }
         }
       })

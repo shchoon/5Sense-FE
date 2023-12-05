@@ -14,6 +14,7 @@ import calendaricon from '@/assets/icons/calendar-month.svg'
 import 'react-datepicker/dist/react-datepicker.css'
 import ko from 'date-fns/locale/ko'
 import Image from 'next/image'
+import SelectForm from '@/components/SelectForm'
 
 export default function ClassType() {
   const [one, setOne] = useState<string>('')
@@ -107,7 +108,8 @@ export default function ClassType() {
   const MyContainer = ({ className, children }: any) => {
     const [isDropdownView, setDropdownView] = useState(false)
     const [isSelectWeek, setIsSelectWeek] = useState(false)
-    const [startH, handleStartH, activeSH, handleActiveSH] = useSelect('0')
+    const [startH, handleStartH, activeSH, handleActiveSH] =
+      useSelect('시간 선택')
     const [startM, handleStartM, activeSM, handleActiveSM] = useSelect('0')
     const [endH, handleEndH, activeEH, handleActiveEH] = useSelect('0')
     const [endM, handleEndM, activeEM, handelActiveEM] = useSelect('0')
@@ -144,65 +146,43 @@ export default function ClassType() {
           <CalendarContainer>
             <div style={{ position: 'relative' }}>{children}</div>
           </CalendarContainer>
-          <div className="w-full flex flex-row justify-between">
-            <div className="w-[268px] h-[73px] flex flex-col justify-start items-start gap-2.5">
+          <div className=" w-full flex flex-row gap-7">
+            <div className=" w-[282px] h-[83px] flex flex-col justify-start gap-2.5">
               <p className="xs-title">시작 시간</p>
               <div className="flex flex-row w-full justify-between">
-                <div className="time-box" onBlur={handleActiveSH}>
-                  <button
-                    className="w-full h-full flex justify-between items-center"
-                    onClick={handleActiveSH}
-                  >
-                    <span className="h-full text-gray-500 text-sm font-normal font-['Inter'] leading-[17.50px]">
-                      {startH === '0' ? startH : '시간 선택'}
-                    </span>
-                    <span className="w-4 h-4 leading-[17.50px]">
-                      {activeSH ? '▲' : '▼'}
-                    </span>
-                  </button>
-                  {activeSH && (
-                    <ul className="absolute top-[52px] w-[124px] h-[184px] overflow-auto p-1 bg-white rounded-md shadow border border-indigo-500">
-                      {hourArray.map((li, i) => (
-                        <li
-                          className="w-full h-[42px] px-3 py-2.5 text-gray-500 bg-white hover:bg-violet-100 rounded-[3px] justify-start"
-                          key={i}
-                          value={li}
-                          onClick={() => handleStartM(i)}
-                        >
-                          {li}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-                <span className="flex items-center">:</span>
-                <div className="time-box" onBlur={handleActiveSM}>
-                  <button
-                    className="w-full h-full flex justify-between items-center"
-                    onClick={handleActiveSM}
-                  >
-                    <span className="h-full text-gray-500 text-sm font-normal font-['Inter'] leading-[17.50px]">
-                      {startM === '0' ? startM : '시간 선택'}
-                    </span>
-                    <span className="w-4 h-4 leading-[17.50px]">
-                      {activeSM ? '▲' : '▼'}
-                    </span>
-                  </button>
-                  {activeSM && (
-                    <ul className="absolute top-[52px] w-[124px] h-[184px] overflow-auto p-1 bg-white rounded-md shadow border border-indigo-500">
-                      {minArray.map((li, i) => (
-                        <li
-                          className="w-full h-[42px] px-3 py-2.5 text-gray-500 bg-white hover:bg-violet-100 rounded-[3px] justify-start"
-                          key={i}
-                          value={li}
-                          onClick={() => handleStartM(i)}
-                        >
-                          {li}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
+                <SelectForm
+                  startH={startH}
+                  handleStartH={handleStartH}
+                  activeSH={activeSH}
+                  handleActiveSH={handleActiveSH}
+                  list={hourArray}
+                />
+                <SelectForm
+                  startH={startM}
+                  handleStartH={handleStartM}
+                  activeSH={activeSM}
+                  handleActiveSH={handleActiveSM}
+                  list={minArray}
+                />
+              </div>
+            </div>
+            <div className=" w-[282px] h-[83px] flex flex-col justify-start gap-2.5">
+              <p className="xs-title">마치는 시간</p>
+              <div className="flex flex-row w-full justify-between">
+                <SelectForm
+                  startH={endH}
+                  handleStartH={handleEndH}
+                  activeSH={activeEH}
+                  handleActiveSH={handleActiveEH}
+                  list={hourArray}
+                />
+                <SelectForm
+                  startH={endM}
+                  handleStartH={handleEndM}
+                  activeSH={activeEM}
+                  handleActiveSH={handelActiveEM}
+                  list={minArray}
+                />
               </div>
             </div>
           </div>
@@ -282,15 +262,12 @@ export default function ClassType() {
         <div className="flex flex-col gap-10">
           <div className="w-full flex flex-col gap-2">
             <p className="s-title">수강료</p>
-            <div className="flex w-[592px] h-[60px] py-3 border-b-2 flex-row-reverse justify-end border-gray-700">
-              <input
-                className="w-full placeholder:m-placeholder"
-                onChange={e => onChangePoints(e)}
-                value={addComma(money) || ''}
-                placeholder="0원"
-              />
-            </div>
-
+            <input
+              className="w-full h-[60px] py-3 box-border border-b-2 flex-row-reverse items-center justify-end border-gray-700 text-gray-900 text-2xl font-semibold font-['Pretendard'] leading-[34px] focus:outline-none placeholder:m-placeholder"
+              onChange={e => onChangePoints(e)}
+              value={addComma(money) || ''}
+              placeholder="0원"
+            />
             <p className=" text-gray-500 text-sm font-normal font-['Inter']">
               {convertToTenThousand(money)}만원
             </p>
@@ -299,12 +276,9 @@ export default function ClassType() {
             <p className="s-title">일정</p>
             <button
               onClick={createComponent}
-              className="flex justify-center items-center w-[592px] h-[52px] px-6 py-3.5 bg-white rounded-lg border border-primary-600 gap-[2px] "
+              className="w-[592px] h-[52px] px-6 py-3.5 btn-line-purple"
             >
-              <Image src={plus} alt="plus" />
-              <span className="text-primary-500 text-base font-semibold font-['Pretendard'] leading-normal">
-                일정 추가
-              </span>
+              일정 추가
             </button>
             {components}
             {calendar === false ? (

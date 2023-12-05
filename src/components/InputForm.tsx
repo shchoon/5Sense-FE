@@ -22,7 +22,7 @@ export default function InputForm({
       <input
         className={`${
           inputValue.length > 0 ? 'bg-gray-50' : 'bg-white'
-        } input-box`}
+        } w-full h-auto input-line-gray`}
         placeholder={placeholder}
         name={name}
         value={inputValue}
