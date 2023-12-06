@@ -533,13 +533,13 @@ export default function MainPageMonth() {
         <div className="w-[164px] h-4 flex gap-6 ">
           <div className="w-[70px] h-full flex gap-2 items-center justify-end">
             <span className="w-[16px] h-[16px] border rounded bg-[#FF7749]"></span>
-            <span className="text-orange-500 text-[13px] font-bold font-['Pretendard'] leading-none">
+            <span className="text-orange-500 text-[13px] font-bold   leading-none">
               회차반
             </span>
           </div>
           <div className="w-[70px] h-full flex gap-2 items-center justify-end">
             <span className="w-[16px] h-[16px] border rounded bg-primary-500"></span>
-            <span className="text-primary-500 text-[13px] font-bold font-['Pretendard'] leading-none">
+            <span className="text-primary-500 text-[13px] font-bold   leading-none">
               기간반
             </span>
           </div>
@@ -554,7 +554,7 @@ export default function MainPageMonth() {
                 key={i}
                 className="w-full h-[43px] px-[10px] py-3 flex items-center outline outline-1 outline-gray-200"
               >
-                <span className=" text-gray-500 text-base font-medium font-['Pretendard']">
+                <span className=" text-gray-500 text-base font-medium  ">
                   {day}
                 </span>
               </div>
@@ -571,11 +571,11 @@ export default function MainPageMonth() {
                     className="w-full h-full px-[10px] pt-[10px] pb-3 flex flex-col justify-between outline outline-1 outline-gray-200"
                   >
                     {currentDate === data.day ? (
-                      <div className="w-7 h-7 flex items-center justify-center rounded-full bg-primary-600 text-white text-lg font-medium font-['Pretendard']">
+                      <div className="w-7 h-7 flex items-center justify-center rounded-full bg-primary-600 text-white text-lg font-medium  ">
                         {data.day}
                       </div>
                     ) : (
-                      <div className="w-7 h-[21px] flex items-center justify-center text-gray-500 text-lg font-medium font-['Pretendard']">
+                      <div className="w-7 h-[21px] flex items-center justify-center text-gray-500 text-lg font-medium  ">
                         {data.day}
                       </div>
                     )}
@@ -588,7 +588,7 @@ export default function MainPageMonth() {
                           className={`w-[14px] h-[14px] ${data.preiodClass.boxBg} rounded`}
                         ></div>
                         <div
-                          className={`flex-1 text-right ${data.preiodClass.textColor} text-[13px] font-bold font-['Pretendard'] leading-none`}
+                          className={`flex-1 text-right ${data.preiodClass.textColor} text-[13px] font-bold   leading-none`}
                         >
                           {data.preiodClass.classCount}
                         </div>
@@ -600,7 +600,7 @@ export default function MainPageMonth() {
                           className={`w-[14px] h-[14px] ${data.timeClass.boxBg}  rounded`}
                         ></div>
                         <div
-                          className={`flex-1 text-right ${data.timeClass.textColor} text-[13px] font-bold font-['Pretendard'] leading-none`}
+                          className={`flex-1 text-right ${data.timeClass.textColor} text-[13px] font-bold   leading-none`}
                         >
                           {data.timeClass.classCount}
                         </div>

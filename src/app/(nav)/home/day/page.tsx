@@ -302,13 +302,13 @@ export default function MainPageDay() {
         <div className="w-[164px] h-4 flex gap-6 ">
           <div className="w-[70px] h-full flex gap-2 items-center justify-end">
             <span className="w-[16px] h-[16px] border rounded bg-[#FF7749]"></span>
-            <span className="text-orange-500 text-[13px] font-bold font-['Pretendard'] leading-none">
+            <span className="text-orange-500 text-[13px] font-bold   leading-none">
               회차반
             </span>
           </div>
           <div className="w-[70px] h-full flex gap-2 items-center justify-end">
             <span className="w-[16px] h-[16px] border rounded bg-primary-500"></span>
-            <span className="text-primary-500 text-[13px] font-bold font-['Pretendard'] leading-none">
+            <span className="text-primary-500 text-[13px] font-bold   leading-none">
               기간반
             </span>
           </div>
@@ -355,7 +355,7 @@ export default function MainPageDay() {
                                 currentHour === Number(data.hour)
                                   ? data.textColorOn
                                   : data.textColorOff
-                              }  text-sm font-medium font-['Pretendard'] leading-[21px]`}
+                              }  text-sm font-medium   leading-[21px]`}
                             >
                               {data.teacherName}
                             </div>
@@ -364,7 +364,7 @@ export default function MainPageDay() {
                                 currentHour === Number(data.hour)
                                   ? data.textColorOn
                                   : data.textColorOff
-                              }  text-sm font-medium font-['Pretendard'] leading-[21px]`}
+                              }  text-sm font-medium   leading-[21px]`}
                             >
                               ·
                             </div>
@@ -373,7 +373,7 @@ export default function MainPageDay() {
                                 currentHour === Number(data.hour)
                                   ? data.textColorOn
                                   : data.textColorOff
-                              }  text-sm font-medium font-['Pretendard'] leading-[21px]`}
+                              }  text-sm font-medium   leading-[21px]`}
                             >
                               {data.roomNum}
                             </div>
