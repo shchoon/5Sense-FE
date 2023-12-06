@@ -218,7 +218,7 @@ export default function ClassFilter() {
             handleCLickClassInside()
           }}
         >
-          <span className="w-16 h-[21px] text-[11.5px] font-semibold font-['Pretendard'] leading-[21px] text-indigo-500 group-hover:text-white group-focus:text-white">
+          <span className="w-16 h-[21px] text-[11.5px] font-semibold   leading-[21px] text-indigo-500 group-hover:text-white group-focus:text-white">
             {classType === '' ? '클래스 유형' : classType}
           </span>
           {isClickedClassFilter ? (
@@ -234,7 +234,7 @@ export default function ClassFilter() {
             handleClickTeacherInside()
           }}
         >
-          <span className="max-w-[110px] h-[21px] text-[11.5px] font-semibold font-['Pretendard'] leading-[21px] text-indigo-500 group-hover:text-white group-focus:text-white">
+          <span className="max-w-[110px] h-[21px] text-[11.5px] font-semibold   leading-[21px] text-indigo-500 group-hover:text-white group-focus:text-white">
             {checkedTeacherNameList.length === 0 ? '강사명' : getCheckedName()}
           </span>
           {isClickedTeacherFilter ? (
@@ -251,7 +251,7 @@ export default function ClassFilter() {
             //setIsClickedCategoryFilter(prev => !prev)
           }}
         >
-          <span className="w-[49px] h-[21px] text-[11.5px] font-semibold font-['Pretendard'] leading-[21px] text-indigo-500 group-hover:text-white group-focus:text-white">
+          <span className="w-[49px] h-[21px] text-[11.5px] font-semibold   leading-[21px] text-indigo-500 group-hover:text-white group-focus:text-white">
             {groupClass.detail !== '' ? groupClass.detail : '카테고리'}
           </span>
           {isClickedCategoryFilter ? (
@@ -284,7 +284,7 @@ export default function ClassFilter() {
                 />
                 <label
                   htmlFor="timeClass"
-                  className="text-gray-900 text-sm font-semibold font-['Pretendard'] leading-[21px]"
+                  className="text-gray-900 text-sm font-semibold   leading-[21px]"
                 >
                   회차반
                 </label>
@@ -299,7 +299,7 @@ export default function ClassFilter() {
                 />
                 <label
                   htmlFor="preiodClass"
-                  className="text-gray-900 text-sm font-semibold font-['Pretendard'] leading-[21px]"
+                  className="text-gray-900 text-sm font-semibold   leading-[21px]"
                 >
                   기간반
                 </label>
@@ -320,7 +320,7 @@ export default function ClassFilter() {
                   type="text"
                   placeholder="강사이름"
                   value={searchTeacher}
-                  className="w-full h-full border-none focus:ring-0 text-gray-500 text-sm font-normal font-['Pretendard'] leading-[17.50px]"
+                  className="w-full h-full border-none focus:ring-0 text-gray-500 text-sm font-normal   leading-[17.50px]"
                   onChange={event => {
                     SearchTeacherName(event)
                     console.log(searchTeacher)
@@ -409,7 +409,7 @@ export default function ClassFilter() {
                             alt=" "
                           />
                           <span
-                            className="text-[#7354E8] text-sm font-normal font-['Pretendard'] leading-[21px] hover:cursor-pointer"
+                            className="text-[#7354E8] text-sm font-normal   leading-[21px] hover:cursor-pointer"
                             id={teacher.name}
                             onClick={e => {
                               //console.log(e.currentTarget)
@@ -428,7 +428,7 @@ export default function ClassFilter() {
                             }}
                           >
                             {searchTeacher}
-                            <span className="text-gray-500 text-sm font-normal font-['Pretendard'] leading-[21px]">
+                            <span className="text-gray-500 text-sm font-normal   leading-[21px]">
                               {teacher.name.replace(searchTeacher, '')}
                             </span>
                           </span>
@@ -455,7 +455,7 @@ export default function ClassFilter() {
                   setOnFocusFirstGroup(prev => !prev)
                 }}
               >
-                <span className="w-[90%] text-left text-gray-500 text-sm font-normal font-['Pretendard']">
+                <span className="w-[90%] text-left text-gray-500 text-sm font-normal  ">
                   {groupClass.subject !== ''
                     ? groupClass.subject
                     : '대분류 선택'}
@@ -477,7 +477,7 @@ export default function ClassFilter() {
                         <div
                           key={i}
                           id={group.subject}
-                          className="rounded-[3px] px-2 py-1 text-gray-900 text-sm font-normal font-['Pretendard'] hover:bg-purple-100"
+                          className="rounded-[3px] px-2 py-1 text-gray-900 text-sm font-normal   hover:bg-purple-100"
                           onClick={e => {
                             setGroupClass({
                               ...groupClass,
@@ -502,7 +502,7 @@ export default function ClassFilter() {
                   setOnFocusSecondGroup(prev => !prev)
                 }}
               >
-                <span className="w-[90%] text-left text-gray-500 text-sm font-normal font-['Pretendard']">
+                <span className="w-[90%] text-left text-gray-500 text-sm font-normal  ">
                   {groupClass.detail !== '' ? groupClass.detail : '소분류 선택'}
                 </span>
                 <Image
@@ -522,7 +522,7 @@ export default function ClassFilter() {
                         <div
                           key={i}
                           id={detailValue}
-                          className="rounded-[3px] px-2 py-1 text-gray-900 text-sm font-normal font-['Pretendard'] hover:bg-purple-100"
+                          className="rounded-[3px] px-2 py-1 text-gray-900 text-sm font-normal   hover:bg-purple-100"
                           onClick={e => {
                             console.log(e.currentTarget.id)
                             setGroupClass({
