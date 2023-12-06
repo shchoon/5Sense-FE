@@ -42,20 +42,20 @@ export default function TodaySchedule() {
         {data.map((item, idx) => (
           <div key={idx} className="flex flex-col">
             <div className="before:inline-block before:w-[6px] before:h-[6px] before:rounded-full before:bg-primary-500 before:mr-2">
-              <span className="text-gray-500 text-xs font-semibold font-sans leading-[18px]">
+              <span className="text-gray-500 text-xs font-semibold   leading-[18px]">
                 {item.start}
               </span>
-              <span className="text-gray-500 text-xs font-semibold font-sans leading-[18px] before:content-['-'] before:px-1">
+              <span className="text-gray-500 text-xs font-semibold   leading-[18px] before:content-['-'] before:px-1">
                 {item.end}
               </span>
             </div>
-            <div className="pl-4 mr-0 text-['#1F2A37'] text-[13px] font-semibold font-sans leading-tight">
+            <div className="pl-4 mr-0 text-['#1F2A37'] text-[13px] font-semibold   leading-tight">
               {item.content}
             </div>
           </div>
         ))}
       </div>
-      <div className="relative w-full top-1 text-center text-gray-700 text-xs font-medium font-['Pretendard'] leading-3">
+      <div className="relative w-full top-1 text-center text-gray-700 text-xs font-medium   leading-3">
         <span className="absolute left-2.5">&lt;</span>1 / 10
         <span className="absolute right-2.5">&gt;</span>
       </div>

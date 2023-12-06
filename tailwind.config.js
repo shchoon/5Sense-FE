@@ -50,13 +50,15 @@ module.exports = {
           borderRadius: 8,
           border: '1px #D1D5DB solid',
           boxSizing: 'border-box',
+          cursor: 'pointer',
           '&:placeholder': {
             color: '#9CA3AF',
             fontWeight: '400'
           },
-          '&:focus-visible': {
+          '&:focus': {
             outline: 'none',
-            border: '1px #5539C0 solid'
+            border: '1px #5539C0 solid',
+            boxShadow: 'none' //textarea default로 shadow 존재
           }
         }
       })
@@ -64,9 +66,6 @@ module.exports = {
   ],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ['Pretendard']
-      },
       screens: {
         md: '769px',
         '2md': '817px',
@@ -74,9 +73,6 @@ module.exports = {
         xl: '1281px',
         '2xl': '1441px',
         '3xl': '1921px'
-      },
-      fontFamily: {
-        sans: ['Pretendard']
       },
       colors: {
         current: 'currentColor',

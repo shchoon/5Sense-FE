@@ -31,7 +31,7 @@ export default function ClassType() {
           onClick={() => setCalendar(!calendar)}
         >
           <Image src={calendaricon} alt="icon" />
-          <span className="text-gray-500 text-base font-normal font-['Pretendard'] leading-normal">
+          <span className="text-gray-500 text-base font-normal   leading-normal">
             기간 선택
           </span>
         </button>
@@ -148,7 +148,7 @@ export default function ClassType() {
           </CalendarContainer>
           <div className=" w-full flex flex-row gap-7">
             <div className=" w-[282px] h-[83px] flex flex-col justify-start gap-2.5">
-              <p className="xs-title">시작 시간</p>
+              <p className="xgray-800-semibold">시작 시간</p>
               <div className="flex flex-row w-full justify-between">
                 <SelectForm
                   startH={startH}
@@ -167,7 +167,7 @@ export default function ClassType() {
               </div>
             </div>
             <div className=" w-[282px] h-[83px] flex flex-col justify-start gap-2.5">
-              <p className="xs-title">마치는 시간</p>
+              <p className="xgray-800-semibold">마치는 시간</p>
               <div className="flex flex-row w-full justify-between">
                 <SelectForm
                   startH={endH}
@@ -188,7 +188,7 @@ export default function ClassType() {
           </div>
           <div>
             <div className="flex flex-col gap-2.5" onBlur={handleActiveSH}>
-              <p className="xs-title">요일 선택</p>
+              <p className="xgray-800-semibold">요일 선택</p>
               <div className="w-full h-[42px] p-3 bg-white rounded-lg border border-gray-300">
                 <label onClick={handleClickContainer2}>
                   <button>
@@ -235,10 +235,10 @@ export default function ClassType() {
 
   return (
     <div className="class-box">
-      <div className="Title m-title">클래스 유형</div>
+      <div className="Title gray-900-bold text-xl">클래스 유형</div>
       <div className="w-[592px] h-[52px] p-1.5 bg-white rounded-md border border-gray-300 flex">
         <button
-          className={`w-[290px] h-10 rounded-md flex justify-center items-center text-base font-sans leading-normal ${
+          className={`w-[290px] h-10 rounded-md flex justify-center items-center text-base   leading-normal ${
             tab
               ? 'bg-primary-600 text-white font-semibold'
               : 'text-gray-500 font-medium'
@@ -248,7 +248,7 @@ export default function ClassType() {
           기간반
         </button>
         <button
-          className={`w-[290px] h-10 rounded-md flex justify-center items-center text-base font-sans leading-normal ${
+          className={`w-[290px] h-10 rounded-md flex justify-center items-center text-base   leading-normal ${
             tab
               ? 'text-gray-500 font-medium'
               : 'bg-primary-600 text-white font-semibold'
@@ -261,9 +261,9 @@ export default function ClassType() {
       {tab ? (
         <div className="flex flex-col gap-10">
           <div className="w-full flex flex-col gap-2">
-            <p className="s-title">수강료</p>
+            <p className="gray-800-semibold">수강료</p>
             <input
-              className="w-full h-[60px] py-3 box-border border-b-2 flex-row-reverse items-center justify-end border-gray-700 text-gray-900 text-2xl font-semibold font-['Pretendard'] leading-[34px] focus:outline-none placeholder:m-placeholder"
+              className="w-full h-[60px] py-3 box-border border-b-2 flex-row-reverse items-center justify-end border-gray-700 text-gray-900 text-2xl font-semibold   leading-[34px] focus:outline-none placeholder:m-placeholder"
               onChange={e => onChangePoints(e)}
               value={addComma(money) || ''}
               placeholder="0원"
@@ -273,7 +273,7 @@ export default function ClassType() {
             </p>
           </div>
           <div className="w-full flex flex-col gap-2">
-            <p className="s-title">일정</p>
+            <p className="gray-800-semibold">일정</p>
             <button
               onClick={createComponent}
               className="w-[592px] h-[52px] px-6 py-3.5 btn-line-purple"
@@ -300,37 +300,37 @@ export default function ClassType() {
         </div>
       ) : (
         <div className="w-full flex flex-col gap-2">
-          <p className="s-title">수강료</p>
+          <p className="gray-800-semibold">수강료</p>
           <div className="relative w-[592px] h-[113px] px-5 py-4 bg-white rounded-lg border border-gray-200 flex flex-col justify-between gap-4">
             <div className="flex">
-              <span className=" text-gray-600 text-base font-medium font-['Pretendard'] leading-normal">
+              <span className=" text-gray-600 text-base font-medium   leading-normal">
                 1회 금액
               </span>
               <div className="relative">
                 <input
-                  className="w-[482px] text-right placeholder:text-gray-400 text-base font-normal font-['Pretendard']"
+                  className="w-[482px] text-right placeholder:text-gray-400 text-base font-normal  "
                   placeholder="0"
                   value={addComma(one)}
                   onChange={onChangeHandler}
                 />
-                <span className="text-gray-400 text-base font-normal font-['Pretendard']">
+                <span className="text-gray-400 text-base font-normal  ">
                   원
                 </span>
               </div>
             </div>
             <div className="Rectangle2385 absolute top-[56px] left-[20px] w-[552px] h-px bg-gray-200" />
             <div className="flex">
-              <span className=" text-gray-600 text-base font-medium font-['Pretendard'] leading-normal">
+              <span className=" text-gray-600 text-base font-medium   leading-normal">
                 총 회차
               </span>
               <div className="relative">
                 <input
-                  className="w-[488px] text-right placeholder:text-gray-400 text-base font-normal font-['Pretendard']"
+                  className="w-[488px] text-right placeholder:text-gray-400 text-base font-normal  "
                   placeholder="0"
                   value={count}
                   onChange={oncountChangeHandler}
                 />
-                <span className="text-gray-400 text-base font-normal font-['Pretendard']">
+                <span className="text-gray-400 text-base font-normal  ">
                   회
                 </span>
               </div>
@@ -339,23 +339,23 @@ export default function ClassType() {
           <div className=" w-[592px] h-[91px] p-5 bg-gray-50 rounded-lg flex justify-between">
             <p>총 금액</p>
             <div className="flex flex-col item-end">
-              <p className="w-[494px] text-right text-indigo-500 text-[22px] font-bold font-['Pretendard'] leading-[33px]">
+              <p className="w-[494px] text-right text-indigo-500 text-[22px] font-bold   leading-[33px]">
                 {multiplyAndFormat(count, one)}원
               </p>
-              <span className="text-right text-gray-500 text-xs font-medium font-['Pretendard'] leading-[18px]">
+              <span className="text-right text-gray-500 text-xs font-medium   leading-[18px]">
                 {convertToTenThousand(multiplyAndFormat(count, one))}만원
               </span>
             </div>
           </div>
           <div className="Frame814133 w-[592px] h-[57px] flex flex-col justify-start items-start gap-3 mt-6">
-            <p className="s-title">상세 내역</p>
+            <p className="gray-800-semibold">상세 내역</p>
             <div className="Frame814143 w-full flex gap-3.5">
               <div className="Rectangle2386 w-[3px] h-[21px] bg-indigo-500 rounded-sm" />
               <div className="Frame814144 w-full flex justify-between">
-                <div className="Text text-gray-600 text-sm font-normal font-['Pretendard'] leading-[21px]">
+                <div className="Text text-gray-600 text-sm font-normal   leading-[21px]">
                   1회 금액 * 총 회차
                 </div>
-                <div className="Text grow shrink basis-0 text-right text-gray-600 text-sm font-normal font-['Pretendard'] leading-[21px]">
+                <div className="Text grow shrink basis-0 text-right text-gray-600 text-sm font-normal   leading-[21px]">
                   {addComma(one)}원 * {count}회
                 </div>
               </div>

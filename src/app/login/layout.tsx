@@ -19,10 +19,10 @@ export default function loginLayout({
               alt=" "
             />
             <div className="flex flex-col gap-2 items-center">
-              <div className="text-center h-[33px] text-gray-900 text-[28px] font-bold font-['Pretendard']">
+              <div className="text-center h-[33px] text-gray-900 text-[28px] font-bold  ">
                 센스있는 매니저, 오센스
               </div>
-              <div className="w-full h-[19px] text-gray-600 text-[13.5px] font-['Pretendard']">
+              <div className="w-full h-[19px] text-gray-600 text-[13.5px]  ">
                 오감을 깨우는 클래스 관리, 센스 만점 오센스에서 시작하세요!
               </div>
             </div>

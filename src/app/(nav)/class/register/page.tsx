@@ -171,7 +171,7 @@ export default function RegisterPage() {
                   />
                   <label
                     htmlFor={option.id}
-                    className={`text-base font-medium font-['Pretendard'] leading-normal text-primary-600`}
+                    className={`text-base font-medium   leading-normal text-primary-600`}
                   >
                     {option.name}
                   </label>
@@ -187,12 +187,12 @@ export default function RegisterPage() {
   return (
     <div className="w-[640px] flex flex-col gap-5">
       <div className="class-box">
-        <div className="m-title">클래스 정보</div>
+        <div className="gray-900-bold text-xl">클래스 정보</div>
         <div className="info-detail flex flex-col gap-2">
           <InputForm {...classNameProps} />
           <TextareaForm {...classMemoProps} />
           <div>
-            <p className="s-title">카테고리</p>
+            <p className="gray-800-semibold">카테고리</p>
             <div className="flex flex-col gap-6">
               <div className="mt-2 grid grid-cols-3 w-full gap-2">
                 {categorydata.map((item: category) => (
@@ -212,7 +212,7 @@ export default function RegisterPage() {
                       />
                       <label
                         htmlFor={item.id}
-                        className={`text-base font-medium font-['Pretendard'] leading-normal ${
+                        className={`text-base font-medium   leading-normal ${
                           selectedGroup === item.id
                             ? ' text-primary-600'
                             : 'text-gray-500'
