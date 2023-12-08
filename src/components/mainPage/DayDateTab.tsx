@@ -24,46 +24,52 @@ export default function DayDateTab() {
   function moveForwardDay() {
     let lastDateOfCurrentMonth = lastDateOfCurrnetMonthData.getDate()
 
-    if (date == lastDateOfCurrentMonth) {
+    if (dateData.date == lastDateOfCurrentMonth) {
       if (dateData.month == 12) {
         setDateData({
           ...dateData,
           year: dateData.year + 1,
-          month: 1
+          month: 1,
+          date: 1
         })
-        setDate(1)
       } else {
         setDateData({
           ...dateData,
-          month: dateData.month + 1
+          month: dateData.month + 1,
+          date: 1
         })
-        setDate(1)
       }
     } else {
-      setDate(date + 1)
+      setDateData({
+        ...dateData,
+        date: dateData.date + 1
+      })
     }
   }
 
   function moveBackDay() {
     let lastDateOfLastMonth = lastDateOfLastMonthData.getDate()
 
-    if (date == 1) {
+    if (dateData.date == 1) {
       if (dateData.month == 1) {
         setDateData({
           ...dateData,
           year: dateData.year - 1,
-          month: 12
+          month: 12,
+          date: 31
         })
-        setDate(31)
       } else {
         setDateData({
           ...dateData,
-          month: dateData.month - 1
+          month: dateData.month - 1,
+          date: lastDateOfLastMonth
         })
-        setDate(lastDateOfLastMonth)
       }
     } else {
-      setDate(date - 1)
+      setDateData({
+        ...dateData,
+        date: dateData.date - 1
+      })
     }
   }
   return (
@@ -77,7 +83,7 @@ export default function DayDateTab() {
       <div className="w-full px-3 py-2 flex justify-center gap-2 items-center">
         <Image src={calender} width={18} height={18} alt=" " />
         <span className="text-gray-900 text-base font-semibold font-['Pretendard'] leading-normal">
-          {dateData.year}년 {dateData.month}월 {date}일
+          {dateData.year}년 {dateData.month}월 {dateData.date}일
         </span>
       </div>
       <div
