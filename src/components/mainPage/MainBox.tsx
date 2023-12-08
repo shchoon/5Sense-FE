@@ -8,7 +8,9 @@ import chevronRight from '../../assets/icons/chevron-right.svg'
 import { useEffect, useRef, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import DateTab from './DateTab'
-import Link from 'next/link'
+import DayDateTab from './DayDateTab'
+import WeekDateTab from './WeekDateTab'
+import MonthDateTab from './MonthDateTab'
 
 export default function MainBox() {
   const { width, height } = useWindowSize()
@@ -37,7 +39,7 @@ export default function MainBox() {
     {
       rounded: 'rounded-l-xl',
       title: '지난달 수입',
-      income: '1,252,181,153,513원',
+      income: '1,252,181,153원',
       statstics: [
         {
           bg_color: 'bg-[#563AC0]',
@@ -60,7 +62,7 @@ export default function MainBox() {
     {
       rounded: 'rounded-r-xl',
       title: '이번달 수입',
-      income: '1,252,181,153,513원',
+      income: '1,252,181,153원',
       statstics: [
         {
           bg_color: 'bg-[#563AC0]',
@@ -117,11 +119,12 @@ export default function MainBox() {
   //const classRef0 = useRef<HTMLDivElement>(null)
   //const classRef4 = useRef<HTMLDivElement>(null)
 
+  console.log(pathName)
   return (
     <>
-      {width > 1024 ? (
-        <div className="w-full flex max-w-[1480px] 2xl:max-w-[1480px] xl:max-w-[1016px] lg:max-w-[936px] items-start gap-6 ">
-          <div className="w-full flex outline outline-1 rounded-xl  outline-gray-200 ">
+      {width > 1180 ? (
+        <div className="w-full flex items-start gap-6 ">
+          <div className="w-full h-[247px] flex outline outline-1 rounded-xl  outline-gray-200 ">
             {incomeData.map((data, i) => {
               return (
                 <div
@@ -129,14 +132,14 @@ export default function MainBox() {
                   className={`w-1/2 p-6 flex flex-col gap-5 outline outline-1 ${data.rounded} outline-gray-200 h-full`}
                 >
                   <div className="w-full flex flex-col gap-2">
-                    <div className="text-gray-600 text-base font-semibold font-['Pretendard'] leading-normal">
+                    <div className="text-gray-600 text-base font-semibold   leading-normal">
                       {data.title}
                     </div>
-                    <span className="w-full h-[33px] text-black text-[28px] font-bold font-['Pretendard']">
+                    <span className="w-full h-[33px] text-black text-[28px] font-bold  ">
                       {data.income}
                     </span>
                   </div>
-                  <div className="w-full h-[114px] flex items-end gap-6">
+                  <div className="w-full h-[114px] flex items-end gap-6 ">
                     <div className="flex w-full flex-col gap-[6px]">
                       {data.statstics.map((data, i) => {
                         return (
@@ -147,10 +150,10 @@ export default function MainBox() {
                             <span
                               className={`w-3 h-[9px] rounded-[3px] ${data.bg_color}`}
                             ></span>
-                            <span className="w-8 h-[18px] text-gray-800 text-xs font-bold font-['Pretendard']">
+                            <span className="w-8 h-[18px] text-gray-800 text-xs font-bold  ">
                               {data.percentage}
                             </span>
-                            <span className="text-gray-400 flex-1 w-1 truncate h-[18px] text-xs font-medium font-['Pretendard'] ">
+                            <span className="text-gray-400 flex-1 w-1 min-w-8 truncate h-[18px] text-xs font-medium   ">
                               {data.className}
                             </span>
                           </div>
@@ -163,91 +166,12 @@ export default function MainBox() {
               )
             })}
           </div>
-          <div className="w-full flex flex-col gap-5 p-6 2xl:max-w-[416px] xl:max-w-[296px] lg:max-w-[300px] outline outline-1 rounded-xl outline-gray-200">
+          <div className="h-[247px] w-full flex flex-col gap-5 p-6 2xl:max-w-[416px] xl:max-w-[296px] lg:max-w-[300px] outline outline-1 rounded-xl outline-gray-200">
             <div className="w-full flex flex-col gap-2 ">
-              <div className="text-gray-600 text-base font-semibold font-['Pretendard'] leading-normal">
+              <div className="text-gray-600 text-base font-semibold   leading-normal">
                 전체 등록 학생 수
               </div>
-              <div className="w-full h-[33px] text-black text-[28px] font-bold font-['Pretendard']">
-                513명
-              </div>
-            </div>
-            <div className="w-full h-[114px] flex items-end gap-6">
-              <div className="flex w-[234px] flex-col gap-[6px]">
-                {studentNum.map((data, i) => {
-                  return (
-                    <div
-                      key={i}
-                      className="flex w-full h-[18px] gap-1 items-center"
-                    >
-                      <span
-                        className={`w-3 min-w-3 h-[9px] rounded-[3px] ${data.bg_color}`}
-                      ></span>
-                      <div className="w-8 h-[18px] text-gray-800 text-xs font-bold font-['Pretendard'] ">
-                        40%
-                      </div>
-                      <div className="text-gray-400 h-[18px] max-w-[182px] flex-1 w-1 truncate text-xs font-medium font-['Pretendard'] ">
-                        {data.className}
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-              <Image src={graph} width={110} height={110} alt="" />
-            </div>
-          </div>
-        </div>
-      ) : null}
-      {width <= 1024 ? (
-        <div className="w-full flex flex-col gap-4">
-          <div className="w-full flex outline outline-1 rounded-xl  outline-gray-200">
-            {incomeData.map((data, i) => {
-              return (
-                <div
-                  key={i}
-                  className={`w-1/2 p-6 flex flex-col gap-5 outline outline-1 ${data.rounded} outline-gray-200 h-full`}
-                >
-                  <div className="w-full flex flex-col gap-2">
-                    <div className="text-gray-600 text-base font-semibold font-['Pretendard'] leading-normal">
-                      {data.title}
-                    </div>
-                    <span className="w-full h-[33px] text-black text-[28px] font-bold font-['Pretendard']">
-                      {data.income}
-                    </span>
-                  </div>
-                  <div className="w-full h-[114px] flex items-end gap-6">
-                    <div className="flex w-full flex-col gap-[6px]">
-                      {data.statstics.map((data, i) => {
-                        return (
-                          <div
-                            key={i}
-                            className="w-full flex gap-1 items-center"
-                          >
-                            <span
-                              className={`w-3 h-[9px] rounded-[3px] ${data.bg_color}`}
-                            ></span>
-                            <span className="w-8 h-[18px] text-gray-800 text-xs font-bold font-['Pretendard']">
-                              {data.percentage}
-                            </span>
-                            <span className="text-gray-400 flex-1 w-1 truncate h-[18px] text-xs font-medium font-['Pretendard'] ">
-                              {data.className}
-                            </span>
-                          </div>
-                        )
-                      })}
-                    </div>
-                    <Image src={graph} width={110} height={110} alt="" />
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-          <div className="w-full flex flex-col outline outline-1 rounded-xl  outline-gray-200 p-6 gap-5">
-            <div className="w-full flex flex-col gap-2 ">
-              <div className="text-gray-600 text-base font-semibold font-['Pretendard'] leading-normal">
-                전체 등록 학생 수
-              </div>
-              <div className="w-full h-[33px] text-black text-[28px] font-bold font-['Pretendard']">
+              <div className="w-full h-[33px] text-black text-[28px] font-bold  ">
                 513명
               </div>
             </div>
@@ -262,10 +186,89 @@ export default function MainBox() {
                       <span
                         className={`w-3 min-w-3 h-[9px] rounded-[3px] ${data.bg_color}`}
                       ></span>
-                      <div className="w-8 h-[18px] text-gray-800 text-xs font-bold font-['Pretendard'] ">
+                      <div className="w-8 h-[18px] text-gray-800 text-xs font-bold   ">
                         40%
                       </div>
-                      <div className="text-gray-400 h-[18px] max-w-[182px] flex-1 w-1 truncate text-xs font-medium font-['Pretendard'] ">
+                      <div className="text-gray-400 h-[18px] max-w-[182px] flex-1 w-1 truncate text-xs font-medium   ">
+                        {data.className}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+              <Image src={graph} width={110} height={110} alt="" />
+            </div>
+          </div>
+        </div>
+      ) : null}
+      {width <= 1180 ? (
+        <div className="w-full flex flex-col gap-4">
+          <div className="w-full flex outline outline-1 rounded-xl  outline-gray-200">
+            {incomeData.map((data, i) => {
+              return (
+                <div
+                  key={i}
+                  className={`w-1/2 p-6 flex flex-col gap-5 outline outline-1 ${data.rounded} outline-gray-200 h-full`}
+                >
+                  <div className="w-full flex flex-col gap-2">
+                    <div className="text-gray-600 text-base font-semibold   leading-normal">
+                      {data.title}
+                    </div>
+                    <span className="w-full h-[33px] text-black text-[28px] font-bold  ">
+                      {data.income}
+                    </span>
+                  </div>
+                  <div className="w-full h-[114px] flex items-end gap-6">
+                    <div className="flex w-full flex-col gap-[6px]">
+                      {data.statstics.map((data, i) => {
+                        return (
+                          <div
+                            key={i}
+                            className="w-full flex gap-1 items-center"
+                          >
+                            <span
+                              className={`w-3 h-[9px] rounded-[3px] ${data.bg_color}`}
+                            ></span>
+                            <span className="w-8 h-[18px] text-gray-800 text-xs font-bold  ">
+                              {data.percentage}
+                            </span>
+                            <span className="text-gray-400 flex-1 w-1 truncate h-[18px] text-xs font-medium   ">
+                              {data.className}
+                            </span>
+                          </div>
+                        )
+                      })}
+                    </div>
+                    <Image src={graph} width={110} height={110} alt="" />
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+          <div className="w-full flex flex-col outline outline-1 rounded-xl  outline-gray-200 p-6 gap-5">
+            <div className="w-full flex flex-col gap-2 ">
+              <div className="text-gray-600 text-base font-semibold   leading-normal">
+                전체 등록 학생 수
+              </div>
+              <div className="w-full h-[33px] text-black text-[28px] font-bold  ">
+                513명
+              </div>
+            </div>
+            <div className="w-full h-[114px] flex items-end gap-6">
+              <div className="flex w-full flex-col gap-[6px]">
+                {studentNum.map((data, i) => {
+                  return (
+                    <div
+                      key={i}
+                      className="flex w-full h-[18px] gap-1 items-center"
+                    >
+                      <span
+                        className={`w-3 min-w-3 h-[9px] rounded-[3px] ${data.bg_color}`}
+                      ></span>
+                      <div className="w-8 h-[18px] text-gray-800 text-xs font-bold   ">
+                        40%
+                      </div>
+                      <div className="text-gray-400 h-[18px] max-w-[182px] flex-1 w-1 truncate text-xs font-medium   ">
                         {data.className}
                       </div>
                     </div>
@@ -286,7 +289,9 @@ export default function MainBox() {
               width > 950 ? 'w-[420px]' : 'w-[312px]'
             }  h-full p-1.5 border rounded-md border-gray-100 bg-[#F8FAFD]`}
           >
-            <DateTab />
+            {pathName == ('day' || undefined) ? <DayDateTab /> : null}
+            {pathName == 'week' ? <WeekDateTab /> : null}
+            {pathName == 'month' ? <MonthDateTab /> : null}
           </div>
           <div className="absolute right-0 flex items-center w-[160px] h-[44px] p-1 outline outline-1 rounded-full outline-gray-200">
             <div

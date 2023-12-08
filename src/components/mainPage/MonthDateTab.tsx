@@ -5,7 +5,7 @@ import calender from '../../assets/icons/calendar.svg'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
-export default function DateTab() {
+export default function MonthDateTab() {
   const currentDate = new Date()
   const pathName = usePathname().split('/')[2]
 
@@ -36,9 +36,7 @@ export default function DateTab() {
       <div className="w-full px-3 py-2 flex justify-center gap-2 items-center">
         <Image src={calender} width={18} height={18} alt=" " />
         <span className="text-gray-900 text-base font-semibold font-['Pretendard'] leading-normal">
-          {dateData.year}년 {dateData.month}월{' '}
-          {pathName == 'day' || pathName == undefined ? `${date}일` : null}
-          {pathName == 'week' ? '1주차' : null}
+          {dateData.year}년 {dateData.month}월
         </span>
       </div>
       <div

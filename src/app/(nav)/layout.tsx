@@ -81,7 +81,7 @@ export default function MainLayout({
                 <span className="text-gray-300 text-xl font-bold font-['Poppins']">
                   5sense
                 </span>
-                <span className="text-gray-300 text-sm font-medium font-['Pretendard'] leading-[14px]">
+                <span className="text-gray-300 text-sm font-medium   leading-[14px]">
                   Copyright ⓒ2023 5sense inc, ltd. All rights reserved
                 </span>
               </div>
@@ -89,7 +89,7 @@ export default function MainLayout({
                 {footer.map((item, idx) => (
                   <span
                     key={item.id}
-                    className="text-gray-300 text-xs font-medium font-['Pretendard'] leading-[14px] after:inline-block after:w-px after:h-2.5 after:bg-gray-300 after:mx-4 last:after:content-none"
+                    className="text-gray-300 text-xs font-medium   leading-[14px] after:inline-block after:w-px after:h-2.5 after:bg-gray-300 after:mx-4 last:after:content-none"
                   >
                     {item.name}
                   </span>

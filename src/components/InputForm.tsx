@@ -4,45 +4,38 @@ export interface InputFormProps {
   title: string
   placeholder: string
   name: string
-  maxLength: number
-  textarea?: boolean
+  maxLength?: number
 }
 
 export default function InputForm({
   title,
   placeholder,
   name,
-  maxLength,
-  textarea
+  maxLength
 }: InputFormProps) {
   const [inputValue, handleChange] = useInput('')
   const ValueLength = inputValue.length
   return (
-    <>
-      <p className="s-title">{title}</p>
-      {textarea ? (
-        <textarea
-          className="w-[592px] h-[52px] px-4 py-3.5 bg-white rounded-lg border border-gray-200 placeholder:s-placeholder"
-          placeholder={placeholder}
-          name={name}
-          value={inputValue}
-          onChange={handleChange}
-          maxLength={maxLength}
-        />
-      ) : (
-        <input
-          className="w-[592px] h-[52px] px-4 py-3.5 bg-white rounded-lg border border-gray-200 placeholder:s-placeholder"
-          placeholder={placeholder}
-          name={name}
-          value={inputValue}
-          onChange={handleChange}
-          maxLength={maxLength}
-        />
-      )}
+    <div className="flex flex-col gap-2">
+      <p className="gray-800-semibold">{title}</p>
 
-      <span className="text-right">
-        {ValueLength}/{maxLength}
-      </span>
-    </>
+      <input
+        className={`${
+          inputValue.length > 0 ? 'bg-gray-50' : 'bg-white'
+        } w-full h-auto input-line-gray gray-900-400`}
+        placeholder={placeholder}
+        name={name}
+        value={inputValue}
+        onChange={handleChange}
+        maxLength={maxLength}
+      />
+      {maxLength ? (
+        <span className="text-right">
+          {ValueLength}/{maxLength}
+        </span>
+      ) : (
+        ''
+      )}
+    </div>
   )
 }
