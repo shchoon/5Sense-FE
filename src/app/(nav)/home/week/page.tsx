@@ -447,9 +447,9 @@ export default function MainPageWeek() {
   //console.log(classData[1].classTime === undefined)
 
   return (
-    <div className="w-full h-full mx-auto xl:max-w-[1016px] pt-8 pb-[80px]">
+    <>
       {/* 요일 선택 탭 */}
-      <div className="w-full flex justify-end pb-6">
+      {/* <div className="w-full flex justify-end pb-6">
         <div className="w-[51px] xl:mr-5 lg:mr-4"></div>
         <div className="w-full grid grid-cols-7 gap-[7px]">
           {dateData.map((date, i) => {
@@ -484,7 +484,7 @@ export default function MainPageWeek() {
             }
           })}
         </div>
-      </div>
+      </div> */}
 
       {/* 회차반 / 기간반 */}
       <div className="flex flex-col gap-4 mx-auto xl:max-w-[1016px] pt-8 pb-[80px]">
@@ -507,7 +507,6 @@ export default function MainPageWeek() {
         {/* 시간표 */}
         <div className="flex flex-col w-full">
           {classInfo.map((data1, pI) => {
-            /* 시간 */
             return (
               <div
                 key={pI}
@@ -517,14 +516,13 @@ export default function MainPageWeek() {
                   {data1.time}
                 </div>
                 <div
-                  className={` xl:w-[945px] lg:w-[875px] md:w-[770px] w-[609px] outline outline-1 ${
+                  className={`w-full outline outline-1 ${
                     pI === 0 ? 'rounded-t-lg' : null
                   } ${
                     pI === classInfo.length - 1 ? 'rounded-b-lg' : null
                   } outline-gray-200 grid grid-cols-7`}
                 >
                   {data1.classData.map((data2, cI) => {
-                    /* 시간표 */
                     return (
                       <div
                         key={cI}
@@ -669,6 +667,6 @@ export default function MainPageWeek() {
           })}
         </div>
       </div>
-    </div>
+    </>
   )
 }

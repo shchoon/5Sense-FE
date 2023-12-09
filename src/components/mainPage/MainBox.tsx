@@ -337,20 +337,6 @@ export default function MainBox() {
           </div>
         </div>
       </div>
-
-      {/* 날짜 & 주,일,월 탭 1000px 미만 */}
-      {/* {width < 1000 ? (
-        <div className="absolute top-[537px] w-full h-[52px] flex md:px-12 px-6">
-          <div className="relative w-full flex">
-            <div className="mx-auto w-[312px] md:w-[300px]  h-full bg-slate-400">
-              tab 1
-            </div>
-            <div className="absolute right-0 w-[160px] h-[44px] bg-blue-200">
-              tab 2
-            </div>
-          </div>
-        </div>
-      ) : null} */}
     </>
   )
 }
