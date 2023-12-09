@@ -11,6 +11,11 @@ import { RecoilRoot, atom } from 'recoil'
   default: ''
 }) */
 
+export const dateSideTab = atom({
+  key: 'slideTab',
+  default: 'translate-x-0'
+})
+
 export default function RecoidContextProvider({
   children
 }: {

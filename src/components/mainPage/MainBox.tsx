@@ -7,7 +7,7 @@ import chevronLeft from '../../assets/icons/chevron-left.svg'
 import chevronRight from '../../assets/icons/chevron-right.svg'
 import { useEffect, useRef, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
-import DateTab from './DateTab'
+import DateTab from './DateSlideTab'
 import DayDateTab from './DayDateTab'
 import WeekDateTab from './WeekDateTab'
 import MonthDateTab from './MonthDateTab'
@@ -15,26 +15,8 @@ import MonthDateTab from './MonthDateTab'
 export default function MainBox() {
   const { width, height } = useWindowSize()
   const router = useRouter()
-  const currentPath = usePathname()
-
-  let [tabBg, setTabBg] = useState('translate-x-0')
-  let [pathName, setPathName] = useState<string>('')
-
-  useEffect(() => {
-    let path = currentPath.split('/')[2]
-    if (path === 'day' || path === undefined) {
-      setPathName('day')
-      setTabBg('translate-x-0')
-    } else if (path === 'week') {
-      //console.log(currentPath.split('/')[2])
-      setTabBg('translate-x-[48px]')
-      setPathName('week')
-    } else if (path === 'month') {
-      setTabBg('translate-x-[96px]')
-      setPathName('month')
-    }
-  }, [currentPath])
-
+  const currentUrl = usePathname()
+  const currentPath = currentUrl.split('/')[2]
   const incomeData = [
     {
       rounded: 'rounded-l-xl',
@@ -119,7 +101,6 @@ export default function MainBox() {
   //const classRef0 = useRef<HTMLDivElement>(null)
   //const classRef4 = useRef<HTMLDivElement>(null)
 
-  console.log(pathName)
   return (
     <>
       {width > 1180 ? (
@@ -282,61 +263,10 @@ export default function MainBox() {
       ) : null}
 
       {/* 날짜 & 주,일,월 탭 950px 이상*/}
-      <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
-        <div className="relative mx-auto flex gap-[138px] items-center w-full  h-[52px]  md:w-full ">
-          <div
-            className={`flex mx-auto ${
-              width > 950 ? 'w-[420px]' : 'w-[312px]'
-            }  h-full p-1.5 border rounded-md border-gray-100 bg-[#F8FAFD]`}
-          >
-            {pathName == ('day' || undefined) ? <DayDateTab /> : null}
-            {pathName == 'week' ? <WeekDateTab /> : null}
-            {pathName == 'month' ? <MonthDateTab /> : null}
-          </div>
-          <div className="absolute right-0 flex items-center w-[160px] h-[44px] p-1 outline outline-1 rounded-full outline-gray-200">
-            <div
-              className={`absolute z-0 w-14 h-9 outline outline-1 outline-[#9B81FE] bg-primary-600 rounded-full transition-transform ${tabBg}`}
-            ></div>
-            <div
-              className={` z-10 px-3 py-1.5 rounded-full text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal cursor-pointer
-              ${tabBg == 'translate-x-0' ? 'w-14' : 'w-12'}
-              ${tabBg === 'translate-x-0' ? 'text-white' : 'text-gray-500'} `}
-              onClick={() => {
-                setTabBg('translate-x-0')
-                router.push('/home/day')
-              }}
-            >
-              <div className="flex justify-center">일</div>
-            </div>
-            <div
-              className={`z-10 px-3 py-1.5 rounded-full text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal cursor-pointer
-              ${tabBg === 'translate-x-[48px]' ? 'w-14' : 'w-12'}
-              ${
-                tabBg === 'translate-x-[48px]' ? 'text-white' : 'text-gray-500'
-              } `}
-              onClick={() => {
-                setTabBg('translate-x-[48px]')
-                router.push('/home/week')
-              }}
-            >
-              <div className="flex justify-center">주</div>
-            </div>
-            <div
-              className={`z-10 px-3 py-1.5 rounded-full text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal cursor-pointer
-              ${tabBg === 'translate-x-[96px]' ? 'w-14' : 'w-12'}
-              ${
-                tabBg === 'translate-x-[96px]' ? 'text-white' : 'text-gray-500'
-              } `}
-              onClick={() => {
-                setTabBg('translate-x-[96px]')
-                router.push('/home/month')
-              }}
-            >
-              <div className="flex justify-center">월</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      {currentPath == undefined ? <DayDateTab /> : null}
+      {currentPath == 'day' ? <DayDateTab /> : null}
+      {currentPath == 'week' ? <WeekDateTab /> : null}
+      {currentPath == 'month' ? <MonthDateTab /> : null}
     </>
   )
 }
