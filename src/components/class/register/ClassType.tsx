@@ -6,10 +6,9 @@ import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import DatePicker, { CalendarContainer } from 'react-datepicker'
 import { getMonth, getYear, getDate } from 'date-fns'
 
-import CalendarCss from '../../calendarcss'
-
 import plus from '@/assets/icons/plus-circle.svg'
 import calendaricon from '@/assets/icons/calendar-month.svg'
+import Schedule from './Schedule'
 
 import 'react-datepicker/dist/react-datepicker.css'
 import ko from 'date-fns/locale/ko'
@@ -105,158 +104,28 @@ export default function ClassType() {
     let str = value.replaceAll(',', '')
     setMoney(str)
   }
-  const MyContainer = ({ className, children }: any) => {
-    const [isDropdownView, setDropdownView] = useState(false)
-    const [isSelectWeek, setIsSelectWeek] = useState(false)
-    const [startH, handleStartH, activeSH, handleActiveSH] =
-      useSelect('시간 선택')
-    const [startM, handleStartM, activeSM, handleActiveSM] = useSelect('0')
-    const [endH, handleEndH, activeEH, handleActiveEH] = useSelect('0')
-    const [endM, handleEndM, activeEM, handelActiveEM] = useSelect('0')
-    const [weekend, handleWeekend, activeWeek, handleA] = useSelect('')
-    const hourArray = Array.from({ length: 23 }, (_, index) => index + 1)
-    const minArray = Array.from({ length: 12 }, (_, index) => index * 5)
-    const [select, setSelect] = useState<any>([])
-    const week = ['월', '화', '수', '목', '금', '토', '일']
 
-    const sortDow = (weekDay: any[]) => {
-      const weekDaySorter: any = { 월: 1, 화: 2, 수: 3, 목: 4, 금: 5 }
-      weekDay.sort(function sortByWeekDay(a: number, b: number): number {
-        return weekDaySorter[a] - weekDaySorter[b]
-      })
-      return weekDay
-    }
-
-    const handleClickWeek = (li: string) => {
-      if (select.includes(li)) {
-        setSelect(sortDow(select.filter((item: any) => item !== li)))
-      } else {
-        setSelect(sortDow([...select, li]))
-      }
-    }
-
-    const handleClickContainer2 = () => {
-      setIsSelectWeek(!isSelectWeek)
-    }
-
+  const activeButton = (content: string, isActive: boolean) => {
     return (
-      <div className="w-[600px] p-4 bg-white rounded-lg shadow flex flex-col justify-start items-center gap-6">
-        <div className="w-full flex flex-col gap-4">
-          <CalendarCss />
-          <CalendarContainer>
-            <div style={{ position: 'relative' }}>{children}</div>
-          </CalendarContainer>
-          <div className=" w-full flex flex-row gap-7">
-            <div className=" w-[282px] h-[83px] flex flex-col justify-start gap-2.5">
-              <p className="xgray-800-semibold">시작 시간</p>
-              <div className="flex flex-row w-full justify-between">
-                <SelectForm
-                  startH={startH}
-                  handleStartH={handleStartH}
-                  activeSH={activeSH}
-                  handleActiveSH={handleActiveSH}
-                  list={hourArray}
-                />
-                <SelectForm
-                  startH={startM}
-                  handleStartH={handleStartM}
-                  activeSH={activeSM}
-                  handleActiveSH={handleActiveSM}
-                  list={minArray}
-                />
-              </div>
-            </div>
-            <div className=" w-[282px] h-[83px] flex flex-col justify-start gap-2.5">
-              <p className="xgray-800-semibold">마치는 시간</p>
-              <div className="flex flex-row w-full justify-between">
-                <SelectForm
-                  startH={endH}
-                  handleStartH={handleEndH}
-                  activeSH={activeEH}
-                  handleActiveSH={handleActiveEH}
-                  list={hourArray}
-                />
-                <SelectForm
-                  startH={endM}
-                  handleStartH={handleEndM}
-                  activeSH={activeEM}
-                  handleActiveSH={handelActiveEM}
-                  list={minArray}
-                />
-              </div>
-            </div>
-          </div>
-          <div>
-            <div className="flex flex-col gap-2.5" onBlur={handleActiveSH}>
-              <p className="xgray-800-semibold">요일 선택</p>
-              <div className="w-full h-[42px] p-3 bg-white rounded-lg border border-gray-300">
-                <label onClick={handleClickContainer2}>
-                  <button>
-                    {select.length > 0 ? `${select} 반복 ` : '요일 선택'}
-                    {isSelectWeek ? '▲' : '▼'}
-                  </button>
-                </label>
-                {isSelectWeek && (
-                  <ul>
-                    {week.map(li => (
-                      <div key={li}>
-                        <input
-                          id={li}
-                          type="checkbox"
-                          value={li}
-                          onClick={() => handleClickWeek(li)}
-                        />
-                        <label htmlFor={li[0]}>{li}</label>
-                      </div>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="w-full flex flex-row justify-between">
-          <button
-            className="w-[279px] h-12 px-5 py-3 rounded-lg border border-gray-200 justify-center items-center"
-            onClick={() => setCalendar(false)}
-          >
-            취소
-          </button>
-          <button
-            className="w-[279px] h-12 px-5 py-3 bg-indigo-500 rounded-lg justify-center items-center"
-            onClick={() => setCalendar(false)}
-          >
-            확인
-          </button>
-        </div>
-      </div>
+      <button
+        className={`w-[290px] h-10 rounded-md flex justify-center items-center text-base leading-normal ${
+          isActive
+            ? 'bg-primary-600 text-white font-semibold'
+            : 'text-gray-500 font-medium'
+        }`}
+        onClick={() => onTabHandler(content)}
+      >
+        {content}
+      </button>
     )
   }
 
   return (
     <div className="class-box">
       <div className="Title gray-900-bold text-xl">클래스 유형</div>
-      <div className="w-[592px] h-[52px] p-1.5 bg-white rounded-md border border-gray-300 flex">
-        <button
-          className={`w-[290px] h-10 rounded-md flex justify-center items-center text-base   leading-normal ${
-            tab
-              ? 'bg-primary-600 text-white font-semibold'
-              : 'text-gray-500 font-medium'
-          }`}
-          onClick={() => onTabHandler('기간반')}
-        >
-          기간반
-        </button>
-        <button
-          className={`w-[290px] h-10 rounded-md flex justify-center items-center text-base   leading-normal ${
-            tab
-              ? 'text-gray-500 font-medium'
-              : 'bg-primary-600 text-white font-semibold'
-          }`}
-          onClick={() => onTabHandler('회차반')}
-        >
-          회차반
-        </button>
+      <div className="flex w-[592px] h-[52px] p-1.5 rounded-md border border-gray-300 ">
+        {activeButton('기간반', tab)}
+        {activeButton('회차반', !tab)}
       </div>
       {tab ? (
         <div className="flex flex-col gap-10">
@@ -292,7 +161,7 @@ export default function ClassType() {
                 endDate={endDate}
                 selectsRange
                 inline={calendar}
-                calendarContainer={MyContainer}
+                calendarContainer={Schedule}
                 monthsShown={2}
               />
             )}
