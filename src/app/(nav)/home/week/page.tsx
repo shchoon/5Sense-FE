@@ -2,37 +2,6 @@
 import { useState, useRef } from 'react'
 
 export default function MainPageWeek() {
-  const dateData: { day: string; date: number }[] = [
-    {
-      day: '일요일',
-      date: 5
-    },
-    {
-      day: '월요일',
-      date: 6
-    },
-    {
-      day: '화요일',
-      date: 7
-    },
-    {
-      day: '수요일',
-      date: 8
-    },
-    {
-      day: '목요일',
-      date: 9
-    },
-    {
-      day: '금요일',
-      date: 10
-    },
-    {
-      day: '토요일',
-      date: 11
-    }
-  ]
-
   const classInfo = [
     {
       time: '09:00',
@@ -416,76 +385,25 @@ export default function MainPageWeek() {
   const handleMouseEnter = (e: any) => {
     //console.log(e.currentTarget.id)
     setMouseOverId(e.currentTarget.id)
-    console.log(mouseOverId)
   }
 
   const handelMouseLeave = (e: any) => {
     setMouseOverId('')
-    console.log(mouseOverId)
   }
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    //console.log(e.currentTarget)
     const y = scrollY
-    //console.log(y)
     const minusXValue: number = e.currentTarget.getBoundingClientRect().left
     const minusYValue: number = e.currentTarget.getBoundingClientRect().top
-    //console.log(e.currentTarget.getBoundingClientRect())
-    //console.log(curserRef.current?.offsetParent)
-    //console.log(curserRef.current?.offsetTop)
-    //console.log(e.pageX, e.pageY)
-    //const { clientX, clientY } = e
 
-    //setCursorPosition({ x: e.clientX - 409, y: e.clientY - 381 })
     setCursorPosition({
       x: e.clientX - minusXValue + 20,
       y: e.clientY - minusYValue + 20
     })
-    //console.log(cursorPosition)
   }
-
-  //console.log(classData[1].classTime === undefined)
 
   return (
     <>
-      {/* 요일 선택 탭 */}
-      {/* <div className="w-full flex justify-end pb-6">
-        <div className="w-[51px] xl:mr-5 lg:mr-4"></div>
-        <div className="w-full grid grid-cols-7 gap-[7px]">
-          {dateData.map((date, i) => {
-            if (i == 3) {
-              return (
-                <div
-                  key={i}
-                  className="xl:max-w-[129px] lg:max-w-[119px] h-full px-3 py-2 flex flex-col  border rounded-lg border-primary-600 bg-white"
-                >
-                  <div className="text-primary-600 text-center text-sm font-medium   leading-[21px]">
-                    {date.day}
-                  </div>
-                  <div className="text-primary-600 text-center text-xl font-bold   leading-[30px]">
-                    {date.date}
-                  </div>
-                </div>
-              )
-            } else {
-              return (
-                <div
-                  key={i}
-                  className="xl:max-w-[129px] lg:max-w-[119px] h-full px-3 py-2 flex flex-col  border rounded-lg border-gray=-200 bg-white"
-                >
-                  <div className="text-gray-400 text-center text-sm font-medium   leading-[21px]">
-                    {date.day}
-                  </div>
-                  <div className="text-gray-400 text-center text-xl font-bold   leading-[30px]">
-                    {date.date}
-                  </div>
-                </div>
-              )
-            }
-          })}
-        </div>
-      </div> */}
-
       {/* 회차반 / 기간반 */}
       <div className="flex flex-col gap-4 mx-auto xl:max-w-[1016px] pt-8 pb-[80px]">
         <div className="w-full h-4 flex justify-end">

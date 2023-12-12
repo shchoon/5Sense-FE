@@ -17,10 +17,6 @@ export default function DayDateTab() {
 
   const lastDateOfCurrnetMonthData = new Date(dateData.year, dateData.month, 0)
   const lastDateOfLastMonthData = new Date(dateData.year, dateData.month - 1, 0)
-  const [date, setDate] = useState<number>(dateData.date)
-
-  console.log(lastDateOfCurrnetMonthData.getDate())
-  console.log(lastDateOfLastMonthData.getDate())
 
   function moveForwardDay() {
     let lastDateOfCurrentMonth = lastDateOfCurrnetMonthData.getDate()
@@ -104,24 +100,6 @@ export default function DayDateTab() {
           <DateSlideTab />
         </div>
       </div>
-      {/* <div
-        className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
-        onClick={moveBackDay}
-      >
-        <Image src={chevronLeft} width={24} height={24} alt=" " />
-      </div>
-      <div className="w-full px-3 py-2 flex justify-center gap-2 items-center">
-        <Image src={calender} width={18} height={18} alt=" " />
-        <span className="text-gray-900 text-base font-semibold font-['Pretendard'] leading-normal">
-          {dateData.year}년 {dateData.month}월 {dateData.date}일
-        </span>
-      </div>
-      <div
-        className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
-        onClick={moveForwardDay}
-      >
-        <Image src={chevronRight} width={24} height={24} alt=" " />
-      </div> */}
     </>
   )
 }

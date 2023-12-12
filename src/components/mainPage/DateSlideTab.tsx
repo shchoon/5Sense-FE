@@ -14,7 +14,6 @@ export default function DateTab() {
 
   let [slideTab, setSlideTab] = useRecoilState(dateSideTab)
   let [pathName, setPathName] = useState<string>('')
-  console.log(slideTab)
 
   useEffect(() => {
     let path = currentPath.split('/')[2]
@@ -38,10 +37,8 @@ export default function DateTab() {
   }
 
   const [date, setDate] = useState<number>(dateData.date)
-  console.log(pathName)
   const firstDayOfYear = new Date(currentDate.getFullYear(), 0, 1)
   const lastDateOfMonth = new Date(2023, 2, 0)
-  console.log(lastDateOfMonth.getDate())
   //console.log(currentDate, firstDayOfYear)
   //const days = Math.floor((currentDate - firstDayOfYear) / (24 * 60 * 60 * 1000));
   //const week = Math.ceil((days + firstDayOfYear.getDay() + 1) / 7);
@@ -49,7 +46,6 @@ export default function DateTab() {
   function moveForwardDay() {
     setDate(date + 1)
   }
-  //console.log(dateData)
   return (
     <>
       <div className="absolute right-0 flex items-center w-[160px] h-[44px] p-1 outline outline-1 rounded-full outline-gray-200">
