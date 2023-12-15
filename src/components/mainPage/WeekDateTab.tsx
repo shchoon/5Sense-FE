@@ -7,36 +7,7 @@ import { useState, useEffect } from 'react'
 import DateSlideTab from './DateSlideTab'
 
 export default function WeekDateTab() {
-  const [dayData, setDayData] = useState<any>([
-    {
-      day: '일요일',
-      date: 0
-    },
-    {
-      day: '월요일',
-      date: 0
-    },
-    {
-      day: '화요일',
-      date: 0
-    },
-    {
-      day: '수요일',
-      date: 0
-    },
-    {
-      day: '목요일',
-      date: 0
-    },
-    {
-      day: '금요일',
-      date: 0
-    },
-    {
-      day: '토요일',
-      date: 0
-    }
-  ])
+  const [dayData, setDayData] = useState<any>([])
   const { width, height } = useWindowSize()
   const currentDate = new Date()
   const dateData: { year: number; month: number; date: number } = {
@@ -59,6 +30,12 @@ export default function WeekDateTab() {
       }
       let calculateEndMonthVar: number = dateData.month
 
+      const lastMonthLastDateData = new Date(
+        dateData.year,
+        calculateEarlyMonthVar,
+        0
+      )
+
       const currentMonthFirstDateDate = new Date(
         dateData.year,
         calculateEarlyMonthVar,
@@ -70,18 +47,15 @@ export default function WeekDateTab() {
         0
       )
 
+      console.log('currentMonth', currentMonthFirstDateDate)
+      console.log('nextMonth', currentMonthLastDateData)
+
       let date = []
       for (var i = 1; i <= currentMonthLastDateData.getDate(); i++) {
         date.push(i)
       }
       const firstWeekLength = 7 - currentMonthFirstDateDate.getDay()
-      const calculateVar =
-        (currentMonthLastDateData.getDate() - firstWeekLength) / 7
-      /* if (Number.isInteger(calculateVar)) {
-          console.log(Math.floor(calculateVar))
-        } else {
-          console.log(Math.ceil(calculateVar))
-        } */
+
       let weekData = []
       weekData.push(date.slice(0, firstWeekLength))
       for (
@@ -92,11 +66,36 @@ export default function WeekDateTab() {
         weekData.push(date.slice(i, i + 7))
       }
 
+      const lastMonthEndDate = lastMonthLastDateData.getDate()
+      const diffFirstWeekLength = 7 - weekData[0].length
+      const diffLastWeekLength = 7 - weekData[weekData.length - 1].length
+
+      for (
+        var i = lastMonthEndDate;
+        i > lastMonthEndDate - diffFirstWeekLength;
+        i--
+      ) {
+        weekData[0].unshift(i)
+      }
+
+      for (var i = 1; i <= diffLastWeekLength; i++) {
+        weekData[weekData.length - 1].push(i)
+      }
+
       return weekData
     }
     let weekData = calculateWeekNum()
-    //console.log(weekData)
+
     let weekAndDateData: any = []
+    const dayName = [
+      '일요일',
+      '월요일',
+      '화요일',
+      '수요일',
+      '목요일',
+      '금요일',
+      '토요일'
+    ]
     for (var i = 0; i < weekData.length; i++) {
       let array: { week: string; data: { day: string; date: number }[] } = {
         week: `${i + 1}`,
@@ -104,7 +103,7 @@ export default function WeekDateTab() {
       }
       for (var j = 0; j < weekData[i].length; j++) {
         array.data.push({
-          day: '일요일',
+          day: dayName[j],
           date: weekData[i][j]
         })
       }
@@ -149,7 +148,6 @@ export default function WeekDateTab() {
   function moveBackWeek() {
     setWeek(week - 1)
   }
-  console.log(dayData[1].data)
   return (
     <>
       <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
@@ -185,7 +183,7 @@ export default function WeekDateTab() {
       <div className="w-full flex max-w-[1016px] mx-auto justify-end pt-[32px]">
         <div className="w-[51px] xl:mr-5 lg:mr-4"></div>
         <div className="w-full grid grid-cols-7 gap-[7px]">
-          {dayData[week - 1].data.map((date, i) => {
+          {dayData[week - 1]?.data.map((date: any, i: number) => {
             if (date.date == dateData.date) {
               return (
                 <div
