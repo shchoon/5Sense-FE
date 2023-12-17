@@ -164,12 +164,19 @@ export default function StudentPage() {
     setSearchInput('')
   }
 
-  function preventDash(event: any) {
+  function preventDashAndPressEnter(event: any) {
     /* dash(-)의 event.which가 189 */
     if (event.which === 189) {
       event.preventDefault()
     }
+    if (event.key == 'Enter') {
+      searchClick()
+    }
     //console.log(event.which)
+  }
+
+  function pressEnter() {
+    console.log('enter')
   }
 
   return (
@@ -198,7 +205,7 @@ export default function StudentPage() {
             placeholder="Search"
             value={searchInput}
             onChange={onChangeInput}
-            onKeyDown={preventDash}
+            onKeyDown={preventDashAndPressEnter}
           />
           <Image
             className="cursor-pointer"
