@@ -10,14 +10,14 @@ export default function WeekDateTab() {
   const [dayData, setDayData] = useState<any>([])
   const { width, height } = useWindowSize()
   const currentDate = new Date()
-  const dateData: { year: number; month: number; date: number } = {
+  const [dateData, setDateData] = useState({
     year: currentDate.getFullYear(),
     month: currentDate.getMonth() + 1,
     date: currentDate.getDate()
-  }
+  })
   //console.log('dateData', dateData)
 
-  let [week, setWeek] = useState<any>()
+  let [week, setWeek] = useState<number>(0)
 
   //console.log(currentDate.getDay())
   useEffect(() => {
@@ -109,24 +109,7 @@ export default function WeekDateTab() {
       }
       weekAndDateData.push(array)
     }
-    console.log(weekAndDateData)
-    /* function checkWeekNum(date: number): any {
-      for (var i = 0; i < weekData.length; i++) {
-        if (weekData[i].includes(date)) {
-          return [weekData[i], Number(i + 1)]
-        }
-      }
-    }
-    let currentWeekData = checkWeekNum(dateData.date)
-    //console.log(currentWeekData[0])
-    setWeek(currentWeekData[1])
-    let newDayData = []
-    for (var i = 0; i < currentWeekData[0].length; i++) {
-      newDayData.push({
-        day: dayData[i].day,
-        date: currentWeekData[0][i]
-      })
-    } */
+    //console.log(weekAndDateData)
 
     function checkWeekNum(date: number): any {
       for (var i = 0; i < weekData.length; i++) {
@@ -135,19 +118,70 @@ export default function WeekDateTab() {
         }
       }
     }
+
     let week = checkWeekNum(dateData.date)
-    setWeek(week)
+    /* 현재 연도 == dateData.year && 현재 월 == dateData.month */
+    if (
+      currentDate.getFullYear() == dateData.year &&
+      currentDate.getMonth() + 1 == dateData.month
+    ) {
+      setWeek(week)
+    } else if (
+      currentDate.getFullYear() == dateData.year &&
+      dateData.month < currentDate.getMonth() + 1
+    ) {
+      /* dateData.month < 현재 월 */
+      setWeek(weekData.length)
+    }
     setDayData(weekAndDateData)
     //console.log('newDayData', newDayData)
-  }, [])
+  }, [dateData.month])
+
+  //console.log(dayData)
 
   function moveForwardWeek() {
-    setWeek(week + 1)
+    let standard = dayData.length
+    if (week === standard) {
+      if (dateData.month == 12) {
+        setDateData({
+          ...dateData,
+          year: dateData.year + 1,
+          month: 1
+        })
+        setWeek(1)
+      } else {
+        setDateData({
+          ...dateData,
+          month: dateData.month + 1
+        })
+        setWeek(1)
+      }
+    } else {
+      setWeek(week + 1)
+    }
   }
 
   function moveBackWeek() {
-    setWeek(week - 1)
+    if (week == 1) {
+      if (dateData.month == 1) {
+        setDateData({
+          ...dateData,
+          year: dateData.year - 1,
+          month: 12
+        })
+      } else {
+        setDateData({
+          ...dateData,
+          month: dateData.month - 1
+        })
+      }
+      console.log(dayData)
+    } else {
+      setWeek(week - 1)
+    }
   }
+
+  //console.log(week)
   return (
     <>
       <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
@@ -158,7 +192,7 @@ export default function WeekDateTab() {
             }  h-full p-1.5 border rounded-md border-gray-100 bg-[#F8FAFD]`}
           >
             <div
-              className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center"
+              className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
               onClick={moveBackWeek}
             >
               <Image src={chevronLeft} width={24} height={24} alt=" " />
@@ -170,7 +204,7 @@ export default function WeekDateTab() {
               </span>
             </div>
             <div
-              className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center"
+              className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
               onClick={moveForwardWeek}
             >
               <Image src={chevronRight} width={24} height={24} alt=" " />
