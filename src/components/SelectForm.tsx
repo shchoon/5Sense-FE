@@ -1,33 +1,37 @@
 export default function SelectForm({
-  startH,
-  handleStartH,
-  activeSH,
-  handleActiveSH,
-  list
+  initialValue,
+  handleValue,
+  activeOption,
+  handleOption,
+  OptionList
 }: any) {
-  console.log(startH)
-  console.log(list[0])
   return (
-    <div className="time-box" onBlur={handleActiveSH}>
+    <div className="w-full flex flex-col flex-grow gap-1 ">
       <button
-        className="w-full h-full flex justify-between items-center"
-        onClick={handleActiveSH}
+        className={`flex justify-between items-center w-full h-[52px] px-4 py-3.5 bg-white rounded-lg border ${
+          activeOption ? 'border-primary-600' : 'border-gray-300`'
+        }`}
+        onClick={handleOption}
       >
-        <span className="h-full text-gray-500 text-sm font-normal font-['Inter'] leading-[17.50px]">
-          {startH}
+        <span className="h-full gray-500-normal text-sm leading-[17.50px]">
+          {initialValue}
         </span>
         <span className="w-4 h-4 leading-[17.50px]">
-          {activeSH ? '▲' : '▼'}
+          {activeOption ? '▲' : '▼'}
         </span>
       </button>
-      {activeSH && (
-        <ul className="absolute top-[52px] w-[124px] h-[184px] overflow-auto p-1 bg-white rounded-md shadow border border-indigo-500">
-          {list.map((item: string, i: any) => (
+      {activeOption && (
+        <ul className="w-[124px] h-[184px] overflow-auto p-1 bg-white rounded-md shadow border border-primary-600 z-50">
+          {OptionList.map((item: string, i: any) => (
             <li
-              className="w-full h-[42px] px-3 py-2.5 text-gray-500 bg-white hover:bg-violet-100 rounded-[3px] justify-start cursor-pointer"
+              className={`w-full h-[42px] px-3 py-2.5 ${
+                initialValue === item
+                  ? 'text-gray-900 hover:text-primary-600'
+                  : 'text-gray-500'
+              } bg-white hover:bg-violet-100 rounded-[3px] justify-start cursor-pointer`}
               key={i}
               value={item}
-              onClick={() => handleStartH(item)}
+              onClick={() => handleValue(item)}
             >
               {item}
             </li>
