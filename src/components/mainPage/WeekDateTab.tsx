@@ -18,6 +18,12 @@ export default function WeekDateTab() {
   //console.log('dateData', dateData)
 
   let [week, setWeek] = useState<number>(0)
+  let [activeDay, setActiveDay] = useState(dateData.date)
+
+  function clickDayTab(e: any) {
+    //console.log(e.currentTarget.id)
+    setActiveDay(e.currentTarget.id)
+  }
 
   //console.log(currentDate.getDay())
   useEffect(() => {
@@ -47,8 +53,8 @@ export default function WeekDateTab() {
         0
       )
 
-      console.log('currentMonth', currentMonthFirstDateDate)
-      console.log('nextMonth', currentMonthLastDateData)
+      //console.log('currentMonth', currentMonthFirstDateDate)
+      //console.log('nextMonth', currentMonthLastDateData)
 
       let date = []
       for (var i = 1; i <= currentMonthLastDateData.getDate(); i++) {
@@ -175,13 +181,13 @@ export default function WeekDateTab() {
           month: dateData.month - 1
         })
       }
-      console.log(dayData)
+      //console.log(dayData)
     } else {
       setWeek(week - 1)
     }
   }
 
-  //console.log(week)
+  //console.log(dayData)
   return (
     <>
       <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
@@ -217,36 +223,38 @@ export default function WeekDateTab() {
       <div className="w-full flex max-w-[1016px] mx-auto justify-end pt-[32px]">
         <div className="w-[51px] xl:mr-5 lg:mr-4"></div>
         <div className="w-full grid grid-cols-7 gap-[7px]">
-          {dayData[week - 1]?.data.map((date: any, i: number) => {
-            if (date.date == dateData.date) {
-              return (
+          {dayData[week - 1]?.data.map((data: any, i: number) => {
+            return (
+              <div
+                key={i}
+                id={data.date}
+                className={`xl:max-w-[129px] lg:max-w-[119px] h-full px-3 py-2 flex flex-col  border rounded-lg ${
+                  activeDay == data.date
+                    ? 'border-primary-600'
+                    : 'border-gray-200'
+                } bg-white cursor-pointer`}
+                onClick={clickDayTab}
+              >
                 <div
-                  key={i}
-                  className="xl:max-w-[129px] lg:max-w-[119px] h-full px-3 py-2 flex flex-col  border rounded-lg border-primary-600 bg-white"
+                  className={`${
+                    activeDay == data.date
+                      ? 'text-primary-600'
+                      : 'text-gray-400'
+                  } text-center text-sm font-medium   leading-[21px]`}
                 >
-                  <div className="text-primary-600 text-center text-sm font-medium   leading-[21px]">
-                    {date.day}
-                  </div>
-                  <div className="text-primary-600 text-center text-xl font-bold   leading-[30px]">
-                    {date.date}
-                  </div>
+                  {data.day}
                 </div>
-              )
-            } else {
-              return (
                 <div
-                  key={i}
-                  className="xl:max-w-[129px] lg:max-w-[119px] h-full px-3 py-2 flex flex-col  border rounded-lg border-gray-200 bg-white"
+                  className={`${
+                    activeDay == data.date
+                      ? 'text-primary-600'
+                      : 'text-gray-400'
+                  } text-center text-xl font-bold   leading-[30px]`}
                 >
-                  <div className="text-gray-400 text-center text-sm font-medium   leading-[21px]">
-                    {date.day}
-                  </div>
-                  <div className="text-gray-400 text-center text-xl font-bold   leading-[30px]">
-                    {date.date}
-                  </div>
+                  {data.date}
                 </div>
-              )
-            }
+              </div>
+            )
           })}
         </div>
       </div>
