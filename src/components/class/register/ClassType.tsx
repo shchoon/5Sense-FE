@@ -68,16 +68,59 @@ export default function ClassType() {
     return price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   }
 
-  const convertToTenThousand = (numberString: string) => {
-    // 콤마 제거 및 숫자로 변환
-    const number = parseInt(numberString.replace(/,/g, ''), 10)
+  // const convertToTenThousand = (numberString: string) => {
+  //   // 콤마 제거 및 숫자로 변환
+  //   const number = parseInt(numberString.replace(/,/g, ''), 10)
 
-    // 만원 단위로 변환
-    if (isNaN(number) || number === 0) {
-      return 0
-    } else {
-      return (number / 10000).toFixed(1)
+  //   // 만원 단위로 변환
+  //   if (isNaN(number) || number === 0) {
+  //     return 0
+  //   } else {
+  //     return (number / 10000).toFixed(1)
+  //   }
+  // }
+
+  function getKoreanNumber(num: string) {
+    let number = parseInt(num)
+    const koreanNumber = [
+      '',
+      '일',
+      '이',
+      '삼',
+      '사',
+      '오',
+      '육',
+      '칠',
+      '팔',
+      '구'
+    ]
+    const tenUnit = ['', '십', '백', '천']
+    const tenThousandUnit = ['조', '억', '만', '']
+    const unit = 10000
+
+    let answer = ''
+
+    while (number > 0) {
+      const mod = number % unit
+      const modToArray = mod.toString().split('')
+      const length = modToArray.length - 1
+
+      const modToKorean = modToArray.reduce((acc, value, index) => {
+        const valueToNumber = +value
+        if (!valueToNumber) return acc
+        // 단위가 십 이상인 '일'글자는 출력하지 않는다. ex) 일십 -> 십
+        const numberToKorean =
+          index < length && valueToNumber === 1
+            ? ''
+            : koreanNumber[valueToNumber]
+        return `${acc}${numberToKorean}${tenUnit[length - index]}`
+      }, '')
+
+      answer = `${modToKorean}${tenThousandUnit.pop()} ${answer}`
+      number = Math.floor(number / unit)
     }
+
+    return answer
   }
 
   const multiplyAndFormat = (
@@ -138,7 +181,7 @@ export default function ClassType() {
               placeholder="0원"
             />
             <p className=" text-gray-500 text-sm font-normal font-['Inter']">
-              {convertToTenThousand(money)}만원
+              {getKoreanNumber(money)}원
             </p>
           </div>
           <div className="w-full flex flex-col gap-2">
@@ -212,7 +255,7 @@ export default function ClassType() {
                 {multiplyAndFormat(count, one)}원
               </p>
               <span className="text-right text-gray-500 text-xs font-medium   leading-[18px]">
-                {convertToTenThousand(multiplyAndFormat(count, one))}만원
+                {getKoreanNumber(multiplyAndFormat(count, one))}만원
               </span>
             </div>
           </div>
