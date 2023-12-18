@@ -147,6 +147,39 @@ export default function ClassType() {
     let str = value.replaceAll(',', '')
     setMoney(str)
   }
+  const MyContainer = ({ className, children }: any) => {
+    const [isDropdownView, setDropdownView] = useState(false)
+    const [isSelectWeek, setIsSelectWeek] = useState(false)
+    const [startH, handleStartH, activeSH, handleActiveSH] =
+      useSelect('시간 선택')
+    const [startM, handleStartM, activeSM, handleActiveSM] = useSelect('0')
+    const [endH, handleEndH, activeEH, handleActiveEH] = useSelect('0')
+    const [endM, handleEndM, activeEM, handelActiveEM] = useSelect('0')
+    const [weekend, handleWeekend, activeWeek, handleA] = useSelect('')
+    const hourArray = Array.from({ length: 23 }, (_, index) => index + 1)
+    const minArray = Array.from({ length: 12 }, (_, index) => index * 5)
+    const [select, setSelect] = useState<any>([])
+    const week = ['월', '화', '수', '목', '금', '토', '일']
+
+    const sortDow = (weekDay: any[]) => {
+      const weekDaySorter: any = { 월: 1, 화: 2, 수: 3, 목: 4, 금: 5 }
+      weekDay.sort(function sortByWeekDay(a: number, b: number): number {
+        return weekDaySorter[a] - weekDaySorter[b]
+      })
+      return weekDay
+    }
+
+    const handleClickWeek = (li: string) => {
+      if (select.includes(li)) {
+        setSelect(sortDow(select.filter((item: any) => item !== li)))
+      } else {
+        setSelect(sortDow([...select, li]))
+      }
+    }
+
+    const handleClickContainer2 = () => {
+      setIsSelectWeek(!isSelectWeek)
+    }
 
   const activeButton = (content: string, isActive: boolean) => {
     return (

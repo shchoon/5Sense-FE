@@ -4,7 +4,7 @@ export interface InputFormProps {
   title: string
   placeholder: string
   name: string
-  maxLength: number
+  maxLength?: number
 }
 
 export default function InputForm({

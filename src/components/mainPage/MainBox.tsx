@@ -7,35 +7,31 @@ import chevronLeft from '../../assets/icons/chevron-left.svg'
 import chevronRight from '../../assets/icons/chevron-right.svg'
 import { useEffect, useRef, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
+import DateTab from './DateTab'
+import Link from 'next/link'
 
 export default function MainBox() {
   const { width, height } = useWindowSize()
   const router = useRouter()
   const currentPath = usePathname()
-  //console.log(pathName)
-  //console.log(pathName.split('/')[2])
-  //let [pathName, setPathName] = useState<undefined | string>()
+
   let [tabBg, setTabBg] = useState('translate-x-0')
-  //console.log(pathName?.split('/')[2])
+  let [pathName, setPathName] = useState<string>('')
 
   useEffect(() => {
-    let pathName = currentPath.split('/')[2]
-    console.log(pathName)
-    //console.log(currentPath.split('/'))
-    if (pathName === 'day' || pathName === undefined) {
+    let path = currentPath.split('/')[2]
+    if (path === 'day' || path === undefined) {
+      setPathName('day')
       setTabBg('translate-x-0')
-    } else if (currentPath.split('/')[2] === 'week') {
+    } else if (path === 'week') {
       //console.log(currentPath.split('/')[2])
-      setTabBg('translate-x-[52.62px]')
-    } else if (pathName === 'month') {
-      setTabBg('translate-x-[105.24px]')
+      setTabBg('translate-x-[48px]')
+      setPathName('week')
+    } else if (path === 'month') {
+      setTabBg('translate-x-[96px]')
+      setPathName('month')
     }
-  }, [])
-
-  //console.log(tabBg)
-
-  //console.log(pathName)
-  //console.log(width)
+  }, [currentPath])
 
   const incomeData = [
     {
@@ -288,44 +284,33 @@ export default function MainBox() {
           <div
             className={`flex mx-auto ${
               width > 950 ? 'w-[420px]' : 'w-[312px]'
-            }  h-full p-1.5 border rounded-md border-gray-100 bg-primary-50`}
+            }  h-full p-1.5 border rounded-md border-gray-100 bg-[#F8FAFD]`}
           >
-            <div className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center">
-              <Image src={chevronLeft} width={24} height={24} alt=" " />
-            </div>
-            <div className="w-full px-3 py-2 flex justify-center gap-2 items-center">
-              <Image src={calender} width={18} height={18} alt=" " />
-              <span className="text-gray-900 text-base font-semibold   leading-normal">
-                2023년 10월 1주차
-              </span>
-            </div>
-            <div className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center">
-              <Image src={chevronRight} width={24} height={24} alt=" " />
-            </div>
+            <DateTab />
           </div>
-          <div className="absolute right-0 flex items-center w-[160px] h-[44px] border rounded-full border-gray-200">
+          <div className="absolute right-0 flex items-center w-[160px] h-[44px] p-1 outline outline-1 rounded-full outline-gray-200">
             <div
-              className={`absolute z-0 w-1/3 h-full bg-primary-600 rounded-full transition-transform ${tabBg}`}
+              className={`absolute z-0 w-14 h-9 outline outline-1 outline-[#9B81FE] bg-primary-600 rounded-full transition-transform ${tabBg}`}
             ></div>
-            <p
-              className={`z-10 w-1/3 px-3 py-1.5 rounded-full ${
-                tabBg === 'translate-x-0' ? 'text-white' : 'text-gray-500'
-              } text-gray-500 text-base text-center font-medium   leading-normal cursor-pointer`}
+            <div
+              className={` z-10 px-3 py-1.5 rounded-full text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal cursor-pointer
+              ${tabBg == 'translate-x-0' ? 'w-14' : 'w-12'}
+              ${tabBg === 'translate-x-0' ? 'text-white' : 'text-gray-500'} `}
               onClick={() => {
                 setTabBg('translate-x-0')
                 router.push('/home/day')
               }}
             >
-              일
-            </p>
-            <p
-              className={`z-10 w-1/3 px-3 py-1.5 rounded-full ${
-                tabBg === 'translate-x-[52.62px]'
-                  ? 'text-white'
-                  : 'text-gray-500'
-              } text-gray-500 text-base text-center font-medium   leading-normal cursor-pointer`}
+              <div className="flex justify-center">일</div>
+            </div>
+            <div
+              className={`z-10 px-3 py-1.5 rounded-full text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal cursor-pointer
+              ${tabBg === 'translate-x-[48px]' ? 'w-14' : 'w-12'}
+              ${
+                tabBg === 'translate-x-[48px]' ? 'text-white' : 'text-gray-500'
+              } `}
               onClick={() => {
-                setTabBg('translate-x-[52.62px]')
+                setTabBg('translate-x-[48px]')
                 router.push('/home/week')
               }}
             >
@@ -338,12 +323,12 @@ export default function MainBox() {
                   : 'text-gray-500'
               } text-gray-500 text-base text-center font-medium   leading-normal cursor-pointer`}
               onClick={() => {
-                setTabBg('translate-x-[105.24px]')
+                setTabBg('translate-x-[96px]')
                 router.push('/home/month')
               }}
             >
-              월
-            </p>
+              <div className="flex justify-center">월</div>
+            </div>
           </div>
         </div>
       </div>

@@ -82,6 +82,7 @@ export default function MainLayout({
                   5sense
                 </span>
                 <span className="text-gray-300 text-sm font-medium leading-[14px]">
+
                   Copyright ⓒ2023 5sense inc, ltd. All rights reserved
                 </span>
               </div>

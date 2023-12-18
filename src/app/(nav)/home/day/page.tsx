@@ -7,6 +7,7 @@ export default function MainPageDay() {
       time: '09:00',
       class: [
         {
+          classType: 'preiod',
           hour: '9',
           bgColorOn: 'bg-primary-600',
           bgColorOff: 'bg-gray-200',
@@ -18,8 +19,9 @@ export default function MainPageDay() {
             '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
         },
         {
+          classType: 'time',
           hour: '9',
-          bgColorOn: 'bg-[#FF5A1F]',
+          bgColorOn: 'bg-orange-500',
           bgColorOff: 'bg-gray-200',
           textColorOn: 'text-gray-800',
           textColorOff: 'text-gray-400',
@@ -29,6 +31,7 @@ export default function MainPageDay() {
             '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
         },
         {
+          classType: 'preiod',
           hour: '9',
           bgColorOn: 'bg-primary-600',
           bgColorOff: 'bg-gray-200',
@@ -40,8 +43,9 @@ export default function MainPageDay() {
             '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
         },
         {
+          classType: 'time',
           hour: '9',
-          bgColorOn: 'bg-primary-600',
+          bgColorOn: 'bg-orange-500',
           bgColorOff: 'bg-gray-200',
           textColorOn: 'text-gray-800',
           textColorOff: 'text-gray-400',
@@ -56,6 +60,7 @@ export default function MainPageDay() {
       time: '11:00',
       class: [
         {
+          classType: 'preiod',
           hour: '11',
           bgColorOn: 'bg-primary-600',
           bgColorOff: 'bg-gray-200',
@@ -72,6 +77,7 @@ export default function MainPageDay() {
       time: '12:00',
       class: [
         {
+          classType: 'preiod',
           hour: '12',
           bgColorOn: 'bg-primary-600',
           bgColorOff: 'bg-gray-200',
@@ -88,6 +94,7 @@ export default function MainPageDay() {
       time: '13:00',
       class: [
         {
+          classType: 'preiod',
           hour: '13',
           bgColorOn: 'bg-primary-600',
           bgColorOff: 'bg-gray-200',
@@ -99,8 +106,38 @@ export default function MainPageDay() {
             '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
         },
         {
+          classType: 'time',
           hour: '13',
+          bgColorOn: 'bg-orange-500',
+          bgColorOff: 'bg-gray-200',
+          textColorOn: 'text-gray-800',
+          textColorOff: 'text-gray-400',
+          teacherName: '엄세리',
+          roomNum: '2호실',
+          className:
+            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
+        }
+      ]
+    },
+    {
+      time: '14:00',
+      class: [
+        {
+          classType: 'preiod',
+          hour: '14',
           bgColorOn: 'bg-primary-600',
+          bgColorOff: 'bg-gray-200',
+          textColorOn: 'text-gray-800',
+          textColorOff: 'text-gray-400',
+          teacherName: '조영은',
+          roomNum: '1호실',
+          className:
+            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
+        },
+        {
+          classType: 'time',
+          hour: '14',
+          bgColorOn: 'bg-orange-500',
           bgColorOff: 'bg-gray-200',
           textColorOn: 'text-gray-800',
           textColorOff: 'text-gray-400',
@@ -115,6 +152,7 @@ export default function MainPageDay() {
       time: '15:00',
       class: [
         {
+          classType: 'preiod',
           hour: '15',
           bgColorOn: 'bg-primary-600',
           bgColorOff: 'bg-gray-200',
@@ -126,8 +164,9 @@ export default function MainPageDay() {
             '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
         },
         {
+          classType: 'time',
           hour: '15',
-          bgColorOn: 'bg-primary-600',
+          bgColorOn: 'bg-orange-500',
           bgColorOff: 'bg-gray-200',
           textColorOn: 'text-gray-800',
           textColorOff: 'text-gray-400',
@@ -142,6 +181,7 @@ export default function MainPageDay() {
       time: '17:00',
       class: [
         {
+          classType: 'preiod',
           hour: '17',
           bgColorOn: 'bg-primary-600',
           bgColorOff: 'bg-gray-200',
@@ -153,8 +193,96 @@ export default function MainPageDay() {
             '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
         },
         {
+          classType: 'time',
           hour: '17',
+          bgColorOn: 'bg-orange-500',
+          bgColorOff: 'bg-gray-200',
+          textColorOn: 'text-gray-800',
+          textColorOff: 'text-gray-400',
+          teacherName: '엄세리',
+          roomNum: '2호실',
+          className:
+            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
+        }
+      ]
+    },
+    {
+      time: '21:00',
+      class: [
+        {
+          classType: 'preiod',
+          hour: '21',
           bgColorOn: 'bg-primary-600',
+          bgColorOff: 'bg-gray-200',
+          textColorOn: 'text-gray-800',
+          textColorOff: 'text-gray-400',
+          teacherName: '조영은',
+          roomNum: '1호실',
+          className:
+            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
+        },
+        {
+          classType: 'time',
+          hour: '21',
+          bgColorOn: 'bg-orange-500',
+          bgColorOff: 'bg-gray-200',
+          textColorOn: 'text-gray-800',
+          textColorOff: 'text-gray-400',
+          teacherName: '엄세리',
+          roomNum: '2호실',
+          className:
+            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
+        }
+      ]
+    },
+    {
+      time: '22:00',
+      class: [
+        {
+          classType: 'preiod',
+          hour: '22',
+          bgColorOn: 'bg-primary-600',
+          bgColorOff: 'bg-gray-200',
+          textColorOn: 'text-gray-800',
+          textColorOff: 'text-gray-400',
+          teacherName: '조영은',
+          roomNum: '1호실',
+          className:
+            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
+        },
+        {
+          classType: 'time',
+          hour: '22',
+          bgColorOn: 'bg-orange-500',
+          bgColorOff: 'bg-gray-200',
+          textColorOn: 'text-gray-800',
+          textColorOff: 'text-gray-400',
+          teacherName: '엄세리',
+          roomNum: '2호실',
+          className:
+            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
+        }
+      ]
+    },
+    {
+      time: '23:00',
+      class: [
+        {
+          classType: 'preiod',
+          hour: '23',
+          bgColorOn: 'bg-primary-600',
+          bgColorOff: 'bg-gray-200',
+          textColorOn: 'text-gray-800',
+          textColorOff: 'text-gray-400',
+          teacherName: '조영은',
+          roomNum: '1호실',
+          className:
+            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
+        },
+        {
+          classType: 'time',
+          hour: '23',
+          bgColorOn: 'bg-orange-500',
           bgColorOff: 'bg-gray-200',
           textColorOn: 'text-gray-800',
           textColorOff: 'text-gray-400',
@@ -197,13 +325,20 @@ export default function MainPageDay() {
               >
                 {/* 시간 */}
                 <div className="flex w-[77px] h-6 gap-5 items-center">
-                  <div className="w-[51px] text-right text-indigo-500 text-base font-semibold   leading-normal">
+                  <div
+                    className={`w-[51px] text-right ${
+                      currentHour === Number(data.time.split(':')[0])
+                        ? 'text-indigo-500'
+                        : 'text-black'
+                    }  text-base font-semibold font-['Pretendard'] leading-normal`}
+                  >
                     {data.time}
                   </div>
                   <div className="w-1.5 h-1.5 bg-primary-600"></div>
                 </div>
                 <div className="w-full flex flex-col p-4 gap-[7px] outline outline-1 rounded-lg outline-gray-200">
                   {data.class.map((data, i) => {
+                    //console.log(currentHour, data.hour)
                     return (
                       <div key={i} className="flex gap-4 h-[45px]">
                         <div
@@ -248,7 +383,7 @@ export default function MainPageDay() {
                               currentHour === Number(data.hour)
                                 ? data.textColorOn
                                 : data.textColorOff
-                            }  text-base font-semibold   leading-normal`}
+                            }  text-base font-semibold font-['Pretendard'] leading-normal truncate`}
                           >
                             {data.className}
                           </div>
