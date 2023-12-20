@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/react-datepicker": "^4.19.3",
+    "chart.js": "^4.4.1",
     "dayjs": "^1.11.10",
     "flowbite": "^2.0.0",
     "flowbite-datepicker": "^1.2.4",
