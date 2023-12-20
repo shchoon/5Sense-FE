@@ -1,10 +1,5 @@
-'use client'
-
-import Category from '@/components/class/register/Category'
-import ClassType from '@/components/class/register/ClassType'
 import InputForm, { InputFormProps } from '@/components/InputForm'
-import TextareaForm, { TextareaFormProps } from '@/components/TextareaForm'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export type category = {
   id: string
@@ -18,25 +13,7 @@ type subCategory = {
   name: string
 }
 
-export default function RegisterPage() {
-  const classNameProps: InputFormProps = {
-    title: '클래스 명',
-    placeholder: '클래스명을 입력해 주세요',
-    name: 'className',
-    maxLength: 20
-  }
-  const optionProps: InputFormProps = {
-    title: '기타',
-    placeholder: '직접 입력',
-    name: 'options'
-  }
-  const classMemoProps: TextareaFormProps = {
-    title: '클래스 메모',
-    placeholder: '클래스관련 메모를 적어주세요',
-    name: 'classMemo',
-    maxLength: 300
-  }
-
+export default function Category() {
   const categorydata: category[] = [
     {
       id: '1',
@@ -131,7 +108,6 @@ export default function RegisterPage() {
       options: []
     }
   ]
-
   const [selectedGroup, setSelectedGroup] = useState('')
   const [selectedOption, setSelectedOption] = useState('')
   const [selectedOptionList, setSelectedOptionList] = useState([])
@@ -146,9 +122,13 @@ export default function RegisterPage() {
     setSelectedOption(optionId)
   }
 
-  console.log(selectedGroup)
-
   const renderOptions = (item: any, groupId: string) => {
+    const optionProps: InputFormProps = {
+      title: '기타',
+      placeholder: '직접 입력',
+      name: 'options',
+      maxLength: 10
+    }
     return (
       <>
         {groupId === '9' ? (
@@ -184,57 +164,41 @@ export default function RegisterPage() {
       </>
     )
   }
-
   return (
-    <div className="w-[640px] flex flex-col gap-5">
-      <div className="class-box">
-        <div className="gray-900-bold text-xl">클래스 정보</div>
-        <div className="info-detail flex flex-col gap-2">
-          <InputForm {...classNameProps} />
-          <TextareaForm {...classMemoProps} />
-          <div>
-            <p className="gray-800-semibold">카테고리</p>
-            <div className="flex flex-col gap-6">
-              <div className="mt-2 grid grid-cols-3 w-full gap-2">
-                {categorydata.map((item: category) => (
-                  <>
-                    <div
-                      className={`relative flex justify-center items-end w-48 h-[110px] py-4 rounded-md border border-primary-500 ${
-                        selectedGroup === item.id ? 'bg-[#F0EFFF]' : 'bg-white'
-                      }`}
-                      key={item.id}
-                      onClick={() => handleGroupChange(item.id, item.options)}
-                    >
-                      <input
-                        type="radio"
-                        id={item.id}
-                        value={item.id}
-                        className={`hidden`}
-                      />
-                      <label
-                        htmlFor={item.id}
-                        className={`text-base font-medium   leading-normal ${
-                          selectedGroup === item.id
-                            ? ' text-primary-600'
-                            : 'text-gray-500'
-                        }`}
-                      >
-                        {item.name}
-                      </label>
-                    </div>
-                  </>
-                ))}
+    <div>
+      <p className="gray-800-semibold">카테고리</p>
+      <div className="flex flex-col gap-6">
+        <div className="mt-2 grid grid-cols-3 w-full gap-2">
+          {categorydata.map((item: category) => (
+            <>
+              <div
+                className={`relative flex justify-center items-end w-48 h-[110px] py-4 rounded-md border border-primary-500 ${
+                  selectedGroup === item.id ? 'bg-[#F0EFFF]' : 'bg-white'
+                }`}
+                key={item.id}
+                onClick={() => handleGroupChange(item.id, item.options)}
+              >
+                <input
+                  type="radio"
+                  id={item.id}
+                  value={item.id}
+                  className={`hidden`}
+                />
+                <label
+                  htmlFor={item.id}
+                  className={`text-base font-medium   leading-normal ${
+                    selectedGroup === item.id
+                      ? ' text-primary-600'
+                      : 'text-gray-500'
+                  }`}
+                >
+                  {item.name}
+                </label>
               </div>
-              {renderOptions(selectedOptionList, selectedGroup)}
-            </div>
-          </div>
-
+            </>
+          ))}
         </div>
-        <Category />
-      </div>
-      <ClassType />
-      <div className="Button w-full h-[52px] px-6 py-3.5 btn-purple">
-        등록하기
+        {renderOptions(selectedOptionList, selectedGroup)}
       </div>
     </div>
   )

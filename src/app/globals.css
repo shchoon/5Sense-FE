@@ -60,6 +60,10 @@
     @apply text-gray-500 font-medium;
   }
 
+  .gray-500-normal {
+    @apply text-gray-500 font-normal;
+  }
+
   .gray-400-medium {
     @apply text-gray-400 font-medium;
   }

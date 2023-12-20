@@ -6,6 +6,7 @@ export function useSelect(initialValue: string): any {
 
   const handleChange = (inputValue: string) => {
     setInputValue(inputValue)
+    handleActive()
   }
 
   const handleActive = () => {
