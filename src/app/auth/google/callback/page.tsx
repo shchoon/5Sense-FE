@@ -2,7 +2,7 @@
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-export default function NaverCallback() {
+export default function GoogleCallbak() {
   const IP_ADDRESS = process.env.NEXT_PUBLIC_IP_ADDRESS
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -18,7 +18,7 @@ export default function NaverCallback() {
       body: JSON.stringify({ code, state })
     }
 
-    fetch(`${IP_ADDRESS}/auth/naver/login`, options)
+    fetch(`${IP_ADDRESS}/auth/google/login`, options)
       .then(res => {
         return res.json()
       })
@@ -28,11 +28,11 @@ export default function NaverCallback() {
         router.push('/main')
       })
       .catch(() => {
-        alert('로그인을 다시 시도해주세요')
+        alert('로그인을 다시 시도해주세요.')
       })
 
     //토큰 받아서 프론트에서 저장 & 리프레시 토큰 저장
   }, [])
 
-  return <div>네이버 계정으로 로그인 중입니다...</div>
+  return <div>구글 계정으로 로그인 중입니다...</div>
 }

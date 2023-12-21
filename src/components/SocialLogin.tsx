@@ -19,18 +19,9 @@ export default function SocialLoginBtn({ socialLogo }: any) {
     return result
   }
   const state = generateState()
-  const KAKAO_CLIENT_ID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID
-  const KAKAO_REDIRECT_URI = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_CLIENT_ID}&redirect_uri=${KAKAO_REDIRECT_URI}&state=${state}`
-  const NAVER_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID
-  const NAVER_REDIRECT_URI = process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI
-  const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=${state}&redirect_uri=${NAVER_REDIRECT_URI}`
-  const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
-  const GOOGLE_REDIRECT_URI = process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI
-  const GOOGLE_AUTH_URL =
-    `https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/drive.metadata.readonly&include_granted_scopes=true&response_type=code&state=${state}&` +
-    `redirect_uri=${GOOGLE_REDIRECT_URI}` +
-    `&client_id=${GOOGLE_CLIENT_ID}`
+  const KAKAO_AUTH_URL = process.env.NEXT_PUBLIC_KAKAO_AUTH_URL + state
+  const NAVER_AUTH_URL = process.env.NEXT_PUBLIC_NAVER_AUTH_URL + state
+  const GOOGLE_AUTH_URL = process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL + state
 
   const router = useRouter()
   const loginBtnData: {
@@ -51,7 +42,6 @@ export default function SocialLoginBtn({ socialLogo }: any) {
       alt: 'kakao',
       login: async function kakaoLogin() {
         window.location.href = KAKAO_AUTH_URL
-        //router.push('/loading');
       }
     },
     {
@@ -63,7 +53,6 @@ export default function SocialLoginBtn({ socialLogo }: any) {
       alt: 'naver',
       login: function naverLogin() {
         window.location.href = NAVER_AUTH_URL
-        //router.push('/loading');
       }
     },
     {
@@ -75,7 +64,6 @@ export default function SocialLoginBtn({ socialLogo }: any) {
       alt: 'google',
       login: function googleLogin() {
         window.location.href = GOOGLE_AUTH_URL
-        //router.push('/loading');
       }
     }
   ]
@@ -94,7 +82,7 @@ export default function SocialLoginBtn({ socialLogo }: any) {
       {loginBtnData.map((data, i) => {
         return (
           <div
-            className={`flex w-[430px] h-[52px] rounded-md ${data.bgColor} border ${data.borderColor}`}
+            className={`flex w-[430px] h-[52px] rounded-md ${data.bgColor} border ${data.borderColor} cursor-pointer`}
             key={i}
             onClick={data.login}
           >
