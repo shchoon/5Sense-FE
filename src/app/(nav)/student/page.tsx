@@ -3,7 +3,7 @@ import plusCircle from '../../../assets/icon/plus-circle.svg'
 import search_16 from '../../../assets/icon/search.svg'
 import x_icon_12 from '../../../assets/icon/x_icon_12.svg'
 import search_20 from '../../../assets/icon/search_20.svg'
-import chevron_right_16 from '../../../assets/icon/chevron_right_16.svg'
+import noneResult from '../../../assets/icon/noneResult.svg'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 
@@ -148,20 +148,26 @@ export default function StudentPage() {
       let result = allStudentData.filter(data =>
         data.name.includes(searchInput)
       )
-      setStudentData(result)
+      if (result.length !== 0) {
+        setStudentData(result)
+      } else {
+        setStudentData(null)
+      }
     } else {
       let result = allStudentData.filter(data =>
         data.phoneNum.replaceAll('-', '').includes(searchInput)
       )
-      setStudentData(result)
+      if (result.length !== 0) {
+        setStudentData(result)
+      } else {
+        setStudentData(null)
+      }
     }
-
-    //console.log(result)
-    //setStudentData(result)
   }
 
   function onClickX() {
     setSearchInput('')
+    setStudentData(allStudentData)
   }
 
   function preventDashAndPressEnter(event: any) {
@@ -172,12 +178,9 @@ export default function StudentPage() {
     if (event.key == 'Enter') {
       searchClick()
     }
-    //console.log(event.which)
   }
 
-  function pressEnter() {
-    console.log('enter')
-  }
+  console.log(studentData)
 
   return (
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6">
@@ -234,59 +237,59 @@ export default function StudentPage() {
           <div className="lg:w-[160px] w-[130px] text-indigo-500 text-sm font-semibold font-['Pretendard'] leading-[14px]">
             전화번호
           </div>
-          <div className="lg:w-[240px] w-[120px] text-indigo-500 text-sm font-semibold font-['Pretendard'] leading-[14px]">
+          <div className="xl:flex-1 lg:w-[100px] flex-1 text-indigo-500 text-sm font-semibold font-['Pretendard'] leading-[14px]">
             클래스명
           </div>
-          <div className="grow shrink basis-0 text-indigo-500 text-sm font-semibold font-['Pretendard'] leading-[14px]">
+          <div className="xl:w-[400px] lg:flex-1 w-[200px] text-indigo-500 text-sm font-semibold font-['Pretendard'] leading-[14px]">
             특이사항
           </div>
         </div>
         {/* 수강생 목록 시작 */}
         <div className="w-full flex flex-col gap-[14px]">
-          {studentData?.map(
-            (
-              data: {
-                name: string
-                phoneNum: string
-                className: string
-                detail: string
-              },
-              i: number
-            ) => {
-              return (
-                <div
-                  key={i}
-                  className="w-full flex lg:gap-10 gap-8 lg:p-7 p-6 outline rounded-md outline-1 outline-gray-200 shadow-[0_5px_15px_0px_rgba(0,0,0,0.02)]"
-                >
-                  <div className="flex lg:gap-6 gap-4 flex-1">
-                    <div className="w-[100px] text-gray-800 text-sm font-semibold font-['Pretendard']">
-                      {data.name}
-                    </div>
-                    <div className="lg:w-[160px] w-[130px] text-gray-800 text-sm font-semibold font-['Pretendard']">
-                      {data.phoneNum}
-                    </div>
-                    <div className="lg:w-[240px] w-[120px] text-gray-800 text-sm font-semibold font-['Pretendard']">
-                      {data.className}
-                    </div>
-                    <div className="flex-1 text-gray-900 text-base font-normal font-['Pretendard']">
-                      {data.detail}
-                    </div>
+          {searchInput !== '' && studentData == null ? (
+            <div className="flex w-full h-screen justify-center items-center">
+              <div className="flex flex-col gap-6 w-[432px] h-[244px]">
+                <Image
+                  className="mx-auto"
+                  src={noneResult}
+                  width={148}
+                  height={148}
+                  alt=" "
+                />
+                <div className="w-full flex flex-col gap-3">
+                  <div className="w-[432px] text-center text-gray-900 text-2xl font-bold font-['Pretendard'] leading-9">
+                    검색결과가 없습니다.
                   </div>
-                  {/* <div className="w-[93px] h-[37px] flex gap-1 px-3 py-2 rounded-lg outline outline-1 outline-primary-600">
-                  <div className="w-[49px] text-indigo-500 text-[12px] font-semibold font-['Pretendard'] leading-[21px]">
-                    관리하기
+                  <div className="w-[432px] text-center text-gray-400 text-base font-medium font-['Pretendard'] leading-normal">
+                    다른 검색어를 통해 검색을 이어나가보세요
                   </div>
-                  <Image
-                    src={chevron_right_16}
-                    width={16}
-                    height={16}
-                    alt=" "
-                  />
-                </div> */}
                 </div>
-              )
-            }
-          )}
+              </div>
+            </div>
+          ) : null}
+          {studentData?.map((data: any, i: number) => {
+            return (
+              <div
+                key={i}
+                className="w-full flex lg:gap-10 gap-8 lg:p-7 p-6 outline rounded-md outline-1 outline-gray-200 shadow-[0_5px_15px_0px_rgba(0,0,0,0.02)]"
+              >
+                <div className="flex lg:gap-6 gap-4 flex-1">
+                  <div className="w-[100px] text-gray-800 text-sm font-semibold font-['Pretendard']">
+                    {data.name}
+                  </div>
+                  <div className="lg:w-[160px] w-[130px] text-gray-800 text-sm font-semibold font-['Pretendard']">
+                    {data.phoneNum}
+                  </div>
+                  <div className="xl:flex-1 lg:w-[100px] flex-1 text-gray-800 text-sm font-semibold font-['Pretendard']">
+                    {data.className}
+                  </div>
+                  <div className="xl:w-[400px] lg:flex-1 w-[200px] text-gray-900 text-base font-normal font-['Pretendard']">
+                    {data.detail}
+                  </div>
+                </div>
+              </div>
+            )
+          })}
         </div>
       </div>
     </div>
