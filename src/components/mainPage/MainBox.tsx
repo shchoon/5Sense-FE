@@ -314,14 +314,14 @@ export default function MainBox() {
                 router.push('/home/week')
               }}
             >
-              주
-            </p>
-            <p
-              className={`z-10 w-1/3 px-3 py-1.5 rounded-full ${
-                tabBg === 'translate-x-[105.24px]'
-                  ? 'text-white'
-                  : 'text-gray-500'
-              } text-gray-500 text-base text-center font-medium   leading-normal cursor-pointer`}
+              <div className="flex justify-center">주</div>
+            </div>
+            <div
+              className={`z-10 px-3 py-1.5 rounded-full text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal cursor-pointer
+              ${tabBg === 'translate-x-[96px]' ? 'w-14' : 'w-12'}
+              ${
+                tabBg === 'translate-x-[96px]' ? 'text-white' : 'text-gray-500'
+              } `}
               onClick={() => {
                 setTabBg('translate-x-[96px]')
                 router.push('/home/month')
