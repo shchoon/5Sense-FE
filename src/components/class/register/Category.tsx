@@ -186,7 +186,7 @@ export default function Category() {
                 />
                 <label
                   htmlFor={item.id}
-                  className={`text-base font-medium   leading-normal ${
+                  className={`text-base font-medium leading-normal ${
                     selectedGroup === item.id
                       ? ' text-primary-600'
                       : 'text-gray-500'

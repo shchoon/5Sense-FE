@@ -11,7 +11,7 @@ export default function ClassPage() {
       userCnt: 50
     },
     {
-      title: '체형 교정 및 이완을 통한 삶의 균형 찾기',
+      title: '일이삼사오육칠팔구십일이삼사오육칠팔구십',
       instructor: '김솔지',
       userCnt: 50
     },
@@ -180,7 +180,7 @@ export default function ClassPage() {
   return (
     <div>
       <div className="w-full flex justify-between">
-        <h1 className="menu-title">클래스 관리</h1>
+        <h1 className="black-bold text-3xl">클래스 관리</h1>
         <Link
           href={'class/register'}
           className="Button w-28 h-[37px] px-3 py-2 btn-purple text-sm"
@@ -193,18 +193,17 @@ export default function ClassPage() {
         {data.map(({ title, instructor, userCnt }) => (
           <div
             key={title}
-            className="h-56 px-6 py-8 bg-white rounded-lg shadow border border-gray-200 flex-col justify-start items-start gap-16 inline-flex"
+            className="h-56 px-4 py-8 flex flex-col justify-between box-border bg-white rounded-lg shadow border border-gray-200"
           >
-            <div className="self-stretch text-gray-900 text-xl font-semibold   leading-[30px]">
-              {title}
+            <div className="categor w-fit h-fit px-2.5 py-2 box-border bg-[#FFF0E3] rounded justify-center items-center text-[#FF5A1F] text-xs font-semibold">
+              일이삼사오육칠팔구십
             </div>
-            <div className="Frame814119 self-stretch justify-between items-end inline-flex">
-              <div className=" text-gray-500 text-base font-medium   leading-normal">
+            <div className="mt-4 flex-1 gray-900-semibold text-xl">{title}</div>
+            <div className="flex justify-between items-end">
+              <div className="gray-500-medium text-base">
                 담당 강사 : {instructor}
               </div>
-              <div className="3040 text-center text-gray-500 text-sm font-normal   leading-[21px]">
-                회원 수 : {userCnt}
-              </div>
+              <div className="gray-500-normal text-sm">회원 수 : {userCnt}</div>
             </div>
           </div>
         ))}

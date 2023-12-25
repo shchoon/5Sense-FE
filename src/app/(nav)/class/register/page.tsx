@@ -2,6 +2,7 @@
 
 import Category from '@/components/class/register/Category'
 import ClassType from '@/components/class/register/ClassType'
+import ClassFilter from '@/components/classFilter/classFilter'
 import InputForm, { InputFormProps } from '@/components/InputForm'
 import TextareaForm, { TextareaFormProps } from '@/components/TextareaForm'
 import { ChangeEvent, useEffect, useState } from 'react'
@@ -192,45 +193,8 @@ export default function RegisterPage() {
         <div className="info-detail flex flex-col gap-2">
           <InputForm {...classNameProps} />
           <TextareaForm {...classMemoProps} />
-          <div>
-            <p className="gray-800-semibold">카테고리</p>
-            <div className="flex flex-col gap-6">
-              <div className="mt-2 grid grid-cols-3 w-full gap-2">
-                {categorydata.map((item: category) => (
-                  <>
-                    <div
-                      className={`relative flex justify-center items-end w-48 h-[110px] py-4 rounded-md border border-primary-500 ${
-                        selectedGroup === item.id ? 'bg-[#F0EFFF]' : 'bg-white'
-                      }`}
-                      key={item.id}
-                      onClick={() => handleGroupChange(item.id, item.options)}
-                    >
-                      <input
-                        type="radio"
-                        id={item.id}
-                        value={item.id}
-                        className={`hidden`}
-                      />
-                      <label
-                        htmlFor={item.id}
-                        className={`text-base font-medium   leading-normal ${
-                          selectedGroup === item.id
-                            ? ' text-primary-600'
-                            : 'text-gray-500'
-                        }`}
-                      >
-                        {item.name}
-                      </label>
-                    </div>
-                  </>
-                ))}
-              </div>
-              {renderOptions(selectedOptionList, selectedGroup)}
-            </div>
-          </div>
-
+          <Category />
         </div>
-        <Category />
       </div>
       <ClassType />
       <div className="Button w-full h-[52px] px-6 py-3.5 btn-purple">
