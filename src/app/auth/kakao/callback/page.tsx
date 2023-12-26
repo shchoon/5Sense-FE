@@ -25,7 +25,7 @@ export default function KakaoCallback() {
       .then(result => {
         localStorage.setItem('accessToken', result.data.accessToken)
         localStorage.setItem('refreshToken', result.data.refreshToken)
-        router.push('/main')
+        router.push('/home')
       })
       .catch(() => {
         alert('로그인을 다시 시도해주세요')

@@ -25,7 +25,7 @@ export default function GoogleCallbak() {
       .then(result => {
         localStorage.setItem('accessToken', result.data.accessToken)
         localStorage.setItem('refreshToken', result.data.refreshToken)
-        router.push('/main')
+        router.push('/home')
       })
       .catch(() => {
         alert('로그인을 다시 시도해주세요.')
@@ -33,6 +33,4 @@ export default function GoogleCallbak() {
 
     //토큰 받아서 프론트에서 저장 & 리프레시 토큰 저장
   }, [])
-
-  return <div>구글 계정으로 로그인 중입니다...</div>
 }
