@@ -9,12 +9,15 @@ export default function WriteBox() {
   }
 
   function preventInput(e: any) {
-    if (e.code == 'Backspace') {
+    /* if (e.code == 'Backspace') {
       onChangeMemo
     } else {
       e.preventDefault()
-    }
+    } */
+    e.preventDefault()
   }
+
+  console.log(/^[a-zA-Z]+$/.test(memo[98]))
 
   return (
     <div className="w-full  h-[220px] p-6 rounded-xl border border-gray-200 ">
@@ -27,11 +30,12 @@ export default function WriteBox() {
           className={`w-full h-[96px] p-0 border-none focus:ring-0 text-xl focus:font-normal font-bold focus:text-gray-900 text-gray-800 placeholder:text-gray-300 placeholder:text-xl placeholder:font-bold`}
           placeholder="메모를 적어보세요."
           value={memo}
+          maxLength={/^[a-zA-Z]+$/.test(memo[98]) == true ? 99 : 99}
           onChange={onChangeMemo}
           onKeyDown={memo.length >= 300 ? preventInput : undefined}
         />
         <div className="flex gap-5 justify-end">
-          <div className="h-[41px] flex items-center">{memo.length}/300</div>
+          <div className="h-[41px] flex items-center">{memo.length}/100</div>
           <button className="w-[86px] h-[41px] px-5 py-[10px] rounded-lg bg-primary-600">
             <div className="text-white text-sm font-semibold font-['Pretendard'] leading-[21px]">
               저장

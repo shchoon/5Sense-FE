@@ -106,9 +106,6 @@ export default function MainBox() {
 
   let [cor, setCor] = useState({ cor_x: 0, cor_y: 0 })
   let [onMouse, setOnMouse] = useState(false)
-  //const classRefs = studentNum.map(() => useRef<HTMLDivElement>(null))
-  //const classRef0 = useRef<HTMLDivElement>(null)
-  //const classRef4 = useRef<HTMLDivElement>(null)
 
   return (
     <>
