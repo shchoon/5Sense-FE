@@ -1,8 +1,8 @@
 'use client'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-export default function KakaoCallback() {
+export default function GoogleCallbak() {
   const IP_ADDRESS = process.env.NEXT_PUBLIC_IP_ADDRESS
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -15,10 +15,10 @@ export default function KakaoCallback() {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ code: code, state: state })
+      body: JSON.stringify({ code, state })
     }
 
-    fetch(`${IP_ADDRESS}/auth/kakao/login`, options)
+    fetch(`${IP_ADDRESS}/auth/google/login`, options)
       .then(res => {
         return res.json()
       })
@@ -28,7 +28,7 @@ export default function KakaoCallback() {
         router.push('/home')
       })
       .catch(() => {
-        alert('로그인을 다시 시도해주세요')
+        alert('로그인을 다시 시도해주세요.')
       })
 
     //토큰 받아서 프론트에서 저장 & 리프레시 토큰 저장
