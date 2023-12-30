@@ -2,9 +2,11 @@ import Image from 'next/image'
 import { useWindowSize } from '@/hooks/useWindowSize'
 import chevronLeft from '../../assets/icons/chevron-left.svg'
 import chevronRight from '../../assets/icons/chevron-right.svg'
-import calender from '../../assets/icons/calendar.svg'
 import { useState } from 'react'
 import DateSlideTab from './DateSlideTab'
+import Calendar from '@/components/calendar'
+import allowLeft from '../../assets/icons/allowLeft.svg'
+import allowright from '../../assets/icons/allowRight.svg'
 
 export default function DayDateTab() {
   const { width, height } = useWindowSize()
@@ -84,12 +86,12 @@ export default function DayDateTab() {
             >
               <Image src={chevronLeft} width={24} height={24} alt=" " />
             </div>
-            <div className="w-full px-3 py-2 flex justify-center gap-2 items-center">
-              <Image src={calender} width={18} height={18} alt=" " />
-              <span className="text-gray-900 text-base font-semibold font-['Pretendard'] leading-normal">
+            <button className="w-full px-3 py-2 flex justify-center gap-2 items-center group">
+              <Calendar className="fill-[#6B7280] group-hover:fill-primary-600 group-focus:fill-primary-600" />
+              <span className="text-gray-900 text-base font-semibold font-['Pretendard'] leading-normal group-hover:text-primary-600 group-focus:text-primary-600">
                 {dateData.year}년 {dateData.month}월 {dateData.date}일
               </span>
-            </div>
+            </button>
             <div
               className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
               onClick={moveForwardDay}
@@ -98,6 +100,58 @@ export default function DayDateTab() {
             </div>
           </div>
           <DateSlideTab />
+          <div className="absolute z-10 w-full top-[60px] flex justify-center">
+            <div className="w-[284px] h-[313px] bg-white p-4 rounded-lg shadow flex flex-col gap-2">
+              <div className="w-full h-6 flex space-x-[43px]">
+                <Image src={allowLeft} width={20} height={20} alt="" />
+                <div className="w-[126px] h-[18px]">
+                  <div className="w-[126px] text-center text-gray-900 text-xs font-bold font-['Pretendard'] leading-[18px]">
+                    2021년 10월
+                  </div>
+                </div>
+                <Image src={allowright} width={20} height={20} alt="" />
+              </div>
+              <div className="flex flex-col">
+                <div className="w-full flex h-[18px]">
+                  <div className="w-7 h-[18px] px-1 py-2">
+                    <div className="w-7 text-center text-gray-500 text-xs font-semibold font-['Pretendard'] leading-[18px]">
+                      Sun
+                    </div>
+                  </div>
+                  <div className="w-7 h-[18px] px-1 py-2">
+                    <div className="w-7 text-center text-gray-500 text-xs font-semibold font-['Pretendard'] leading-[18px]">
+                      Sun
+                    </div>
+                  </div>
+                  <div className="w-7 h-[18px] px-1 py-2">
+                    <div className="w-7 text-center text-gray-500 text-xs font-semibold font-['Pretendard'] leading-[18px]">
+                      Sun
+                    </div>
+                  </div>
+                  <div className="w-7 h-[18px] px-1 py-2">
+                    <div className="w-7 text-center text-gray-500 text-xs font-semibold font-['Pretendard'] leading-[18px]">
+                      Sun
+                    </div>
+                  </div>
+                  <div className="w-7 h-[18px] px-1 py-2">
+                    <div className="w-7 text-center text-gray-500 text-xs font-semibold font-['Pretendard'] leading-[18px]">
+                      Sun
+                    </div>
+                  </div>
+                  <div className="w-7 h-[18px] px-1 py-2">
+                    <div className="w-7 text-center text-gray-500 text-xs font-semibold font-['Pretendard'] leading-[18px]">
+                      Sun
+                    </div>
+                  </div>
+                  <div className="w-7 h-[18px] px-1 py-2">
+                    <div className="w-7 text-center text-gray-500 text-xs font-semibold font-['Pretendard'] leading-[18px]">
+                      Sun
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>

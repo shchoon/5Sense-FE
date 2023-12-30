@@ -5,6 +5,7 @@ import chevronRight from '../../assets/icons/chevron-right.svg'
 import calender from '../../assets/icons/calendar.svg'
 import { useState } from 'react'
 import DateSlideTab from './DateSlideTab'
+import Calendar from '@/components/calendar'
 
 export default function MonthDateTab() {
   const { width, height } = useWindowSize()
@@ -60,12 +61,12 @@ export default function MonthDateTab() {
             >
               <Image src={chevronLeft} width={24} height={24} alt=" " />
             </div>
-            <div className="w-full px-3 py-2 flex justify-center gap-2 items-center">
-              <Image src={calender} width={18} height={18} alt=" " />
-              <span className="text-gray-900 text-base font-semibold font-['Pretendard'] leading-normal">
+            <button className="w-full px-3 py-2 flex justify-center gap-2 items-center group">
+              <Calendar className="fill-[#6B7280] group-hover:fill-primary-600 group-focus:fill-primary-600" />
+              <span className="text-gray-900 text-base font-semibold font-['Pretendard'] leading-normal group-hover:text-primary-600 group-focus:text-primary-600">
                 {dateData.year}년 {dateData.month}월
               </span>
-            </div>
+            </button>
             <div
               className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
               onClick={moveForwardMonth}
