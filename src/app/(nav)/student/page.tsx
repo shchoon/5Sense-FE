@@ -6,6 +6,7 @@ import search_20 from '../../../assets/icon/search_20.svg'
 import noneResult from '../../../assets/icon/noneResult.svg'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 
 export default function StudentPage() {
   const allStudentData = [
@@ -192,12 +193,14 @@ export default function StudentPage() {
           </div>
         </div>
 
-        <div className="flex gap-2 items-center w-[132px] h-[41px] rounded-lg px-5 py-2.5 bg-primary-600">
-          <Image src={plusCircle} width={20} height={20} alt=" " />
-          <div className="h-[21px] w-16 text-white text-[11.5px] font-semibold font-['Pretendard'] leading-[21px] cursor-pointer">
-            수강생 등록
+        <Link href={'/student/register'}>
+          <div className="flex gap-2 items-center w-[132px] h-[41px] rounded-lg px-5 py-2.5 bg-primary-600  cursor-pointer">
+            <Image src={plusCircle} width={20} height={20} alt=" " />
+            <div className="h-[21px] w-16 text-white text-[11.5px] font-semibold font-['Pretendard'] leading-[21px]">
+              수강생 등록
+            </div>
           </div>
-        </div>
+        </Link>
       </div>
       {/* 검색창 */}
       <div className="flex gap-2.5 lg:w-[377px] lg:h-[42px] w-[326px] h-[37px] mb-5">
