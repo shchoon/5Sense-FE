@@ -3,8 +3,8 @@ import plusCircle from '../../../assets/icon/plus-circle.svg'
 import search_16 from '../../../assets/icon/search.svg'
 import x_icon_12 from '../../../assets/icon/x_icon_12.svg'
 import search_20 from '../../../assets/icon/search_20.svg'
-import chevron_right_16 from '../../../assets/icon/chevron_right_16.svg'
 import Image from 'next/image'
+import { fetchApi } from '@/hooks/useApi'
 import { useState, useEffect } from 'react'
 
 export default function StudentPage() {
@@ -136,6 +136,7 @@ export default function StudentPage() {
 
   useEffect(() => {
     setStudentData(allStudentData)
+    fetchApi('/students?searchBy=none', 'GET')
   }, [])
 
   function onChangeInput(event: any) {
