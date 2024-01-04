@@ -8,34 +8,73 @@ import Image from 'next/image'
 import { fetchApi } from '@/hooks/useApi'
 import { useState, useEffect } from 'react'
 
-export default function StudentPage() {
-  const [studentData, setStudentData] = useState<any>()
+export default function InstructorPage() {
+  const allInstructorData = [
+    {
+      name: '엄세리',
+      phone: '010-1234-5678'
+    },
+    {
+      name: '조성훈',
+      phone: '010-1231-1315'
+    },
+    {
+      name: '정은담',
+      phone: '010-8435-1536'
+    },
+    {
+      name: '윤태식',
+      phone: '010-3556-5678'
+    },
+    {
+      name: '조영은',
+      phone: '010-2166-5678'
+    },
+    {
+      name: '엄세리',
+      phone: '010-2365-5678'
+    },
+    {
+      name: '엄세리',
+      phone: '010-1234-1565'
+    }
+  ]
+  const [instructorData, setInstructorData] = useState<any>()
 
   let [searchInput, setSearchInput] = useState<any>('')
 
-  useEffect(() => {}, [])
+  useEffect(() => {
+    //fetchApi('/teachers?searchBy=none', 'GET')
+    setInstructorData(allInstructorData)
+  }, [])
 
   function onChangeInput(event: any) {
     setSearchInput(event.target.value)
   }
 
-  /* function searchClick() {
-    console.log(searchInput)
+  function searchClick() {
     if (isNaN(searchInput)) {
-      let result = allStudentData.filter(data =>
+      let result = allInstructorData.filter(data =>
         data.name.includes(searchInput)
       )
-      setStudentData(result)
+      setInstructorData(result)
     } else {
-      let result = allStudentData.filter(data =>
-        data.phoneNum.replaceAll('-', '').includes(searchInput)
+      let result = allInstructorData.filter(data =>
+        data.phone.replaceAll('-', '').includes(searchInput)
       )
-      setStudentData(result)
+      setInstructorData(result)
     }
+  }
 
-    //console.log(result)
-    //setStudentData(result)
-  } */
+  function preventDashAndPressEnter(event: any) {
+    /* dash(-)의 event.which가 189 */
+    if (event.which === 189) {
+      event.preventDefault()
+    }
+    if (event.key == 'Enter') {
+      searchClick()
+    }
+  }
 
   function onClickX() {
     setSearchInput('')
@@ -71,6 +110,7 @@ export default function StudentPage() {
             placeholder="Search"
             value={searchInput}
             onChange={onChangeInput}
+            onKeyDown={preventDashAndPressEnter}
           />
           <Image
             className="cursor-pointer"
@@ -82,26 +122,40 @@ export default function StudentPage() {
           />
         </div>
 
-        <div className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer">
+        <div
+          className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer"
+          onClick={searchClick}
+        >
           <Image src={search_20} width={20} height={20} alt=" " />
         </div>
       </div>
       {/* 강사 목록 시작 */}
-      <div className="w-[355px] h-[240px] flex flex-col justify-between px-6 pt-8 pb-6 border border-gray-200 rounded-3xl shadow-[0px_5px_15px_0px_rgba(0, 0, 0, 0.02)]">
-        <div className="w-full flex flex-col gap-2">
-          <div className="w-[307px] text-gray-900 text-2xl font-semibold font-['Pretendard'] leading-9">
-            엄세리
-          </div>
-          <div className="w-[307px] text-gray-500 text-base font-medium font-['Pretendard'] leading-normal">
-            010-1234-5678
-          </div>
-        </div>
-        <div className="w-full px-5 py-2.5 flex gap-2 justify-center border border-primary-600 rounded-lg">
-          <div className="text-indigo-500 text-sm font-semibold font-['Pretendard'] leading-[21px]">
-            강사 정보
-          </div>
-          <Image src={chevronRight} width={20} height={20} alt="" />
-        </div>
+      <div className="w-full grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-5">
+        {instructorData?.map(
+          (data: { name: string; phone: string }, i: number) => {
+            return (
+              <div
+                key={i}
+                className="w-full h-[240px] flex flex-col justify-between px-6 pt-8 pb-6 border border-gray-200 rounded-3xl shadow-[0px_5px_15px_0px_rgba(0, 0, 0, 0.02)]"
+              >
+                <div className="w-full flex flex-col gap-2">
+                  <div className="w-[307px] text-gray-900 text-2xl font-semibold font-['Pretendard'] leading-9">
+                    {data.name}
+                  </div>
+                  <div className="w-[307px] text-gray-500 text-base font-medium font-['Pretendard'] leading-normal">
+                    {data.phone}
+                  </div>
+                </div>
+                <div className="w-full px-5 py-2.5 flex gap-2 justify-center border border-primary-600 rounded-lg">
+                  <div className="text-indigo-500 text-sm font-semibold font-['Pretendard'] leading-[21px]">
+                    강사 정보
+                  </div>
+                  <Image src={chevronRight} width={20} height={20} alt="" />
+                </div>
+              </div>
+            )
+          }
+        )}
       </div>
     </div>
   )

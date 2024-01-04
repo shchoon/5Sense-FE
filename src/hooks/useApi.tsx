@@ -25,7 +25,7 @@ const checkExpiredToken = () => {
 //console.log(checkExpiredToken())
 
 export const fetchApi = async (url: string, method: string, data?: any) => {
-  if (isLoginType(data)) {
+  if (url.includes('login')) {
     const res = await fetch(IP_ADDRESS + url, {
       method: method,
       headers: {
