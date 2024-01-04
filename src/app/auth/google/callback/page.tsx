@@ -1,6 +1,7 @@
 'use client'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { fetchApi } from '@/hooks/useApi'
 
 export default function GoogleCallbak() {
   const IP_ADDRESS = process.env.NEXT_PUBLIC_IP_ADDRESS
@@ -18,18 +19,15 @@ export default function GoogleCallbak() {
       body: JSON.stringify({ code, state })
     }
 
-    fetch(`${IP_ADDRESS}/auth/google/login`, options)
-      .then(res => {
-        return res.json()
-      })
-      .then(result => {
-        localStorage.setItem('accessToken', result.data.accessToken)
-        localStorage.setItem('refreshToken', result.data.refreshToken)
-        router.push('/home')
-      })
-      .catch(() => {
-        alert('로그인을 다시 시도해주세요.')
-      })
+    fetchApi(`/auth/kakao/login`, 'POST', {
+      code: code,
+      state: state
+    }).then(result => {
+      localStorage.setItem('accessToken', result.data.accessToken)
+      localStorage.setItem('refreshToken', result.data.refreshToken)
+      localStorage.setItem('accessTokenExp', result.data.accessTokenExp)
+      router.push('/home')
+    })
 
     //토큰 받아서 프론트에서 저장 & 리프레시 토큰 저장
   }, [])
