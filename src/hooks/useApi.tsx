@@ -1,5 +1,3 @@
-import local from 'next/font/local'
-
 const IP_ADDRESS = process.env.NEXT_PUBLIC_IP_ADDRESS
 
 const isLoginType = (data: any) => {
@@ -22,10 +20,8 @@ const checkExpiredToken = () => {
   }
 }
 
-//console.log(checkExpiredToken())
-
 export const fetchApi = async (url: string, method: string, data?: any) => {
-  if (isLoginType(data)) {
+  if (url.includes('login')) {
     const res = await fetch(IP_ADDRESS + url, {
       method: method,
       headers: {
@@ -34,36 +30,63 @@ export const fetchApi = async (url: string, method: string, data?: any) => {
       body: JSON.stringify(data)
     })
     return res.json()
+  } else if (url == '/centers') {
+    let accessToken = localStorage.getItem('accessToken')
+    let refreshToken = localStorage.getItem('refreshToken')
+    const requestCenterRegister = await fetch(IP_ADDRESS + url, {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${accessToken}`
+      },
+      body: JSON.stringify(data)
+    })
+
+    const data1 = await requestCenterRegister.json()
+
+    const requestReissueToken = await fetch(IP_ADDRESS + '/auth/reissue', {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${refreshToken}`
+      }
+    })
+
+    const data2 = await requestReissueToken.json()
+
+    return { data1, data2 }
   } else {
     if (!checkExpiredToken()) {
+      /* accessToken is expired */
       let refreshToken = localStorage.getItem('refreshToken')
-      fetch(IP_ADDRESS + '/auth/reissue', {
-        method: 'POST',
+      const requestReissueToken = await fetch(IP_ADDRESS + '/auth/reissue', {
+        method: method,
         headers: {
           'Content-Type': 'application/json',
           authorization: `Bearer ${refreshToken}`
         }
       })
-        .then(res => {
-          return res.json()
-        })
-        .then(result => {
-          localStorage.setItem('accessToken', result.data.accessToken)
-          localStorage.setItem('refreshToken', result.data.refreshToken)
-          localStorage.setItem('accessTokenExp', result.data.accessTokenExp)
-        })
-      let newAccessToken = localStorage.getItem('accessToken')
+
+      const data1 = await requestReissueToken.json()
+
+      /* 받아온 토큰 데이터 담기 */
+      localStorage.setItem('accessToken', data1.data.accessToken)
+      localStorage.setItem('accessTokenExp', data1.data.accessTokenExp)
+
+      /* 원하는 요청 보내기 */
       const res = await fetch(IP_ADDRESS + url, {
         method: method,
         headers: {
           'Content-Type': 'application/json',
-          authorization: `Bearer ${newAccessToken}`
+          authorization: `Bearer ${data1.data.accessToken}`
         },
         body: JSON.stringify(data)
       })
       return res.json()
     } else {
+      /* accessToken is not expired */
       let accessToken = localStorage.getItem('accessToken')
+      console.log('not expired')
       const res = await fetch(IP_ADDRESS + url, {
         method: method,
         headers: {
@@ -72,22 +95,7 @@ export const fetchApi = async (url: string, method: string, data?: any) => {
         },
         body: JSON.stringify(data)
       })
-      console.log(res)
       return res.json()
     }
   }
-
-  //보내는 데이터가 인가코드일 경우 (로그인만 해당)
-  /*
-  토큰 없이 전달 가능
-  토큰 전달 받으면 스토리지에 저장 
-   */
-
-  //보내는 데이커가 인가코드가 아닐 경우(로그인 외 모든 경우)
-  /* 
-  일단 토큰이 만료 되었는지 체크하고 만료 되었으면 리프레시 토큰을 이용해 새로운 토큰 값 받아와서 헤더에 담기
-  헤더에 bear, type 등등 필요한 거 담기
-  요청에 따른 데이터 담아서 보내기
-  
-  */
 }

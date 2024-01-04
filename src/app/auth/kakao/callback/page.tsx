@@ -24,6 +24,7 @@ export default function KakaoCallback() {
       code: code,
       state: state
     }).then(result => {
+      console.log(result)
       localStorage.setItem('accessToken', result.data.accessToken)
       localStorage.setItem('refreshToken', result.data.refreshToken)
       localStorage.setItem('accessTokenExp', result.data.accessTokenExp)

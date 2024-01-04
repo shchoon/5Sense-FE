@@ -136,7 +136,9 @@ export default function StudentPage() {
 
   useEffect(() => {
     setStudentData(allStudentData)
-    fetchApi('/students?searchBy=none', 'GET')
+    fetchApi('/students?searchBy=none', 'GET').then(result => {
+      console.log(result)
+    })
   }, [])
 
   function onChangeInput(event: any) {
