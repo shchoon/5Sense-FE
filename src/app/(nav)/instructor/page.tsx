@@ -44,8 +44,9 @@ export default function InstructorPage() {
   let [searchInput, setSearchInput] = useState<any>('')
 
   useEffect(() => {
-    //fetchApi('/teachers?searchBy=none', 'GET')
-    setInstructorData(allInstructorData)
+    fetchApi('/teachers?searchBy=none', 'GET').then(result => {
+      setInstructorData(result.data.teachers)
+    })
   }, [])
 
   function onChangeInput(event: any) {

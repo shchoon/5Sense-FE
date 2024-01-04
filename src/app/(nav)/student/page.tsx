@@ -130,16 +130,34 @@ export default function StudentPage() {
         '체형 교정 및 이완을 통한 삶의 균형 찾기/스트레스로부터 벗어 나기/체형 교정 및 이완을 통한 삶의 균형 찾기'
     }
   ]
-  const [studentData, setStudentData] = useState<any>()
+  const [studentData, setStudentData] = useState<any>([])
 
   let [searchInput, setSearchInput] = useState<any>('')
 
+  let [postVariable, setPostVariable] = useState({
+    page: '',
+    cursor: ''
+  })
+
+  let [isRequest, setIsRequest] = useState(false)
+
   useEffect(() => {
-    setStudentData(allStudentData)
     fetchApi('/students?searchBy=none', 'GET').then(result => {
       console.log(result)
+      setStudentData(result.data.students)
+      setPostVariable({
+        ...postVariable,
+        page: result.data.meta.page,
+        cursor: result.data.students[9].id
+      })
     })
   }, [])
+
+  useEffect(() => {
+    window.addEventListener('scroll', test)
+  }, [postVariable])
+
+  console.log(postVariable)
 
   function onChangeInput(event: any) {
     setSearchInput(event.target.value)
@@ -158,9 +176,6 @@ export default function StudentPage() {
       )
       setStudentData(result)
     }
-
-    //console.log(result)
-    //setStudentData(result)
   }
 
   function onClickX() {
@@ -182,6 +197,30 @@ export default function StudentPage() {
     console.log('enter')
   }
 
+  function test() {
+    if (
+      Math.abs(
+        document.documentElement.scrollTop +
+          document.documentElement.clientHeight -
+          document.documentElement.scrollHeight
+      ) <= 1
+    ) {
+      fetchApi(
+        `/students?searchBy=none&page=${postVariable.page + 1}&cursor=${
+          postVariable.cursor
+        }`,
+        'GET'
+      ).then(result => {
+        console.log(result)
+        setStudentData([...studentData, ...result.data.students])
+        setPostVariable({
+          ...postVariable,
+          page: result.data.meta.page,
+          cursor: result.data.students[9].id
+        })
+      })
+    }
+  }
   return (
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6">
       {/* 수강생 관리 + 수강생 등록 버튼 */}
@@ -250,9 +289,9 @@ export default function StudentPage() {
             (
               data: {
                 name: string
-                phoneNum: string
+                phone: string
                 className: string
-                detail: string
+                particulars: string
               },
               i: number
             ) => {
@@ -266,26 +305,16 @@ export default function StudentPage() {
                       {data.name}
                     </div>
                     <div className="lg:w-[160px] w-[130px] text-gray-800 text-sm font-semibold font-['Pretendard']">
-                      {data.phoneNum}
+                      {data.phone.slice(0, 3)}-{data.phone.slice(3, 7)}-
+                      {data.phone.slice(7, 11)}
                     </div>
                     <div className="lg:w-[240px] w-[120px] text-gray-800 text-sm font-semibold font-['Pretendard']">
                       {data.className}
                     </div>
                     <div className="flex-1 text-gray-900 text-base font-normal font-['Pretendard']">
-                      {data.detail}
+                      {data.particulars}
                     </div>
                   </div>
-                  {/* <div className="w-[93px] h-[37px] flex gap-1 px-3 py-2 rounded-lg outline outline-1 outline-primary-600">
-                  <div className="w-[49px] text-indigo-500 text-[12px] font-semibold font-['Pretendard'] leading-[21px]">
-                    관리하기
-                  </div>
-                  <Image
-                    src={chevron_right_16}
-                    width={16}
-                    height={16}
-                    alt=" "
-                  />
-                </div> */}
                 </div>
               )
             }
