@@ -2,41 +2,39 @@
 
 import { useSelect } from '@/hooks/useSelect'
 import { ChangeEvent, useEffect, useMemo, useState } from 'react'
-import DatePicker, { CalendarContainer } from 'react-datepicker'
 import { getMonth, getYear, getDate } from 'date-fns'
 
 import plus from '@/assets/icons/plus-circle.svg'
 import calendaricon from '@/assets/icons/calendar-month.svg'
-import Schedule from './Schedule'
 
-import 'react-datepicker/dist/react-datepicker.css'
-import ko from 'date-fns/locale/ko'
+import minus from '@/assets/icon/minus-circle.svg'
+
+import Schedule from './Calendar'
+
+import Calendar from './Calendar'
 import Image from 'next/image'
 
+export type scheduleItem = {
+  id: number
+  content: string
+  modal: boolean
+}
+
 export default function ClassType() {
+  const [number, setNumber] = useState(1)
   const [one, setOne] = useState<string>('')
   const [count, setCount] = useState<string>('')
-  const [calendar, setCalendar] = useState<boolean>(false)
-  const [components, setComponents] = useState<any>([])
-  const createComponent = () => {
+  const [calendarModal, setCalendarModal] = useState<boolean>(false)
+  const [components, setComponents] = useState<any>([]) // 일정이 가지는 변수들 값
+  const addSchedule = (schedule: scheduleItem) => {
     // 현재 컴포넌트 배열을 가져와 새로운 컴포넌트 추가
-    const newComponents = [
-      ...components,
-      <>
-        <button
-          className="flex justify-start items-center w-[592px] h-[52px] px-4 py-3.5 bg-white rounded-lg border border-gray-300 gap-[2px]"
-          onClick={() => setCalendar(!calendar)}
-        >
-          <Image src={calendaricon} alt="icon" />
-          <span className="text-gray-500 text-base font-normal   leading-normal">
-            기간 선택
-          </span>
-        </button>
-      </>
-    ]
-    setComponents(newComponents)
+    setNumber(number + 1)
+    setComponents([...components, schedule])
   }
 
+  const deleteSchedule = (id: number) => {
+    setComponents(components.filter((item: scheduleItem) => item.id !== id))
+  }
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setOne(e.target.value)
   }
@@ -45,13 +43,6 @@ export default function ClassType() {
   }
 
   const [tab, setTab] = useState<boolean>(true)
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(null)
-  const onChange = (dates: any) => {
-    const [start, end] = dates
-    setStartDate(start)
-    setEndDate(end)
-  }
 
   const onTabHandler = (date: string) => {
     if (date === '기간반') {
@@ -134,8 +125,6 @@ export default function ClassType() {
     setMoney(str)
   }
 
-  const [isSelectWeek, setIsSelectWeek] = useState(false)
-
   const hourArray = Array.from({ length: 23 }, (_, index) => index + 1)
   const minArray = Array.from({ length: 12 }, (_, index) => index * 5)
   const [select, setSelect] = useState<any>([])
@@ -157,10 +146,6 @@ export default function ClassType() {
     }
   }
 
-  const handleClickContainer2 = () => {
-    setIsSelectWeek(!isSelectWeek)
-  }
-
   const activeButton = (content: string, isActive: boolean) => {
     return (
       <button
@@ -173,6 +158,42 @@ export default function ClassType() {
       >
         {content}
       </button>
+    )
+  }
+
+  function ScheduleItem(item: scheduleItem) {
+    return (
+      <>
+        <div className="flex gap-2">
+          <button
+            key={item.id}
+            className="flex justify-between items-center w-[560px] h-[52px] px-4 py-3.5 bg-white rounded-lg border border-gray-300"
+            onClick={() =>
+              setComponents(
+                components.map((schdule: scheduleItem) =>
+                  item.id === schdule.id
+                    ? { ...schdule, modal: !schdule.modal }
+                    : schdule
+                )
+              )
+            }
+          >
+            <div className="flex gap-[2px]">
+              <Image src={calendaricon} alt="icon" />
+              <span className="text-gray-500 text-base font-normal">
+                {item.content}
+              </span>
+            </div>
+          </button>
+          <Image
+            className="cursor-pointer"
+            src={minus}
+            alt="minus"
+            onClick={() => deleteSchedule(item.id)}
+          />
+        </div>
+        {item.modal && <Calendar />}
+      </>
     )
   }
 
@@ -200,27 +221,14 @@ export default function ClassType() {
           <div className="w-full flex flex-col gap-2">
             <p className="gray-800-semibold">일정</p>
             <button
-              onClick={createComponent}
+              onClick={() =>
+                addSchedule({ id: number, content: 'hi', modal: false })
+              }
               className="w-full h-[52px] px-6 py-3.5 btn-line-purple"
             >
               일정 추가
             </button>
-            {components}
-            {calendar === false ? (
-              ''
-            ) : (
-              <DatePicker
-                locale={ko}
-                selected={startDate}
-                onChange={onChange}
-                startDate={startDate}
-                endDate={endDate}
-                selectsRange
-                inline={calendar}
-                calendarContainer={Schedule}
-                monthsShown={2}
-              />
-            )}
+            {components.map((item: scheduleItem) => ScheduleItem(item))}
           </div>
         </div>
       ) : (
