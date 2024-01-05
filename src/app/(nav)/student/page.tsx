@@ -24,11 +24,11 @@ export default function StudentPage() {
     threshold: 1.0
   }
 
-  const callback = (entries: any) => {
-    entries.forEach((entry: any) => {
+  const callback = (entries: IntersectionObserverEntry[]) => {
+    entries.forEach((entry: IntersectionObserverEntry) => {
       if (entry.isIntersecting) {
         observer.unobserve(entry.target)
-        setPage(page => page + 1)
+        setInfiniteScrollCount(page => page + 1)
       }
     })
   }
@@ -41,29 +41,30 @@ export default function StudentPage() {
     cursor: '',
     hasNextPage: true
   })
-  let [page, setPage] = useState(0)
+  let [infiniteScrollCount, setInfiniteScrollCount] = useState(0)
   let [loading, setLoading] = useState(false)
 
   function click() {
-    setPage(page => page + 1)
+    setInfiniteScrollCount(page => page + 1)
   }
 
   let [searchInput, setSearchInput] = useState<any>('')
 
   useEffect(() => {
     fetchApi('/students?searchBy=none', 'GET').then(result => {
+      let cursorIndex = result.data.students.length - 1
+      console.log(cursorIndex)
       setStudentData(result.data.students)
       setPostVariable({
         ...postVariable,
         page: result.data.meta.page,
-        cursor: result.data.students[9].id,
+        cursor: result.data.students[cursorIndex].id,
         hasNextPage: result.data.meta.hasNextPage
       })
     })
   }, [])
 
   useEffect(() => {
-    setLoading(true)
     if (postVariable.hasNextPage) {
       fetchApi(
         `/students?searchBy=none&page=${postVariable.page + 1}&cursor=${
@@ -71,17 +72,17 @@ export default function StudentPage() {
         }`,
         'GET'
       ).then(result => {
+        let cursorIndex = result.data.students.length - 1
         setStudentData([...studentData, ...result.data.students])
         setPostVariable({
           ...postVariable,
           page: result.data.meta.page,
-          cursor: result.data.students[9].id,
+          cursor: result.data.students[cursorIndex].id,
           hasNextPage: result.data.meta.hasNextPage
         })
-        setLoading(false)
       })
     }
-  }, [page])
+  }, [infiniteScrollCount])
 
   function onChangeInput(event: any) {
     setSearchInput(event.target.value)
@@ -253,7 +254,7 @@ export default function StudentPage() {
           })}
         </div>
       </div>
-      {!loading ? <div id="test"></div> : <div>Loading...</div>}
+      <div id="test"></div>
     </div>
   )
 }
