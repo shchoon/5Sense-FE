@@ -87,36 +87,57 @@ export default function StudentPage() {
     setSearchInput(event.target.value)
   }
 
-  /* function searchClick() {
+  async function searchClick() {
     console.log(searchInput)
     if (isNaN(searchInput)) {
-      let result = allStudentData.filter(data =>
-        data.name.includes(searchInput)
+      let res = await fetchApi(
+        `/students?searchBy=name&name=${searchInput}`,
+        'GET'
       )
-      if (result.length !== 0) {
-        setStudentData(result)
+      if (res.data.students.length !== 0) {
+        setStudentData(res.data.students)
+        setPostVariable({
+          ...postVariable,
+          hasNextPage: res.data.meta.hasNextPage
+        })
       } else {
-        setStudentData(null)
+        setStudentData(res.data.students)
+        setPostVariable({
+          ...postVariable,
+          hasNextPage: res.data.meta.hasNextPage
+        })
       }
     } else {
-      let result = allStudentData.filter(data =>
-        data.phoneNum.replaceAll('-', '').includes(searchInput)
+      let res = await fetchApi(
+        `/students?searchBy=phone&phone=${searchInput}`,
+        'GET'
       )
-      if (result.length !== 0) {
-        setStudentData(result)
+      if (res.data.students.length !== 0) {
+        setStudentData(res.data.students)
+        setPostVariable({
+          ...postVariable,
+          hasNextPage: res.data.meta.hasNextPage
+        })
       } else {
-        setStudentData(null)
+        setStudentData(res.data.students)
+        setPostVariable({
+          ...postVariable,
+          hasNextPage: res.data.meta.hasNextPage
+        })
       }
     }
-  } */
-
-  /* function onClickX() {
+  }
+  function preventDashAndPressEnter(event: any) {
+    /* dash(-)의 event.which가 189 */
+    if (event.which === 189) {
+      event.preventDefault()
+    }
+    if (event.key == 'Enter') {
+      searchClick()
+    }
+  }
+  function onClickX() {
     setSearchInput('')
-    setStudentData(allStudentData)
-  } */
-
-  function pressEnter() {
-    console.log('enter')
   }
 
   return (
@@ -147,6 +168,7 @@ export default function StudentPage() {
             placeholder="Search"
             value={searchInput}
             onChange={onChangeInput}
+            onKeyDown={preventDashAndPressEnter}
           />
           <Image
             className="cursor-pointer"
@@ -154,10 +176,14 @@ export default function StudentPage() {
             width={12}
             height={12}
             alt=" "
+            onClick={onClickX}
           />
         </div>
 
-        <div className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer">
+        <div
+          className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer"
+          onClick={searchClick}
+        >
           <Image src={search_20} width={20} height={20} alt=" " />
         </div>
       </div>
@@ -180,7 +206,7 @@ export default function StudentPage() {
         </div>
         {/* 수강생 목록 시작 */}
         <div className="w-full flex flex-col gap-[14px]">
-          {searchInput !== '' && studentData == null ? (
+          {searchInput !== '' && studentData.length == 0 ? (
             <div className="flex w-full h-screen justify-center items-center">
               <div className="flex flex-col gap-6 w-[432px] h-[244px]">
                 <Image
@@ -212,7 +238,7 @@ export default function StudentPage() {
                     {data.name}
                   </div>
                   <div className="lg:w-[160px] w-[130px] text-gray-800 text-sm font-semibold font-['Pretendard']">
-                    {data.phone.slice(0, 3)}-{data.phone.slice(4, 7)}-
+                    {data.phone.slice(0, 3)}-{data.phone.slice(3, 7)}-
                     {data.phone.slice(7, 11)}
                   </div>
                   <div className="xl:flex-1 lg:w-[100px] flex-1 text-gray-800 text-sm font-semibold font-['Pretendard']">
