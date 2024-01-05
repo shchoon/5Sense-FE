@@ -7,7 +7,7 @@ import appleLogo from '../assets/logo/appleLogo.svg'
 import Script from 'next/script'
 import { useRouter } from 'next/navigation'
 
-export default function SocialLoginBtn({ socialLogo }: any) {
+export default function SocialLoginBtn() {
   function generateState() {
     let result = ''
     let basis = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
