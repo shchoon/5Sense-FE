@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Script from 'next/script'
 import { useRef, useState } from 'react'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
+import { fetchApi } from '@/hooks/useApi'
 
 declare global {
   interface Window {
@@ -70,23 +71,19 @@ export default function MyCenter() {
           if (userNum.length !== 11) {
             alert('번호를 다시 입력해주세요. ex) 010xxxxxxxx')
           }
-          /* const options = {
-                method: "POST", // *GET, POST, PUT, DELETE, etc.
-                headers: {
-                  "Content-Type": "application/json",
-                  // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: JSON.stringify({centerName, address, userNum})
-            }
 
-            fetch('url', options)
-            .then(res => res.json())
-            .then(result => {
-                console.log(result);
-            })
-            .catch(error => {
-                console.log(error);
-            }) */
+          fetchApi('/centers', 'POST', {
+            name: centerName,
+            address: address,
+            mainPhone: userNum
+          }).then(result => {
+            console.log(result)
+            const centerRes = result.data1
+            const tokenRes = result.data2
+            localStorage.setItem('accessToken', result.data.accessToken)
+            localStorage.setItem('refreshToken', result.data.refreshToken)
+            localStorage.setItem('accessTokenExp', result.data.accessTokenExp)
+          })
         }}
       >
         <div className="w-[430px] h-[209px] flex flex-col items-center gap-4">

@@ -1,45 +1,40 @@
 'use client'
 
-import ClassFilter from '@/components/classFilter/classFilter'
 import { useSelect } from '@/hooks/useSelect'
 import { ChangeEvent, useEffect, useMemo, useState } from 'react'
-import DatePicker, { CalendarContainer } from 'react-datepicker'
 import { getMonth, getYear, getDate } from 'date-fns'
-
-import CalendarCss from '../../calendarcss'
 
 import plus from '@/assets/icons/plus-circle.svg'
 import calendaricon from '@/assets/icons/calendar-month.svg'
 
-import 'react-datepicker/dist/react-datepicker.css'
-import ko from 'date-fns/locale/ko'
+import minus from '@/assets/icon/minus-circle.svg'
+
+import Schedule from './Calendar'
+
+import Calendar from './Calendar'
 import Image from 'next/image'
-import SelectForm from '@/components/SelectForm'
+
+export type scheduleItem = {
+  id: number
+  content: string
+  modal: boolean
+}
 
 export default function ClassType() {
+  const [number, setNumber] = useState(1)
   const [one, setOne] = useState<string>('')
   const [count, setCount] = useState<string>('')
-  const [calendar, setCalendar] = useState<boolean>(false)
-  const [components, setComponents] = useState<any>([])
-  const createComponent = () => {
+  const [calendarModal, setCalendarModal] = useState<boolean>(false)
+  const [components, setComponents] = useState<any>([]) // 일정이 가지는 변수들 값
+  const addSchedule = (schedule: scheduleItem) => {
     // 현재 컴포넌트 배열을 가져와 새로운 컴포넌트 추가
-    const newComponents = [
-      ...components,
-      <>
-        <button
-          className="flex justify-start items-center w-[592px] h-[52px] px-4 py-3.5 bg-white rounded-lg border border-gray-300 gap-[2px]"
-          onClick={() => setCalendar(!calendar)}
-        >
-          <Image src={calendaricon} alt="icon" />
-          <span className="text-gray-500 text-base font-normal   leading-normal">
-            기간 선택
-          </span>
-        </button>
-      </>
-    ]
-    setComponents(newComponents)
+    setNumber(number + 1)
+    setComponents([...components, schedule])
   }
 
+  const deleteSchedule = (id: number) => {
+    setComponents(components.filter((item: scheduleItem) => item.id !== id))
+  }
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setOne(e.target.value)
   }
@@ -48,13 +43,6 @@ export default function ClassType() {
   }
 
   const [tab, setTab] = useState<boolean>(true)
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(null)
-  const onChange = (dates: any) => {
-    const [start, end] = dates
-    setStartDate(start)
-    setEndDate(end)
-  }
 
   const onTabHandler = (date: string) => {
     if (date === '기간반') {
@@ -69,16 +57,47 @@ export default function ClassType() {
     return price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   }
 
-  const convertToTenThousand = (numberString: string) => {
-    // 콤마 제거 및 숫자로 변환
-    const number = parseInt(numberString.replace(/,/g, ''), 10)
+  function getKoreanNumber(num: string) {
+    let number = parseInt(num)
+    const koreanNumber = [
+      '',
+      '일',
+      '이',
+      '삼',
+      '사',
+      '오',
+      '육',
+      '칠',
+      '팔',
+      '구'
+    ]
+    const tenUnit = ['', '십', '백', '천']
+    const tenThousandUnit = ['조', '억', '만', '']
+    const unit = 10000
 
-    // 만원 단위로 변환
-    if (isNaN(number) || number === 0) {
-      return 0
-    } else {
-      return (number / 10000).toFixed(1)
+    let answer = ''
+
+    while (number > 0) {
+      const mod = number % unit
+      const modToArray = mod.toString().split('')
+      const length = modToArray.length - 1
+
+      const modToKorean = modToArray.reduce((acc, value, index) => {
+        const valueToNumber = +value
+        if (!valueToNumber) return acc
+        // 단위가 십 이상인 '일'글자는 출력하지 않는다. ex) 일십 -> 십
+        const numberToKorean =
+          index < length && valueToNumber === 1
+            ? ''
+            : koreanNumber[valueToNumber]
+        return `${acc}${numberToKorean}${tenUnit[length - index]}`
+      }, '')
+
+      answer = `${modToKorean}${tenThousandUnit.pop()} ${answer}`
+      number = Math.floor(number / unit)
     }
+
+    return answer
   }
 
   const multiplyAndFormat = (
@@ -105,158 +124,85 @@ export default function ClassType() {
     let str = value.replaceAll(',', '')
     setMoney(str)
   }
-  const MyContainer = ({ className, children }: any) => {
-    const [isDropdownView, setDropdownView] = useState(false)
-    const [isSelectWeek, setIsSelectWeek] = useState(false)
-    const [startH, handleStartH, activeSH, handleActiveSH] =
-      useSelect('시간 선택')
-    const [startM, handleStartM, activeSM, handleActiveSM] = useSelect('0')
-    const [endH, handleEndH, activeEH, handleActiveEH] = useSelect('0')
-    const [endM, handleEndM, activeEM, handelActiveEM] = useSelect('0')
-    const [weekend, handleWeekend, activeWeek, handleA] = useSelect('')
-    const hourArray = Array.from({ length: 23 }, (_, index) => index + 1)
-    const minArray = Array.from({ length: 12 }, (_, index) => index * 5)
-    const [select, setSelect] = useState<any>([])
-    const week = ['월', '화', '수', '목', '금', '토', '일']
 
-    const sortDow = (weekDay: any[]) => {
-      const weekDaySorter: any = { 월: 1, 화: 2, 수: 3, 목: 4, 금: 5 }
-      weekDay.sort(function sortByWeekDay(a: number, b: number): number {
-        return weekDaySorter[a] - weekDaySorter[b]
-      })
-      return weekDay
+  const hourArray = Array.from({ length: 23 }, (_, index) => index + 1)
+  const minArray = Array.from({ length: 12 }, (_, index) => index * 5)
+  const [select, setSelect] = useState<any>([])
+  const week = ['월', '화', '수', '목', '금', '토', '일']
+
+  const sortDow = (weekDay: any[]) => {
+    const weekDaySorter: any = { 월: 1, 화: 2, 수: 3, 목: 4, 금: 5 }
+    weekDay.sort(function sortByWeekDay(a: number, b: number): number {
+      return weekDaySorter[a] - weekDaySorter[b]
+    })
+    return weekDay
+  }
+
+  const handleClickWeek = (li: string) => {
+    if (select.includes(li)) {
+      setSelect(sortDow(select.filter((item: any) => item !== li)))
+    } else {
+      setSelect(sortDow([...select, li]))
     }
+  }
 
-    const handleClickWeek = (li: string) => {
-      if (select.includes(li)) {
-        setSelect(sortDow(select.filter((item: any) => item !== li)))
-      } else {
-        setSelect(sortDow([...select, li]))
-      }
-    }
-
-    const handleClickContainer2 = () => {
-      setIsSelectWeek(!isSelectWeek)
-    }
-
+  const activeButton = (content: string, isActive: boolean) => {
     return (
-      <div className="w-[600px] p-4 bg-white rounded-lg shadow flex flex-col justify-start items-center gap-6">
-        <div className="w-full flex flex-col gap-4">
-          <CalendarCss />
-          <CalendarContainer>
-            <div style={{ position: 'relative' }}>{children}</div>
-          </CalendarContainer>
-          <div className=" w-full flex flex-row gap-7">
-            <div className=" w-[282px] h-[83px] flex flex-col justify-start gap-2.5">
-              <p className="xgray-800-semibold">시작 시간</p>
-              <div className="flex flex-row w-full justify-between">
-                <SelectForm
-                  startH={startH}
-                  handleStartH={handleStartH}
-                  activeSH={activeSH}
-                  handleActiveSH={handleActiveSH}
-                  list={hourArray}
-                />
-                <SelectForm
-                  startH={startM}
-                  handleStartH={handleStartM}
-                  activeSH={activeSM}
-                  handleActiveSH={handleActiveSM}
-                  list={minArray}
-                />
-              </div>
-            </div>
-            <div className=" w-[282px] h-[83px] flex flex-col justify-start gap-2.5">
-              <p className="xgray-800-semibold">마치는 시간</p>
-              <div className="flex flex-row w-full justify-between">
-                <SelectForm
-                  startH={endH}
-                  handleStartH={handleEndH}
-                  activeSH={activeEH}
-                  handleActiveSH={handleActiveEH}
-                  list={hourArray}
-                />
-                <SelectForm
-                  startH={endM}
-                  handleStartH={handleEndM}
-                  activeSH={activeEM}
-                  handleActiveSH={handelActiveEM}
-                  list={minArray}
-                />
-              </div>
-            </div>
-          </div>
-          <div>
-            <div className="flex flex-col gap-2.5" onBlur={handleActiveSH}>
-              <p className="xgray-800-semibold">요일 선택</p>
-              <div className="w-full h-[42px] p-3 bg-white rounded-lg border border-gray-300">
-                <label onClick={handleClickContainer2}>
-                  <button>
-                    {select.length > 0 ? `${select} 반복 ` : '요일 선택'}
-                    {isSelectWeek ? '▲' : '▼'}
-                  </button>
-                </label>
-                {isSelectWeek && (
-                  <ul>
-                    {week.map(li => (
-                      <div key={li}>
-                        <input
-                          id={li}
-                          type="checkbox"
-                          value={li}
-                          onClick={() => handleClickWeek(li)}
-                        />
-                        <label htmlFor={li[0]}>{li}</label>
-                      </div>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="w-full flex flex-row justify-between">
+      <button
+        className={`w-[290px] h-10 rounded-md flex justify-center items-center text-base leading-normal ${
+          isActive
+            ? 'bg-primary-600 text-white font-semibold'
+            : 'text-gray-500 font-medium'
+        }`}
+        onClick={() => onTabHandler(content)}
+      >
+        {content}
+      </button>
+    )
+  }
+
+  function ScheduleItem(item: scheduleItem) {
+    return (
+      <>
+        <div className="flex gap-2">
           <button
-            className="w-[279px] h-12 px-5 py-3 rounded-lg border border-gray-200 justify-center items-center"
-            onClick={() => setCalendar(false)}
+            key={item.id}
+            className="flex justify-between items-center w-[560px] h-[52px] px-4 py-3.5 bg-white rounded-lg border border-gray-300"
+            onClick={() =>
+              setComponents(
+                components.map((schdule: scheduleItem) =>
+                  item.id === schdule.id
+                    ? { ...schdule, modal: !schdule.modal }
+                    : schdule
+                )
+              )
+            }
           >
-            취소
+            <div className="flex gap-[2px]">
+              <Image src={calendaricon} alt="icon" />
+              <span className="text-gray-500 text-base font-normal">
+                {item.content}
+              </span>
+            </div>
           </button>
-          <button
-            className="w-[279px] h-12 px-5 py-3 bg-indigo-500 rounded-lg justify-center items-center"
-            onClick={() => setCalendar(false)}
-          >
-            확인
-          </button>
+          <Image
+            className="cursor-pointer"
+            src={minus}
+            alt="minus"
+            onClick={() => deleteSchedule(item.id)}
+          />
         </div>
-      </div>
+        {item.modal && <Calendar />}
+      </>
     )
   }
 
   return (
     <div className="class-box">
       <div className="Title gray-900-bold text-xl">클래스 유형</div>
-      <div className="w-[592px] h-[52px] p-1.5 bg-white rounded-md border border-gray-300 flex">
-        <button
-          className={`w-[290px] h-10 rounded-md flex justify-center items-center text-base   leading-normal ${
-            tab
-              ? 'bg-primary-600 text-white font-semibold'
-              : 'text-gray-500 font-medium'
-          }`}
-          onClick={() => onTabHandler('기간반')}
-        >
-          기간반
-        </button>
-        <button
-          className={`w-[290px] h-10 rounded-md flex justify-center items-center text-base   leading-normal ${
-            tab
-              ? 'text-gray-500 font-medium'
-              : 'bg-primary-600 text-white font-semibold'
-          }`}
-          onClick={() => onTabHandler('회차반')}
-        >
-          회차반
-        </button>
+      <div className="flex w-full h-[52px] p-1.5 rounded-md border border-gray-300 ">
+        {activeButton('기간반', tab)}
+        {activeButton('회차반', !tab)}
       </div>
       {tab ? (
         <div className="flex flex-col gap-10">
@@ -269,33 +215,20 @@ export default function ClassType() {
               placeholder="0원"
             />
             <p className=" text-gray-500 text-sm font-normal font-['Inter']">
-              {convertToTenThousand(money)}만원
+              {getKoreanNumber(money)}원
             </p>
           </div>
           <div className="w-full flex flex-col gap-2">
             <p className="gray-800-semibold">일정</p>
             <button
-              onClick={createComponent}
-              className="w-[592px] h-[52px] px-6 py-3.5 btn-line-purple"
+              onClick={() =>
+                addSchedule({ id: number, content: 'hi', modal: false })
+              }
+              className="w-full h-[52px] px-6 py-3.5 btn-line-purple"
             >
               일정 추가
             </button>
-            {components}
-            {calendar === false ? (
-              ''
-            ) : (
-              <DatePicker
-                locale={ko}
-                selected={startDate}
-                onChange={onChange}
-                startDate={startDate}
-                endDate={endDate}
-                selectsRange
-                inline={calendar}
-                calendarContainer={MyContainer}
-                monthsShown={2}
-              />
-            )}
+            {components.map((item: scheduleItem) => ScheduleItem(item))}
           </div>
         </div>
       ) : (
@@ -343,7 +276,7 @@ export default function ClassType() {
                 {multiplyAndFormat(count, one)}원
               </p>
               <span className="text-right text-gray-500 text-xs font-medium   leading-[18px]">
-                {convertToTenThousand(multiplyAndFormat(count, one))}만원
+                {getKoreanNumber(multiplyAndFormat(count, one))}만원
               </span>
             </div>
           </div>

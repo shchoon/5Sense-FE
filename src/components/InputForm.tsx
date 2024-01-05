@@ -13,7 +13,7 @@ export default function InputForm({
   name,
   maxLength
 }: InputFormProps) {
-  const [inputValue, handleChange] = useInput('')
+  const [inputValue, handleChange] = useInput('', maxLength)
   const ValueLength = inputValue.length
   return (
     <div className="flex flex-col gap-2">

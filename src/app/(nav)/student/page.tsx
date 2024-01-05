@@ -5,145 +5,89 @@ import x_icon_12 from '../../../assets/icon/x_icon_12.svg'
 import search_20 from '../../../assets/icon/search_20.svg'
 import noneResult from '../../../assets/icon/noneResult.svg'
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
+import { fetchApi } from '@/hooks/useApi'
+import { useState, useEffect, useRef, use } from 'react'
 import Link from 'next/link'
 
+interface studentType {
+  name: string
+  phone: string
+  className: string
+  particulars: string
+}
+
 export default function StudentPage() {
-  const allStudentData = [
-    {
-      name: '정은담',
-      phoneNum: '010-1234-5678',
-      className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-      detail:
-        '체형 교정 및 이완을 통한 삶의 균형 찾기/스트레스로부터 벗어 나기/체형 교정 및 이완을 통한 삶의 균형 찾기'
-    },
-    {
-      name: '조영은',
-      phoneNum: '010-2345-6789',
-      className: '반야사 요가',
-      detail:
-        '체형 교정 및 이완을 통한 삶의 균형 찾기/스트레스로부터 벗어 나기/체형 교정 및 이완을 통한 삶의 균형 찾기'
-    },
-    {
-      name: '조성훈',
-      phoneNum: '010-3456-7891',
-      className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-      detail: '체형 교정 및 이완을 통한 삶의 균형 찾기/스트레스로부터 벗어 나기'
-    },
-    {
-      name: '윤태식',
-      phoneNum: '010-4567-8910',
-      className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-      detail:
-        '체형 교정 및 이완을 통한 삶의 균형 찾기/스트레스로부터 벗어 나기/체형 교정 및 이완을 통한 삶의 균형 찾기'
-    },
-    {
-      name: '엄세리',
-      phoneNum: '010-5678-9101',
-      className: '기구 필라테스',
-      detail: '체형 교정 및 이완을 통한 삶의 균형 찾기'
-    },
-    {
-      name: '정은담',
-      phoneNum: '010-6789-1011',
-      className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-      detail:
-        '체형 교정 및 이완을 통한 삶의 균형 찾기/스트레스로부터 벗어 나기/체형 교정 및 이완을 통한 삶의 균형 찾기'
-    },
-    {
-      name: '정은담',
-      phoneNum: '010-7891-0111',
-      className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-      detail:
-        '체형 교정 및 이완을 통한 삶의 균형 찾기/스트레스로부터 벗어 나기/체형 교정 및 이완을 통한 삶의 균형 찾기'
-    },
-    {
-      name: '조영은',
-      phoneNum: '010-8910-1112',
-      className: '반야사 요가',
-      detail:
-        '체형 교정 및 이완을 통한 삶의 균형 찾기/스트레스로부터 벗어 나기/체형 교정 및 이완을 통한 삶의 균형 찾기'
-    },
-    {
-      name: '조성훈',
-      phoneNum: '010-9101-1121',
-      className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-      detail: '체형 교정 및 이완을 통한 삶의 균형 찾기/스트레스로부터 벗어 나기'
-    },
-    {
-      name: '윤태식',
-      phoneNum: '010-1011-1213',
-      className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-      detail:
-        '체형 교정 및 이완을 통한 삶의 균형 찾기/스트레스로부터 벗어 나기/체형 교정 및 이완을 통한 삶의 균형 찾기'
-    },
-    {
-      name: '엄세리',
-      phoneNum: '010-1234-1566',
-      className: '기구 필라테스',
-      detail: '체형 교정 및 이완을 통한 삶의 균형 찾기'
-    },
-    {
-      name: '정은담',
-      phoneNum: '010-1688-1591',
-      className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-      detail:
-        '체형 교정 및 이완을 통한 삶의 균형 찾기/스트레스로부터 벗어 나기/체형 교정 및 이완을 통한 삶의 균형 찾기'
-    },
-    {
-      name: '정은담',
-      phoneNum: '010-1568-1235',
-      className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-      detail:
-        '체형 교정 및 이완을 통한 삶의 균형 찾기/스트레스로부터 벗어 나기/체형 교정 및 이완을 통한 삶의 균형 찾기'
-    },
-    {
-      name: '조영은',
-      phoneNum: '010-1368-1689',
-      className: '반야사 요가',
-      detail:
-        '체형 교정 및 이완을 통한 삶의 균형 찾기/스트레스로부터 벗어 나기/체형 교정 및 이완을 통한 삶의 균형 찾기'
-    },
-    {
-      name: '조성훈',
-      phoneNum: '010-1397-1587',
-      className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-      detail: '체형 교정 및 이완을 통한 삶의 균형 찾기/스트레스로부터 벗어 나기'
-    },
-    {
-      name: '윤태식',
-      phoneNum: '010-1356-1566',
-      className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-      detail:
-        '체형 교정 및 이완을 통한 삶의 균형 찾기/스트레스로부터 벗어 나기/체형 교정 및 이완을 통한 삶의 균형 찾기'
-    },
-    {
-      name: '엄세리',
-      phoneNum: '010-1234-1566',
-      className: '기구 필라테스',
-      detail: '체형 교정 및 이완을 통한 삶의 균형 찾기'
-    },
-    {
-      name: '정은담',
-      phoneNum: '010-1234-1359',
-      className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-      detail:
-        '체형 교정 및 이완을 통한 삶의 균형 찾기/스트레스로부터 벗어 나기/체형 교정 및 이완을 통한 삶의 균형 찾기'
-    }
-  ]
-  const [studentData, setStudentData] = useState<any>()
+  let target: HTMLElement | null = document.getElementById('test')
+  let options = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 1.0
+  }
+
+  const callback = (entries: any) => {
+    entries.forEach((entry: any) => {
+      if (entry.isIntersecting) {
+        observer.unobserve(entry.target)
+        setPage(page => page + 1)
+      }
+    })
+  }
+  const observer = new IntersectionObserver(callback, options)
+  if (target) observer.observe(target)
+
+  let [studentData, setStudentData] = useState<any>([])
+  let [postVariable, setPostVariable] = useState({
+    page: '',
+    cursor: '',
+    hasNextPage: true
+  })
+  let [page, setPage] = useState(0)
+  let [loading, setLoading] = useState(false)
+
+  function click() {
+    setPage(page => page + 1)
+  }
 
   let [searchInput, setSearchInput] = useState<any>('')
 
   useEffect(() => {
-    setStudentData(allStudentData)
+    fetchApi('/students?searchBy=none', 'GET').then(result => {
+      setStudentData(result.data.students)
+      setPostVariable({
+        ...postVariable,
+        page: result.data.meta.page,
+        cursor: result.data.students[9].id,
+        hasNextPage: result.data.meta.hasNextPage
+      })
+    })
   }, [])
+
+  useEffect(() => {
+    setLoading(true)
+    if (postVariable.hasNextPage) {
+      fetchApi(
+        `/students?searchBy=none&page=${postVariable.page + 1}&cursor=${
+          postVariable.cursor
+        }`,
+        'GET'
+      ).then(result => {
+        setStudentData([...studentData, ...result.data.students])
+        setPostVariable({
+          ...postVariable,
+          page: result.data.meta.page,
+          cursor: result.data.students[9].id,
+          hasNextPage: result.data.meta.hasNextPage
+        })
+        setLoading(false)
+      })
+    }
+  }, [page])
 
   function onChangeInput(event: any) {
     setSearchInput(event.target.value)
   }
 
-  function searchClick() {
+  /* function searchClick() {
     console.log(searchInput)
     if (isNaN(searchInput)) {
       let result = allStudentData.filter(data =>
@@ -164,24 +108,16 @@ export default function StudentPage() {
         setStudentData(null)
       }
     }
-  }
+  } */
 
-  function onClickX() {
+  /* function onClickX() {
     setSearchInput('')
     setStudentData(allStudentData)
-  }
+  } */
 
-  function preventDashAndPressEnter(event: any) {
-    /* dash(-)의 event.which가 189 */
-    if (event.which === 189) {
-      event.preventDefault()
-    }
-    if (event.key == 'Enter') {
-      searchClick()
-    }
+  function pressEnter() {
+    console.log('enter')
   }
-
-  console.log(studentData)
 
   return (
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6">
@@ -211,7 +147,6 @@ export default function StudentPage() {
             placeholder="Search"
             value={searchInput}
             onChange={onChangeInput}
-            onKeyDown={preventDashAndPressEnter}
           />
           <Image
             className="cursor-pointer"
@@ -219,14 +154,10 @@ export default function StudentPage() {
             width={12}
             height={12}
             alt=" "
-            onClick={onClickX}
           />
         </div>
 
-        <div
-          className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer"
-          onClick={searchClick}
-        >
+        <div className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer">
           <Image src={search_20} width={20} height={20} alt=" " />
         </div>
       </div>
@@ -270,7 +201,7 @@ export default function StudentPage() {
               </div>
             </div>
           ) : null}
-          {studentData?.map((data: any, i: number) => {
+          {studentData?.map((data: studentType, i: number) => {
             return (
               <div
                 key={i}
@@ -281,13 +212,14 @@ export default function StudentPage() {
                     {data.name}
                   </div>
                   <div className="lg:w-[160px] w-[130px] text-gray-800 text-sm font-semibold font-['Pretendard']">
-                    {data.phoneNum}
+                    {data.phone.slice(0, 3)}-{data.phone.slice(4, 7)}-
+                    {data.phone.slice(7, 11)}
                   </div>
                   <div className="xl:flex-1 lg:w-[100px] flex-1 text-gray-800 text-sm font-semibold font-['Pretendard']">
                     {data.className}
                   </div>
                   <div className="xl:w-[400px] lg:flex-1 w-[200px] text-gray-900 text-base font-normal font-['Pretendard']">
-                    {data.detail}
+                    {data.particulars}
                   </div>
                 </div>
               </div>
@@ -295,6 +227,7 @@ export default function StudentPage() {
           })}
         </div>
       </div>
+      {!loading ? <div id="test"></div> : <div>Loading...</div>}
     </div>
   )
 }

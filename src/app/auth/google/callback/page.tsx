@@ -3,7 +3,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { fetchApi } from '@/hooks/useApi'
 
-export default function NaverCallback() {
+export default function GoogleCallbak() {
   const IP_ADDRESS = process.env.NEXT_PUBLIC_IP_ADDRESS
   const searchParams = useSearchParams()
   const router = useRouter()

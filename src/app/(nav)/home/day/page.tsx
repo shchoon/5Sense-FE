@@ -315,9 +315,9 @@ export default function MainPageDay() {
         </div>
       </div>
       {/* 일 시간표 */}
-      <div className="flex flex-col gap-7 w-full">
+      <div className="flex flex-col gap-7 w-full max-h-[800px] p-2 overflow-y-auto">
         {classData.map((data, i) => {
-          if (currentHour <= Number(data.time.split(':')[0])) {
+          if (true) {
             return (
               <div
                 key={i}
