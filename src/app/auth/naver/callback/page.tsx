@@ -18,7 +18,13 @@ export default function NaverCallback() {
       localStorage.setItem('accessToken', result.data.accessToken)
       localStorage.setItem('refreshToken', result.data.refreshToken)
       localStorage.setItem('accessTokenExp', result.data.accessTokenExp)
-      router.push('/home')
+      localStorage.setItem('hasCenter', result.data.hasCenter)
+
+      if (result.data.hasCenter) {
+        router.push('/home')
+      } else {
+        router.push('/myCenter')
+      }
     })
   }
   useEffect(() => {
