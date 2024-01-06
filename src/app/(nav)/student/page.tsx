@@ -42,16 +42,16 @@ export default function StudentPage() {
   const observer = new IntersectionObserver(callback, options)
   if (target) observer.observe(target)
 
-  let [studentData, setStudentData] = useState<studentType[]>([])
-  let [postVariable, setPostVariable] = useState<postVariableType>({
+  const [studentData, setStudentData] = useState<studentType[]>([])
+  const [postVariable, setPostVariable] = useState<postVariableType>({
     page: '',
     cursor: '',
     hasNextPage: true
   })
-  let [infiniteScrollCount, setInfiniteScrollCount] = useState(0)
-  let [loading, setLoading] = useState(false)
 
-  let [searchInput, setSearchInput] = useState<string>('')
+  const [infiniteScrollCount, setInfiniteScrollCount] = useState(0)
+  const [loading, setLoading] = useState(false)
+  const [searchInput, setSearchInput] = useState<string>('')
 
   const getStudentData = (page?: string, cursor?: string) => {
     if (page && cursor) {
@@ -228,7 +228,7 @@ export default function StudentPage() {
         </div>
         {/* 수강생 목록 시작 */}
         <div className="w-full flex flex-col gap-[14px]">
-          {studentData && studentData.length == 0 ? (
+          {searchInput !== '' && studentData.length == 0 ? (
             <div className="flex w-full h-screen justify-center items-center">
               <div className="flex flex-col gap-6 w-[432px] h-[244px]">
                 <Image
