@@ -89,7 +89,7 @@ export default function MyCenter() {
     <>
       <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></Script>
       <form
-        className="flex flex-col w-[430px] h-[297px] gap-5"
+        className="flex flex-col w-[430px] h-[297px] gap-9"
         onSubmit={e => {
           e.preventDefault()
           if (postData.mainPhone.length !== 11) {
@@ -106,23 +106,20 @@ export default function MyCenter() {
               id="floating_outlined"
               value={postData.name}
               autoComplete="off"
-              className="block px-2.5 pb-2.5 pt-4 w-full h-full text-sm text-gray-900 bg-transparent 
-                rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600
-                 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
+              className="w-full px-3 py-5 text-sm text-gray-900 bg-transparent 
+                rounded-lg border-1 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-primary-700 peer"
+              placeholder=""
               onChange={e => {
                 handelChangeName('name', e)
               }}
             />
             <label
               htmlFor="floating_outlined"
-              className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 
-                transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 
-                peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 
-                peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-100 
-                peer-focus:-translate-y-4 left-1"
+              className="absolute w-[42px] h-5 p-1 bg-white justify-start items-start gap-2.5 inline-flex"
             >
-              센터명
+              <div className="text-indigo-700 text-xs font-medium font-['Inter'] leading-3">
+                센터명
+              </div>
             </label>
           </div>
           <div
@@ -134,9 +131,8 @@ export default function MyCenter() {
               name="address"
               id="floating_outlined"
               autoComplete="off"
-              className="block px-2.5 pb-2.5 pt-4 w-full h-full text-sm text-gray-900 bg-transparent 
-                rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600
-                 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className="w-full px-3 py-5 text-sm text-gray-900 bg-transparent 
+              rounded-lg border-1 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-primary-700 peer"
               placeholder=" "
             />
             <label
@@ -157,9 +153,8 @@ export default function MyCenter() {
               name="mainPhone"
               id="floating_outlined"
               autoComplete="off"
-              className={`block px-2.5 pb-2.5 pt-4 w-full h-full text-sm text-gray-900 bg-transparent 
-                rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600
-                 dark:focus:border-blue-500 focus:outline-none focus:ring-0 ${inputWarn} peer`}
+              className="w-full px-3 py-5 text-sm text-gray-900 bg-transparent 
+              rounded-lg border-1 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-primary-700 peer"
               placeholder=" "
               value={postData.mainPhone}
               onClick={() => {
@@ -187,10 +182,10 @@ export default function MyCenter() {
             </label>
           </div>
         </div>
-        <div className="flex justify-center items-center">
+        <div className="w-full flex justify-center items-center">
           <button
             type="submit"
-            className="w-[200px] px-6 py-[10px] rounded-lg bg-[#7354E8] text-[#FFF] font-semibold"
+            className="w-[200px] h-[52px] px-6 py-[10px] rounded-lg bg-[#7354E8] text-[#FFF] font-semibold"
           >
             등록
           </button>
