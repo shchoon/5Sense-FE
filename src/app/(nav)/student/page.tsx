@@ -10,10 +10,17 @@ import { useState, useEffect, useRef, use } from 'react'
 import Link from 'next/link'
 
 interface studentType {
+  id: string
   name: string
   phone: string
   className: string
   particulars: string
+}
+
+interface postVariableType {
+  page: string
+  cursor: string
+  hasNextPage: boolean
 }
 
 export default function StudentPage() {
@@ -24,6 +31,31 @@ export default function StudentPage() {
     threshold: 1.0
   }
 
+  function getMoreData() {
+    fetchApi(
+      `/students?searchBy=none&page=${postVariable.page + 1}&cursor=${
+        postVariable.cursor
+      }`,
+      'GET'
+    )
+      .then(result => {
+        let cursorIndex = result.data.students.length - 1
+        setStudentData((preStudentData: studentType[]) => [
+          ...preStudentData,
+          ...result.data.students
+        ])
+        setPostVariable((prePostVariable: postVariableType) => ({
+          ...prePostVariable,
+          page: result.data.meta.page,
+          cursor: result.data.students[cursorIndex].id,
+          hasNextPage: result.data.meta.hasNextPage
+        }))
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
+
   const callback = (entries: IntersectionObserverEntry[]) => {
     entries.forEach((entry: IntersectionObserverEntry) => {
       if (entry.isIntersecting) {
@@ -32,11 +64,12 @@ export default function StudentPage() {
       }
     })
   }
+
   const observer = new IntersectionObserver(callback, options)
   if (target) observer.observe(target)
 
-  let [studentData, setStudentData] = useState<any>([])
-  let [postVariable, setPostVariable] = useState({
+  let [studentData, setStudentData] = useState<studentType[]>([])
+  let [postVariable, setPostVariable] = useState<postVariableType>({
     page: '',
     cursor: '',
     hasNextPage: true
@@ -44,43 +77,31 @@ export default function StudentPage() {
   let [infiniteScrollCount, setInfiniteScrollCount] = useState(0)
   let [loading, setLoading] = useState(false)
 
-  function click() {
-    setInfiniteScrollCount(page => page + 1)
-  }
-
   let [searchInput, setSearchInput] = useState<any>('')
 
   useEffect(() => {
     fetchApi('/students?searchBy=none', 'GET').then(result => {
       let cursorIndex = result.data.students.length - 1
       console.log(cursorIndex)
-      setStudentData(result.data.students)
-      setPostVariable({
-        ...postVariable,
+      setStudentData((preStudentData: studentType[]) => [
+        ...preStudentData,
+        ...result.data.students
+      ])
+      setPostVariable((prePostVariable: postVariableType) => ({
+        ...prePostVariable,
         page: result.data.meta.page,
         cursor: result.data.students[cursorIndex].id,
         hasNextPage: result.data.meta.hasNextPage
-      })
+      }))
     })
   }, [])
 
   useEffect(() => {
-    if (postVariable.hasNextPage) {
-      fetchApi(
-        `/students?searchBy=none&page=${postVariable.page + 1}&cursor=${
-          postVariable.cursor
-        }`,
-        'GET'
-      ).then(result => {
-        let cursorIndex = result.data.students.length - 1
-        setStudentData([...studentData, ...result.data.students])
-        setPostVariable({
-          ...postVariable,
-          page: result.data.meta.page,
-          cursor: result.data.students[cursorIndex].id,
-          hasNextPage: result.data.meta.hasNextPage
-        })
-      })
+    if (infiniteScrollCount > 0 && postVariable.hasNextPage && !loading) {
+      setLoading(true)
+      setTimeout(() => {
+        getMoreData()
+      }, 500)
     }
   }, [infiniteScrollCount])
 
@@ -95,7 +116,13 @@ export default function StudentPage() {
         `/students?searchBy=name&name=${searchInput}`,
         'GET'
       )
-      if (res.data.students.length !== 0) {
+
+      setStudentData(res.data.students)
+      setPostVariable({
+        ...postVariable,
+        hasNextPage: res.data.meta.hasNextPage
+      })
+      /* if (res.data.students.length !== 0) {
         setStudentData(res.data.students)
         setPostVariable({
           ...postVariable,
@@ -107,13 +134,18 @@ export default function StudentPage() {
           ...postVariable,
           hasNextPage: res.data.meta.hasNextPage
         })
-      }
+      } */
     } else {
       let res = await fetchApi(
         `/students?searchBy=phone&phone=${searchInput}`,
         'GET'
       )
-      if (res.data.students.length !== 0) {
+      setStudentData(res.data.students)
+      setPostVariable({
+        ...postVariable,
+        hasNextPage: res.data.meta.hasNextPage
+      })
+      /* if (res.data.students.length !== 0) {
         setStudentData(res.data.students)
         setPostVariable({
           ...postVariable,
@@ -125,7 +157,7 @@ export default function StudentPage() {
           ...postVariable,
           hasNextPage: res.data.meta.hasNextPage
         })
-      }
+      } */
     }
   }
   function preventDashAndPressEnter(event: any) {
@@ -139,6 +171,20 @@ export default function StudentPage() {
   }
   function onClickX() {
     setSearchInput('')
+    fetchApi('/students?searchBy=none', 'GET').then(result => {
+      let cursorIndex = result.data.students.length - 1
+      console.log(cursorIndex)
+      setStudentData((preStudentData: studentType[]) => [
+        ...preStudentData,
+        ...result.data.students
+      ])
+      setPostVariable((prePostVariable: postVariableType) => ({
+        ...prePostVariable,
+        page: result.data.meta.page,
+        cursor: result.data.students[cursorIndex].id,
+        hasNextPage: result.data.meta.hasNextPage
+      }))
+    })
   }
 
   return (
@@ -189,7 +235,7 @@ export default function StudentPage() {
         </div>
       </div>
       {/* 수강생 목록 시작 */}
-      <div className="w-full flex flex-col gap-3 pb-[60px]">
+      <div className="w-full flex flex-col gap-3">
         {/* 수강생 목록 설명 */}
         <div className="w-full h-[46px] lg:px-7 px-6 py-4 flex lg:gap-6 gap-4 rounded bg-[#F0EFFF]">
           <div className="w-[100px] text-indigo-500 text-sm font-semibold font-['Pretendard'] leading-[14px]">
@@ -254,6 +300,18 @@ export default function StudentPage() {
           })}
         </div>
       </div>
+      {loading && (
+        <div className="w-full h-14 flex justify-center items-center">
+          <div
+            className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+            role="status"
+          >
+            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+              Loading...
+            </span>
+          </div>
+        </div>
+      )}
       <div id="test"></div>
     </div>
   )
