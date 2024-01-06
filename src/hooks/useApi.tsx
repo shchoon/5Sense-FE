@@ -1,13 +1,3 @@
-interface DataType {
-  code: string
-  state: string
-  name: string
-  address: string
-  mainPhone: string
-  phone: string
-  particulars: string
-}
-
 const IP_ADDRESS = process.env.NEXT_PUBLIC_IP_ADDRESS
 
 const checkExpiredToken = () => {
@@ -23,11 +13,7 @@ const checkExpiredToken = () => {
   }
 }
 
-export const fetchApi = async (
-  url: string,
-  method: string,
-  data?: DataType
-) => {
+export const fetchApi = async (url: string, method: string, data?: any) => {
   if (url.includes('login')) {
     try {
       const res = await fetch(IP_ADDRESS + url, {
@@ -76,7 +62,7 @@ export const fetchApi = async (
       try {
         let refreshToken = localStorage.getItem('refreshToken')
         const requestReissueToken = await fetch(IP_ADDRESS + '/auth/reissue', {
-          method: method,
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             authorization: `Bearer ${refreshToken}`
