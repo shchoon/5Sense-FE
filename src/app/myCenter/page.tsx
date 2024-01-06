@@ -182,6 +182,7 @@ export default function MyCenter() {
           <div className="relative w-[430px] h-[60px]  flex items-center  rounded-lg border border-[#E5E7EB]">
             <input
               ref={phoneNumInputRef}
+              name="phone"
               onFocus={e => {
                 handleOnFocus(e.target.name)
               }}
@@ -189,7 +190,6 @@ export default function MyCenter() {
                 rounded-lg border-1 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0 peer"
               placeholder="대표번호 (- 없이 입력해주세요)"
               value={postData.mainPhone}
-              onClick={() => {}}
               onKeyDown={allowOnlyNum}
               onChange={e => {
                 handelChangeName('phone', e)
@@ -207,7 +207,7 @@ export default function MyCenter() {
         <div className="w-full flex justify-center items-center">
           <button
             type="submit"
-            className="w-[200px] h-[52px] px-6 py-[10px] rounded-lg bg-[#7354E8] text-[#FFF] font-semibold"
+            className="w-[200px] h-[52px] px-6 py-[10px] rounded-lg bg-primary-600 hover:bg-primary-700 focus:ring-1 focus:ring-primary-200 text-[#FFF] font-semibold"
           >
             등록
           </button>
