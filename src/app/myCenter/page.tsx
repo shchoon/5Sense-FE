@@ -2,9 +2,8 @@
 import '../globals.css'
 import Image from 'next/image'
 import Script from 'next/script'
-import { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
-import { fetchApi } from '@/hooks/useApi'
 
 declare global {
   interface Window {
@@ -17,6 +16,12 @@ interface IAddr {
   zonecode: string
 }
 
+interface postDataType {
+  name: string
+  address: string
+  mainPhone: string
+}
+
 export default function MyCenter() {
   const phoneNumInputRef = useRef<HTMLInputElement>(null)
 
@@ -25,31 +30,53 @@ export default function MyCenter() {
       oncomplete: function (data: any) {
         // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
         // 예제를 참고하여 다양한 활용법을 확인해 보세요.
-        console.log(data)
-        setAddress(data.address + `  (${data.buildingName})`)
+        setPostData({
+          ...postData,
+          address: data.address
+        })
       }
     }).open()
   }
 
-  let [address, setAddress] = useState<string>('')
-  let [centerName, setCenterName] = useState<string>('')
-  let [userNum, setUserNum] = useState<string>('')
+  const [postData, setPostData] = useState<postDataType>({
+    name: '',
+    address: '',
+    mainPhone: ''
+  })
   let [inputWarn, setInputWarn] = useState<string>('outline-[#7354E8]')
-  let [onFocusCenterInput, setOnFocusCenterInput] = useState<boolean>(false)
   let [onFocusPhoneNumInput, setOnFocusPhoneNumInput] = useState<boolean>(false)
 
   const handleClickOutside = () => {
     setOnFocusPhoneNumInput(false)
   }
-
   const handleClickInside = () => {
     setOnFocusPhoneNumInput(true)
     console.log('in')
   }
+  const handelChangeName = (
+    name: string,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (name === 'name') {
+      setPostData({
+        ...postData,
+        name: e.target.value
+      })
+    } else if (name === 'address') {
+      setPostData({
+        ...postData,
+        address: e.target.value
+      })
+    } else if (name === 'mainPhone') {
+      setPostData({
+        ...postData,
+        mainPhone: e.target.value
+      })
+    }
+  }
 
   useOnClickOutside(phoneNumInputRef, handleClickOutside)
 
-  console.log(userNum)
   /* 전화번호 입력 -> '-' &  number type 아닌 것들 입력 방지*/
   function allowOnlyNum(e: any) {
     console.log(e.key)
@@ -65,40 +92,26 @@ export default function MyCenter() {
         className="flex flex-col w-[430px] h-[297px] gap-5"
         onSubmit={e => {
           e.preventDefault()
-          console.log(centerName)
-          console.log(address)
-          console.log(userNum)
-          if (userNum.length !== 11) {
+          if (postData.mainPhone.length !== 11) {
             alert('번호를 다시 입력해주세요. ex) 010xxxxxxxx')
           }
-
-          fetchApi('/centers', 'POST', {
-            name: centerName,
-            address: address,
-            mainPhone: userNum
-          }).then(result => {
-            console.log(result)
-            const centerRes = result.data1
-            const tokenRes = result.data2
-            localStorage.setItem('accessToken', result.data.accessToken)
-            localStorage.setItem('refreshToken', result.data.refreshToken)
-            localStorage.setItem('accessTokenExp', result.data.accessTokenExp)
-          })
+          console.log(postData)
         }}
       >
         <div className="w-[430px] h-[209px] flex flex-col items-center gap-4">
           <div className="relative w-[430px] h-[60px] flex items-center border rounded-lg border-[#E5E7EB] ">
             <input
               type="text"
+              name="name"
               id="floating_outlined"
-              value={centerName}
+              value={postData.name}
               autoComplete="off"
               className="block px-2.5 pb-2.5 pt-4 w-full h-full text-sm text-gray-900 bg-transparent 
                 rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600
                  dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               onChange={e => {
-                setCenterName(e.target.value)
+                handelChangeName('name', e)
               }}
             />
             <label
@@ -118,8 +131,8 @@ export default function MyCenter() {
           >
             <input
               type="text"
+              name="address"
               id="floating_outlined"
-              value={address}
               autoComplete="off"
               className="block px-2.5 pb-2.5 pt-4 w-full h-full text-sm text-gray-900 bg-transparent 
                 rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600
@@ -141,25 +154,25 @@ export default function MyCenter() {
             <input
               ref={phoneNumInputRef}
               type="text"
+              name="mainPhone"
               id="floating_outlined"
               autoComplete="off"
               className={`block px-2.5 pb-2.5 pt-4 w-full h-full text-sm text-gray-900 bg-transparent 
                 rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600
                  dark:focus:border-blue-500 focus:outline-none focus:ring-0 ${inputWarn} peer`}
               placeholder=" "
-              value={userNum}
+              value={postData.mainPhone}
               onClick={() => {
                 handleClickInside()
               }}
               onKeyDown={allowOnlyNum}
               onChange={e => {
-                console.log(e.target.value)
+                handelChangeName('mainPhone', e)
                 if (e.target.value.length > 11) {
                   setInputWarn('focus:border-red-600')
                 } else {
                   setInputWarn('focus:border-blue-600')
                 }
-                setUserNum(e.target.value)
               }}
             />
             <label
