@@ -10,6 +10,5 @@ export function useInput(initialValue: string, maxLength: number): any {
       setInputValue(e.target.value.slice(0, maxLength))
     }
   }
-
   return [inputValue, handleChange]
 }

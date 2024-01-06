@@ -45,4 +45,6 @@ export default function KakaoCallback() {
 
     //토큰 받아서 프론트에서 저장 & 리프레시 토큰 저장
   }, [])
+
+  return <div>카카오 계정으로 로그인중입니다...</div>
 }
