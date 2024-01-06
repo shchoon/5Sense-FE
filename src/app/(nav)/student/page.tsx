@@ -30,32 +30,6 @@ export default function StudentPage() {
     rootMargin: '0px',
     threshold: 1.0
   }
-
-  function getMoreData() {
-    fetchApi(
-      `/students?searchBy=none&page=${postVariable.page + 1}&cursor=${
-        postVariable.cursor
-      }`,
-      'GET'
-    )
-      .then(result => {
-        let cursorIndex = result.data.students.length - 1
-        setStudentData((preStudentData: studentType[]) => [
-          ...preStudentData,
-          ...result.data.students
-        ])
-        setPostVariable((prePostVariable: postVariableType) => ({
-          ...prePostVariable,
-          page: result.data.meta.page,
-          cursor: result.data.students[cursorIndex].id,
-          hasNextPage: result.data.meta.hasNextPage
-        }))
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }
-
   const callback = (entries: IntersectionObserverEntry[]) => {
     entries.forEach((entry: IntersectionObserverEntry) => {
       if (entry.isIntersecting) {
@@ -77,88 +51,77 @@ export default function StudentPage() {
   let [infiniteScrollCount, setInfiniteScrollCount] = useState(0)
   let [loading, setLoading] = useState(false)
 
-  let [searchInput, setSearchInput] = useState<any>('')
+  let [searchInput, setSearchInput] = useState<string>('')
 
-  useEffect(() => {
-    fetchApi('/students?searchBy=none', 'GET').then(result => {
-      let cursorIndex = result.data.students.length - 1
-      console.log(cursorIndex)
-      setStudentData((preStudentData: studentType[]) => [
-        ...preStudentData,
-        ...result.data.students
-      ])
-      setPostVariable((prePostVariable: postVariableType) => ({
-        ...prePostVariable,
-        page: result.data.meta.page,
-        cursor: result.data.students[cursorIndex].id,
-        hasNextPage: result.data.meta.hasNextPage
-      }))
-    })
-  }, [])
-
-  useEffect(() => {
-    if (infiniteScrollCount > 0 && postVariable.hasNextPage && !loading) {
-      setLoading(true)
-      setTimeout(() => {
-        getMoreData()
-      }, 500)
+  const getStudentData = (page?: string, cursor?: string) => {
+    if (page && cursor) {
+      fetchApi(
+        `/students?searchBy=none&page=${postVariable.page + 1}&cursor=${
+          postVariable.cursor
+        }`,
+        'GET'
+      )
+        .then(result => {
+          let cursorIndex = result.data.students.length - 1
+          setStudentData((preStudentData: studentType[]) => [
+            ...preStudentData,
+            ...result.data.students
+          ])
+          setPostVariable((prePostVariable: postVariableType) => ({
+            ...prePostVariable,
+            page: result.data.meta.page,
+            cursor: result.data.students[cursorIndex].id,
+            hasNextPage: result.data.meta.hasNextPage
+          }))
+        })
+        .finally(() => {
+          setLoading(false)
+        })
+    } else {
+      fetchApi('/students?searchBy=none&page=1', 'GET').then(result => {
+        let cursorIndex = result.data.students.length - 1
+        console.log(cursorIndex)
+        setStudentData((preStudentData: studentType[]) => [
+          ...preStudentData,
+          ...result.data.students
+        ])
+        setPostVariable((prePostVariable: postVariableType) => ({
+          ...prePostVariable,
+          page: result.data.meta.page,
+          cursor: result.data.students[cursorIndex].id,
+          hasNextPage: result.data.meta.hasNextPage
+        }))
+      })
     }
-  }, [infiniteScrollCount])
+  }
+  const getStudentDataBynameOrPhone = (value: string) => {
+    if (Number(value)) {
+      fetchApi(`/students?searchBy=phone&phone=${value}`, 'GET').then(res => {
+        setStudentData(res.data.students)
+        setPostVariable({
+          ...postVariable,
+          hasNextPage: res.data.meta.hasNextPage
+        })
+      })
+    } else {
+      fetchApi(`/students?searchBy=name&name=${searchInput}`, 'GET').then(
+        res => {
+          setStudentData(res.data.students)
+          setPostVariable({
+            ...postVariable,
+            hasNextPage: res.data.meta.hasNextPage
+          })
+        }
+      )
+    }
+  }
 
-  function onChangeInput(event: any) {
+  const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(event.target.value)
   }
 
   async function searchClick() {
-    console.log(searchInput)
-    if (isNaN(searchInput)) {
-      let res = await fetchApi(
-        `/students?searchBy=name&name=${searchInput}`,
-        'GET'
-      )
-
-      setStudentData(res.data.students)
-      setPostVariable({
-        ...postVariable,
-        hasNextPage: res.data.meta.hasNextPage
-      })
-      /* if (res.data.students.length !== 0) {
-        setStudentData(res.data.students)
-        setPostVariable({
-          ...postVariable,
-          hasNextPage: res.data.meta.hasNextPage
-        })
-      } else {
-        setStudentData(res.data.students)
-        setPostVariable({
-          ...postVariable,
-          hasNextPage: res.data.meta.hasNextPage
-        })
-      } */
-    } else {
-      let res = await fetchApi(
-        `/students?searchBy=phone&phone=${searchInput}`,
-        'GET'
-      )
-      setStudentData(res.data.students)
-      setPostVariable({
-        ...postVariable,
-        hasNextPage: res.data.meta.hasNextPage
-      })
-      /* if (res.data.students.length !== 0) {
-        setStudentData(res.data.students)
-        setPostVariable({
-          ...postVariable,
-          hasNextPage: res.data.meta.hasNextPage
-        })
-      } else {
-        setStudentData(res.data.students)
-        setPostVariable({
-          ...postVariable,
-          hasNextPage: res.data.meta.hasNextPage
-        })
-      } */
-    }
+    getStudentDataBynameOrPhone(searchInput)
   }
   function preventDashAndPressEnter(event: any) {
     /* dash(-)의 event.which가 189 */
@@ -186,6 +149,18 @@ export default function StudentPage() {
       }))
     })
   }
+
+  useEffect(() => {
+    if (infiniteScrollCount === 0) {
+      getStudentData()
+    }
+    if (infiniteScrollCount > 0 && postVariable.hasNextPage && !loading) {
+      setLoading(true)
+      setTimeout(() => {
+        getStudentData(postVariable.page, postVariable.cursor)
+      }, 500)
+    }
+  }, [infiniteScrollCount])
 
   return (
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6">
@@ -253,7 +228,7 @@ export default function StudentPage() {
         </div>
         {/* 수강생 목록 시작 */}
         <div className="w-full flex flex-col gap-[14px]">
-          {searchInput !== '' && studentData.length == 0 ? (
+          {studentData && studentData.length == 0 ? (
             <div className="flex w-full h-screen justify-center items-center">
               <div className="flex flex-col gap-6 w-[432px] h-[244px]">
                 <Image
