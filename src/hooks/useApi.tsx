@@ -59,53 +59,6 @@ export const fetchApi = async (url: string, method: string, data?: any) => {
     } catch (error) {
       alert('센터정보를 모두 입력해주세요.')
     }
-
-    //alert(JSON.stringify(requestCenterRegister, null, 2))
-
-    //const data1 = await requestCenterRegister
-
-    /* const requestReissueToken = await fetch(IP_ADDRESS + '/auth/reissue', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          authorization: `Bearer ${refreshToken}`
-        }
-      }) */
-
-    //const data2 = await requestReissueToken
-
-    //return { data1, data2 }
-    /* try {
-      const accessToken = localStorage.getItem('accessToken')
-      const refreshToken = localStorage.getItem('refreshToken')
-      const requestCenterRegister = await fetch(IP_ADDRESS + url, {
-        method: method,
-        headers: {
-          'Content-Type': 'application/json',
-          authorization: `Bearer ${accessToken}`
-        },
-        body: JSON.stringify(data)
-      })
-
-      //alert(JSON.stringify(requestCenterRegister, null, 2))
-
-      const data1 = await requestCenterRegister
-
-      const requestReissueToken = await fetch(IP_ADDRESS + '/auth/reissue', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          authorization: `Bearer ${refreshToken}`
-        }
-      })
-
-      const data2 = await requestReissueToken
-
-      return { data1, data2 }
-    } catch (error) {
-      console.log(error)
-      alert('error')
-    } */
   } else {
     if (!checkExpiredToken()) {
       /* accessToken is expired */
@@ -148,9 +101,15 @@ export const fetchApi = async (url: string, method: string, data?: any) => {
           },
           body: JSON.stringify(data)
         })
-        return res.json()
+
+        if (!res.ok) {
+          throw new Error('err')
+        }
+        const data1 = res.json()
+        return data1
       } catch (error) {
-        alert('error')
+        console.log(error)
+        alert('모든 정보를 입력해주세요.')
       }
     }
   }

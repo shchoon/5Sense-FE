@@ -136,14 +136,11 @@ export default function StudentPage() {
   }
   function onClickX() {
     setSearchInput('')
-    fetchApi('/students?searchBy=none', 'GET').then(result => {
+    fetchApi('/students?searchBy=none&page=1', 'GET').then(result => {
       if (result.data.students.length !== 0) {
         let cursorIndex = result.data.students.length - 1
         console.log(cursorIndex)
-        setStudentData((preStudentData: studentType[]) => [
-          ...preStudentData,
-          ...result.data.students
-        ])
+        setStudentData(result.data.students)
         setPostVariable((prePostVariable: postVariableType) => ({
           ...prePostVariable,
           page: result.data.meta.page,
@@ -168,7 +165,7 @@ export default function StudentPage() {
 
   console.log(infiniteScrollCount)
   return (
-    <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6">
+    <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-[60px]">
       {/* 수강생 관리 + 수강생 등록 버튼 */}
       <div className="flex w-full pt-12 mb-[30px] justify-between">
         <div className=" h-[30px]">
@@ -233,9 +230,8 @@ export default function StudentPage() {
         </div>
         {/* 수강생 목록 시작 */}
         <div className="w-full flex flex-col gap-[14px]">
-          {searchInput !== '' &&
-          studentData.length == 0 &&
-          infiniteScrollCount !== 0 ? (
+          {(searchInput !== '' && studentData.length == 0) ||
+          studentData.length === 0 ? (
             <div className="flex w-full h-screen justify-center items-center">
               <div className="flex flex-col gap-6 w-[432px] h-[244px]">
                 <Image
@@ -294,7 +290,7 @@ export default function StudentPage() {
           </div>
         </div>
       )}
-      {studentData.length !== 0 ? <div id="test"></div> : null}
+      {postVariable.hasNextPage ? <div id="test"></div> : null}
     </div>
   )
 }
