@@ -1,90 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
 
-@layer components {
-  .box-flex {
-    @apply flex flex-col justify-center items-center;
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
   }
-
-  .side-info {
-    @apply mt-[130px] w-[296px] max-w-[504px] h-full box-border lg:px-4 xl:px-6 3xl:px-0 3xl:flex-grow flex-shrink-0 flex flex-col items-center gap-16;
-  }
-
-  .m-placeholder {
-    @apply text-gray-300 text-2xl font-semibold;
-  }
-
-  .class-box {
-    @apply w-full flex flex-col gap-[40px] px-6 py-8 bg-white rounded-xl border border-gray-200;
-  }
-
-  .time-box {
-    @apply relative flex justify-center items-center w-[124px] h-[42px] p-3 bg-white rounded-lg border border-gray-300;
-  }
-
-  .bold-500 {
-    @apply font-bold text-primary-500;
-  }
-
-  .medium-500 {
-    @apply font-medium text-primary-500;
-  }
-
-  .input-box {
-    @apply w-full h-auto px-4 py-3.5 rounded-lg border border-gray-200 box-border overflow-hidden text-gray-900 text-base font-normal   placeholder:s-placeholder focus:outline-none focus:border focus:border-primary-700;
-  }
-
-  .black-bold {
-    @apply text-black font-bold;
-  }
-
-  .gray-900-bold {
-    @apply text-gray-900 font-bold;
-  }
-
-  .gray-900-semibold {
-    @apply text-gray-900 font-semibold;
-  }
-
-  .gray-900-400 {
-    @apply text-gray-900 font-[400];
-  }
-
-  .gray-800-semibold {
-    @apply text-gray-800 font-semibold;
-  }
-
-  .gray-500-medium {
-    @apply text-gray-500 font-medium;
-  }
-
-  .gray-500-normal {
-    @apply text-gray-500 font-normal;
-  }
-
-  .gray-400-medium {
-    @apply text-gray-400 font-medium;
-  }
-
-  .gray-300-medium {
-    @apply text-gray-300 font-medium;
-  }
-
-  .indigo-500-semibold {
-    @apply text-indigo-500 font-semibold;
-  }
-
-  /* ... */
 }
 
 body {
   max-width: 100vw;
   height: 100vh;
   /* overflow-x: hidden; */
-}
-
-* {
-  font-family: Pretendard;
 }
