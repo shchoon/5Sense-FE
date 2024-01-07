@@ -28,7 +28,11 @@ export default function KakaoCallback() {
       localStorage.setItem('accessToken', result.data.accessToken)
       localStorage.setItem('refreshToken', result.data.refreshToken)
       localStorage.setItem('accessTokenExp', result.data.accessTokenExp)
-      router.push('/home')
+      if (result.data.hasNextPage) {
+        router.push('/home')
+      } else {
+        router.push('/myCenter')
+      }
     })
     /* fetch(`${IP_ADDRESS}/auth/kakao/login`, options)
       .then(res => {

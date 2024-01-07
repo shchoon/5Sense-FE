@@ -1,9 +1,12 @@
 'use client'
 import '../globals.css'
-import Image from 'next/image'
 import Script from 'next/script'
 import React, { useEffect, useRef, useState } from 'react'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
+import { fetchApi } from '@/hooks/useApi'
+import Router from 'next/navigation'
+import { useRouter } from 'next/navigation'
+import local from 'next/font/local'
 
 declare global {
   interface Window {
@@ -23,6 +26,7 @@ interface postDataType {
 }
 
 export default function MyCenter() {
+  const router = useRouter()
   const centerNameInputRef = useRef<HTMLInputElement>(null)
   const addressNameInputRef = useRef<HTMLInputElement>(null)
   const phoneNumInputRef = useRef<HTMLInputElement>(null)
@@ -110,7 +114,7 @@ export default function MyCenter() {
   useOnClickOutside(centerNameInputRef, handelClickOutsideCenter)
 
   /* 전화번호 입력 -> '-' &  number type 아닌 것들 입력 방지*/
-  function allowOnlyNum(e: any) {
+  async function allowOnlyNum(e: any) {
     let ASCIICode = e.which ? e.which : e.keyCode
     if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57)) return false
     return true
@@ -118,18 +122,29 @@ export default function MyCenter() {
       e.preventDefault()
     } */
   }
-
+  const IP_ADDRESS = process.env.NEXT_PUBLIC_IP_ADDRESS
   return (
     <>
       <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></Script>
       <form
         className="flex flex-col w-[430px] h-[297px] gap-9"
-        onSubmit={e => {
+        onSubmit={async e => {
           e.preventDefault()
-          if (postData.mainPhone.length !== 11) {
+          /* if (postData.mainPhone.length !== 11) {
             alert('번호를 다시 입력해주세요. ex) 010xxxxxxxx')
-          }
+          } */
           console.log(postData)
+
+          await fetchApi('/centers', 'POST', {
+            name: postData.name,
+            address: postData.address,
+            mainPhone: postData.mainPhone
+          }).then(result => {
+            console.log(result)
+            localStorage.setItem('accessToken', result.data.accessToken)
+            localStorage.setItem('accessTokenExp', result.data.accessTokenExp)
+            //router.push('/home')
+          })
         }}
       >
         <div className="w-[430px] h-[209px] flex flex-col items-center gap-4">
@@ -142,16 +157,26 @@ export default function MyCenter() {
               onFocus={e => {
                 handleOnFocus(e.target.name)
               }}
-              className="w-full px-3 py-5 text-sm text-gray-900 bg-transparent 
-                rounded-lg border-1 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0 peer"
+              className={`w-full px-3 py-5 text-sm text-gray-900  
+                rounded-lg border-1 ${
+                  !onFocusInput.nameInput && postData.name !== ''
+                    ? 'border-green-600'
+                    : 'border-gray-200'
+                } appearance-none focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0`}
               placeholder="센터명"
               onChange={e => {
                 handelChangeName('name', e)
               }}
             />
-            {onFocusInput.nameInput && (
+            {(onFocusInput.nameInput || postData.name !== '') && (
               <label className="absolute -top-2 left-3 w-[42px] h-5 bg-white">
-                <div className="text-indigo-700 text-xs font-medium font-['Inter'] leading-3">
+                <div
+                  className={`${
+                    !onFocusInput.nameInput
+                      ? 'text-green-600'
+                      : 'text-indigo-700'
+                  }  text-xs font-medium font-['Inter'] leading-3`}
+                >
                   센터명
                 </div>
               </label>
@@ -166,14 +191,24 @@ export default function MyCenter() {
               onFocus={e => {
                 handleOnFocus(e.target.name)
               }}
-              className="w-full px-3 py-5 text-sm text-gray-900 bg-transparent 
-                rounded-lg border-1 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0 peer"
+              className={`w-full px-3 py-5 text-sm text-gray-900  
+              rounded-lg border-1 ${
+                !onFocusInput.addressInput && postData.address !== ''
+                  ? 'border-green-600'
+                  : 'border-gray-200'
+              } appearance-none focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0`}
               placeholder="주소"
               onClick={onClickAdd}
             />
-            {onFocusInput.addressInput && (
+            {(onFocusInput.addressInput || postData.address !== '') && (
               <label className="absolute -top-2 left-3 w-[28px] h-3 bg-white">
-                <div className="text-indigo-700 text-xs font-medium font-['Inter'] leading-3">
+                <div
+                  className={`${
+                    !onFocusInput.addressInput
+                      ? 'text-green-600'
+                      : 'text-indigo-700'
+                  }  text-xs font-medium font-['Inter'] leading-3`}
+                >
                   주소
                 </div>
               </label>
@@ -186,8 +221,12 @@ export default function MyCenter() {
               onFocus={e => {
                 handleOnFocus(e.target.name)
               }}
-              className="w-full px-3 py-5 text-sm text-gray-900 bg-transparent 
-                rounded-lg border-1 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0 peer"
+              className={`w-full px-3 py-5 text-sm text-gray-900  
+              rounded-lg border-2 ${
+                !onFocusInput.phoneInput && postData.mainPhone !== ''
+                  ? 'border-green-600'
+                  : 'border-gray-200'
+              } appearance-none focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0`}
               placeholder="대표번호 (- 없이 입력해주세요)"
               value={postData.mainPhone}
               onKeyDown={allowOnlyNum}
@@ -195,9 +234,15 @@ export default function MyCenter() {
                 handelChangeName('phone', e)
               }}
             />
-            {onFocusInput.phoneInput && (
+            {(onFocusInput.phoneInput || postData.mainPhone !== '') && (
               <label className="absolute -top-2 left-3 w-[60px] h-5 bg-white">
-                <div className="text-indigo-700 text-xs font-medium font-['Inter'] leading-3">
+                <div
+                  className={`${
+                    !onFocusInput.phoneInput
+                      ? 'text-green-600'
+                      : 'text-indigo-700'
+                  }  text-xs font-medium font-['Inter'] leading-3`}
+                >
                   전화번호
                 </div>
               </label>
