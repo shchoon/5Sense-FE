@@ -79,18 +79,20 @@ export default function StudentPage() {
         })
     } else {
       fetchApi('/students?searchBy=none&page=1', 'GET').then(result => {
-        let cursorIndex = result.data.students.length - 1
-        console.log(cursorIndex)
-        setStudentData((preStudentData: studentType[]) => [
-          ...preStudentData,
-          ...result.data.students
-        ])
-        setPostVariable((prePostVariable: postVariableType) => ({
-          ...prePostVariable,
-          page: result.data.meta.page,
-          cursor: result.data.students[cursorIndex].id,
-          hasNextPage: result.data.meta.hasNextPage
-        }))
+        if (result.data.students.length !== 0) {
+          let cursorIndex = result.data.students.length - 1
+          console.log(cursorIndex)
+          setStudentData((preStudentData: studentType[]) => [
+            ...preStudentData,
+            ...result.data.students
+          ])
+          setPostVariable((prePostVariable: postVariableType) => ({
+            ...prePostVariable,
+            page: result.data.meta.page,
+            cursor: result.data.students[cursorIndex].id,
+            hasNextPage: result.data.meta.hasNextPage
+          }))
+        }
       })
     }
   }
