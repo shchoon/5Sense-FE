@@ -31,30 +31,30 @@ export default function StudentPage() {
     threshold: 1.0
   }
 
-  function getMoreData() {
-    fetchApi(
-      `/students?searchBy=none&page=${postVariable.page + 1}&cursor=${
-        postVariable.cursor
-      }`,
-      'GET'
-    )
-      .then(result => {
-        let cursorIndex = result.data.students.length - 1
-        setStudentData((preStudentData: studentType[]) => [
-          ...preStudentData,
-          ...result.data.students
-        ])
-        setPostVariable((prePostVariable: postVariableType) => ({
-          ...prePostVariable,
-          page: result.data.meta.page,
-          cursor: result.data.students[cursorIndex].id,
-          hasNextPage: result.data.meta.hasNextPage
-        }))
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }
+  // function getMoreData() {
+  //   fetchApi(
+  //     `/students?searchBy=none&page=${postVariable.page + 1}&cursor=${
+  //       postVariable.cursor
+  //     }`,
+  //     'GET'
+  //   )
+  //     .then(result => {
+  //       let cursorIndex = result.data.students.length - 1
+  //       setStudentData((preStudentData: studentType[]) => [
+  //         ...preStudentData,
+  //         ...result.data.students
+  //       ])
+  //       setPostVariable((prePostVariable: postVariableType) => ({
+  //         ...prePostVariable,
+  //         page: result.data.meta.page,
+  //         cursor: result.data.students[cursorIndex].id,
+  //         hasNextPage: result.data.meta.hasNextPage
+  //       }))
+  //     })
+  //     .finally(() => {
+  //       setLoading(false)
+  //     })
+  // }
 
   const callback = (entries: IntersectionObserverEntry[]) => {
     entries.forEach((entry: IntersectionObserverEntry) => {
@@ -79,31 +79,31 @@ export default function StudentPage() {
 
   let [searchInput, setSearchInput] = useState<any>('')
 
-  useEffect(() => {
-    fetchApi('/students?searchBy=none', 'GET').then(result => {
-      let cursorIndex = result.data.students.length - 1
-      console.log(cursorIndex)
-      setStudentData((preStudentData: studentType[]) => [
-        ...preStudentData,
-        ...result.data.students
-      ])
-      setPostVariable((prePostVariable: postVariableType) => ({
-        ...prePostVariable,
-        page: result.data.meta.page,
-        cursor: result.data.students[cursorIndex].id,
-        hasNextPage: result.data.meta.hasNextPage
-      }))
-    })
-  }, [])
+  // useEffect(() => {
+  //   fetchApi('/students?searchBy=none', 'GET').then(result => {
+  //     let cursorIndex = result.data.students.length - 1
+  //     console.log(cursorIndex)
+  //     setStudentData((preStudentData: studentType[]) => [
+  //       ...preStudentData,
+  //       ...result.data.students
+  //     ])
+  //     setPostVariable((prePostVariable: postVariableType) => ({
+  //       ...prePostVariable,
+  //       page: result.data.meta.page,
+  //       cursor: result.data.students[cursorIndex].id,
+  //       hasNextPage: result.data.meta.hasNextPage
+  //     }))
+  //   })
+  // }, [])
 
-  useEffect(() => {
-    if (infiniteScrollCount > 0 && postVariable.hasNextPage && !loading) {
-      setLoading(true)
-      setTimeout(() => {
-        getMoreData()
-      }, 500)
-    }
-  }, [infiniteScrollCount])
+  // useEffect(() => {
+  //   if (infiniteScrollCount > 0 && postVariable.hasNextPage && !loading) {
+  //     setLoading(true)
+  //     setTimeout(() => {
+  //       getMoreData()
+  //     }, 500)
+  //   }
+  // }, [infiniteScrollCount])
 
   function onChangeInput(event: any) {
     setSearchInput(event.target.value)

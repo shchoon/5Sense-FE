@@ -19,25 +19,41 @@ type subCategory = {
   name: string
 }
 
+export type ClassInfo = {
+  name: string
+  memo: String
+}
+
 export default function RegisterPage() {
+  const [classInfo, setClassInfo] = useState<ClassInfo>({
+    name: '',
+    memo: ''
+  })
+
   const classNameProps: InputFormProps = {
     title: '클래스 명',
     placeholder: '클래스명을 입력해 주세요',
-    name: 'className',
-    maxLength: 20
+    name: 'name',
+    maxLength: 20,
+    submitData: classInfo,
+    setSubmitData: setClassInfo
   }
   const optionProps: InputFormProps = {
     title: '기타',
     placeholder: '직접 입력',
-    name: 'options'
+    name: 'options',
+    maxLength: 20,
+    submitData: classInfo,
+    setSubmitData: setClassInfo
   }
   const classMemoProps: TextareaFormProps = {
     title: '클래스 메모',
     placeholder: '클래스관련 메모를 적어주세요',
-    name: 'classMemo',
-    maxLength: 300
+    name: 'memo',
+    maxLength: 300,
+    submitData: classInfo,
+    setSubmitData: setClassInfo
   }
-
   const categorydata: category[] = [
     {
       id: '1',
@@ -132,7 +148,9 @@ export default function RegisterPage() {
       options: []
     }
   ]
+  // 클래스 정보
 
+  // 카테고리 선택 값
   const [selectedGroup, setSelectedGroup] = useState('')
   const [selectedOption, setSelectedOption] = useState('')
   const [selectedOptionList, setSelectedOptionList] = useState([])
@@ -147,7 +165,7 @@ export default function RegisterPage() {
     setSelectedOption(optionId)
   }
 
-  console.log(selectedGroup)
+  console.log(classInfo)
 
   const renderOptions = (item: any, groupId: string) => {
     return (

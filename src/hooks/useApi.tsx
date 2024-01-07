@@ -43,7 +43,7 @@ export const fetchApi = async (url: string, method: string, data?: any) => {
       const data1 = await requestCenterRegister.json()
 
       const requestReissueToken = await fetch(IP_ADDRESS + '/auth/reissue', {
-        method: method,
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           authorization: `Bearer ${refreshToken}`

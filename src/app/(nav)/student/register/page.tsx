@@ -3,69 +3,65 @@ import Image from 'next/image'
 import Ellipsis from '../../../../assets/icon/ellipsis75.svg'
 import ArrowBack from '../../../../assets/icon/allowBack.svg'
 import PlusCircle from '../../../../assets/icon/plusCirclePrimary600.svg'
-import { FormEventHandler, useState } from 'react'
+import { FormEventHandler, SetStateAction, useState } from 'react'
 import { useInput } from '@/hooks/useInput'
 import InputForm, { InputFormProps } from '@/components/InputForm'
 import TextareaForm, { TextareaFormProps } from '@/components/TextareaForm'
 import { fetchApi } from '@/hooks/useApi'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import useInputNum from '@/hooks/useInputNum'
+
+type studentInfo = {
+  name: string
+  phone: string
+  particulars: string
+}
+
+export interface InputNumProps {
+  name: string
+  submitData: any
+  setSubmitData: React.Dispatch<SetStateAction<any>>
+}
 
 export default function StudentRegister() {
   const router = useRouter()
+
+  const [studentInfo, setStudentInfo] = useState<studentInfo>({
+    name: '',
+    phone: '',
+    particulars: ''
+  })
+  const [InputValue, handleChage] = useInputNum({
+    name: 'phone',
+    submitData: studentInfo,
+    setSubmitData: setStudentInfo
+  })
   const studentNameProps: InputFormProps = {
     title: '이름',
     placeholder: '이름을 입력해 주세요',
-    name: 'studentName',
-    maxLength: 20
+    name: 'name',
+    maxLength: 20,
+    submitData: studentInfo,
+    setSubmitData: setStudentInfo
   }
 
   const studentMemoProps: TextareaFormProps = {
     title: '특이사항',
     placeholder: '수강생 특이사항을 적어주세요.',
-    name: 'studentMemo',
-    maxLength: 300
-  }
-  let [postStudentData, setPostStudentData] = useState({
-    name: '',
-    phoneNumber: '',
-    other: ''
-  })
-  const onChangeName = (e: any) => {
-    setPostStudentData({
-      ...postStudentData,
-      name: e.target.value
-    })
-    console.log(postStudentData.name)
-  }
-
-  const onChangeOther = (e: any) => {
-    setPostStudentData({
-      ...postStudentData,
-      other: e.target.value
-    })
-    console.log(postStudentData.other)
-  }
-
-  const onChangePhoneNumber = (e: any) => {
-    setPostStudentData({
-      ...postStudentData,
-      phoneNumber: e.target.value
-    })
-    console.log(postStudentData.phoneNumber)
+    name: 'particulars',
+    maxLength: 300,
+    submitData: studentInfo,
+    setSubmitData: setStudentInfo
   }
 
   const studentRigister = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const postData = {
-      name: postStudentData.name,
-      phone: postStudentData.phoneNumber,
-      particulars: postStudentData.other
-    }
-    fetchApi('/students', 'POST', postData).then(() => {
+    fetchApi('/students', 'POST', studentInfo).then(() => {
       router.push('/student')
     })
   }
+  console.log('studentInfo', studentInfo)
 
   return (
     <div className="w-full">
@@ -97,57 +93,22 @@ export default function StudentRegister() {
             <div className="gray-900-bold text-xl font-['Pretendard'] leading-tight">
               수강생 정보
             </div>
-            <div className="flex flex-col gap-4 w-full ">
-              {/* <InputForm {...studentNameProps} /> */}
+            <div className="flex flex-col gap-4 w-full">
+              <InputForm {...studentNameProps} />
               <div className="flex flex-col gap-2">
-                <div className="w-[592px] gray-800-semibold text-base font-['Pretendard'] leading-normal">
-                  이름
-                </div>
-                <div className="w-full h-[52px] px-4 py-[14px] outline outline-1 rounded-lg outline-gray-200 focus-within:outline-[#563AC0]">
-                  <input
-                    className="w-full h-6 border-none focus:ring-0"
-                    type="text"
-                    placeholder="이름을 입력해주세요"
-                    value={postStudentData.name}
-                    onChange={onChangeName}
-                  />
-                </div>
-                <div className="w-full text-right text-gray-500 text-sm font-normal font-['Pretendard'] leading-[17.50px]">
-                  {postStudentData.name.length}/20
-                </div>
+                <div className="gray-800-semibold">전화번호</div>
+                <input
+                  className={`${
+                    InputValue.length > 0 ? 'bg-gray-50' : 'bg-white'
+                  } w-full h-auto input-line-gray gray-900-400`}
+                  type="text"
+                  placeholder="전화번호를 입력해주세요 (-제외)"
+                  value={InputValue}
+                  onChange={handleChage}
+                  maxLength={12}
+                />
               </div>
-              <div className="flex flex-col gap-2">
-                <div className="w-[592px] gray-800-semibold text-base font-['Pretendard'] leading-normal">
-                  전화번호
-                </div>
-                <div className="w-full h-[52px] px-4 py-[14px] outline outline-1 rounded-lg outline-gray-200 focus-within:outline-[#563AC0]">
-                  <input
-                    className="w-full h-6 border-none focus:ring-0"
-                    type="text"
-                    placeholder="전화번호흫 입력해주세요 (-제외)"
-                    value={postStudentData.phoneNumber}
-                    onChange={onChangePhoneNumber}
-                  />
-                </div>
-              </div>
-              {/* <TextareaForm {...studentMemoProps} /> */}
-              <div className="flex flex-col gap-2">
-                <div className="w-[592px] gray-800-semibold text-base font-['Pretendard'] leading-normal">
-                  특이사항
-                </div>
-                <div className="w-full h-[52px] px-4 py-[14px] outline outline-1 rounded-lg outline-gray-200 focus-within:outline-[#563AC0]">
-                  <input
-                    className="w-full h-6 border-none focus:ring-0"
-                    type="text"
-                    placeholder="수강생 특이사항을 적어주세요"
-                    value={postStudentData.other}
-                    onChange={onChangeOther}
-                  />
-                </div>
-                <div className="w-[592px] text-right text-gray-500 text-sm font-normal font-['Pretendard'] leading-[17.50px]">
-                  {postStudentData.other.length}/300
-                </div>
-              </div>
+              <TextareaForm {...studentMemoProps} />
             </div>
           </div>
           {/* 클래스 등록 */}
