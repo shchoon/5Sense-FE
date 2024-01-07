@@ -1,20 +1,38 @@
+import { ClassInfo } from '@/app/(nav)/class/register/page'
 import { useInput } from '@/hooks/useInput'
+import { SetStateAction } from 'react'
+import ClassFilter from './classFilter/classFilter'
 
 export interface InputFormProps {
   title: string
   placeholder: string
   name: string
-  maxLength?: number
+  maxLength: number
+  submitData: any
+  setSubmitData: React.Dispatch<SetStateAction<any>>
 }
+
+export type InputProps = Pick<
+  InputFormProps,
+  'name' | 'maxLength' | 'submitData' | 'setSubmitData'
+>
 
 export default function InputForm({
   title,
   placeholder,
   name,
-  maxLength
+  maxLength,
+  submitData,
+  setSubmitData
 }: InputFormProps) {
-  const [inputValue, handleChange] = useInput('', maxLength)
+  const [inputValue, handleChange] = useInput({
+    name,
+    maxLength,
+    submitData,
+    setSubmitData
+  })
   const ValueLength = inputValue.length
+
   return (
     <div className="flex flex-col gap-2">
       <p className="gray-800-semibold">{title}</p>
@@ -29,12 +47,10 @@ export default function InputForm({
         onChange={handleChange}
         maxLength={maxLength}
       />
-      {maxLength ? (
-        <span className="text-right">
+      {maxLength && (
+        <span className="text-gray-500 text-sm font-normal font-['Inter'] text-right">
           {ValueLength}/{maxLength}
         </span>
-      ) : (
-        ''
       )}
     </div>
   )

@@ -31,12 +31,10 @@ export default function MainLayout({
       } min-w-[768px] max-w-[2560px]`}
     >
       {/* purplebox를 위한 relative */}
-      {isModal ? (
+      {isModal && (
         <div className="absolute top-0 w-screen h-screen bg-black bg-opacity-20 backdrop-blur-[5px] shadow z-[100]">
           <SideModal isModal={isModal} setIsModal={setIsModal} />
         </div>
-      ) : (
-        ''
       )}
       <div className="w-full h-full px-6 2md:px-12 box-border lg:pl-0 lg:pr-4 xl:pr-8 2xl:pr-12">
         {/* 상위 relative가 없기때문에 body를 부모로 잡음 */}
@@ -82,7 +80,6 @@ export default function MainLayout({
                   5sense
                 </span>
                 <span className="text-gray-300 text-sm font-medium leading-[14px]">
-
                   Copyright ⓒ2023 5sense inc, ltd. All rights reserved
                 </span>
               </div>

@@ -1,5 +1,11 @@
 import { useInput } from '@/hooks/useInput'
-import { ChangeEvent, useCallback, useRef, useState } from 'react'
+import {
+  ChangeEvent,
+  SetStateAction,
+  useCallback,
+  useRef,
+  useState
+} from 'react'
 
 export interface TextareaFormProps {
   title: string
@@ -7,24 +13,35 @@ export interface TextareaFormProps {
   name: string
   maxLength: number
   height?: string
+  submitData: any
+  setSubmitData: React.Dispatch<SetStateAction<any>>
 }
 
 export default function TextareaForm({
   title,
   placeholder,
   name,
-  maxLength
+  maxLength,
+  submitData,
+  setSubmitData
 }: TextareaFormProps) {
+  console.log(name)
   const [inputValue, setInputValue] = useState<string>('')
   const ValueLength = inputValue.length
 
   const textarea = useRef<HTMLTextAreaElement | null>(null)
-  const handleResizeHeight = useCallback(() => {
-    if (!textarea.current) return
-    setInputValue(textarea.current.value)
-    textarea.current.style.height = 'auto'
-    textarea.current.style.height = textarea.current?.scrollHeight + 'px'
-  }, [textarea])
+  const handleResizeHeight = useCallback(
+    (e: ChangeEvent<HTMLTextAreaElement>) => {
+      if (!textarea.current) return
+      setInputValue(textarea.current.value)
+      textarea.current.style.height = 'auto'
+      textarea.current.style.height = textarea.current?.scrollHeight + 'px'
+    },
+    [textarea]
+  )
+  const handelChage = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setSubmitData({ ...submitData, [name]: e.target.value })
+  }
 
   return (
     <>
@@ -38,11 +55,12 @@ export default function TextareaForm({
         name={name}
         value={inputValue}
         onInput={handleResizeHeight}
+        onChange={handelChage}
         rows={1}
         maxLength={maxLength}
       />
 
-      <span className="text-right">
+      <span className="text-gray-500 text-sm font-normal font-['Inter'] text-right">
         {ValueLength}/{maxLength}
       </span>
     </>

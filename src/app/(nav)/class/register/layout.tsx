@@ -1,5 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation'
+import { Button } from 'flowbite-react'
 
 export default function ClassRegisterLayout({
   children
