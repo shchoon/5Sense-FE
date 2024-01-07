@@ -1,0 +1,7 @@
+@import 'react-datepicker/dist/react-datepicker.css';
+
+.my-custom-navigation--previous {
+  @extend .react-datepicker__header;
+  background-color: white;
+  font-size: 18px;
+}
