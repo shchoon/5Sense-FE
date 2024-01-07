@@ -20,8 +20,9 @@ export default function KakaoCallback() {
       localStorage.setItem('refreshToken', result.data.refreshToken)
       localStorage.setItem('accessTokenExp', result.data.accessTokenExp)
       localStorage.setItem('hasCenter', result.data.hasCenter)
+      localStorage.setItem('isNew', result.data.isNew)
 
-      if (result.data.hasCenter) {
+      if (!result.data.isNew) {
         router.push('/home')
       } else {
         router.push('/myCenter')
