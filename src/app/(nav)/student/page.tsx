@@ -81,18 +81,20 @@ export default function StudentPage() {
 
   useEffect(() => {
     fetchApi('/students?searchBy=none', 'GET').then(result => {
-      let cursorIndex = result.data.students.length - 1
-      console.log(cursorIndex)
-      setStudentData((preStudentData: studentType[]) => [
-        ...preStudentData,
-        ...result.data.students
-      ])
-      setPostVariable((prePostVariable: postVariableType) => ({
-        ...prePostVariable,
-        page: result.data.meta.page,
-        cursor: result.data.students[cursorIndex].id,
-        hasNextPage: result.data.meta.hasNextPage
-      }))
+      if (result.data.students.length !== 0) {
+        let cursorIndex = result.data.students.length - 1
+        console.log(cursorIndex)
+        setStudentData((preStudentData: studentType[]) => [
+          ...preStudentData,
+          ...result.data.students
+        ])
+        setPostVariable((prePostVariable: postVariableType) => ({
+          ...prePostVariable,
+          page: result.data.meta.page,
+          cursor: result.data.students[cursorIndex].id,
+          hasNextPage: result.data.meta.hasNextPage
+        }))
+      }
     })
   }, [])
 
@@ -122,19 +124,6 @@ export default function StudentPage() {
         ...postVariable,
         hasNextPage: res.data.meta.hasNextPage
       })
-      /* if (res.data.students.length !== 0) {
-        setStudentData(res.data.students)
-        setPostVariable({
-          ...postVariable,
-          hasNextPage: res.data.meta.hasNextPage
-        })
-      } else {
-        setStudentData(res.data.students)
-        setPostVariable({
-          ...postVariable,
-          hasNextPage: res.data.meta.hasNextPage
-        })
-      } */
     } else {
       let res = await fetchApi(
         `/students?searchBy=phone&phone=${searchInput}`,
@@ -145,19 +134,6 @@ export default function StudentPage() {
         ...postVariable,
         hasNextPage: res.data.meta.hasNextPage
       })
-      /* if (res.data.students.length !== 0) {
-        setStudentData(res.data.students)
-        setPostVariable({
-          ...postVariable,
-          hasNextPage: res.data.meta.hasNextPage
-        })
-      } else {
-        setStudentData(res.data.students)
-        setPostVariable({
-          ...postVariable,
-          hasNextPage: res.data.meta.hasNextPage
-        })
-      } */
     }
   }
   function preventDashAndPressEnter(event: any) {

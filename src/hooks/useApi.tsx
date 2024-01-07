@@ -31,32 +31,34 @@ export const fetchApi = async (url: string, method: string, data?: any) => {
       alert('error')
     }
   } else if (url == '/centers') {
-    fetch(IP_ADDRESS + url, {
-      method: method,
-      headers: {
-        'Content-Type': 'application/json',
-        authorization: `Bearer ${accessToken}`
-      },
-      body: JSON.stringify(data)
-    })
-      .then(res => {
-        console.log(res)
-        if (!res.ok) {
-          throw new Error('err')
+    try {
+      const res1 = await fetch(IP_ADDRESS + url, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${accessToken}`
+        },
+        body: JSON.stringify(data)
+      })
+
+      if (!res1.ok) {
+        throw new Error('error')
+      }
+
+      const res2 = await fetch(IP_ADDRESS + '/auth/reissue', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${refreshToken}`
         }
-        fetch(IP_ADDRESS + '/auth/reissue', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            authorization: `Bearer ${refreshToken}`
-          }
-        }).then(res => {
-          console.log(res)
-        })
       })
-      .catch(err => {
-        alert('모든 정보를 입력해주세요.')
-      })
+
+      const tokenData = res2.json()
+
+      return tokenData
+    } catch (error) {
+      alert('센터정보를 모두 입력해주세요.')
+    }
 
     //alert(JSON.stringify(requestCenterRegister, null, 2))
 

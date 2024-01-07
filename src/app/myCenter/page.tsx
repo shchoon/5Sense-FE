@@ -179,8 +179,9 @@ export default function MyCenter() {
             mainPhone: postData.mainPhone
           }).then(result => {
             console.log(result)
-
-            //router.push('/home')
+            localStorage.setItem('accessToken', result.data.accessToken)
+            localStorage.setItem('accessTokenExp', result.data.accessTokenExp)
+            router.push('/home')
           })
         }}
       >
