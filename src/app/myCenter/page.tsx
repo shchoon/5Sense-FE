@@ -42,6 +42,12 @@ export default function MyCenter() {
     phoneInput: false
   })
 
+  const [danger, setDanger] = useState({
+    name: false,
+    address: false,
+    phone: false
+  })
+
   const onClickAdd = () => {
     new window.daum.Postcode({
       oncomplete: function (data: any) {
@@ -61,16 +67,28 @@ export default function MyCenter() {
         ...onFocusInput,
         nameInput: true
       })
+      setDanger(danger => ({
+        ...danger,
+        name: false
+      }))
     } else if (inputName === 'address') {
       setOnFocusInput({
         ...onFocusInput,
         addressInput: true
       })
+      setDanger(danger => ({
+        ...danger,
+        address: false
+      }))
     } else if (inputName === 'phone') {
       setOnFocusInput({
         ...onFocusInput,
         phoneInput: true
       })
+      setDanger(danger => ({
+        ...danger,
+        phone: false
+      }))
     }
   }
   const handelClickOutsideCenter = () => {
@@ -122,7 +140,8 @@ export default function MyCenter() {
       e.preventDefault()
     } */
   }
-  const IP_ADDRESS = process.env.NEXT_PUBLIC_IP_ADDRESS
+  console.log(danger)
+  console.log(postData)
   return (
     <>
       <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></Script>
@@ -133,16 +152,34 @@ export default function MyCenter() {
           /* if (postData.mainPhone.length !== 11) {
             alert('번호를 다시 입력해주세요. ex) 010xxxxxxxx')
           } */
-          console.log(postData)
 
-          await fetchApi('/centers', 'POST', {
+          Object.entries(postData).forEach(([key, value]) => {
+            if (key === 'name' && value === '') {
+              setDanger(danger => ({
+                ...danger,
+                name: true
+              }))
+            } else if (key === 'address' && value === '') {
+              setDanger(danger => ({
+                ...danger,
+                address: true
+              }))
+            } else if (key === 'mainPhone' && value === '') {
+              setDanger(danger => ({
+                ...danger,
+                phone: true
+              }))
+            }
+          })
+
+          console.log(danger)
+          fetchApi('/centers', 'POST', {
             name: postData.name,
             address: postData.address,
             mainPhone: postData.mainPhone
           }).then(result => {
             console.log(result)
-            localStorage.setItem('accessToken', result.data.accessToken)
-            localStorage.setItem('accessTokenExp', result.data.accessTokenExp)
+
             //router.push('/home')
           })
         }}
@@ -159,22 +196,28 @@ export default function MyCenter() {
               }}
               className={`w-full px-3 py-5 text-sm text-gray-900  
                 rounded-lg border-1 ${
-                  !onFocusInput.nameInput && postData.name !== ''
-                    ? 'border-green-600'
-                    : 'border-gray-200'
+                  danger.name
+                    ? 'border-red-600'
+                    : !onFocusInput.nameInput && postData.name !== ''
+                      ? 'border-green-600'
+                      : 'border-gray-200'
                 } appearance-none focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0`}
               placeholder="센터명"
               onChange={e => {
                 handelChangeName('name', e)
               }}
             />
-            {(onFocusInput.nameInput || postData.name !== '') && (
+            {(onFocusInput.nameInput ||
+              postData.name !== '' ||
+              danger.name) && (
               <label className="absolute -top-2 left-3 w-[42px] h-5 bg-white">
                 <div
                   className={`${
-                    !onFocusInput.nameInput
-                      ? 'text-green-600'
-                      : 'text-indigo-700'
+                    danger.name
+                      ? 'text-red-600'
+                      : !onFocusInput.nameInput
+                        ? 'text-green-600'
+                        : 'text-indigo-700'
                   }  text-xs font-medium font-['Inter'] leading-3`}
                 >
                   센터명
@@ -193,20 +236,26 @@ export default function MyCenter() {
               }}
               className={`w-full px-3 py-5 text-sm text-gray-900  
               rounded-lg border-1 ${
-                !onFocusInput.addressInput && postData.address !== ''
-                  ? 'border-green-600'
-                  : 'border-gray-200'
+                danger.address
+                  ? 'border-red-600'
+                  : !onFocusInput.addressInput && postData.address !== ''
+                    ? 'border-green-600'
+                    : 'border-gray-200'
               } appearance-none focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0`}
               placeholder="주소"
               onClick={onClickAdd}
             />
-            {(onFocusInput.addressInput || postData.address !== '') && (
+            {(onFocusInput.addressInput ||
+              postData.address !== '' ||
+              danger.address) && (
               <label className="absolute -top-2 left-3 w-[28px] h-3 bg-white">
                 <div
                   className={`${
-                    !onFocusInput.addressInput
-                      ? 'text-green-600'
-                      : 'text-indigo-700'
+                    danger.address
+                      ? 'text-red-600'
+                      : !onFocusInput.addressInput
+                        ? 'text-green-600'
+                        : 'text-indigo-700'
                   }  text-xs font-medium font-['Inter'] leading-3`}
                 >
                   주소
@@ -223,9 +272,11 @@ export default function MyCenter() {
               }}
               className={`w-full px-3 py-5 text-sm text-gray-900  
               rounded-lg border-2 ${
-                !onFocusInput.phoneInput && postData.mainPhone !== ''
-                  ? 'border-green-600'
-                  : 'border-gray-200'
+                danger.phone
+                  ? 'border-red-600'
+                  : !onFocusInput.phoneInput && postData.mainPhone !== ''
+                    ? 'border-green-600'
+                    : 'border-gray-200'
               } appearance-none focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0`}
               placeholder="대표번호 (- 없이 입력해주세요)"
               value={postData.mainPhone}
@@ -234,13 +285,17 @@ export default function MyCenter() {
                 handelChangeName('phone', e)
               }}
             />
-            {(onFocusInput.phoneInput || postData.mainPhone !== '') && (
+            {(onFocusInput.phoneInput ||
+              postData.mainPhone !== '' ||
+              danger.phone) && (
               <label className="absolute -top-2 left-3 w-[60px] h-5 bg-white">
                 <div
                   className={`${
-                    !onFocusInput.phoneInput
-                      ? 'text-green-600'
-                      : 'text-indigo-700'
+                    danger.phone
+                      ? 'text-red-600'
+                      : !onFocusInput.phoneInput
+                        ? 'text-green-600'
+                        : 'text-indigo-700'
                   }  text-xs font-medium font-['Inter'] leading-3`}
                 >
                   전화번호

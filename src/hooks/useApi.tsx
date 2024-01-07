@@ -52,7 +52,6 @@ export const fetchApi = async (url: string, method: string, data?: any) => {
           }
         }).then(res => {
           console.log(res)
-          return res.json()
         })
       })
       .catch(err => {
