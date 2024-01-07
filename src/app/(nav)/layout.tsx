@@ -11,6 +11,9 @@ import { useState } from 'react'
 import LogoLink from '@/components/LogoLink'
 import SideModal from '@/components/SideModal'
 import TodaySchedule from '@/components/layout/TodaySchedule'
+import { useRecoilState } from 'recoil'
+import { modalState } from '@/state/modal'
+import DetailModal from '@/components/detailModal'
 
 export default function MainLayout({
   children
@@ -24,6 +27,7 @@ export default function MainLayout({
   ]
 
   const [isModal, setIsModal] = useState<boolean>(false)
+  const [modalValue, setModalValue] = useRecoilState(modalState)
   return (
     <div
       className={`wrapper ${
@@ -34,6 +38,11 @@ export default function MainLayout({
       {isModal && (
         <div className="absolute top-0 w-screen h-screen bg-black bg-opacity-20 backdrop-blur-[5px] shadow z-[100]">
           <SideModal isModal={isModal} setIsModal={setIsModal} />
+        </div>
+      )}
+      {modalValue && (
+        <div className="absolute top-0 w-screen h-screen bg-black bg-opacity-20 backdrop-blur-[5px] shadow z-[100]">
+          <DetailModal />
         </div>
       )}
       <div className="w-full h-full px-6 2md:px-12 box-border lg:pl-0 lg:pr-4 xl:pr-8 2xl:pr-12">

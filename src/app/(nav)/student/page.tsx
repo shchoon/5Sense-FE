@@ -8,6 +8,8 @@ import Image from 'next/image'
 import { fetchApi } from '@/hooks/useApi'
 import { useState, useEffect, useRef, use } from 'react'
 import Link from 'next/link'
+import { useRecoilState, useSetRecoilState } from 'recoil'
+import { idState, modalState } from '@/state/modal'
 
 interface studentType {
   id: string
@@ -163,7 +165,10 @@ export default function StudentPage() {
     }
   }, [infiniteScrollCount])
 
-  console.log(infiniteScrollCount)
+
+  const [modalValue, setModalValue] = useRecoilState(modalState)
+  const [idValue, setIdValue] = useRecoilState(idState)
+
   return (
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-[60px]">
       {/* 수강생 관리 + 수강생 등록 버튼 */}
@@ -256,7 +261,11 @@ export default function StudentPage() {
             return (
               <div
                 key={i}
-                className="w-full flex lg:gap-10 gap-8 lg:p-7 p-6 outline rounded-md outline-1 outline-gray-200 shadow-[0_5px_15px_0px_rgba(0,0,0,0.02)]"
+                className="w-full flex lg:gap-10 gap-8 lg:p-7 p-6 outline rounded-md outline-1 outline-gray-200 shadow-[0_5px_15px_0px_rgba(0,0,0,0.02)] cursor-pointer"
+                onClick={() => {
+                  setModalValue(!modalValue)
+                  setIdValue(data.id)
+                }}
               >
                 <div className="flex lg:gap-6 gap-4 flex-1">
                   <div className="w-[100px] text-gray-800 text-sm font-semibold font-['Pretendard']">
