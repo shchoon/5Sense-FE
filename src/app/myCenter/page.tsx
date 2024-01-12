@@ -1,12 +1,12 @@
 'use client'
 import '../globals.css'
 import Script from 'next/script'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
-import { fetchApi } from '@/hooks/useApi'
 import Router from 'next/navigation'
 import { useRouter } from 'next/navigation'
-import local from 'next/font/local'
+import instance from '@/hooks/useAxios'
+import { AxiosResponse, AxiosError } from 'axios'
 
 declare global {
   interface Window {
@@ -136,12 +136,7 @@ export default function MyCenter() {
     let ASCIICode = e.which ? e.which : e.keyCode
     if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57)) return false
     return true
-    /* if (isNaN(e.key) && e.key !== 'Backspace') {
-      e.preventDefault()
-    } */
   }
-  console.log(danger)
-  console.log(postData)
   return (
     <>
       <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></Script>
@@ -149,9 +144,6 @@ export default function MyCenter() {
         className="flex flex-col w-[430px] h-[297px] gap-9"
         onSubmit={async e => {
           e.preventDefault()
-          /* if (postData.mainPhone.length !== 11) {
-            alert('번호를 다시 입력해주세요. ex) 010xxxxxxxx')
-          } */
 
           Object.entries(postData).forEach(([key, value]) => {
             if (key === 'name' && value === '') {
@@ -172,19 +164,21 @@ export default function MyCenter() {
             }
           })
 
-          console.log(danger)
-          fetchApi('/centers', 'POST', {
+          const res = await instance.post('/centers', {
             name: postData.name,
             address: postData.address,
             mainPhone: postData.mainPhone
-          }).then(result => {
-            console.log(result)
-            if (result !== undefined) {
-              localStorage.setItem('accessToken', result.data.accessToken)
-              localStorage.setItem('accessTokenExp', result.data.accessTokenExp)
-              router.push('/home')
-            }
           })
+          const refreshToken = localStorage.getItem('refreshToken')
+          instance
+            .post('/auth/reissue', { authorization: `Bearer ${refreshToken}` })
+            .then((res: AxiosResponse) => {
+              router.push('/home')
+              localStorage.setItem('accessToken', res.data.data.accessToken)
+            })
+            .catch((error: AxiosError) => {
+              alert(error)
+            })
         }}
       >
         <div className="w-[430px] h-[209px] flex flex-col items-center gap-4">
