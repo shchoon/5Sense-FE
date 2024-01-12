@@ -10,6 +10,8 @@ import { useState, useEffect, useRef, use } from 'react'
 import Link from 'next/link'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 import { idState, modalState } from '@/state/modal'
+import instance from '@/hooks/useAxios'
+import { AxiosResponse, AxiosError } from 'axios'
 
 interface studentType {
   id: string
@@ -50,6 +52,7 @@ export default function StudentPage() {
     cursor: '',
     hasNextPage: true
   })
+  const [refresh, setRefresh] = useState<boolean>(false)
 
   const [infiniteScrollCount, setInfiniteScrollCount] = useState(0)
   const [loading, setLoading] = useState(false)
@@ -57,66 +60,70 @@ export default function StudentPage() {
 
   const getStudentData = (page?: string, cursor?: string) => {
     if (page && cursor) {
-      fetchApi(
-        `/students?searchBy=none&page=${postVariable.page + 1}&cursor=${
-          postVariable.cursor
-        }`,
-        'GET'
-      )
-        .then(result => {
-          let cursorIndex = result.data.students.length - 1
+      instance
+        .get(
+          `/students?searchBy=none&page=${postVariable.page + 1}&cursor=${
+            postVariable.cursor
+          }`
+        )
+        .then((res: AxiosResponse) => {
+          let cursorIndex = res.data.data.students.length - 1
           setStudentData((preStudentData: studentType[]) => [
             ...preStudentData,
-            ...result.data.students
+            ...res.data.data.students
           ])
           setPostVariable((prePostVariable: postVariableType) => ({
             ...prePostVariable,
-            page: result.data.meta.page,
-            cursor: result.data.students[cursorIndex].id,
-            hasNextPage: result.data.meta.hasNextPage
+            page: res.data.data.meta.page,
+            cursor: res.data.data.students[cursorIndex].id,
+            hasNextPage: res.data.data.meta.hasNextPage
           }))
         })
         .finally(() => {
           setLoading(false)
         })
     } else {
-      fetchApi('/students?searchBy=none&page=1', 'GET').then(result => {
-        if (result.data.students.length !== 0) {
-          let cursorIndex = result.data.students.length - 1
-          console.log(cursorIndex)
-          setStudentData((preStudentData: studentType[]) => [
-            ...preStudentData,
-            ...result.data.students
-          ])
-          setPostVariable((prePostVariable: postVariableType) => ({
-            ...prePostVariable,
-            page: result.data.meta.page,
-            cursor: result.data.students[cursorIndex].id,
-            hasNextPage: result.data.meta.hasNextPage
-          }))
-        }
-      })
+      instance
+        .get('/students?searchBy=none&page=1')
+        .then((res: AxiosResponse) => {
+          if (res.data.data.students.length !== 0) {
+            let cursorIndex = res.data.data.students.length - 1
+            setStudentData((preStudentData: studentType[]) => [
+              ...preStudentData,
+              ...res.data.data.students
+            ])
+            setPostVariable((prePostVariable: postVariableType) => ({
+              ...prePostVariable,
+              page: res.data.data.meta.page,
+              cursor: res.data.data.students[cursorIndex].id,
+              hasNextPage: res.data.data.meta.hasNextPage
+            }))
+          }
+        })
+        .finally(() => {
+          setRefresh(true)
+        })
     }
   }
   const getStudentDataBynameOrPhone = (value: string) => {
     if (Number(value)) {
-      fetchApi(`/students?searchBy=phone&phone=${value}`, 'GET').then(res => {
-        setStudentData(res.data.students)
-        setPostVariable({
-          ...postVariable,
-          hasNextPage: res.data.meta.hasNextPage
-        })
-      })
-    } else {
-      fetchApi(`/students?searchBy=name&name=${searchInput}`, 'GET').then(
-        res => {
-          setStudentData(res.data.students)
+      instance
+        .get(`/students?searchBy=phone&phone=${value}`)
+        .then((res: AxiosResponse) => {
+          setStudentData(res.data.data.students)
           setPostVariable({
             ...postVariable,
-            hasNextPage: res.data.meta.hasNextPage
+            hasNextPage: res.data.data.meta.hasNextPage
           })
-        }
-      )
+        })
+    } else {
+      instance.get(`/students?searchBy=name&name=${value}`).then(res => {
+        setStudentData(res.data.data.students)
+        setPostVariable({
+          ...postVariable,
+          hasNextPage: res.data.data.meta.hasNextPage
+        })
+      })
     }
   }
 
@@ -138,16 +145,15 @@ export default function StudentPage() {
   }
   function onClickX() {
     setSearchInput('')
-    fetchApi('/students?searchBy=none&page=1', 'GET').then(result => {
-      if (result.data.students.length !== 0) {
-        let cursorIndex = result.data.students.length - 1
-        console.log(cursorIndex)
-        setStudentData(result.data.students)
+    instance.get('/students?searchBy=none&page=1').then(res => {
+      if (res.data.data.students.length !== 0) {
+        let cursorIndex = res.data.data.students.length - 1
+        setStudentData(res.data.data.students)
         setPostVariable((prePostVariable: postVariableType) => ({
           ...prePostVariable,
-          page: result.data.meta.page,
-          cursor: result.data.students[cursorIndex].id,
-          hasNextPage: result.data.meta.hasNextPage
+          page: res.data.data.meta.page,
+          cursor: res.data.data.students[cursorIndex].id,
+          hasNextPage: res.data.data.meta.hasNextPage
         }))
       }
     })
@@ -164,7 +170,6 @@ export default function StudentPage() {
       }, 500)
     }
   }, [infiniteScrollCount])
-
 
   const [modalValue, setModalValue] = useRecoilState(modalState)
   const [idValue, setIdValue] = useRecoilState(idState)
@@ -235,8 +240,7 @@ export default function StudentPage() {
         </div>
         {/* 수강생 목록 시작 */}
         <div className="w-full flex flex-col gap-[14px]">
-          {(searchInput !== '' && studentData.length == 0) ||
-          studentData.length === 0 ? (
+          {refresh && studentData.length === 0 ? (
             <div className="flex w-full h-screen justify-center items-center">
               <div className="flex flex-col gap-6 w-[432px] h-[244px]">
                 <Image

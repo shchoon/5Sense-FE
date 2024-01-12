@@ -3,14 +3,14 @@ import Image from 'next/image'
 import Ellipsis from '../../../../assets/icon/ellipsis75.svg'
 import ArrowBack from '../../../../assets/icon/allowBack.svg'
 import PlusCircle from '../../../../assets/icon/plusCirclePrimary600.svg'
-import { FormEventHandler, SetStateAction, useState } from 'react'
-import { useInput } from '@/hooks/useInput'
+import { SetStateAction, useState } from 'react'
 import InputForm, { InputFormProps } from '@/components/InputForm'
 import TextareaForm, { TextareaFormProps } from '@/components/TextareaForm'
-import { fetchApi } from '@/hooks/useApi'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import useInputNum from '@/hooks/useInputNum'
+import { AxiosError, AxiosResponse } from 'axios'
+import instance from '@/hooks/useAxios'
 
 type studentInfo = {
   name: string
@@ -57,15 +57,10 @@ export default function StudentRegister() {
 
   const studentRigister = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault()
-    fetchApi('/students', 'POST', studentInfo).then(result => {
-      console.log(result)
-      if (result !== undefined) {
-        router.push('/student')
-      }
-      //
+    instance.post('/students', studentInfo).then((res: AxiosResponse) => {
+      router.push('/student')
     })
   }
-  console.log('studentInfo', studentInfo)
 
   return (
     <div className="w-full">
