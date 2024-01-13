@@ -6,7 +6,8 @@ import search_20 from '../../../assets/icon/search_20.svg'
 import chevronRight from '../../../assets/icon/chevron_right_20.svg'
 import x_circle from '../../../assets/icon/x_circle_35.svg'
 import Image from 'next/image'
-import { fetchApi } from '@/hooks/useApi'
+import instance from '@/hooks/useAxios'
+import { AxiosResponse } from 'axios'
 import { useState, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { instructorRegisterModal } from '@/state/modal'
@@ -28,10 +29,12 @@ export default function InstructorPage() {
   let [searchInput, setSearchInput] = useState<any>('')
 
   useEffect(() => {
-    fetchApi('/teachers?searchBy=none', 'GET').then(result => {
-      setInstructorData(result.data.teachers)
-    })
-  }, [])
+    if (!modalValue) {
+      instance.get('/teachers?searchBy=none').then((res: AxiosResponse) => {
+        setInstructorData(res.data.data.teachers)
+      })
+    }
+  }, [modalValue])
 
   function onChangeInput(event: any) {
     setSearchInput(event.target.value)
@@ -116,7 +119,7 @@ export default function InstructorPage() {
       </div>
       {/* 강사 목록 시작 */}
       <div className="w-full grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-5">
-        {/* {instructorData?.map(
+        {instructorData?.map(
           (data: { name: string; phone: string }, i: number) => {
             return (
               <div
@@ -140,7 +143,7 @@ export default function InstructorPage() {
               </div>
             )
           }
-        )} */}
+        )}
       </div>
     </div>
   )
