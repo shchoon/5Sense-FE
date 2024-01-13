@@ -81,7 +81,7 @@ export default function StudentRegister() {
             alt=""
           />
         </Link>
-        <div className="absolute left-[92px] top-[60px] black-bold text-3xl  font-['Pretendard'] leading-[30px]">
+        <div className="absolute left-[92px] top-[60px] black-bold text-3xl font-['Pretendard'] leading-[30px]">
           수강생 등록
         </div>
       </div>
@@ -117,7 +117,7 @@ export default function StudentRegister() {
             </div>
             <button className="flex justify-center gap-2 w-full px-6 py-3.5 border rounded-lg border-primary-600">
               <Image src={PlusCircle} width={24} height={24} alt="" />
-              <div className="indigo-500-semibold text-base font-['Pretendard'] leading-normal">
+              <div className="text-base font-semibold text-primary-600 font-['Pretendard'] leading-normal">
                 클래스 추가
               </div>
             </button>
@@ -125,7 +125,7 @@ export default function StudentRegister() {
           {/* 등록 버튼 */}
           <button
             type="submit"
-            className="w-full py-3.5 rounded-lg bg-primary-600"
+            className="w-full py-3.5 btn-purple focus:ring-1 focus:ring-primary-200"
           >
             <div className="text-white text-base font-semibold font-['Pretendard'] leading-normal">
               등록하기

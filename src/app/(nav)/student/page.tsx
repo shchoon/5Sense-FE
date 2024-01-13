@@ -184,8 +184,11 @@ export default function StudentPage() {
           </div>
         </div>
 
-        <Link href={'/student/register'}>
-          <div className="flex gap-2 items-center w-[132px] h-[41px] rounded-lg px-5 py-2.5 bg-primary-600  cursor-pointer">
+        <Link
+          href={'/student/register'}
+          className="btn-purple focus:ring-1 focus:ring-primary-200"
+        >
+          <div className="flex gap-2 items-center w-[132px] h-[41px] px-5 py-2.5">
             <Image src={plusCircle} width={20} height={20} alt=" " />
             <div className="h-[21px] w-16 text-white text-[11.5px] font-semibold font-['Pretendard'] leading-[21px]">
               수강생 등록

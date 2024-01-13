@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { AxiosResponse, AxiosError } from 'axios'
 
-const accessToken: string | null = localStorage.getItem('accessToken') as string
+const accessToken = localStorage.getItem('accessToken') as string
 const accessTokenExp: string | null = localStorage.getItem(
   'accessTokenExp'
 ) as string
@@ -13,16 +13,9 @@ const checkToken = () => {
   const tokenExp = Date.parse(accessTokenExp) / 60000
   const currentDate = Date.parse(current.toISOString()) / 60000
 
+  console.log(tokenExp - currentDate)
   return tokenExp - currentDate
 }
-
-/* const getNewAccessToken = async () => {
-  const res = await instance.post('/auth/reissue', {
-    authorization: `Bearer ${refreshToken}`
-  })
-
-  return res
-} */
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_IP_ADDRESS,
@@ -36,6 +29,7 @@ instance.interceptors.request.use(
   async config => {
     const accessToken = localStorage.getItem('accessToken')
     const refreshToken = localStorage.getItem('refreshToken')
+    checkToken()
 
     if (accessToken) {
       if (checkToken() < 5) {
@@ -52,13 +46,14 @@ instance.interceptors.request.use(
           console.log(res)
           localStorage.setItem('accessToken', res.data.data.accessToken)
           localStorage.setItem('accessTokenExp', res.data.data.accessTokenExp)
+          config.headers.Authorization = `Bearer ${res.data.data.accessToken}`
         } catch (error) {
           console.log(error)
         }
       }
       config.headers.Authorization = `Bearer ${accessToken}`
     }
-
+    console.log(config)
     return config
   },
   error => {
