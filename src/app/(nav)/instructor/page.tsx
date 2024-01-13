@@ -4,42 +4,26 @@ import search_16 from '../../../assets/icon/search.svg'
 import x_icon_12 from '../../../assets/icon/x_icon_12.svg'
 import search_20 from '../../../assets/icon/search_20.svg'
 import chevronRight from '../../../assets/icon/chevron_right_20.svg'
+import x_circle from '../../../assets/icon/x_circle_35.svg'
 import Image from 'next/image'
 import { fetchApi } from '@/hooks/useApi'
 import { useState, useEffect } from 'react'
+import { useRecoilState } from 'recoil'
+import { instructorRegisterModal } from '@/state/modal'
+
+export interface InsturctorDataType {
+  name: string
+  phone: string
+}
 
 export default function InstructorPage() {
-  const allInstructorData = [
-    {
-      name: '엄세리',
-      phone: '010-1234-5678'
-    },
-    {
-      name: '조성훈',
-      phone: '010-1231-1315'
-    },
-    {
-      name: '정은담',
-      phone: '010-8435-1536'
-    },
-    {
-      name: '윤태식',
-      phone: '010-3556-5678'
-    },
-    {
-      name: '조영은',
-      phone: '010-2166-5678'
-    },
-    {
-      name: '엄세리',
-      phone: '010-2365-5678'
-    },
-    {
-      name: '엄세리',
-      phone: '010-1234-1565'
-    }
-  ]
-  const [instructorData, setInstructorData] = useState<any>()
+  const [instructorInfo, setInsturctorInfo] = useState<InsturctorDataType>({
+    name: '',
+    phone: ''
+  })
+  const [instructorData, setInstructorData] = useState<any>([])
+
+  const [modalValue, setModalValue] = useRecoilState(instructorRegisterModal)
 
   let [searchInput, setSearchInput] = useState<any>('')
 
@@ -53,7 +37,7 @@ export default function InstructorPage() {
     setSearchInput(event.target.value)
   }
 
-  function searchClick() {
+  /* function searchClick() {
     if (isNaN(searchInput)) {
       let result = allInstructorData.filter(data =>
         data.name.includes(searchInput)
@@ -65,7 +49,7 @@ export default function InstructorPage() {
       )
       setInstructorData(result)
     }
-  }
+  } */
 
   function preventDashAndPressEnter(event: any) {
     /* dash(-)의 event.which가 189 */
@@ -73,7 +57,7 @@ export default function InstructorPage() {
       event.preventDefault()
     }
     if (event.key == 'Enter') {
-      searchClick()
+      //searchClick()
     }
   }
 
@@ -81,8 +65,8 @@ export default function InstructorPage() {
     setSearchInput('')
   }
 
-  function pressEnter() {
-    console.log('enter')
+  const modalClick = () => {
+    setModalValue(true)
   }
 
   return (
@@ -95,7 +79,10 @@ export default function InstructorPage() {
           </div>
         </div>
 
-        <div className="flex gap-2 items-center w-[132px] h-[41px] rounded-lg px-5 py-2.5 bg-primary-600">
+        <div
+          className="flex gap-2 items-center w-[132px] h-[41px] rounded-lg px-5 py-2.5 btn-purple"
+          onClick={modalClick}
+        >
           <Image src={plusCircle} width={20} height={20} alt=" " />
           <div className="h-[21px] w-16 text-white text-[11.5px] font-semibold font-['Pretendard'] leading-[21px] cursor-pointer">
             강사 등록
@@ -123,16 +110,13 @@ export default function InstructorPage() {
           />
         </div>
 
-        <div
-          className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer"
-          onClick={searchClick}
-        >
+        <div className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer">
           <Image src={search_20} width={20} height={20} alt=" " />
         </div>
       </div>
       {/* 강사 목록 시작 */}
       <div className="w-full grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-5">
-        {instructorData?.map(
+        {/* {instructorData?.map(
           (data: { name: string; phone: string }, i: number) => {
             return (
               <div
@@ -156,7 +140,7 @@ export default function InstructorPage() {
               </div>
             )
           }
-        )}
+        )} */}
       </div>
     </div>
   )

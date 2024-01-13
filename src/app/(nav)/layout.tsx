@@ -14,6 +14,8 @@ import TodaySchedule from '@/components/layout/TodaySchedule'
 import { useRecoilState } from 'recoil'
 import { modalState } from '@/state/modal'
 import DetailModal from '@/components/detailModal'
+import { instructorRegisterModal } from '@/state/modal'
+import InstructorRegisterModal from '@/components/InstructorRegisterModal'
 
 export default function MainLayout({
   children
@@ -28,6 +30,9 @@ export default function MainLayout({
 
   const [isModal, setIsModal] = useState<boolean>(false)
   const [modalValue, setModalValue] = useRecoilState(modalState)
+  const [instructorModal, setInstrictorModal] = useRecoilState(
+    instructorRegisterModal
+  )
   return (
     <div
       className={`wrapper ${
@@ -45,9 +50,14 @@ export default function MainLayout({
           <DetailModal />
         </div>
       )}
+      {instructorModal && (
+        <div className="absolute flex justify-center items-center w-screen h-screen bg-black bg-opacity-20 backdrop-blur-[5px] shadow z-[100]">
+          <InstructorRegisterModal />
+        </div>
+      )}
+
       <div className="w-full h-full px-6 2md:px-12 box-border lg:pl-0 lg:pr-4 xl:pr-8 2xl:pr-12">
         {/* 상위 relative가 없기때문에 body를 부모로 잡음 */}
-
         <div className="header w-full h-[124px] flex justify-between items-center lg:flex-none lg:h-[66px]">
           <div className="rightBox flex gap-5 lg:flex-none lg:relative lg:top-12 lg:left-6">
             <Image
@@ -105,6 +115,7 @@ export default function MainLayout({
             </div>
           </div>
         </div>
+        InstructorRegisterModal
       </div>
       {/* <SideModal /> */}
       {/* static은 레이어 계층에 들어가지 않기때문에 purplebox에 인덱스값을 -로 설정함*/}
