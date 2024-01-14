@@ -55,14 +55,34 @@ instance.interceptors.request.use(
 )
 
 instance.interceptors.response.use(
-  response => {
-    //console.log(response)
+  async (response: AxiosResponse) => {
+    const { url } = response.config
+    if (url === '/centers') {
+      const refreshToken = localStorage.getItem('refreshToken')
+      try {
+        const res = await axios.post(
+          process.env.NEXT_PUBLIC_IP_ADDRESS + '/auth/reissue',
+          {},
+          {
+            headers: {
+              authorization: `Bearer ${refreshToken}`
+            }
+          }
+        )
+        console.log(res)
+        localStorage.setItem('accessToken', res.data.data.accessToken)
+        localStorage.setItem('accessTokenExp', res.data.data.accessTokenExp)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    console.log(response)
     // 2xx 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
     // 응답 데이터가 있는 작업 수행
     return response
   },
   error => {
-    if (error.response?.status >= 400) {
+    if (error?.response) {
       console.log(error.response)
       alert(error.response.data.message)
     }

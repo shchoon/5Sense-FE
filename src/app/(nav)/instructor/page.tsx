@@ -67,11 +67,12 @@ export default function InstructorPage() {
     if (!modalValue) {
       instance.get('/teachers?searchBy=none').then((res: AxiosResponse) => {
         setInstructorData(res.data.data.teachers)
+        const lastTeacherId = res.data.data.teachers.length - 1
         if (res.data.data.meta.hasNextPage) {
           setPostVar(postVar => ({
             ...postVar,
             page: res.data.data.meta.page,
-            cursor: res.data.data.teachers[9].id,
+            cursor: res.data.data.teachers[lastTeacherId].id,
             hasNextPage: res.data.data.meta.hasNextPage
           }))
         }
@@ -200,7 +201,9 @@ export default function InstructorPage() {
           }
         )}
       </div>
-      {loading && postVar.hasNextPage ? <div id="test"></div> : null}
+      {loading && postVar.hasNextPage && !modalValue ? (
+        <div id="test"></div>
+      ) : null}
       {postVar.hasNextPage ? (
         <div className="w-full h-[70px] pt-[50px] flex justify-center items-center">
           <div

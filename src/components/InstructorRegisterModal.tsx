@@ -71,7 +71,6 @@ export default function () {
         e.preventDefault()
         const data = postData
         instance.post('/teachers', data).then((res: AxiosResponse) => {
-          console.log(res)
           setModal(false)
         })
 
@@ -99,7 +98,7 @@ export default function () {
               onChangeHandler(e, 'name')
               limitLength(e)
             }}
-            maxLength={5}
+            maxLength={20}
             className={`${
               postData.name.length > 0 ? 'bg-gray-50' : 'bg-white'
             } w-full h-[58px] px-3 py-5 border-gray-200 rounded-lg focus:ring-0 focus:border-[#563AC0]`}
