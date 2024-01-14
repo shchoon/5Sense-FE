@@ -43,6 +43,27 @@ export default function () {
     }
   }
 
+  const onKeyDownOnlyNum = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const forbiddenKeys = ['-', 'e', 'ArrowDown', 'ArrowUp']
+    if (forbiddenKeys.includes(e.key)) {
+      e.preventDefault()
+    }
+    if (e.currentTarget.value.length === 12 && e.key !== 'Backspace') {
+      e.preventDefault()
+    }
+  }
+
+  const limitLength = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.currentTarget
+    const max = Number(e.currentTarget.getAttribute('maxlength'))
+    if (target.value.length > max) {
+      setPostData({
+        ...postData,
+        name: target.value.slice(0, max)
+      })
+    }
+  }
+
   return (
     <form
       className="relative w-[424px] h-[326px] bg-white rounded-xl border border-gray-900 flex justify-center"
@@ -76,17 +97,24 @@ export default function () {
             value={postData.name}
             onChange={e => {
               onChangeHandler(e, 'name')
+              limitLength(e)
             }}
-            className="w-full px-3 h-[58px] py-5 rounded-lg border-gray-200"
+            maxLength={5}
+            className={`${
+              postData.name.length > 0 ? 'bg-gray-50' : 'bg-white'
+            } w-full h-[58px] px-3 py-5 border-gray-200 rounded-lg focus:ring-0 focus:border-[#563AC0]`}
           />
           <input
-            type="text"
+            type="number"
             placeholder="전화번호 (-제외)"
             value={postData.phone}
             onChange={e => {
               onChangeHandler(e, 'phone')
             }}
-            className="w-full px-3 h-[58px] py-5 rounded-lg border-gray-200"
+            onKeyDown={onKeyDownOnlyNum}
+            className={`${
+              postData.phone.length > 0 ? 'bg-gray-50' : 'bg-white'
+            } w-full h-[58px] px-3 py-5 border-gray-200 rounded-lg focus:ring-0 focus:border-[#563AC0]`}
           />
         </div>
         <button
