@@ -16,14 +16,6 @@ const checkToken = () => {
   return tokenExp - currentDate
 }
 
-/* const getNewAccessToken = async () => {
-  const res = await instance.post('/auth/reissue', {
-    authorization: `Bearer ${refreshToken}`
-  })
-
-  return res
-} */
-
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_IP_ADDRESS,
   timeout: 2000,
@@ -34,9 +26,6 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   async config => {
-    const accessToken = localStorage.getItem('accessToken')
-    const refreshToken = localStorage.getItem('refreshToken')
-
     if (accessToken) {
       if (checkToken() < 5) {
         try {
@@ -69,14 +58,33 @@ instance.interceptors.request.use(
 )
 
 instance.interceptors.response.use(
-  response => {
+  async (response: AxiosResponse) => {
+    const { url } = response.config
+    if (url === '/centers') {
+      try {
+        const res = await axios.post(
+          process.env.NEXT_PUBLIC_IP_ADDRESS + '/auth/reissue',
+          {},
+          {
+            headers: {
+              authorization: `Bearer ${refreshToken}`
+            }
+          }
+        )
+        console.log(res)
+        localStorage.setItem('accessToken', res.data.data.accessToken)
+        localStorage.setItem('accessTokenExp', res.data.data.accessTokenExp)
+      } catch (error) {
+        console.log(error)
+      }
+    }
     console.log(response)
     // 2xx 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
     // 응답 데이터가 있는 작업 수행
     return response
   },
   error => {
-    if (error.response?.status >= 400) {
+    if (error?.response) {
       console.log(error.response)
       alert(error.response.data.message)
     }

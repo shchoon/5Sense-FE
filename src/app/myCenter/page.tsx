@@ -7,6 +7,7 @@ import Router from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import instance from '@/hooks/useAxios'
 import { AxiosResponse, AxiosError } from 'axios'
+import local from 'next/font/local'
 
 declare global {
   interface Window {
@@ -132,11 +133,34 @@ export default function MyCenter() {
   useOnClickOutside(centerNameInputRef, handelClickOutsideCenter)
 
   /* 전화번호 입력 -> '-' &  number type 아닌 것들 입력 방지*/
-  async function allowOnlyNum(e: any) {
-    let ASCIICode = e.which ? e.which : e.keyCode
-    if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57)) return false
-    return true
+  const allowOnlyNum = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const forbiddenKeys = ['-', 'e']
+    if (
+      forbiddenKeys.includes(e.key) ||
+      e.currentTarget.value.length > 12 ||
+      e.key === 'ArrowUp' ||
+      e.key === 'ArrowDown' ||
+      (e.currentTarget.value.length === 12 && e.key !== 'Backspace')
+    ) {
+      e.preventDefault()
+    }
+    /* if (e.currentTarget.value.length > 12 && e.key !== 'Backspace') {
+      e.preventDefault()
+    } */
   }
+
+  const checkPostableData = (postData: postDataType) => {
+    if (
+      postData.name !== '' &&
+      postData.address !== '' &&
+      postData.mainPhone.length >= 9
+    ) {
+      return true
+    } else {
+      false
+    }
+  }
+
   return (
     <>
       <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></Script>
@@ -156,7 +180,7 @@ export default function MyCenter() {
                 ...danger,
                 address: true
               }))
-            } else if (key === 'mainPhone' && value === '') {
+            } else if (key === 'mainPhone' && value.length < 9) {
               setDanger(danger => ({
                 ...danger,
                 phone: true
@@ -164,25 +188,26 @@ export default function MyCenter() {
             }
           })
 
-          const res = await instance.post('/centers', {
-            name: postData.name,
-            address: postData.address,
-            mainPhone: postData.mainPhone
-          })
-          const refreshToken = localStorage.getItem('refreshToken')
-          instance
-            .post('/auth/reissue', { authorization: `Bearer ${refreshToken}` })
-            .then((res: AxiosResponse) => {
-              router.push('/home')
-              localStorage.setItem('accessToken', res.data.data.accessToken)
+          if (
+            checkPostableData(postData) &&
+            !localStorage.getItem('hasCenter')
+          ) {
+            instance.post('/centers', {
+              name: postData.name,
+              address: postData.address,
+              mainPhone: postData.mainPhone
             })
-            .catch((error: AxiosError) => {
-              alert(error)
-            })
+          } else {
+            if (localStorage.getItem('hasCenter')) {
+              alert('한 개 이상의 센터는 등록할 수 없습니다.')
+            } else {
+              alert('학원 정보를 올바르게 입력해주세요.')
+            }
+          }
         }}
       >
         <div className="w-[430px] h-[209px] flex flex-col items-center gap-4">
-          <div className="relative w-[430px] h-[60px] flex items-center border rounded-lg border-[#E5E7EB] ">
+          <div className="relative w-[430px] h-[60px] flex items-center rounded-lg">
             <input
               ref={centerNameInputRef}
               type="text"
@@ -192,13 +217,13 @@ export default function MyCenter() {
                 handleOnFocus(e.target.name)
               }}
               className={`w-full px-3 py-5 text-sm text-gray-900  
-                rounded-lg border-1 ${
+                rounded-lg border-1 border-[#E5E7EB] ${
                   danger.name
                     ? 'border-red-600'
                     : !onFocusInput.nameInput && postData.name !== ''
                       ? 'border-green-600'
                       : 'border-gray-200'
-                } appearance-none focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0`}
+                } focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0`}
               placeholder="센터명"
               onChange={e => {
                 handelChangeName('name', e)
@@ -209,7 +234,7 @@ export default function MyCenter() {
               danger.name) && (
               <label className="absolute -top-2 left-3 w-[42px] h-5 bg-white">
                 <div
-                  className={`${
+                  className={`flex justify-center ${
                     danger.name
                       ? 'text-red-600'
                       : !onFocusInput.nameInput
@@ -222,7 +247,7 @@ export default function MyCenter() {
               </label>
             )}
           </div>
-          <div className="relative w-[430px] h-[60px]  flex items-center  rounded-lg border border-[#E5E7EB]">
+          <div className="relative w-[430px] h-[60px]  flex items-center  rounded-lg">
             <input
               ref={addressNameInputRef}
               type="text"
@@ -232,13 +257,13 @@ export default function MyCenter() {
                 handleOnFocus(e.target.name)
               }}
               className={`w-full px-3 py-5 text-sm text-gray-900  
-              rounded-lg border-1 ${
+              rounded-lg border-1 border-[#E5E7EB] ${
                 danger.address
                   ? 'border-red-600'
                   : !onFocusInput.addressInput && postData.address !== ''
                     ? 'border-green-600'
                     : 'border-gray-200'
-              } appearance-none focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0`}
+              } focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0`}
               placeholder="주소"
               onClick={onClickAdd}
             />
@@ -247,7 +272,7 @@ export default function MyCenter() {
               danger.address) && (
               <label className="absolute -top-2 left-3 w-[28px] h-3 bg-white">
                 <div
-                  className={`${
+                  className={`flex justify-center ${
                     danger.address
                       ? 'text-red-600'
                       : !onFocusInput.addressInput
@@ -260,21 +285,23 @@ export default function MyCenter() {
               </label>
             )}
           </div>
-          <div className="relative w-[430px] h-[60px]  flex items-center  rounded-lg border border-[#E5E7EB]">
+          <div className="relative w-[430px] h-[60px] flex items-center rounded-lg">
             <input
               ref={phoneNumInputRef}
               name="phone"
               onFocus={e => {
                 handleOnFocus(e.target.name)
               }}
+              type="number"
               className={`w-full px-3 py-5 text-sm text-gray-900  
-              rounded-lg border-2 ${
+              rounded-lg border-1 border-[#E5E7EB] ${
                 danger.phone
                   ? 'border-red-600'
                   : !onFocusInput.phoneInput && postData.mainPhone !== ''
                     ? 'border-green-600'
                     : 'border-gray-200'
-              } appearance-none focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0`}
+              } focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0 [appearance:textfield]
+               [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
               placeholder="대표번호 (- 없이 입력해주세요)"
               value={postData.mainPhone}
               onKeyDown={allowOnlyNum}
@@ -287,7 +314,7 @@ export default function MyCenter() {
               danger.phone) && (
               <label className="absolute -top-2 left-3 w-[60px] h-5 bg-white">
                 <div
-                  className={`${
+                  className={`flex justify-center ${
                     danger.phone
                       ? 'text-red-600'
                       : !onFocusInput.phoneInput
@@ -301,10 +328,18 @@ export default function MyCenter() {
             )}
           </div>
         </div>
-        <div className="w-full flex justify-center items-center">
+        <div className="w-full flex gap-[10px]">
+          <div
+            onClick={() => {
+              router.push('/home')
+            }}
+            className="w-full flex justify-center h-[52px] px-6 py-[14px] border border-primary-600 rounded-lg bg-white  text-primary-600 font-semibold cursor-pointer"
+          >
+            다음에 하기
+          </div>
           <button
             type="submit"
-            className="w-[200px] h-[52px] px-6 py-[10px] rounded-lg bg-primary-600 hover:bg-primary-700 focus:ring-1 focus:ring-primary-200 text-[#FFF] font-semibold"
+            className="w-full h-[52px] px-6 py-[14px] rounded-lg bg-primary-600 hover:bg-primary-700 focus:ring-1 focus:ring-primary-200 text-[#FFF] font-semibold"
           >
             등록
           </button>
