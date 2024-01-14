@@ -300,8 +300,7 @@ export default function MyCenter() {
                   : !onFocusInput.phoneInput && postData.mainPhone !== ''
                     ? 'border-green-600'
                     : 'border-gray-200'
-              } focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0 [appearance:textfield]
-               [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
+              } focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0`}
               placeholder="대표번호 (- 없이 입력해주세요)"
               value={postData.mainPhone}
               onKeyDown={allowOnlyNum}

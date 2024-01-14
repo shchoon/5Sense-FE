@@ -1,15 +1,8 @@
 import axios from 'axios'
 import { AxiosResponse, AxiosError } from 'axios'
 
-const accessToken: string | null = localStorage.getItem('accessToken') as string
-const accessTokenExp: string | null = localStorage.getItem(
-  'accessTokenExp'
-) as string
-const refreshToken: string | null = localStorage.getItem(
-  'refreshToken'
-) as string
 const current: Date = new Date()
-const checkToken = () => {
+const checkToken = (accessTokenExp: string) => {
   const tokenExp = Date.parse(accessTokenExp) / 60000
   const currentDate = Date.parse(current.toISOString()) / 60000
 
@@ -26,8 +19,12 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   async config => {
+    const accessToken = localStorage.getItem('accessToken')
+    const refreshToken = localStorage.getItem('refreshToken')
+    const accessTokenExp = localStorage.getItem('accessTokenExp')
+
     if (accessToken) {
-      if (checkToken() < 5) {
+      if (accessTokenExp && checkToken(accessTokenExp) < 5) {
         try {
           const res = await axios.post(
             process.env.NEXT_PUBLIC_IP_ADDRESS + '/auth/reissue',
@@ -61,6 +58,7 @@ instance.interceptors.response.use(
   async (response: AxiosResponse) => {
     const { url } = response.config
     if (url === '/centers') {
+      const refreshToken = localStorage.getItem('refreshToken')
       try {
         const res = await axios.post(
           process.env.NEXT_PUBLIC_IP_ADDRESS + '/auth/reissue',
