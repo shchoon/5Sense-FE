@@ -57,8 +57,12 @@ export default function StudentRegister() {
 
   const studentRigister = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault()
-    fetchApi('/students', 'POST', studentInfo).then(() => {
-      router.push('/student')
+    fetchApi('/students', 'POST', studentInfo).then(result => {
+      console.log(result)
+      if (result !== undefined) {
+        router.push('/student')
+      }
+      //
     })
   }
   console.log('studentInfo', studentInfo)
