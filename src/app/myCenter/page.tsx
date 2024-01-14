@@ -328,10 +328,18 @@ export default function MyCenter() {
             )}
           </div>
         </div>
-        <div className="w-full flex justify-center items-center">
+        <div className="w-full flex gap-[10px]">
+          <div
+            onClick={() => {
+              router.push('/home')
+            }}
+            className="w-full flex justify-center h-[52px] px-6 py-[14px] border border-primary-600 rounded-lg bg-white  text-primary-600 font-semibold cursor-pointer"
+          >
+            다음에 하기
+          </div>
           <button
             type="submit"
-            className="w-[200px] h-[52px] px-6 py-[10px] rounded-lg bg-primary-600 hover:bg-primary-700 focus:ring-1 focus:ring-primary-200 text-[#FFF] font-semibold"
+            className="w-full h-[52px] px-6 py-[14px] rounded-lg bg-primary-600 hover:bg-primary-700 focus:ring-1 focus:ring-primary-200 text-[#FFF] font-semibold"
           >
             등록
           </button>
