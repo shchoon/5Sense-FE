@@ -1,7 +1,6 @@
 'use client'
 import { fetchApi } from '@/hooks/useApi'
 import { idState, modalState } from '@/state/modal'
-import { useRouter } from 'next/navigation'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 
@@ -11,8 +10,6 @@ type Props = {
 }
 
 const DetailModal = () => {
-  const router = useRouter()
-
   const [modalValue, setModalValue] = useRecoilState(modalState)
   const [idValue, setIdValue] = useRecoilState(idState)
 
@@ -30,14 +27,15 @@ const DetailModal = () => {
   })
 
   return (
-    <div className="relative top-0 left-0 w-[480px] h-screen bg-white rounded-tr-[32px] shadow">
+    <div className="relative top-0 left-0 w-[480px] h-full bg-white rounded-tr-[32px] shadow">
+      <div className="flex flex-col pt-[72px] px-6 box-border gap-[81px]"></div>
       <button
         className="absolute top-6 right-6"
         onClick={() => setModalValue(!modalValue)}
       >
         x
       </button>
-      <div className="pt-[72px] px-6 box-border">
+      <div className="p-6">
         <div className="text-gray-900 text-[26px] font-bold mb-2">
           {student.name}
         </div>
@@ -50,17 +48,7 @@ const DetailModal = () => {
           {student.particulars}
         </div>
       </div>
-      <div className="absolute bottom-0 p-6">
-        <button
-          onClick={() => {
-            router.push('/student/edit')
-            setModalValue(!modalValue)
-          }}
-          className="h-[52px] w-[431px] btn-purple"
-        >
-          수정하기
-        </button>
-      </div>
+      <div className="absolute top-[364px] w-[480px] h-px bg-gray-200" />
     </div>
   )
 }

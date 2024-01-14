@@ -1,5 +1,5 @@
 import { InputNumProps } from '@/app/(nav)/student/register/page'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 
 export default function useInputNum({
   name,
@@ -12,10 +12,6 @@ export default function useInputNum({
     setInputValue(e.target.value.replace(/[^0-9]/g, ''))
     setSubmitData({ ...submitData, [name]: e.target.value })
   }
-
-  useEffect(() => {
-    setInputValue(submitData[name])
-  }, [submitData[name]])
 
   return [inputValue, handleChange]
 }

@@ -25,9 +25,6 @@ module.exports = {
           cursor: 'pointer',
           '&:hover': {
             backgroundColor: '#563AC0'
-          },
-          '&:active': {
-            outline: '2px solid #D3C4F9'
           }
         },
         '.btn-line-purple': {
