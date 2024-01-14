@@ -8,33 +8,88 @@ import x_circle from '../../../assets/icon/x_circle_35.svg'
 import Image from 'next/image'
 import instance from '@/hooks/useAxios'
 import { AxiosResponse } from 'axios'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRecoilState } from 'recoil'
 import { instructorRegisterModal } from '@/state/modal'
 
-export interface InsturctorDataType {
-  name: string
-  phone: string
-}
-
 export default function InstructorPage() {
-  const [instructorInfo, setInsturctorInfo] = useState<InsturctorDataType>({
-    name: '',
-    phone: ''
-  })
+  let target: HTMLElement | null = document.getElementById('test')
+
+  const getInstructorList = () => {
+    instance
+      .get(
+        `/teachers?searchBy=none&page=${postVar.page + 1}&cursor=${
+          postVar.cursor
+        }`
+      )
+      .then((res: AxiosResponse) => {
+        setLoading(false)
+        setTimeout(() => {
+          setInstructorData([...instructorData, ...res.data.data.teachers])
+          let index = res.data.data.teachers.length - 1
+          setPostVar({
+            ...postVar,
+            page: res.data.data.meta.page,
+            cursor: res.data.data.teachers[index].id,
+            hasNextPage: res.data.data.meta.hasNextPage
+          })
+        }, 500)
+      })
+      .finally(() => {
+        setLoading(true)
+      })
+  }
+
+  const handleObserver = useCallback(
+    ([entry]: IntersectionObserverEntry[], observer: IntersectionObserver) => {
+      if (entry.isIntersecting) {
+        //observer.unobserve(entry.target)
+        setLoading(false)
+        getInstructorList()
+        observer.observe(entry.target)
+      }
+    },
+    [getInstructorList]
+  )
+  const [loading, setLoading] = useState(true)
   const [instructorData, setInstructorData] = useState<any>([])
 
   const [modalValue, setModalValue] = useRecoilState(instructorRegisterModal)
 
-  let [searchInput, setSearchInput] = useState<any>('')
+  const [searchInput, setSearchInput] = useState<any>('')
+  const [postVar, setPostVar] = useState({
+    page: '',
+    cursor: '',
+    hasNextPage: true
+  })
 
   useEffect(() => {
     if (!modalValue) {
       instance.get('/teachers?searchBy=none').then((res: AxiosResponse) => {
         setInstructorData(res.data.data.teachers)
+        if (res.data.data.meta.hasNextPage) {
+          setPostVar(postVar => ({
+            ...postVar,
+            page: res.data.data.meta.page,
+            cursor: res.data.data.teachers[9].id,
+            hasNextPage: res.data.data.meta.hasNextPage
+          }))
+        }
       })
     }
   }, [modalValue])
+
+  useEffect(() => {
+    let options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 1.0
+    }
+
+    const observer = new IntersectionObserver(handleObserver, options)
+
+    postVar.hasNextPage && target && observer.observe(target)
+  })
 
   function onChangeInput(event: any) {
     setSearchInput(event.target.value)
@@ -73,7 +128,7 @@ export default function InstructorPage() {
   }
 
   return (
-    <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6">
+    <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-16">
       {/* 수강생 관리 + 수강생 등록 버튼 */}
       <div className="flex w-full pt-12 mb-[30px] justify-between">
         <div className=" h-[30px]">
@@ -145,6 +200,19 @@ export default function InstructorPage() {
           }
         )}
       </div>
+      {loading && postVar.hasNextPage ? <div id="test"></div> : null}
+      {postVar.hasNextPage ? (
+        <div className="w-full h-[70px] pt-[50px] flex justify-center items-center">
+          <div
+            className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+            role="status"
+          >
+            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+              Loading...
+            </span>
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }
