@@ -134,9 +134,12 @@ export default function StudentPage() {
   async function searchClick() {
     getStudentDataBynameOrPhone(searchInput)
   }
-  function preventDashAndPressEnter(event: any) {
-    /* dash(-)의 event.which가 189 */
-    if (event.which === 189) {
+  function preventDashAndPressEnter(
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) {
+    const forbidden = ['-']
+
+    if (forbidden.includes(event.key)) {
       event.preventDefault()
     }
     if (event.key == 'Enter') {

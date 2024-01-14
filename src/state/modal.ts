@@ -9,3 +9,8 @@ export const idState = atom({
   key: 'idState',
   default: ''
 })
+
+export const instructorRegisterModal = atom({
+  key: 'instructorRegisterModal',
+  default: false
+})
