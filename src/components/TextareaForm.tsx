@@ -1,8 +1,8 @@
-import { useInput } from '@/hooks/useInput'
 import {
   ChangeEvent,
   SetStateAction,
   useCallback,
+  useEffect,
   useRef,
   useState
 } from 'react'
@@ -25,7 +25,6 @@ export default function TextareaForm({
   submitData,
   setSubmitData
 }: TextareaFormProps) {
-  console.log(name)
   const [inputValue, setInputValue] = useState<string>('')
   const ValueLength = inputValue.length
 
@@ -40,8 +39,17 @@ export default function TextareaForm({
     [textarea]
   )
   const handelChage = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    if (e.target.value.length <= maxLength) {
+      setInputValue(e.target.value)
+    } else if (e.target.value.length > maxLength) {
+      setInputValue(e.target.value.slice(0, maxLength))
+    }
     setSubmitData({ ...submitData, [name]: e.target.value })
   }
+
+  useEffect(() => {
+    setInputValue(submitData[name])
+  }, [submitData[name]])
 
   return (
     <>
