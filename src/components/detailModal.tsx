@@ -24,7 +24,7 @@ const DetailModal = () => {
     fetchApi(`/students/${idValue}`, 'GET').then(res => {
       setStudent(res.data)
     })
-  })
+  }, [])
 
   return (
     <div className="relative top-0 left-0 w-[480px] h-full bg-white rounded-tr-[32px] shadow">

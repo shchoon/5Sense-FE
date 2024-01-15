@@ -6,6 +6,7 @@ const checkToken = (accessTokenExp: string) => {
   const tokenExp = Date.parse(accessTokenExp) / 60000
   const currentDate = Date.parse(current.toISOString()) / 60000
 
+  console.log(tokenExp - currentDate)
   return tokenExp - currentDate
 }
 
@@ -38,13 +39,14 @@ instance.interceptors.request.use(
           console.log(res)
           localStorage.setItem('accessToken', res.data.data.accessToken)
           localStorage.setItem('accessTokenExp', res.data.data.accessTokenExp)
+          config.headers.Authorization = `Bearer ${res.data.data.accessToken}`
         } catch (error) {
           console.log(error)
         }
       }
       config.headers.Authorization = `Bearer ${accessToken}`
     }
-
+    console.log(config)
     return config
   },
   error => {

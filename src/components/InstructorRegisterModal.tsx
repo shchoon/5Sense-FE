@@ -101,7 +101,7 @@ export default function () {
             maxLength={20}
             className={`${
               postData.name.length > 0 ? 'bg-gray-50' : 'bg-white'
-            } w-full h-[58px] px-3 py-5 border-gray-200 rounded-lg focus:ring-0 focus:border-[#563AC0]`}
+            } w-full h-[58px] onlyInput`}
           />
           <input
             type="number"
@@ -113,7 +113,7 @@ export default function () {
             onKeyDown={onKeyDownOnlyNum}
             className={`${
               postData.phone.length > 0 ? 'bg-gray-50' : 'bg-white'
-            } w-full h-[58px] px-3 py-5 border-gray-200 rounded-lg focus:ring-0 focus:border-[#563AC0]`}
+            } w-full h-[58px] onlyInput`}
           />
         </div>
         <button
