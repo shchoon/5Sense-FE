@@ -56,7 +56,7 @@ export default function StudentPage() {
 
   const [infiniteScrollCount, setInfiniteScrollCount] = useState(0)
   const [loading, setLoading] = useState(false)
-  const [searchInput, setSearchInput] = useState<string>('')
+  const [inputValue, setInputValue] = useState<string>('')
 
   const getStudentData = (page?: string, cursor?: string) => {
     if (page && cursor) {
@@ -128,12 +128,13 @@ export default function StudentPage() {
   }
 
   const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(event.target.value)
+    setInputValue(event.target.value)
   }
 
   async function searchClick() {
-    getStudentDataBynameOrPhone(searchInput)
+    getStudentDataBynameOrPhone(inputValue)
   }
+
   function preventDashAndPressEnter(
     event: React.KeyboardEvent<HTMLInputElement>
   ) {
@@ -147,7 +148,7 @@ export default function StudentPage() {
     }
   }
   function onClickX() {
-    setSearchInput('')
+    setInputValue('')
     instance.get('/students?searchBy=none&page=1').then(res => {
       if (res.data.data.students.length !== 0) {
         let cursorIndex = res.data.data.students.length - 1
@@ -160,6 +161,47 @@ export default function StudentPage() {
         }))
       }
     })
+  }
+
+  const checkInputType = () => {
+    const checkList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    if (inputValue !== '' && checkList.includes(inputValue[0])) {
+      return false
+    } else {
+      return true
+    }
+  }
+
+  const allowOnlyNum = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    let regex = /^[a-zA-Z]+$/
+    const forbiddenKeys = ['-', 'e', 'ArrowUp', 'ArrowDown']
+    const checkList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    if (
+      forbiddenKeys.includes(e.key) ||
+      e.currentTarget.value.length > 12 ||
+      (e.currentTarget.value.length === 12 && e.key !== 'Backspace')
+    ) {
+      e.preventDefault()
+    }
+    if (regex.test(e.key) && e.key !== 'Backspace' && e.key !== 'Enter') {
+      alert('이름과 전화번호를 동시에 검색할 수 없습니다. 각각 입력해주세요.')
+    }
+    if (e.key == 'Enter') {
+      searchClick()
+    }
+  }
+
+  const preventInputDifferentType = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    const checkList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    if (inputValue !== '' && checkList.includes(e.key) && e.key === 'Enter') {
+      e.preventDefault()
+      alert('이름과 전화번호를 동시에 검색할 수 없습니다. 각각 입력해주세요.')
+    }
+    if (e.key == 'Enter') {
+      searchClick()
+    }
   }
 
   useEffect(() => {
@@ -204,11 +246,14 @@ export default function StudentPage() {
         <div className="lg:w-[325px] lg:gap-2.5 w-[280px] flex gap-2 px-4 lg:py-3 py-2 rounded-lg outline outline-1 outline-gray-300 focus-within:outline-[#563AC0]">
           <Image src={search_16} width={16} height={16} alt=" " />
           <input
-            className="w-[245px] focus:outline-none"
+            className="w-[245px] border-none ring-0 focus:ring-0"
             placeholder="Search"
-            value={searchInput}
+            type={checkInputType() ? 'text' : 'number'}
+            value={inputValue}
             onChange={onChangeInput}
-            onKeyDown={preventDashAndPressEnter}
+            onKeyDown={
+              checkInputType() ? preventInputDifferentType : allowOnlyNum
+            }
           />
           <Image
             className="cursor-pointer"
