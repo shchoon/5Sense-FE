@@ -12,6 +12,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil'
 import { idState, modalState } from '@/state/modal'
 import instance from '@/hooks/useAxios'
 import { AxiosResponse, AxiosError } from 'axios'
+import SearchFeat from '@/components/SearchFeat'
 
 interface studentType {
   id: string
@@ -195,7 +196,7 @@ export default function StudentPage() {
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
     const checkList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-    if (inputValue !== '' && checkList.includes(e.key) && e.key === 'Enter') {
+    if (inputValue !== '' && checkList.includes(e.key)) {
       e.preventDefault()
       alert('이름과 전화번호를 동시에 검색할 수 없습니다. 각각 입력해주세요.')
     }

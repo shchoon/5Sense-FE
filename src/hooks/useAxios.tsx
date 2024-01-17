@@ -6,7 +6,6 @@ const checkToken = (accessTokenExp: string) => {
   const tokenExp = Date.parse(accessTokenExp) / 60000
   const currentDate = Date.parse(current.toISOString()) / 60000
 
-  console.log(tokenExp - currentDate)
   return tokenExp - currentDate
 }
 
