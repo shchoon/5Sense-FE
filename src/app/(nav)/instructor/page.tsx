@@ -4,16 +4,18 @@ import search_16 from '../../../assets/icon/search.svg'
 import x_icon_12 from '../../../assets/icon/x_icon_12.svg'
 import search_20 from '../../../assets/icon/search_20.svg'
 import chevronRight from '../../../assets/icon/chevron_right_20.svg'
-import x_circle from '../../../assets/icon/x_circle_35.svg'
 import Image from 'next/image'
 import instance from '@/hooks/useAxios'
 import { AxiosResponse } from 'axios'
 import { useState, useEffect, useCallback } from 'react'
 import { useRecoilState } from 'recoil'
 import { instructorRegisterModal } from '@/state/modal'
+import SearchFeat from '@/components/SearchFeat'
+import { useRouter } from 'next/navigation'
 
 export default function InstructorPage() {
   let target: HTMLElement | null = document.getElementById('test')
+  const router = useRouter()
 
   const getInstructorList = () => {
     instance
@@ -40,29 +42,31 @@ export default function InstructorPage() {
       })
   }
 
-  const handleObserver = useCallback(
-    ([entry]: IntersectionObserverEntry[], observer: IntersectionObserver) => {
-      if (entry.isIntersecting) {
-        //observer.unobserve(entry.target)
-        setLoading(false)
-        getInstructorList()
-        observer.observe(entry.target)
-      }
-    },
-    [getInstructorList]
-  )
+  const handleObserver = (
+    [entry]: IntersectionObserverEntry[],
+    observer: IntersectionObserver
+  ) => {
+    if (entry.isIntersecting) {
+      console.log(entry)
+      //observer.unobserve(entry.target)
+      setLoading(false)
+      getInstructorList()
+      observer.observe(entry.target)
+    }
+  }
+
   const [loading, setLoading] = useState(true)
   const [instructorData, setInstructorData] = useState<any>([])
 
   const [modalValue, setModalValue] = useRecoilState(instructorRegisterModal)
 
-  const [searchInput, setSearchInput] = useState<any>('')
+  const [inputValue, setInputValue] = useState<string>('')
   const [postVar, setPostVar] = useState({
     page: '',
     cursor: '',
     hasNextPage: true
   })
-
+  console.log(postVar)
   useEffect(() => {
     if (!modalValue) {
       instance.get('/teachers?searchBy=none').then((res: AxiosResponse) => {
@@ -88,12 +92,12 @@ export default function InstructorPage() {
     }
 
     const observer = new IntersectionObserver(handleObserver, options)
-
+    console.log(postVar.hasNextPage, loading, !modalValue)
     postVar.hasNextPage && target && observer.observe(target)
   })
 
   function onChangeInput(event: any) {
-    setSearchInput(event.target.value)
+    setInputValue(event.target.value)
   }
 
   /* function searchClick() {
@@ -121,11 +125,46 @@ export default function InstructorPage() {
   }
 
   function onClickX() {
-    setSearchInput('')
+    instance.get('/teachers?searchBy=none').then((res: AxiosResponse) => {
+      setInstructorData(res.data.data.teachers)
+      const lastTeacherId = res.data.data.teachers.length - 1
+      if (res.data.data.meta.hasNextPage) {
+        setPostVar(postVar => ({
+          ...postVar,
+          page: res.data.data.meta.page,
+          cursor: res.data.data.teachers[lastTeacherId].id,
+          hasNextPage: res.data.data.meta.hasNextPage
+        }))
+        setInputValue('')
+      }
+    })
   }
 
   const modalClick = () => {
     setModalValue(true)
+  }
+
+  const getTeacherData = (e: React.MouseEvent<HTMLDivElement>) => {
+    const searchBy = e.currentTarget.id
+    console.log(searchBy)
+    SearchFeat('teachers', searchBy, inputValue).then(res => {
+      const lastTeacherId = res.teachers.length - 1
+      setInstructorData(res.teachers)
+      setPostVar(postVar => ({
+        ...postVar,
+        page: res.meta.page,
+        cursor: res.teachers[lastTeacherId].id,
+        hasNextPage: res.meta.hasNextPage
+      }))
+    })
+  }
+  const checkInputType = () => {
+    const checkList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    if (inputValue !== '' && checkList.includes(inputValue[0])) {
+      return false
+    } else {
+      return true
+    }
   }
 
   return (
@@ -153,9 +192,10 @@ export default function InstructorPage() {
         <div className="lg:w-[325px] lg:gap-2.5 w-[280px] flex gap-2 px-4 lg:py-3 py-2 rounded-lg outline outline-1 outline-gray-300 focus-within:outline-[#563AC0]">
           <Image src={search_16} width={16} height={16} alt=" " />
           <input
-            className="w-[245px] focus:outline-none"
+            className="w-[245px] border-none focus:ring-0"
             placeholder="Search"
-            value={searchInput}
+            type={checkInputType() ? 'text' : 'number'}
+            value={inputValue}
             onChange={onChangeInput}
             onKeyDown={preventDashAndPressEnter}
           />
@@ -169,7 +209,11 @@ export default function InstructorPage() {
           />
         </div>
 
-        <div className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer">
+        <div
+          className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer"
+          id={checkInputType() ? 'name' : 'phone'}
+          onClick={e => getTeacherData(e)}
+        >
           <Image src={search_20} width={20} height={20} alt=" " />
         </div>
       </div>
