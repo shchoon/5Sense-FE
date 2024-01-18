@@ -35,7 +35,7 @@ instance.interceptors.request.use(
               }
             }
           )
-          console.log(res)
+          //console.log(res)
           localStorage.setItem('accessToken', res.data.data.accessToken)
           localStorage.setItem('accessTokenExp', res.data.data.accessTokenExp)
           config.headers.Authorization = `Bearer ${res.data.data.accessToken}`
@@ -70,7 +70,7 @@ instance.interceptors.response.use(
             }
           }
         )
-        console.log(res)
+        //console.log(res)
         localStorage.setItem('accessToken', res.data.data.accessToken)
         localStorage.setItem('accessTokenExp', res.data.data.accessTokenExp)
       } catch (error) {

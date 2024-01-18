@@ -4,54 +4,22 @@ import search_16 from '../../../assets/icon/search.svg'
 import x_icon_12 from '../../../assets/icon/x_icon_12.svg'
 import search_20 from '../../../assets/icon/search_20.svg'
 import chevronRight from '../../../assets/icon/chevron_right_20.svg'
-import x_circle from '../../../assets/icon/x_circle_35.svg'
+import NoneResult from '@/components/NoneResult'
 import Image from 'next/image'
 import instance from '@/hooks/useAxios'
 import { AxiosResponse } from 'axios'
 import { useState, useEffect, useCallback } from 'react'
 import { useRecoilState } from 'recoil'
 import { instructorRegisterModal } from '@/state/modal'
+import SearchFeat from '@/components/SearchFeat'
+import { useRef } from 'react'
 
 export default function InstructorPage() {
+  const inputRef = useRef<HTMLInputElement>(null)
   let target: HTMLElement | null = document.getElementById('test')
-
-  const getInstructorList = () => {
-    instance
-      .get(
-        `/teachers?searchBy=none&page=${postVar.page + 1}&cursor=${
-          postVar.cursor
-        }`
-      )
-      .then((res: AxiosResponse) => {
-        setLoading(false)
-        setTimeout(() => {
-          setInstructorData([...instructorData, ...res.data.data.teachers])
-          let index = res.data.data.teachers.length - 1
-          setPostVar({
-            ...postVar,
-            page: res.data.data.meta.page,
-            cursor: res.data.data.teachers[index].id,
-            hasNextPage: res.data.data.meta.hasNextPage
-          })
-        }, 500)
-      })
-      .finally(() => {
-        setLoading(true)
-      })
-  }
-
-  const handleObserver = useCallback(
-    ([entry]: IntersectionObserverEntry[], observer: IntersectionObserver) => {
-      if (entry.isIntersecting) {
-        //observer.unobserve(entry.target)
-        setLoading(false)
-        getInstructorList()
-        observer.observe(entry.target)
-      }
-    },
-    [getInstructorList]
-  )
-  const [loading, setLoading] = useState(true)
+  const [refresh, setRefresh] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [scrollCount, setScrollCount] = useState(0)
   const [instructorData, setInstructorData] = useState<any>([])
 
   const [modalValue, setModalValue] = useRecoilState(instructorRegisterModal)
@@ -62,6 +30,82 @@ export default function InstructorPage() {
     cursor: '',
     hasNextPage: true
   })
+  const handleObserver = (
+    [entry]: IntersectionObserverEntry[],
+    observer: IntersectionObserver
+  ) => {
+    if (entry.isIntersecting) {
+      console.log(entry)
+      observer.unobserve(entry.target)
+      setScrollCount(prev => prev + 1)
+    }
+  }
+
+  let options = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 1.0
+  }
+
+  const observer = new IntersectionObserver(handleObserver, options)
+  postVar.hasNextPage && target && observer.observe(target)
+
+  useEffect(() => {
+    if (scrollCount !== 0 && postVar.hasNextPage) {
+      setLoading(true)
+      setTimeout(() => {
+        getInstructorList()
+        setLoading(false)
+      }, 500)
+    }
+  }, [scrollCount])
+
+  const getInstructorList = () => {
+    if (inputValue !== '') {
+      const searchBy = inputRef.current?.name as string
+      instance
+        .get(
+          `/teachers?searchBy=${searchBy}&phone=${inputValue}&page=${
+            postVar.page + 1
+          }&cursor=${postVar.cursor}`
+        )
+        .then((res: AxiosResponse) => {
+          console.log(res)
+          setInstructorData((preStudentData: any) => [
+            ...preStudentData,
+            ...res.data.data.teachers
+          ])
+          let index = res.data.data.teachers.length - 1
+          setPostVar(prePostVar => ({
+            ...prePostVar,
+            page: res.data.data.meta.page,
+            cursor: res.data.data.teachers[index].id,
+            hasNextPage: res.data.data.meta.hasNextPage
+          }))
+        })
+    } else {
+      instance
+        .get(
+          `/teachers?searchBy=none&page=${postVar.page + 1}&cursor=${
+            postVar.cursor
+          }`
+        )
+        .then((res: AxiosResponse) => {
+          console.log(inputRef.current)
+          setInstructorData((preStudentData: any) => [
+            ...preStudentData,
+            ...res.data.data.teachers
+          ])
+          let index = res.data.data.teachers.length - 1
+          setPostVar(prePostVar => ({
+            ...prePostVar,
+            page: res.data.data.meta.page,
+            cursor: res.data.data.teachers[index].id,
+            hasNextPage: res.data.data.meta.hasNextPage
+          }))
+        })
+    }
+  }
 
   useEffect(() => {
     if (!modalValue) {
@@ -76,50 +120,35 @@ export default function InstructorPage() {
             hasNextPage: res.data.data.meta.hasNextPage
           }))
         }
+        setRefresh(true)
       })
     }
   }, [modalValue])
-
-  useEffect(() => {
-    let options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 1.0
-    }
-
-    const observer = new IntersectionObserver(handleObserver, options)
-
-    postVar.hasNextPage && target && observer.observe(target)
-  })
 
   function onChangeInput(event: any) {
     setInputValue(event.target.value)
   }
 
-  /* function searchClick() {
-    if (isNaN(searchInput)) {
-      let result = allInstructorData.filter(data =>
-        data.name.includes(searchInput)
-      )
-      setInstructorData(result)
-    } else {
-      let result = allInstructorData.filter(data =>
-        data.phone.replaceAll('-', '').includes(searchInput)
-      )
-      setInstructorData(result)
-    }
-  } */
-
-  function preventDashAndPressEnter(event: any) {
-    /* dash(-)의 event.which가 189 */
-    if (event.which === 189) {
-      event.preventDefault()
-    }
-    if (event.key == 'Enter') {
-      //searchClick()
-    }
+  function searchClick() {
+    const searchBy = inputRef.current?.name as string
+    SearchFeat('teachers', searchBy, inputValue).then(res => {
+      setInstructorData(res.teachers)
+      if (res.meta.hasNextPage) {
+        const lastId = res.teachers.length - 1
+        setPostVar({
+          ...postVar,
+          page: res.meta.page,
+          cursor: res.teachers[lastId].id,
+          hasNextPage: res.meta.hasNextPage
+        })
+      } else {
+        setPostVar(prePostVar => ({
+          ...prePostVar,
+          hasNextPage: false
+        }))
+      }
+    })
   }
-
   function onClickX() {
     setInputValue('')
   }
@@ -152,7 +181,7 @@ export default function InstructorPage() {
       alert('이름과 전화번호를 동시에 검색할 수 없습니다. 각각 입력해주세요.')
     }
     if (e.key == 'Enter') {
-      //searchClick()
+      searchClick()
     }
   }
 
@@ -165,7 +194,7 @@ export default function InstructorPage() {
       alert('이름과 전화번호를 동시에 검색할 수 없습니다. 각각 입력해주세요.')
     }
     if (e.key == 'Enter') {
-      //searchClick()
+      searchClick()
     }
   }
 
@@ -194,8 +223,10 @@ export default function InstructorPage() {
         <div className="lg:w-[325px] lg:gap-2.5 w-[280px] flex gap-2 px-4 lg:py-3 py-2 rounded-lg outline outline-1 outline-gray-300 focus-within:outline-[#563AC0]">
           <Image src={search_16} width={16} height={16} alt=" " />
           <input
+            ref={inputRef}
             className="w-[245px] border-none focus:ring-0"
             placeholder="Search"
+            name={checkInputType() ? 'name' : 'phone'}
             type={checkInputType() ? 'text' : 'number'}
             value={inputValue}
             onChange={onChangeInput}
@@ -218,6 +249,8 @@ export default function InstructorPage() {
         </div>
       </div>
       {/* 강사 목록 시작 */}
+      {instructorData.length === 0 && refresh ? <NoneResult /> : null}
+      {/* 겅색 결과 없음 */}
       <div className="w-full grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-5">
         {instructorData?.map(
           (data: { name: string; phone: string }, i: number) => {
@@ -245,10 +278,8 @@ export default function InstructorPage() {
           }
         )}
       </div>
-      {loading && postVar.hasNextPage && !modalValue ? (
-        <div id="test"></div>
-      ) : null}
-      {postVar.hasNextPage ? (
+      {!loading && !modalValue ? <div id="test"></div> : null}
+      {loading ? (
         <div className="w-full h-[70px] pt-[50px] flex justify-center items-center">
           <div
             className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
