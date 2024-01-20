@@ -22,7 +22,7 @@ interface studentType {
   particulars: string
 }
 
-interface postVariableType {
+export interface postVarType {
   page: string
   cursor: string
   hasNextPage: boolean
@@ -48,7 +48,7 @@ export default function StudentPage() {
   if (target) observer.observe(target)
 
   const [studentData, setStudentData] = useState<studentType[]>([])
-  const [postVariable, setPostVariable] = useState<postVariableType>({
+  const [postVariable, setPostVariable] = useState<postVarType>({
     page: '',
     cursor: '',
     hasNextPage: true
@@ -73,7 +73,7 @@ export default function StudentPage() {
             ...preStudentData,
             ...res.data.data.students
           ])
-          setPostVariable((prePostVariable: postVariableType) => ({
+          setPostVariable((prePostVariable: postVarType) => ({
             ...prePostVariable,
             page: res.data.data.meta.page,
             cursor: res.data.data.students[cursorIndex].id,
@@ -93,7 +93,7 @@ export default function StudentPage() {
               ...preStudentData,
               ...res.data.data.students
             ])
-            setPostVariable((prePostVariable: postVariableType) => ({
+            setPostVariable((prePostVariable: postVarType) => ({
               ...prePostVariable,
               page: res.data.data.meta.page,
               cursor: res.data.data.students[cursorIndex].id,
@@ -154,7 +154,7 @@ export default function StudentPage() {
       if (res.data.data.students.length !== 0) {
         let cursorIndex = res.data.data.students.length - 1
         setStudentData(res.data.data.students)
-        setPostVariable((prePostVariable: postVariableType) => ({
+        setPostVariable((prePostVariable: postVarType) => ({
           ...prePostVariable,
           page: res.data.data.meta.page,
           cursor: res.data.data.students[cursorIndex].id,

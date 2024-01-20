@@ -1,6 +1,7 @@
 'use client'
 import Image from 'next/image'
 import profile from '@/assets/images/profile.png'
+import Link from 'next/link'
 
 export default function AcademyInfo(props: any) {
   console.log(props.color)
@@ -23,14 +24,16 @@ export default function AcademyInfo(props: any) {
           </p>
         </div>
       </div>
-      <button
-        onClick={onProfileHandler}
-        className={`w-[200px] h-[45px] px-4 py-3 box-border ${props.btnColor} rounded-md justify-center items-center`}
-      >
-        <span className="text-center text-white text-sm font-bold leading-[21px]">
-          내 프로필 관리
-        </span>
-      </button>
+      <Link href={'/management'}>
+        <button
+          onClick={onProfileHandler}
+          className={`w-[200px] h-[45px] px-4 py-3 box-border ${props.btnColor} rounded-md justify-center items-center`}
+        >
+          <span className="text-center text-white text-sm font-bold leading-[21px]">
+            내 프로필 관리
+          </span>
+        </button>
+      </Link>
     </div>
   )
 }
