@@ -75,7 +75,7 @@ export default function ModifyPage({
         </div>
       </div>
       {/* box */}
-      {children}
+      <div className="w-full flex justify-center pb-[60px]">{children}</div>
     </div>
   )
 }

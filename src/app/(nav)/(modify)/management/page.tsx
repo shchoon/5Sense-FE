@@ -22,7 +22,7 @@ export default function ManageMent() {
     })
   }
   return (
-    <div className="w-[640px] mx-auto flex flex-col gap-5 justify-center">
+    <div className="w-[640px] flex flex-col gap-5 justify-center">
       <form
         className="w-full px-6 py-8 flex flex-col justify-center gap-10"
         onSubmit={e => {
