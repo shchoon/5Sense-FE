@@ -3,14 +3,14 @@ import Image from 'next/image'
 import Ellipsis from '../../../../assets/icon/ellipsis75.svg'
 import ArrowBack from '../../../../assets/icon/allowBack.svg'
 import PlusCircle from '../../../../assets/icon/plusCirclePrimary600.svg'
-import { FormEventHandler, SetStateAction, useState } from 'react'
-import { useInput } from '@/hooks/useInput'
+import { SetStateAction, useState } from 'react'
 import InputForm, { InputFormProps } from '@/components/InputForm'
 import TextareaForm, { TextareaFormProps } from '@/components/TextareaForm'
-import { fetchApi } from '@/hooks/useApi'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import useInputNum from '@/hooks/useInputNum'
+import { AxiosError, AxiosResponse } from 'axios'
+import instance from '@/hooks/useAxios'
 
 type studentInfo = {
   name: string
@@ -57,11 +57,10 @@ export default function StudentRegister() {
 
   const studentRigister = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault()
-    fetchApi('/students', 'POST', studentInfo).then(() => {
+    instance.post('/students', studentInfo).then((res: AxiosResponse) => {
       router.push('/student')
     })
   }
-  console.log('studentInfo', studentInfo)
 
   return (
     <div className="w-full">
@@ -82,7 +81,7 @@ export default function StudentRegister() {
             alt=""
           />
         </Link>
-        <div className="absolute left-[92px] top-[60px] black-bold text-3xl  font-['Pretendard'] leading-[30px]">
+        <div className="absolute left-[92px] top-[60px] black-bold text-3xl font-['Pretendard'] leading-[30px]">
           수강생 등록
         </div>
       </div>
@@ -118,7 +117,7 @@ export default function StudentRegister() {
             </div>
             <button className="flex justify-center gap-2 w-full px-6 py-3.5 border rounded-lg border-primary-600">
               <Image src={PlusCircle} width={24} height={24} alt="" />
-              <div className="indigo-500-semibold text-base font-['Pretendard'] leading-normal">
+              <div className="text-base font-semibold text-primary-600 font-['Pretendard'] leading-normal">
                 클래스 추가
               </div>
             </button>
@@ -126,7 +125,7 @@ export default function StudentRegister() {
           {/* 등록 버튼 */}
           <button
             type="submit"
-            className="w-full py-3.5 rounded-lg bg-primary-600"
+            className="w-full py-3.5 btn-purple focus:ring-1 focus:ring-primary-200"
           >
             <div className="text-white text-base font-semibold font-['Pretendard'] leading-normal">
               등록하기

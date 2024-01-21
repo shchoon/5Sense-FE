@@ -199,6 +199,7 @@ export default function ClassPage() {
       </div>
       <ClassFilter />
       <div className="container w-full max-w-[1872px] grid grid-cols-2 2xl:grid-cols-3 gap-[20px] mt-[87px]">
+
         {classList.map((it, idx) => (
           <div
             key={idx}

@@ -1,9 +1,9 @@
 const IP_ADDRESS = process.env.NEXT_PUBLIC_IP_ADDRESS
 
 const checkExpiredToken = () => {
-  let currentDate = new Date()
-  let currentDateUTC = Date.parse(currentDate.toISOString()) / 1000
-  let accessTokenExp =
+  const currentDate = new Date()
+  const currentDateUTC = Date.parse(currentDate.toISOString()) / 1000
+  const accessTokenExp =
     Date.parse(`${localStorage.getItem('accessTokenExp')}`) / 1000
 
   if ((accessTokenExp - currentDateUTC) / 60 < 5) {
@@ -14,6 +14,9 @@ const checkExpiredToken = () => {
 }
 
 export const fetchApi = async (url: string, method: string, data?: any) => {
+  const accessToken = localStorage.getItem('accessToken')
+  const refreshToken = localStorage.getItem('refreshToken')
+
   if (url.includes('login')) {
     try {
       const res = await fetch(IP_ADDRESS + url, {
@@ -29,9 +32,7 @@ export const fetchApi = async (url: string, method: string, data?: any) => {
     }
   } else if (url == '/centers') {
     try {
-      let accessToken = localStorage.getItem('accessToken')
-      let refreshToken = localStorage.getItem('refreshToken')
-      const requestCenterRegister = await fetch(IP_ADDRESS + url, {
+      const res1 = await fetch(IP_ADDRESS + url, {
         method: method,
         headers: {
           'Content-Type': 'application/json',
@@ -39,28 +40,28 @@ export const fetchApi = async (url: string, method: string, data?: any) => {
         },
         body: JSON.stringify(data)
       })
+      if (!res1.ok) {
+        throw new Error('error')
+      }
 
-      const data1 = await requestCenterRegister.json()
-
-      const requestReissueToken = await fetch(IP_ADDRESS + '/auth/reissue', {
+      const res2 = await fetch(IP_ADDRESS + '/auth/reissue', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           authorization: `Bearer ${refreshToken}`
         }
       })
+      
+      const tokenData = res2.json()
 
-      const data2 = await requestReissueToken.json()
-
-      return { data1, data2 }
+      return tokenData
     } catch (error) {
-      alert('error')
+      alert('센터정보를 모두 입력해주세요.')
     }
   } else {
     if (!checkExpiredToken()) {
       /* accessToken is expired */
       try {
-        let refreshToken = localStorage.getItem('refreshToken')
         const requestReissueToken = await fetch(IP_ADDRESS + '/auth/reissue', {
           method: 'POST',
           headers: {
@@ -91,7 +92,6 @@ export const fetchApi = async (url: string, method: string, data?: any) => {
     } else {
       /* accessToken is not expired */
       try {
-        let accessToken = localStorage.getItem('accessToken')
         const res = await fetch(IP_ADDRESS + url, {
           method: method,
           headers: {
@@ -100,9 +100,15 @@ export const fetchApi = async (url: string, method: string, data?: any) => {
           },
           body: JSON.stringify(data)
         })
-        return res.json()
+
+        if (!res.ok) {
+          throw new Error('err')
+        }
+        const data1 = res.json()
+        return data1
       } catch (error) {
-        alert('error')
+        console.log(error)
+        alert('모든 정보를 입력해주세요.')
       }
     }
   }

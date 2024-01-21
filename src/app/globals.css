@@ -4,6 +4,17 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
 
 @layer components {
+  input:-webkit-autofill { -webkit-box-shadow: 0 0 0 30px #fff inset ; -webkit-text-fill-color: #000; }
+  input:-webkit-autofill, 
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:active { transition: background-color 5000s ease-in-out 0s; }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
   .box-flex {
     @apply flex flex-col justify-center items-center;
   }
@@ -74,6 +85,10 @@
 
   .indigo-500-semibold {
     @apply text-indigo-500 font-semibold;
+  }
+
+  .onlyInput {
+    @apply px-3 py-5 border-gray-200 rounded-lg focus:ring-0 focus:border-[#563AC0]
   }
 
   /* ... */

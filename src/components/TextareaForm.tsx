@@ -60,7 +60,7 @@ export default function TextareaForm({
         maxLength={maxLength}
       />
 
-      <span className="text-right">
+      <span className="text-gray-500 text-sm font-normal font-['Inter'] text-right">
         {ValueLength}/{maxLength}
       </span>
     </>

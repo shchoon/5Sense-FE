@@ -12,7 +12,10 @@ export interface InputFormProps {
   setSubmitData: React.Dispatch<SetStateAction<any>>
 }
 
-export type InputProps = Pick<InputFormProps, "name" | "maxLength" | "submitData"| "setSubmitData">
+export type InputProps = Pick<
+  InputFormProps,
+  'name' | 'maxLength' | 'submitData' | 'setSubmitData'
+>
 
 export default function InputForm({
   title,
@@ -22,7 +25,6 @@ export default function InputForm({
   submitData,
   setSubmitData
 }: InputFormProps) {
-  
   const [inputValue, handleChange] = useInput({
     name,
     maxLength,
@@ -46,7 +48,7 @@ export default function InputForm({
         maxLength={maxLength}
       />
       {maxLength && (
-        <span className="text-right">
+        <span className="text-gray-500 text-sm font-normal font-['Inter'] text-right">
           {ValueLength}/{maxLength}
         </span>
       )}
