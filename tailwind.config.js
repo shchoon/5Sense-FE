@@ -23,8 +23,12 @@ module.exports = {
           color: 'white',
           fontWeight: '600',
           cursor: 'pointer',
+          border: '3px solid transparent',
           '&:hover': {
             backgroundColor: '#563AC0'
+          },
+          '&:active': {
+            border: '3px solid #D3C4F9'
           }
         },
         '.btn-line-purple': {

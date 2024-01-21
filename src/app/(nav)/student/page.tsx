@@ -1,5 +1,5 @@
 'use client'
-import plusCircle from '../../../assets/icon/plus-circle.svg'
+import plusCircle from '@/assets/icon/plus-circle.svg'
 import search_16 from '../../../assets/icon/search.svg'
 import x_icon_12 from '../../../assets/icon/x_icon_12.svg'
 import search_20 from '../../../assets/icon/search_20.svg'
@@ -197,13 +197,18 @@ export default function StudentPage() {
           </div>
         </div>
 
-        <Link href={'/student/register'}>
-          <div className="flex gap-2 items-center w-[132px] h-[41px] rounded-lg px-5 py-2.5 bg-primary-600  cursor-pointer">
-            <Image src={plusCircle} width={20} height={20} alt=" " />
-            <div className="h-[21px] w-16 text-white text-[11.5px] font-semibold font-['Pretendard'] leading-[21px]">
-              수강생 등록
-            </div>
-          </div>
+        <Link
+          href={'class/register'}
+          className="Button flex flex-row px-5 py-2.5 btn-purple text-sm"
+        >
+          <Image
+            src={plusCircle}
+            alt="plus"
+            width={20}
+            height={20}
+            className="mr-2"
+          />
+          수강생 등록
         </Link>
       </div>
       {/* 검색창 */}
