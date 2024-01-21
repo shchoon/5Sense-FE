@@ -1,7 +1,5 @@
 'use client'
-
 import plusCircle from '@/assets/icon/plus-circle.svg'
-
 import search_16 from '../../../assets/icon/search.svg'
 import x_icon_12 from '../../../assets/icon/x_icon_12.svg'
 import search_20 from '../../../assets/icon/search_20.svg'
@@ -15,6 +13,7 @@ import { idState, modalState } from '@/state/modal'
 import instance from '@/hooks/useAxios'
 import { AxiosResponse, AxiosError } from 'axios'
 import SearchFeat from '@/components/SearchFeat'
+import NoneResult from '@/components/NoneResult'
 
 interface studentType {
   id: string
@@ -295,53 +294,33 @@ export default function StudentPage() {
         </div>
         {/* 수강생 목록 시작 */}
         <div className="w-full flex flex-col gap-[14px]">
-          {refresh && studentData.length === 0 ? (
-            <div className="flex w-full h-screen justify-center items-center">
-              <div className="flex flex-col gap-6 w-[432px] h-[244px]">
-                <Image
-                  className="mx-auto"
-                  src={noneResult}
-                  width={148}
-                  height={148}
-                  alt=" "
-                />
-                <div className="w-full flex flex-col gap-3">
-                  <div className="w-[432px] text-center text-gray-900 text-2xl font-bold font-['Pretendard'] leading-9">
-                    검색결과가 없습니다.
-                  </div>
-                  <div className="w-[432px] text-center text-gray-400 text-base font-medium font-['Pretendard'] leading-normal">
-                    다른 검색어를 통해 검색을 이어나가보세요
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : null}
+          {refresh && studentData.length === 0 ? <NoneResult /> : null}
           {studentData?.map((data: studentType, i: number) => {
             return (
-              <div
+              <button
                 key={i}
-                className="w-full flex lg:gap-10 gap-8 lg:p-7 p-6 outline rounded-md outline-1 outline-gray-200 shadow-[0_5px_15px_0px_rgba(0,0,0,0.02)] cursor-pointer"
+                className="w-full flex lg:gap-10 gap-8 lg:p-7 p-6 outline rounded-md outline-1 outline-gray-200 shadow-[0_5px_15px_0px_rgba(0,0,0,0.02)] hover:outline-primary-600"
                 onClick={() => {
                   setModalValue(!modalValue)
                   setIdValue(data.id)
                 }}
               >
                 <div className="flex lg:gap-6 gap-4 flex-1">
-                  <div className="w-[100px] text-gray-800 text-sm font-semibold font-['Pretendard']">
+                  <div className="w-[100px] text-gray-800 text-sm font-semibold font-['Pretendard'] text-left">
                     {data.name}
                   </div>
-                  <div className="lg:w-[160px] w-[130px] text-gray-800 text-sm font-semibold font-['Pretendard']">
+                  <div className="lg:w-[160px] w-[130px] text-gray-800 text-sm font-semibold font-['Pretendard'] text-left">
                     {data.phone.slice(0, 3)}-{data.phone.slice(3, 7)}-
                     {data.phone.slice(7, 11)}
                   </div>
-                  <div className="xl:flex-1 lg:w-[100px] flex-1 text-gray-800 text-sm font-semibold font-['Pretendard']">
+                  <div className="xl:flex-1 lg:w-[100px] flex-1 text-gray-800 text-sm font-semibold font-['Pretendard'] text-left">
                     {data.className}
                   </div>
-                  <div className="xl:w-[400px] lg:flex-1 w-[200px] text-gray-900 text-base font-normal font-['Pretendard']">
+                  <div className="xl:w-[400px] lg:flex-1 w-[200px] text-gray-900 text-base font-normal font-['Pretendard'] text-left">
                     {data.particulars}
                   </div>
                 </div>
-              </div>
+              </button>
             )
           })}
         </div>
