@@ -35,7 +35,6 @@ export default function InstructorPage() {
     observer: IntersectionObserver
   ) => {
     if (entry.isIntersecting) {
-      console.log(entry)
       observer.unobserve(entry.target)
       setScrollCount(prev => prev + 1)
     }

@@ -30,42 +30,45 @@ export interface postVarType {
 }
 
 export default function StudentPage() {
+  const inputRef = useRef<HTMLInputElement>(null)
   let target: HTMLElement | null = document.getElementById('test')
-  let options = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 1.0
-  }
-  const callback = (entries: IntersectionObserverEntry[]) => {
-    entries.forEach((entry: IntersectionObserverEntry) => {
-      if (entry.isIntersecting) {
-        observer.unobserve(entry.target)
-        setInfiniteScrollCount(page => page + 1)
-      }
-    })
-  }
-
-  const observer = new IntersectionObserver(callback, options)
-  if (target) observer.observe(target)
 
   const [studentData, setStudentData] = useState<studentType[]>([])
-  const [postVariable, setPostVariable] = useState<postVarType>({
+  const [postVar, setPostVar] = useState<postVarType>({
     page: '',
     cursor: '',
     hasNextPage: true
   })
   const [refresh, setRefresh] = useState<boolean>(false)
-
-  const [infiniteScrollCount, setInfiniteScrollCount] = useState(0)
+  const [scrollCount, setScrollCount] = useState(0)
   const [loading, setLoading] = useState(false)
   const [inputValue, setInputValue] = useState<string>('')
 
+  let options = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 1.0
+  }
+  const handleObserver = (
+    [entry]: IntersectionObserverEntry[],
+    observer: IntersectionObserver
+  ) => {
+    if (entry.isIntersecting) {
+      observer.unobserve(entry.target)
+      setScrollCount(prev => prev + 1)
+    }
+  }
+
+  const observer = new IntersectionObserver(handleObserver, options)
+  postVar.hasNextPage && target && observer.observe(target)
+
   const getStudentData = (page?: string, cursor?: string) => {
-    if (page && cursor) {
+    if (inputValue !== '') {
+      const searchBy = inputRef.current?.name as string
       instance
         .get(
-          `/students?searchBy=none&page=${postVariable.page + 1}&cursor=${
-            postVariable.cursor
+          `/students?searchBy=${searchBy}&page=${postVar.page + 1}&cursor=${
+            postVar.cursor
           }`
         )
         .then((res: AxiosResponse) => {
@@ -74,19 +77,20 @@ export default function StudentPage() {
             ...preStudentData,
             ...res.data.data.students
           ])
-          setPostVariable((prePostVariable: postVarType) => ({
+          setPostVar((prePostVariable: postVarType) => ({
             ...prePostVariable,
             page: res.data.data.meta.page,
             cursor: res.data.data.students[cursorIndex].id,
             hasNextPage: res.data.data.meta.hasNextPage
           }))
         })
-        .finally(() => {
-          setLoading(false)
-        })
     } else {
       instance
-        .get('/students?searchBy=none&page=1')
+        .get(
+          `/students?searchBy=none&page=${postVar.page + 1}&curosr=${
+            postVar.cursor
+          }`
+        )
         .then((res: AxiosResponse) => {
           if (res.data.data.students.length !== 0) {
             let cursorIndex = res.data.data.students.length - 1
@@ -94,7 +98,7 @@ export default function StudentPage() {
               ...preStudentData,
               ...res.data.data.students
             ])
-            setPostVariable((prePostVariable: postVarType) => ({
+            setPostVar((prePostVariable: postVarType) => ({
               ...prePostVariable,
               page: res.data.data.meta.page,
               cursor: res.data.data.students[cursorIndex].id,
@@ -102,30 +106,6 @@ export default function StudentPage() {
             }))
           }
         })
-        .finally(() => {
-          setRefresh(true)
-        })
-    }
-  }
-  const getStudentDataBynameOrPhone = (value: string) => {
-    if (Number(value)) {
-      instance
-        .get(`/students?searchBy=phone&phone=${value}`)
-        .then((res: AxiosResponse) => {
-          setStudentData(res.data.data.students)
-          setPostVariable({
-            ...postVariable,
-            hasNextPage: res.data.data.meta.hasNextPage
-          })
-        })
-    } else {
-      instance.get(`/students?searchBy=name&name=${value}`).then(res => {
-        setStudentData(res.data.data.students)
-        setPostVariable({
-          ...postVariable,
-          hasNextPage: res.data.data.meta.hasNextPage
-        })
-      })
     }
   }
 
@@ -133,29 +113,34 @@ export default function StudentPage() {
     setInputValue(event.target.value)
   }
 
-  async function searchClick() {
-    getStudentDataBynameOrPhone(inputValue)
+  const searchClick = () => {
+    const searchBy = inputRef.current?.name as string
+    SearchFeat('students', searchBy, inputValue).then(res => {
+      setStudentData(res.students)
+      if (res.meta.hasNextPage) {
+        const lastId = res.teachers.length - 1
+        setPostVar({
+          ...postVar,
+          page: res.meta.page,
+          cursor: res.teachers[lastId].id,
+          hasNextPage: res.meta.hasNextPage
+        })
+      } else {
+        setPostVar(prePostVar => ({
+          ...prePostVar,
+          hasNextPage: false
+        }))
+      }
+    })
   }
 
-  function preventDashAndPressEnter(
-    event: React.KeyboardEvent<HTMLInputElement>
-  ) {
-    const forbidden = ['-']
-
-    if (forbidden.includes(event.key)) {
-      event.preventDefault()
-    }
-    if (event.key == 'Enter') {
-      searchClick()
-    }
-  }
-  function onClickX() {
+  const onClickInputRefresh = () => {
     setInputValue('')
     instance.get('/students?searchBy=none&page=1').then(res => {
       if (res.data.data.students.length !== 0) {
         let cursorIndex = res.data.data.students.length - 1
         setStudentData(res.data.data.students)
-        setPostVariable((prePostVariable: postVarType) => ({
+        setPostVar((prePostVariable: postVarType) => ({
           ...prePostVariable,
           page: res.data.data.meta.page,
           cursor: res.data.data.students[cursorIndex].id,
@@ -207,16 +192,32 @@ export default function StudentPage() {
   }
 
   useEffect(() => {
-    if (infiniteScrollCount === 0) {
-      getStudentData()
-    }
-    if (infiniteScrollCount > 0 && postVariable.hasNextPage && !loading) {
+    instance.get(`/students?searchBy=none`).then((res: AxiosResponse) => {
+      if (res.data.data.students.length !== 0) {
+        let cursorIndex = res.data.data.students.length - 1
+        setStudentData((preStudentData: studentType[]) => [
+          ...preStudentData,
+          ...res.data.data.students
+        ])
+        setPostVar((prePostVariable: postVarType) => ({
+          ...prePostVariable,
+          page: res.data.data.meta.page,
+          cursor: res.data.data.students[cursorIndex].id,
+          hasNextPage: res.data.data.meta.hasNextPage
+        }))
+      }
+    })
+  }, [])
+
+  /* useEffect(() => {
+    if (scrollCount === 0 && postVar.hasNextPage) {
       setLoading(true)
       setTimeout(() => {
-        getStudentData(postVariable.page, postVariable.cursor)
+        getStudentData()
+        setLoading(false)
       }, 500)
     }
-  }, [infiniteScrollCount])
+  }, [scrollCount]) */
 
   const [modalValue, setModalValue] = useRecoilState(modalState)
   const [idValue, setIdValue] = useRecoilState(idState)
@@ -249,8 +250,10 @@ export default function StudentPage() {
         <div className="lg:w-[325px] lg:gap-2.5 w-[280px] flex gap-2 px-4 lg:py-3 py-2 rounded-lg outline outline-1 outline-gray-300 focus-within:outline-[#563AC0]">
           <Image src={search_16} width={16} height={16} alt=" " />
           <input
+            ref={inputRef}
             className="w-[245px] border-none ring-0 focus:ring-0"
             placeholder="Search"
+            name={checkInputType() ? 'name' : 'phone'}
             type={checkInputType() ? 'text' : 'number'}
             value={inputValue}
             onChange={onChangeInput}
@@ -264,7 +267,7 @@ export default function StudentPage() {
             width={12}
             height={12}
             alt=" "
-            onClick={onClickX}
+            onClick={onClickInputRefresh}
           />
         </div>
 
@@ -337,7 +340,7 @@ export default function StudentPage() {
           </div>
         </div>
       )}
-      {postVariable.hasNextPage ? <div id="test"></div> : null}
+      {!loading ? <div id="test"></div> : null}
     </div>
   )
 }
