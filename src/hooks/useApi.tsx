@@ -40,7 +40,6 @@ export const fetchApi = async (url: string, method: string, data?: any) => {
         },
         body: JSON.stringify(data)
       })
-
       if (!res1.ok) {
         throw new Error('error')
       }
@@ -52,7 +51,6 @@ export const fetchApi = async (url: string, method: string, data?: any) => {
           authorization: `Bearer ${refreshToken}`
         }
       })
-
       const tokenData = res2.json()
 
       return tokenData
