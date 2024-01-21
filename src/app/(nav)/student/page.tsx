@@ -1,6 +1,7 @@
 'use client'
 
 import plusCircle from '@/assets/icon/plus-circle.svg'
+
 import search_16 from '../../../assets/icon/search.svg'
 import x_icon_12 from '../../../assets/icon/x_icon_12.svg'
 import search_20 from '../../../assets/icon/search_20.svg'
@@ -14,7 +15,6 @@ import { idState, modalState } from '@/state/modal'
 import instance from '@/hooks/useAxios'
 import { AxiosResponse, AxiosError } from 'axios'
 import SearchFeat from '@/components/SearchFeat'
-
 
 interface studentType {
   id: string
@@ -144,6 +144,7 @@ export default function StudentPage() {
     const forbidden = ['-']
 
     if (forbidden.includes(event.key)) {
+
       event.preventDefault()
     }
     if (event.key == 'Enter') {
@@ -224,6 +225,7 @@ export default function StudentPage() {
 
   return (
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-[60px]">
+
       {/* 수강생 관리 + 수강생 등록 버튼 */}
       <div className="flex w-full pt-12 mb-[30px] justify-between">
         <div className=" h-[30px]">
@@ -231,7 +233,6 @@ export default function StudentPage() {
             수강생 관리
           </div>
         </div>
-
         <Link
           href={'class/register'}
           className="Button flex flex-row px-5 py-2.5 btn-purple text-sm"

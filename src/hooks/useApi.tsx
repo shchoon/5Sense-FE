@@ -51,7 +51,6 @@ export const fetchApi = async (url: string, method: string, data?: any) => {
           authorization: `Bearer ${refreshToken}`
         }
       })
-      
       const tokenData = res2.json()
 
       return tokenData
