@@ -23,8 +23,12 @@ module.exports = {
           color: 'white',
           fontWeight: '600',
           cursor: 'pointer',
+          border: '3px solid transparent',
           '&:hover': {
             backgroundColor: '#563AC0'
+          },
+          '&:active': {
+            border: '3px solid #D3C4F9'
           }
         },
         '.btn-line-purple': {
@@ -59,6 +63,24 @@ module.exports = {
           '&:focus': {
             outline: 'none',
             border: '1px #5539C0 solid',
+            boxShadow: 'none' //textarea default로 shadow 존재
+          }
+        },
+        'input-instructor-register': {
+          paddingLeft: 12,
+          paddingRight: 12,
+          paddingBottom: 20,
+          paddingTop: 20,
+          border: '1px #E5E7EB solid',
+          borderRadius: 8,
+          cursor: 'pointer',
+          '&:placeholder': {
+            color: '#9CA3AF',
+            fontWeight: '400'
+          },
+          '&:focus': {
+            outline: 'none',
+            border: '1px #563AC0 solid',
             boxShadow: 'none' //textarea default로 shadow 존재
           }
         }

@@ -1,5 +1,7 @@
 'use client'
-import plusCircle from '../../../assets/icon/plus-circle.svg'
+
+import plusCircle from '@/assets/icon/plus-circle.svg'
+
 import search_16 from '../../../assets/icon/search.svg'
 import x_icon_12 from '../../../assets/icon/x_icon_12.svg'
 import search_20 from '../../../assets/icon/search_20.svg'
@@ -8,6 +10,11 @@ import Image from 'next/image'
 import { fetchApi } from '@/hooks/useApi'
 import { useState, useEffect, useRef, use } from 'react'
 import Link from 'next/link'
+import { useRecoilState, useSetRecoilState } from 'recoil'
+import { idState, modalState } from '@/state/modal'
+import instance from '@/hooks/useAxios'
+import { AxiosResponse, AxiosError } from 'axios'
+import SearchFeat from '@/components/SearchFeat'
 
 interface studentType {
   id: string
@@ -30,32 +37,6 @@ export default function StudentPage() {
     rootMargin: '0px',
     threshold: 1.0
   }
-
-  // function getMoreData() {
-  //   fetchApi(
-  //     `/students?searchBy=none&page=${postVariable.page + 1}&cursor=${
-  //       postVariable.cursor
-  //     }`,
-  //     'GET'
-  //   )
-  //     .then(result => {
-  //       let cursorIndex = result.data.students.length - 1
-  //       setStudentData((preStudentData: studentType[]) => [
-  //         ...preStudentData,
-  //         ...result.data.students
-  //       ])
-  //       setPostVariable((prePostVariable: postVariableType) => ({
-  //         ...prePostVariable,
-  //         page: result.data.meta.page,
-  //         cursor: result.data.students[cursorIndex].id,
-  //         hasNextPage: result.data.meta.hasNextPage
-  //       }))
-  //     })
-  //     .finally(() => {
-  //       setLoading(false)
-  //     })
-  // }
-
   const callback = (entries: IntersectionObserverEntry[]) => {
     entries.forEach((entry: IntersectionObserverEntry) => {
       if (entry.isIntersecting) {
@@ -68,101 +49,102 @@ export default function StudentPage() {
   const observer = new IntersectionObserver(callback, options)
   if (target) observer.observe(target)
 
-  let [studentData, setStudentData] = useState<studentType[]>([])
-  let [postVariable, setPostVariable] = useState<postVariableType>({
+  const [studentData, setStudentData] = useState<studentType[]>([])
+  const [postVariable, setPostVariable] = useState<postVariableType>({
     page: '',
     cursor: '',
     hasNextPage: true
   })
-  let [infiniteScrollCount, setInfiniteScrollCount] = useState(0)
-  let [loading, setLoading] = useState(false)
+  const [refresh, setRefresh] = useState<boolean>(false)
 
-  let [searchInput, setSearchInput] = useState<any>('')
+  const [infiniteScrollCount, setInfiniteScrollCount] = useState(0)
+  const [loading, setLoading] = useState(false)
+  const [inputValue, setInputValue] = useState<string>('')
 
-  // useEffect(() => {
-  //   fetchApi('/students?searchBy=none', 'GET').then(result => {
-  //     let cursorIndex = result.data.students.length - 1
-  //     console.log(cursorIndex)
-  //     setStudentData((preStudentData: studentType[]) => [
-  //       ...preStudentData,
-  //       ...result.data.students
-  //     ])
-  //     setPostVariable((prePostVariable: postVariableType) => ({
-  //       ...prePostVariable,
-  //       page: result.data.meta.page,
-  //       cursor: result.data.students[cursorIndex].id,
-  //       hasNextPage: result.data.meta.hasNextPage
-  //     }))
-  //   })
-  // }, [])
+  const getStudentData = (page?: string, cursor?: string) => {
+    if (page && cursor) {
+      instance
+        .get(
+          `/students?searchBy=none&page=${postVariable.page + 1}&cursor=${
+            postVariable.cursor
+          }`
+        )
+        .then((res: AxiosResponse) => {
+          let cursorIndex = res.data.data.students.length - 1
+          setStudentData((preStudentData: studentType[]) => [
+            ...preStudentData,
+            ...res.data.data.students
+          ])
+          setPostVariable((prePostVariable: postVariableType) => ({
+            ...prePostVariable,
+            page: res.data.data.meta.page,
+            cursor: res.data.data.students[cursorIndex].id,
+            hasNextPage: res.data.data.meta.hasNextPage
+          }))
+        })
+        .finally(() => {
+          setLoading(false)
+        })
+    } else {
+      instance
+        .get('/students?searchBy=none&page=1')
+        .then((res: AxiosResponse) => {
+          if (res.data.data.students.length !== 0) {
+            let cursorIndex = res.data.data.students.length - 1
+            setStudentData((preStudentData: studentType[]) => [
+              ...preStudentData,
+              ...res.data.data.students
+            ])
+            setPostVariable((prePostVariable: postVariableType) => ({
+              ...prePostVariable,
+              page: res.data.data.meta.page,
+              cursor: res.data.data.students[cursorIndex].id,
+              hasNextPage: res.data.data.meta.hasNextPage
+            }))
+          }
+        })
+        .finally(() => {
+          setRefresh(true)
+        })
+    }
+  }
+  const getStudentDataBynameOrPhone = (value: string) => {
+    if (Number(value)) {
+      instance
+        .get(`/students?searchBy=phone&phone=${value}`)
+        .then((res: AxiosResponse) => {
+          setStudentData(res.data.data.students)
+          setPostVariable({
+            ...postVariable,
+            hasNextPage: res.data.data.meta.hasNextPage
+          })
+        })
+    } else {
+      instance.get(`/students?searchBy=name&name=${value}`).then(res => {
+        setStudentData(res.data.data.students)
+        setPostVariable({
+          ...postVariable,
+          hasNextPage: res.data.data.meta.hasNextPage
+        })
+      })
+    }
+  }
 
-  // useEffect(() => {
-  //   if (infiniteScrollCount > 0 && postVariable.hasNextPage && !loading) {
-  //     setLoading(true)
-  //     setTimeout(() => {
-  //       getMoreData()
-  //     }, 500)
-  //   }
-  // }, [infiniteScrollCount])
-
-  function onChangeInput(event: any) {
-    setSearchInput(event.target.value)
+  const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value)
   }
 
   async function searchClick() {
-    console.log(searchInput)
-    if (isNaN(searchInput)) {
-      let res = await fetchApi(
-        `/students?searchBy=name&name=${searchInput}`,
-        'GET'
-      )
-
-      setStudentData(res.data.students)
-      setPostVariable({
-        ...postVariable,
-        hasNextPage: res.data.meta.hasNextPage
-      })
-      /* if (res.data.students.length !== 0) {
-        setStudentData(res.data.students)
-        setPostVariable({
-          ...postVariable,
-          hasNextPage: res.data.meta.hasNextPage
-        })
-      } else {
-        setStudentData(res.data.students)
-        setPostVariable({
-          ...postVariable,
-          hasNextPage: res.data.meta.hasNextPage
-        })
-      } */
-    } else {
-      let res = await fetchApi(
-        `/students?searchBy=phone&phone=${searchInput}`,
-        'GET'
-      )
-      setStudentData(res.data.students)
-      setPostVariable({
-        ...postVariable,
-        hasNextPage: res.data.meta.hasNextPage
-      })
-      /* if (res.data.students.length !== 0) {
-        setStudentData(res.data.students)
-        setPostVariable({
-          ...postVariable,
-          hasNextPage: res.data.meta.hasNextPage
-        })
-      } else {
-        setStudentData(res.data.students)
-        setPostVariable({
-          ...postVariable,
-          hasNextPage: res.data.meta.hasNextPage
-        })
-      } */
-    }
+    getStudentDataBynameOrPhone(inputValue)
   }
-  function preventDashAndPressEnter(event: any) {
-    /* dash(-)의 event.which가 189 */
-    if (event.which === 189) {
+
+  function preventDashAndPressEnter(
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) {
+    const forbidden = ['-']
+
+    if (forbidden.includes(event.key)) {
+
       event.preventDefault()
     }
     if (event.key == 'Enter') {
@@ -170,25 +152,80 @@ export default function StudentPage() {
     }
   }
   function onClickX() {
-    setSearchInput('')
-    fetchApi('/students?searchBy=none', 'GET').then(result => {
-      let cursorIndex = result.data.students.length - 1
-      console.log(cursorIndex)
-      setStudentData((preStudentData: studentType[]) => [
-        ...preStudentData,
-        ...result.data.students
-      ])
-      setPostVariable((prePostVariable: postVariableType) => ({
-        ...prePostVariable,
-        page: result.data.meta.page,
-        cursor: result.data.students[cursorIndex].id,
-        hasNextPage: result.data.meta.hasNextPage
-      }))
+    setInputValue('')
+    instance.get('/students?searchBy=none&page=1').then(res => {
+      if (res.data.data.students.length !== 0) {
+        let cursorIndex = res.data.data.students.length - 1
+        setStudentData(res.data.data.students)
+        setPostVariable((prePostVariable: postVariableType) => ({
+          ...prePostVariable,
+          page: res.data.data.meta.page,
+          cursor: res.data.data.students[cursorIndex].id,
+          hasNextPage: res.data.data.meta.hasNextPage
+        }))
+      }
     })
   }
 
+  const checkInputType = () => {
+    const checkList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    if (inputValue !== '' && checkList.includes(inputValue[0])) {
+      return false
+    } else {
+      return true
+    }
+  }
+
+  const allowOnlyNum = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    let regex = /^[a-zA-Z]+$/
+    const forbiddenKeys = ['-', 'e', 'ArrowUp', 'ArrowDown']
+    const checkList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    if (
+      forbiddenKeys.includes(e.key) ||
+      e.currentTarget.value.length > 12 ||
+      (e.currentTarget.value.length === 12 && e.key !== 'Backspace')
+    ) {
+      e.preventDefault()
+    }
+    if (regex.test(e.key) && e.key !== 'Backspace' && e.key !== 'Enter') {
+      alert('이름과 전화번호를 동시에 검색할 수 없습니다. 각각 입력해주세요.')
+    }
+    if (e.key == 'Enter') {
+      searchClick()
+    }
+  }
+
+  const preventInputDifferentType = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    const checkList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    if (inputValue !== '' && checkList.includes(e.key)) {
+      e.preventDefault()
+      alert('이름과 전화번호를 동시에 검색할 수 없습니다. 각각 입력해주세요.')
+    }
+    if (e.key == 'Enter') {
+      searchClick()
+    }
+  }
+
+  useEffect(() => {
+    if (infiniteScrollCount === 0) {
+      getStudentData()
+    }
+    if (infiniteScrollCount > 0 && postVariable.hasNextPage && !loading) {
+      setLoading(true)
+      setTimeout(() => {
+        getStudentData(postVariable.page, postVariable.cursor)
+      }, 500)
+    }
+  }, [infiniteScrollCount])
+
+  const [modalValue, setModalValue] = useRecoilState(modalState)
+  const [idValue, setIdValue] = useRecoilState(idState)
+
   return (
-    <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6">
+    <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-[60px]">
+
       {/* 수강생 관리 + 수강생 등록 버튼 */}
       <div className="flex w-full pt-12 mb-[30px] justify-between">
         <div className=" h-[30px]">
@@ -196,14 +233,18 @@ export default function StudentPage() {
             수강생 관리
           </div>
         </div>
-
-        <Link href={'/student/register'}>
-          <div className="flex gap-2 items-center w-[132px] h-[41px] rounded-lg px-5 py-2.5 bg-primary-600  cursor-pointer">
-            <Image src={plusCircle} width={20} height={20} alt=" " />
-            <div className="h-[21px] w-16 text-white text-[11.5px] font-semibold font-['Pretendard'] leading-[21px]">
-              수강생 등록
-            </div>
-          </div>
+        <Link
+          href={'class/register'}
+          className="Button flex flex-row px-5 py-2.5 btn-purple text-sm"
+        >
+          <Image
+            src={plusCircle}
+            alt="plus"
+            width={20}
+            height={20}
+            className="mr-2"
+          />
+          수강생 등록
         </Link>
       </div>
       {/* 검색창 */}
@@ -211,11 +252,14 @@ export default function StudentPage() {
         <div className="lg:w-[325px] lg:gap-2.5 w-[280px] flex gap-2 px-4 lg:py-3 py-2 rounded-lg outline outline-1 outline-gray-300 focus-within:outline-[#563AC0]">
           <Image src={search_16} width={16} height={16} alt=" " />
           <input
-            className="w-[245px] focus:outline-none"
+            className="w-[245px] border-none ring-0 focus:ring-0"
             placeholder="Search"
-            value={searchInput}
+            type={checkInputType() ? 'text' : 'number'}
+            value={inputValue}
             onChange={onChangeInput}
-            onKeyDown={preventDashAndPressEnter}
+            onKeyDown={
+              checkInputType() ? preventInputDifferentType : allowOnlyNum
+            }
           />
           <Image
             className="cursor-pointer"
@@ -253,7 +297,7 @@ export default function StudentPage() {
         </div>
         {/* 수강생 목록 시작 */}
         <div className="w-full flex flex-col gap-[14px]">
-          {searchInput !== '' && studentData.length == 0 ? (
+          {refresh && studentData.length === 0 ? (
             <div className="flex w-full h-screen justify-center items-center">
               <div className="flex flex-col gap-6 w-[432px] h-[244px]">
                 <Image
@@ -278,7 +322,11 @@ export default function StudentPage() {
             return (
               <div
                 key={i}
-                className="w-full flex lg:gap-10 gap-8 lg:p-7 p-6 outline rounded-md outline-1 outline-gray-200 shadow-[0_5px_15px_0px_rgba(0,0,0,0.02)]"
+                className="w-full flex lg:gap-10 gap-8 lg:p-7 p-6 outline rounded-md outline-1 outline-gray-200 shadow-[0_5px_15px_0px_rgba(0,0,0,0.02)] cursor-pointer"
+                onClick={() => {
+                  setModalValue(!modalValue)
+                  setIdValue(data.id)
+                }}
               >
                 <div className="flex lg:gap-6 gap-4 flex-1">
                   <div className="w-[100px] text-gray-800 text-sm font-semibold font-['Pretendard']">
@@ -312,7 +360,7 @@ export default function StudentPage() {
           </div>
         </div>
       )}
-      <div id="test"></div>
+      {postVariable.hasNextPage ? <div id="test"></div> : null}
     </div>
   )
 }
