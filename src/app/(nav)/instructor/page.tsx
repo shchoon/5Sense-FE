@@ -149,8 +149,21 @@ export default function InstructorPage() {
       }
     })
   }
-  function onClickX() {
+  const onClickInputRefresh = () => {
     setInputValue('')
+    instance.get('/teachers?searchBy=none').then((res: AxiosResponse) => {
+      setInstructorData(res.data.data.teachers)
+      const lastTeacherId = res.data.data.teachers.length - 1
+      if (res.data.data.meta.hasNextPage) {
+        setPostVar(postVar => ({
+          ...postVar,
+          page: res.data.data.meta.page,
+          cursor: res.data.data.teachers[lastTeacherId].id,
+          hasNextPage: res.data.data.meta.hasNextPage
+        }))
+      }
+      setRefresh(true)
+    })
   }
 
   const modalClick = () => {
@@ -240,7 +253,7 @@ export default function InstructorPage() {
             width={12}
             height={12}
             alt=" "
-            onClick={onClickX}
+            onClick={onClickInputRefresh}
           />
         </div>
 
