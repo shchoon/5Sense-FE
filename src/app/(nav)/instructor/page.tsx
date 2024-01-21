@@ -207,7 +207,6 @@ export default function InstructorPage() {
             강사 관리
           </div>
         </div>
-
         <div
           className="flex gap-2 items-center w-[132px] h-[41px] rounded-lg px-5 py-2.5 btn-purple"
           onClick={modalClick}
@@ -243,7 +242,6 @@ export default function InstructorPage() {
             onClick={onClickX}
           />
         </div>
-
         <div className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer">
           <Image src={search_20} width={20} height={20} alt=" " />
         </div>
