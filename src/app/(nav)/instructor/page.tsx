@@ -13,6 +13,7 @@ import { useRecoilState } from 'recoil'
 import { instructorRegisterModal } from '@/state/modal'
 import SearchFeat from '@/components/SearchFeat'
 import { useRef } from 'react'
+import { postVarType } from '../student/page'
 
 export default function InstructorPage() {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -25,10 +26,9 @@ export default function InstructorPage() {
   const [modalValue, setModalValue] = useRecoilState(instructorRegisterModal)
 
   const [inputValue, setInputValue] = useState<any>('')
-  const [postVar, setPostVar] = useState({
+  const [postVar, setPostVar] = useState<postVarType>({
     page: '',
-    cursor: '',
-    hasNextPage: true
+    hasNextPage: false
   })
   const handleObserver = (
     [entry]: IntersectionObserverEntry[],
@@ -69,16 +69,13 @@ export default function InstructorPage() {
           }`
         )
         .then((res: AxiosResponse) => {
-          console.log(res)
           setInstructorData((preStudentData: any) => [
             ...preStudentData,
             ...res.data.data.teachers
           ])
-          let index = res.data.data.teachers.length - 1
           setPostVar(prePostVar => ({
             ...prePostVar,
             page: res.data.data.meta.page,
-            cursor: res.data.data.teachers[index].id,
             hasNextPage: res.data.data.meta.hasNextPage
           }))
         })
@@ -86,16 +83,13 @@ export default function InstructorPage() {
       instance
         .get(`/teachers?searchBy=none&page=${postVar.page + 1}`)
         .then((res: AxiosResponse) => {
-          console.log(inputRef.current)
           setInstructorData((preStudentData: any) => [
             ...preStudentData,
             ...res.data.data.teachers
           ])
-          let index = res.data.data.teachers.length - 1
           setPostVar(prePostVar => ({
             ...prePostVar,
             page: res.data.data.meta.page,
-            cursor: res.data.data.teachers[index].id,
             hasNextPage: res.data.data.meta.hasNextPage
           }))
         })
@@ -106,12 +100,10 @@ export default function InstructorPage() {
     if (!modalValue) {
       instance.get('/teachers?searchBy=none').then((res: AxiosResponse) => {
         setInstructorData(res.data.data.teachers)
-        const lastTeacherId = res.data.data.teachers.length - 1
         if (res.data.data.meta.hasNextPage) {
           setPostVar(postVar => ({
             ...postVar,
             page: res.data.data.meta.page,
-            cursor: res.data.data.teachers[lastTeacherId].id,
             hasNextPage: res.data.data.meta.hasNextPage
           }))
         }
@@ -120,20 +112,18 @@ export default function InstructorPage() {
     }
   }, [modalValue])
 
-  function onChangeInput(event: any) {
+  const onChangeInput = (event: any) => {
     setInputValue(event.target.value)
   }
 
-  function searchClick() {
+  const searchClick = () => {
     const searchBy = inputRef.current?.name as string
     SearchFeat('teachers', searchBy, inputValue).then(res => {
       setInstructorData(res.teachers)
       if (res.meta.hasNextPage) {
-        const lastId = res.teachers.length - 1
         setPostVar({
           ...postVar,
           page: res.meta.page,
-          cursor: res.teachers[lastId].id,
           hasNextPage: res.meta.hasNextPage
         })
       } else {
@@ -148,12 +138,10 @@ export default function InstructorPage() {
     setInputValue('')
     instance.get('/teachers?searchBy=none').then((res: AxiosResponse) => {
       setInstructorData(res.data.data.teachers)
-      const lastTeacherId = res.data.data.teachers.length - 1
       if (res.data.data.meta.hasNextPage) {
         setPostVar(postVar => ({
           ...postVar,
           page: res.data.data.meta.page,
-          cursor: res.data.data.teachers[lastTeacherId].id,
           hasNextPage: res.data.data.meta.hasNextPage
         }))
       }
