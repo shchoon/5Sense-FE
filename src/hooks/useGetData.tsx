@@ -9,12 +9,6 @@ export async function useGetData(
   searchBy?: string,
   inputValue?: string
 ) {
-  //const [getData, setGetData] = useState()
-  /* const [postVar, setPostVar] = useState<postVarType>({
-    page: '',
-    cursor: '',
-    hasNextPage: true
-  }) */
   if (searchBy) {
     const res = await instance(
       `/${type}?searchBy=${searchBy}&${searchBy}=${inputValue}&page=${page}`
@@ -26,21 +20,4 @@ export async function useGetData(
     const data = res.data.data
     return { data: data[`${type}`], meta: data.meta }
   }
-
-  /* setGetData(data.students)
-  if (data.meta.hasNextPage) {
-    let cursorIndex = data.students.length - 1
-    setPostVar(prePostVariable => ({
-      ...prePostVariable,
-      page: data.meta.page,
-      cursor: data.students[cursorIndex].id,
-      hasNextPage: data.meta.hasNextPage
-    }))
-  } else {
-    setPostVar(prePostVar => ({
-      ...prePostVar,
-      hasNextPage: false
-    }))
-  }
-  return [getData, postVar] */
 }
