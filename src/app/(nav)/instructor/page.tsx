@@ -35,7 +35,6 @@ export default function InstructorPage() {
     observer: IntersectionObserver
   ) => {
     if (entry.isIntersecting) {
-      console.log(entry)
       observer.unobserve(entry.target)
       setScrollCount(prev => prev + 1)
     }
@@ -67,7 +66,7 @@ export default function InstructorPage() {
         .get(
           `/teachers?searchBy=${searchBy}&phone=${inputValue}&page=${
             postVar.page + 1
-          }&cursor=${postVar.cursor}`
+          }`
         )
         .then((res: AxiosResponse) => {
           console.log(res)
@@ -85,11 +84,7 @@ export default function InstructorPage() {
         })
     } else {
       instance
-        .get(
-          `/teachers?searchBy=none&page=${postVar.page + 1}&cursor=${
-            postVar.cursor
-          }`
-        )
+        .get(`/teachers?searchBy=none&page=${postVar.page + 1}`)
         .then((res: AxiosResponse) => {
           console.log(inputRef.current)
           setInstructorData((preStudentData: any) => [

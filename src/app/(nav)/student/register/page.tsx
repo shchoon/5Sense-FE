@@ -123,10 +123,7 @@ export default function StudentRegister() {
             </button>
           </div>
           {/* 등록 버튼 */}
-          <button
-            type="submit"
-            className="w-full py-3.5 btn-purple focus:ring-1 focus:ring-primary-200"
-          >
+          <button type="submit" className="w-full py-3.5 btn-purple">
             <div className="text-white text-base font-semibold font-['Pretendard'] leading-normal">
               등록하기
             </div>

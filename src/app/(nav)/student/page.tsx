@@ -1,13 +1,9 @@
 'use client'
-
 import plusCircle from '@/assets/icon/plus-circle.svg'
-
 import search_16 from '../../../assets/icon/search.svg'
 import x_icon_12 from '../../../assets/icon/x_icon_12.svg'
 import search_20 from '../../../assets/icon/search_20.svg'
-import noneResult from '../../../assets/icon/noneResult.svg'
 import Image from 'next/image'
-import { fetchApi } from '@/hooks/useApi'
 import { useState, useEffect, useRef, use } from 'react'
 import Link from 'next/link'
 import { useRecoilState, useSetRecoilState } from 'recoil'
@@ -15,6 +11,7 @@ import { idState, modalState } from '@/state/modal'
 import instance from '@/hooks/useAxios'
 import { AxiosResponse, AxiosError } from 'axios'
 import SearchFeat from '@/components/SearchFeat'
+import NoneResult from '@/components/NoneResult'
 
 interface studentType {
   id: string
@@ -26,107 +23,77 @@ interface studentType {
 
 export interface postVarType {
   page: string
-  cursor: string
   hasNextPage: boolean
 }
 
 export default function StudentPage() {
+  const inputRef = useRef<HTMLInputElement>(null)
   let target: HTMLElement | null = document.getElementById('test')
+
+  const [studentData, setStudentData] = useState<studentType[]>([])
+  const [postVar, setPostVar] = useState<postVarType>({
+    page: '',
+    hasNextPage: false
+  })
+  const [refresh, setRefresh] = useState<boolean>(false)
+  const [scrollCount, setScrollCount] = useState(0)
+  const [loading, setLoading] = useState(false)
+  const [inputValue, setInputValue] = useState<string>('')
+
   let options = {
     root: null,
     rootMargin: '0px',
     threshold: 1.0
   }
-  const callback = (entries: IntersectionObserverEntry[]) => {
-    entries.forEach((entry: IntersectionObserverEntry) => {
-      if (entry.isIntersecting) {
-        observer.unobserve(entry.target)
-        setInfiniteScrollCount(page => page + 1)
-      }
-    })
+  const handleObserver = (
+    [entry]: IntersectionObserverEntry[],
+    observer: IntersectionObserver
+  ) => {
+    if (entry.isIntersecting) {
+      observer.unobserve(entry.target)
+      setScrollCount(prev => prev + 1)
+    }
   }
 
-  const observer = new IntersectionObserver(callback, options)
-  if (target) observer.observe(target)
-
-  const [studentData, setStudentData] = useState<studentType[]>([])
-  const [postVariable, setPostVariable] = useState<postVarType>({
-    page: '',
-    cursor: '',
-    hasNextPage: true
-  })
-  const [refresh, setRefresh] = useState<boolean>(false)
-
-  const [infiniteScrollCount, setInfiniteScrollCount] = useState(0)
-  const [loading, setLoading] = useState(false)
-  const [inputValue, setInputValue] = useState<string>('')
-
-  const getStudentData = (page?: string, cursor?: string) => {
-    if (page && cursor) {
+  const observer = new IntersectionObserver(handleObserver, options)
+  postVar.hasNextPage && target && observer.observe(target)
+  console.log(postVar.hasNextPage, target)
+  const getStudentData = (page?: string) => {
+    if (inputValue !== '') {
+      const searchBy = inputRef.current?.name as string
       instance
         .get(
-          `/students?searchBy=none&page=${postVariable.page + 1}&cursor=${
-            postVariable.cursor
+          `/students?searchBy=${searchBy}&${searchBy}=${inputValue}&page=${
+            postVar.page + 1
           }`
         )
         .then((res: AxiosResponse) => {
-          let cursorIndex = res.data.data.students.length - 1
           setStudentData((preStudentData: studentType[]) => [
             ...preStudentData,
             ...res.data.data.students
           ])
-          setPostVariable((prePostVariable: postVarType) => ({
+          setPostVar((prePostVariable: postVarType) => ({
             ...prePostVariable,
             page: res.data.data.meta.page,
-            cursor: res.data.data.students[cursorIndex].id,
             hasNextPage: res.data.data.meta.hasNextPage
           }))
         })
-        .finally(() => {
-          setLoading(false)
-        })
     } else {
       instance
-        .get('/students?searchBy=none&page=1')
+        .get(`/students?searchBy=none&page=${postVar.page + 1}`)
         .then((res: AxiosResponse) => {
           if (res.data.data.students.length !== 0) {
-            let cursorIndex = res.data.data.students.length - 1
             setStudentData((preStudentData: studentType[]) => [
               ...preStudentData,
               ...res.data.data.students
             ])
-            setPostVariable((prePostVariable: postVarType) => ({
+            setPostVar((prePostVariable: postVarType) => ({
               ...prePostVariable,
               page: res.data.data.meta.page,
-              cursor: res.data.data.students[cursorIndex].id,
               hasNextPage: res.data.data.meta.hasNextPage
             }))
           }
         })
-        .finally(() => {
-          setRefresh(true)
-        })
-    }
-  }
-  const getStudentDataBynameOrPhone = (value: string) => {
-    if (Number(value)) {
-      instance
-        .get(`/students?searchBy=phone&phone=${value}`)
-        .then((res: AxiosResponse) => {
-          setStudentData(res.data.data.students)
-          setPostVariable({
-            ...postVariable,
-            hasNextPage: res.data.data.meta.hasNextPage
-          })
-        })
-    } else {
-      instance.get(`/students?searchBy=name&name=${value}`).then(res => {
-        setStudentData(res.data.data.students)
-        setPostVariable({
-          ...postVariable,
-          hasNextPage: res.data.data.meta.hasNextPage
-        })
-      })
     }
   }
 
@@ -134,33 +101,33 @@ export default function StudentPage() {
     setInputValue(event.target.value)
   }
 
-  async function searchClick() {
-    getStudentDataBynameOrPhone(inputValue)
+  const searchClick = () => {
+    const searchBy = inputRef.current?.name as string
+    SearchFeat('students', searchBy, inputValue).then(res => {
+      setStudentData(res.students)
+      if (res.meta.hasNextPage) {
+        setPostVar({
+          ...postVar,
+          page: res.meta.page,
+          hasNextPage: res.meta.hasNextPage
+        })
+      } else {
+        setPostVar(prePostVar => ({
+          ...prePostVar,
+          hasNextPage: false
+        }))
+      }
+    })
   }
 
-  function preventDashAndPressEnter(
-    event: React.KeyboardEvent<HTMLInputElement>
-  ) {
-    const forbidden = ['-']
-
-    if (forbidden.includes(event.key)) {
-
-      event.preventDefault()
-    }
-    if (event.key == 'Enter') {
-      searchClick()
-    }
-  }
-  function onClickX() {
+  const onClickInputRefresh = () => {
     setInputValue('')
     instance.get('/students?searchBy=none&page=1').then(res => {
       if (res.data.data.students.length !== 0) {
-        let cursorIndex = res.data.data.students.length - 1
         setStudentData(res.data.data.students)
-        setPostVariable((prePostVariable: postVarType) => ({
+        setPostVar((prePostVariable: postVarType) => ({
           ...prePostVariable,
           page: res.data.data.meta.page,
-          cursor: res.data.data.students[cursorIndex].id,
           hasNextPage: res.data.data.meta.hasNextPage
         }))
       }
@@ -209,23 +176,36 @@ export default function StudentPage() {
   }
 
   useEffect(() => {
-    if (infiniteScrollCount === 0) {
-      getStudentData()
-    }
-    if (infiniteScrollCount > 0 && postVariable.hasNextPage && !loading) {
+    instance.get(`/students?searchBy=none`).then((res: AxiosResponse) => {
+      if (res.data.data.students.length !== 0) {
+        setStudentData((preStudentData: studentType[]) => [
+          ...preStudentData,
+          ...res.data.data.students
+        ])
+        setPostVar((prePostVariable: postVarType) => ({
+          ...prePostVariable,
+          page: res.data.data.meta.page,
+          hasNextPage: res.data.data.meta.hasNextPage
+        }))
+      }
+    })
+  }, [])
+
+  useEffect(() => {
+    if (scrollCount !== 0 && postVar.hasNextPage) {
       setLoading(true)
       setTimeout(() => {
-        getStudentData(postVariable.page, postVariable.cursor)
+        getStudentData()
+        setLoading(false)
       }, 500)
     }
-  }, [infiniteScrollCount])
+  }, [scrollCount])
 
   const [modalValue, setModalValue] = useRecoilState(modalState)
   const [idValue, setIdValue] = useRecoilState(idState)
 
   return (
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-[60px]">
-
       {/* 수강생 관리 + 수강생 등록 버튼 */}
       <div className="flex w-full pt-12 mb-[30px] justify-between">
         <div className=" h-[30px]">
@@ -234,7 +214,7 @@ export default function StudentPage() {
           </div>
         </div>
         <Link
-          href={'class/register'}
+          href={'student/register'}
           className="Button flex flex-row px-5 py-2.5 btn-purple text-sm"
         >
           <Image
@@ -252,8 +232,10 @@ export default function StudentPage() {
         <div className="lg:w-[325px] lg:gap-2.5 w-[280px] flex gap-2 px-4 lg:py-3 py-2 rounded-lg outline outline-1 outline-gray-300 focus-within:outline-[#563AC0]">
           <Image src={search_16} width={16} height={16} alt=" " />
           <input
+            ref={inputRef}
             className="w-[245px] border-none ring-0 focus:ring-0"
             placeholder="Search"
+            name={checkInputType() ? 'name' : 'phone'}
             type={checkInputType() ? 'text' : 'number'}
             value={inputValue}
             onChange={onChangeInput}
@@ -267,7 +249,7 @@ export default function StudentPage() {
             width={12}
             height={12}
             alt=" "
-            onClick={onClickX}
+            onClick={onClickInputRefresh}
           />
         </div>
 
@@ -297,59 +279,39 @@ export default function StudentPage() {
         </div>
         {/* 수강생 목록 시작 */}
         <div className="w-full flex flex-col gap-[14px]">
-          {refresh && studentData.length === 0 ? (
-            <div className="flex w-full h-screen justify-center items-center">
-              <div className="flex flex-col gap-6 w-[432px] h-[244px]">
-                <Image
-                  className="mx-auto"
-                  src={noneResult}
-                  width={148}
-                  height={148}
-                  alt=" "
-                />
-                <div className="w-full flex flex-col gap-3">
-                  <div className="w-[432px] text-center text-gray-900 text-2xl font-bold font-['Pretendard'] leading-9">
-                    검색결과가 없습니다.
-                  </div>
-                  <div className="w-[432px] text-center text-gray-400 text-base font-medium font-['Pretendard'] leading-normal">
-                    다른 검색어를 통해 검색을 이어나가보세요
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : null}
+          {refresh && studentData.length === 0 ? <NoneResult /> : null}
           {studentData?.map((data: studentType, i: number) => {
             return (
-              <div
+              <button
                 key={i}
-                className="w-full flex lg:gap-10 gap-8 lg:p-7 p-6 outline rounded-md outline-1 outline-gray-200 shadow-[0_5px_15px_0px_rgba(0,0,0,0.02)] cursor-pointer"
+                className="w-full flex lg:gap-10 gap-8 lg:p-7 p-6 outline rounded-md outline-1 outline-gray-200 shadow-[0_5px_15px_0px_rgba(0,0,0,0.02)] hover:outline-primary-600"
                 onClick={() => {
                   setModalValue(!modalValue)
                   setIdValue(data.id)
                 }}
               >
                 <div className="flex lg:gap-6 gap-4 flex-1">
-                  <div className="w-[100px] text-gray-800 text-sm font-semibold font-['Pretendard']">
+                  <div className="w-[100px] text-gray-800 text-sm font-semibold font-['Pretendard'] text-left">
                     {data.name}
                   </div>
-                  <div className="lg:w-[160px] w-[130px] text-gray-800 text-sm font-semibold font-['Pretendard']">
+                  <div className="lg:w-[160px] w-[130px] text-gray-800 text-sm font-semibold font-['Pretendard'] text-left">
                     {data.phone.slice(0, 3)}-{data.phone.slice(3, 7)}-
                     {data.phone.slice(7, 11)}
                   </div>
-                  <div className="xl:flex-1 lg:w-[100px] flex-1 text-gray-800 text-sm font-semibold font-['Pretendard']">
+                  <div className="xl:flex-1 lg:w-[100px] flex-1 text-gray-800 text-sm font-semibold font-['Pretendard'] text-left">
                     {data.className}
                   </div>
-                  <div className="xl:w-[400px] lg:flex-1 w-[200px] text-gray-900 text-base font-normal font-['Pretendard']">
+                  <div className="xl:w-[400px] lg:flex-1 w-[200px] text-gray-900 text-base font-normal font-['Pretendard'] text-left">
                     {data.particulars}
                   </div>
                 </div>
-              </div>
+              </button>
             )
           })}
         </div>
       </div>
       {loading && (
-        <div className="w-full h-14 flex justify-center items-center">
+        <div className="w-full h-14 flex justify-center items-center pt-[50px]">
           <div
             className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
             role="status"
@@ -360,7 +322,7 @@ export default function StudentPage() {
           </div>
         </div>
       )}
-      {postVariable.hasNextPage ? <div id="test"></div> : null}
+      {!loading ? <div id="test"></div> : null}
     </div>
   )
 }
