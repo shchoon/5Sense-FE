@@ -12,6 +12,7 @@ import instance from '@/hooks/useAxios'
 import { AxiosResponse, AxiosError } from 'axios'
 import SearchFeat from '@/components/SearchFeat'
 import NoneResult from '@/components/NoneResult'
+import { useGetData } from '@/hooks/useGetData'
 
 interface studentType {
   id: string
@@ -63,43 +64,28 @@ export default function StudentPage() {
 
   const observer = new IntersectionObserver(handleObserver, options)
   postVar.hasNextPage && target && observer.observe(target)
-  console.log(postVar.hasNextPage, target)
-  const getStudentData = (page?: string) => {
+
+  const getStudentListToScroll = async () => {
     if (inputValue !== '') {
       const searchBy = inputRef.current?.name as string
-      instance
-        .get(
-          `/students?searchBy=${searchBy}&${searchBy}=${inputValue}&page=${
-            postVar.page + 1
-          }`
-        )
-        .then((res: AxiosResponse) => {
-          setStudentData((preStudentData: studentType[]) => [
-            ...preStudentData,
-            ...res.data.data.students
-          ])
-          setPostVar((prePostVariable: postVarType) => ({
-            ...prePostVariable,
-            page: res.data.data.meta.page,
-            hasNextPage: res.data.data.meta.hasNextPage
-          }))
-        })
+      const res = await useGetData(
+        'students',
+        postVar.page + 1,
+        searchBy,
+        inputValue
+      )
+      setStudentData((preStudentData: getDataType[]) => [
+        ...preStudentData,
+        ...res.data
+      ])
+      setPostVar((prePostVar: postVarType) => res.meta)
     } else {
-      instance
-        .get(`/students?searchBy=none&page=${postVar.page + 1}`)
-        .then((res: AxiosResponse) => {
-          if (res.data.data.students.length !== 0) {
-            setStudentData((preStudentData: studentType[]) => [
-              ...preStudentData,
-              ...res.data.data.students
-            ])
-            setPostVar((prePostVariable: postVarType) => ({
-              ...prePostVariable,
-              page: res.data.data.meta.page,
-              hasNextPage: res.data.data.meta.hasNextPage
-            }))
-          }
-        })
+      const res = await useGetData('students', postVar.page + 1)
+      setStudentData((preStudentData: getDataType[]) => [
+        ...preStudentData,
+        ...res.data
+      ])
+      setPostVar((prePostVar: postVarType) => res.meta)
     }
   }
 
@@ -107,37 +93,18 @@ export default function StudentPage() {
     setInputValue(event.target.value)
   }
 
-  const searchClick = () => {
+  const searchClick = async () => {
     const searchBy = inputRef.current?.name as string
-    SearchFeat('students', searchBy, inputValue).then(res => {
-      setStudentData(res.students)
-      if (res.meta.hasNextPage) {
-        setPostVar({
-          ...postVar,
-          page: res.meta.page,
-          hasNextPage: res.meta.hasNextPage
-        })
-      } else {
-        setPostVar(prePostVar => ({
-          ...prePostVar,
-          hasNextPage: false
-        }))
-      }
-    })
+    const res = await useGetData('students', 1, searchBy, inputValue)
+    setStudentData((preStudentData: getDataType[]) => [...res.data])
+    setPostVar((prePostVar: postVarType) => res.meta)
   }
 
-  const onClickInputRefresh = () => {
+  const onClickInputRefresh = async () => {
     setInputValue('')
-    instance.get('/students?searchBy=none&page=1').then(res => {
-      if (res.data.data.students.length !== 0) {
-        setStudentData(res.data.data.students)
-        setPostVar((prePostVariable: postVarType) => ({
-          ...prePostVariable,
-          page: res.data.data.meta.page,
-          hasNextPage: res.data.data.meta.hasNextPage
-        }))
-      }
-    })
+    const res = await useGetData('students', 1)
+    setStudentData(res.data)
+    setPostVar((prePostVar: postVarType) => res.meta)
   }
 
   const checkInputType = () => {
@@ -152,7 +119,6 @@ export default function StudentPage() {
   const allowOnlyNum = (e: React.KeyboardEvent<HTMLInputElement>) => {
     let regex = /^[a-zA-Z]+$/
     const forbiddenKeys = ['-', 'e', 'ArrowUp', 'ArrowDown']
-    const checkList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     if (
       forbiddenKeys.includes(e.key) ||
       e.currentTarget.value.length > 12 ||
@@ -182,18 +148,10 @@ export default function StudentPage() {
   }
 
   useEffect(() => {
-    instance.get(`/students?searchBy=none`).then((res: AxiosResponse) => {
-      if (res.data.data.students.length !== 0) {
-        setStudentData((preStudentData: studentType[]) => [
-          ...preStudentData,
-          ...res.data.data.students
-        ])
-        setPostVar((prePostVariable: postVarType) => ({
-          ...prePostVariable,
-          page: res.data.data.meta.page,
-          hasNextPage: res.data.data.meta.hasNextPage
-        }))
-      }
+    useGetData('students', 1).then(res => {
+      setStudentData((preInstructorData: getDataType[]) => [...res.data])
+      setPostVar((prePostVar: postVarType) => res.meta)
+      setRefresh(true)
     })
   }, [])
 
@@ -201,7 +159,7 @@ export default function StudentPage() {
     if (scrollCount !== 0 && postVar.hasNextPage) {
       setLoading(true)
       setTimeout(() => {
-        getStudentData()
+        getStudentListToScroll()
         setLoading(false)
       }, 500)
     }

@@ -6,8 +6,6 @@ import search_20 from '../../../assets/icon/search_20.svg'
 import chevronRight from '../../../assets/icon/chevron_right_20.svg'
 import NoneResult from '@/components/NoneResult'
 import Image from 'next/image'
-import instance from '@/hooks/useAxios'
-import { AxiosResponse } from 'axios'
 import { useState, useEffect, useCallback } from 'react'
 import { useRecoilState } from 'recoil'
 import { instructorRegisterModal } from '@/state/modal'
@@ -82,7 +80,7 @@ export default function InstructorPage() {
       setPostVar(prePostVar => res.meta)
     }
   }
-  console.log(postVar)
+
   useEffect(() => {
     if (!modalValue) {
       useGetData('teachers', 1).then(res => {
