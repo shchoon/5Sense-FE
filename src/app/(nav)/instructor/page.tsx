@@ -11,9 +11,9 @@ import { AxiosResponse } from 'axios'
 import { useState, useEffect, useCallback } from 'react'
 import { useRecoilState } from 'recoil'
 import { instructorRegisterModal } from '@/state/modal'
-import SearchFeat from '@/components/SearchFeat'
+import { useGetData } from '@/hooks/useGetData'
 import { useRef } from 'react'
-import { postVarType } from '../student/page'
+import { postVarType, getDataType } from '../student/page'
 
 export default function InstructorPage() {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -27,7 +27,7 @@ export default function InstructorPage() {
 
   const [inputValue, setInputValue] = useState<any>('')
   const [postVar, setPostVar] = useState<postVarType>({
-    page: '',
+    page: 1,
     hasNextPage: false
   })
   const handleObserver = (
@@ -53,60 +53,41 @@ export default function InstructorPage() {
     if (scrollCount !== 0 && postVar.hasNextPage) {
       setLoading(true)
       setTimeout(() => {
-        getInstructorList()
+        getInstructorListToScroll()
         setLoading(false)
       }, 500)
     }
   }, [scrollCount])
 
-  const getInstructorList = () => {
+  const getInstructorListToScroll = async () => {
     if (inputValue !== '') {
       const searchBy = inputRef.current?.name as string
-      instance
-        .get(
-          `/teachers?searchBy=${searchBy}&phone=${inputValue}&page=${
-            postVar.page + 1
-          }`
-        )
-        .then((res: AxiosResponse) => {
-          setInstructorData((preStudentData: any) => [
-            ...preStudentData,
-            ...res.data.data.teachers
-          ])
-          setPostVar(prePostVar => ({
-            ...prePostVar,
-            page: res.data.data.meta.page,
-            hasNextPage: res.data.data.meta.hasNextPage
-          }))
-        })
+      const res = await useGetData(
+        'teachers',
+        postVar.page + 1,
+        searchBy,
+        inputValue
+      )
+      setInstructorData((preInstructorData: getDataType[]) => [
+        ...preInstructorData,
+        ...res.data
+      ])
+      setPostVar(prePostVar => res.meta)
     } else {
-      instance
-        .get(`/teachers?searchBy=none&page=${postVar.page + 1}`)
-        .then((res: AxiosResponse) => {
-          setInstructorData((preStudentData: any) => [
-            ...preStudentData,
-            ...res.data.data.teachers
-          ])
-          setPostVar(prePostVar => ({
-            ...prePostVar,
-            page: res.data.data.meta.page,
-            hasNextPage: res.data.data.meta.hasNextPage
-          }))
-        })
+      const res = await useGetData('teachers', postVar.page + 1)
+      setInstructorData((preInstructorData: getDataType[]) => [
+        ...preInstructorData,
+        ...res.data
+      ])
+      setPostVar(prePostVar => res.meta)
     }
   }
-
+  console.log(postVar)
   useEffect(() => {
     if (!modalValue) {
-      instance.get('/teachers?searchBy=none').then((res: AxiosResponse) => {
-        setInstructorData(res.data.data.teachers)
-        if (res.data.data.meta.hasNextPage) {
-          setPostVar(postVar => ({
-            ...postVar,
-            page: res.data.data.meta.page,
-            hasNextPage: res.data.data.meta.hasNextPage
-          }))
-        }
+      useGetData('teachers', 1).then(res => {
+        setInstructorData((preInstructorData: getDataType[]) => [...res.data])
+        setPostVar(prePostVar => res.meta)
         setRefresh(true)
       })
     }
@@ -116,37 +97,19 @@ export default function InstructorPage() {
     setInputValue(event.target.value)
   }
 
-  const searchClick = () => {
+  const searchClick = async () => {
     const searchBy = inputRef.current?.name as string
-    SearchFeat('teachers', searchBy, inputValue).then(res => {
-      setInstructorData(res.teachers)
-      if (res.meta.hasNextPage) {
-        setPostVar({
-          ...postVar,
-          page: res.meta.page,
-          hasNextPage: res.meta.hasNextPage
-        })
-      } else {
-        setPostVar(prePostVar => ({
-          ...prePostVar,
-          hasNextPage: false
-        }))
-      }
-    })
+    const res = await useGetData('teachers', 1, searchBy, inputValue)
+    setInstructorData((preInstructorData: getDataType[]) => [...res.data])
+    setPostVar(prePostVar => res.meta)
+    console.log(res)
   }
-  const onClickInputRefresh = () => {
+  const onClickInputRefresh = async () => {
     setInputValue('')
-    instance.get('/teachers?searchBy=none').then((res: AxiosResponse) => {
-      setInstructorData(res.data.data.teachers)
-      if (res.data.data.meta.hasNextPage) {
-        setPostVar(postVar => ({
-          ...postVar,
-          page: res.data.data.meta.page,
-          hasNextPage: res.data.data.meta.hasNextPage
-        }))
-      }
-      setRefresh(true)
-    })
+    const res = await useGetData('teachers', 1)
+    setInstructorData((preInstructorData: getDataType[]) => [...res.data])
+    setPostVar(prePostVar => res.meta)
+    setRefresh(true)
   }
 
   const modalClick = () => {
