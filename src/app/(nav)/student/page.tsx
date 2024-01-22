@@ -3,9 +3,7 @@ import plusCircle from '@/assets/icon/plus-circle.svg'
 import search_16 from '../../../assets/icon/search.svg'
 import x_icon_12 from '../../../assets/icon/x_icon_12.svg'
 import search_20 from '../../../assets/icon/search_20.svg'
-import noneResult from '../../../assets/icon/noneResult.svg'
 import Image from 'next/image'
-import { fetchApi } from '@/hooks/useApi'
 import { useState, useEffect, useRef, use } from 'react'
 import Link from 'next/link'
 import { useRecoilState, useSetRecoilState } from 'recoil'
@@ -25,7 +23,6 @@ interface studentType {
 
 export interface postVarType {
   page: string
-  cursor: string
   hasNextPage: boolean
 }
 
@@ -36,8 +33,7 @@ export default function StudentPage() {
   const [studentData, setStudentData] = useState<studentType[]>([])
   const [postVar, setPostVar] = useState<postVarType>({
     page: '',
-    cursor: '',
-    hasNextPage: true
+    hasNextPage: false
   })
   const [refresh, setRefresh] = useState<boolean>(false)
   const [scrollCount, setScrollCount] = useState(0)
@@ -61,18 +57,17 @@ export default function StudentPage() {
 
   const observer = new IntersectionObserver(handleObserver, options)
   postVar.hasNextPage && target && observer.observe(target)
-
-  const getStudentData = (page?: string, cursor?: string) => {
+  console.log(postVar.hasNextPage, target)
+  const getStudentData = (page?: string) => {
     if (inputValue !== '') {
       const searchBy = inputRef.current?.name as string
       instance
         .get(
-          `/students?searchBy=${searchBy}&page=${postVar.page + 1}&cursor=${
-            postVar.cursor
+          `/students?searchBy=${searchBy}&${searchBy}=${inputValue}&page=${
+            postVar.page + 1
           }`
         )
         .then((res: AxiosResponse) => {
-          let cursorIndex = res.data.data.students.length - 1
           setStudentData((preStudentData: studentType[]) => [
             ...preStudentData,
             ...res.data.data.students
@@ -80,20 +75,14 @@ export default function StudentPage() {
           setPostVar((prePostVariable: postVarType) => ({
             ...prePostVariable,
             page: res.data.data.meta.page,
-            cursor: res.data.data.students[cursorIndex].id,
             hasNextPage: res.data.data.meta.hasNextPage
           }))
         })
     } else {
       instance
-        .get(
-          `/students?searchBy=none&page=${postVar.page + 1}&curosr=${
-            postVar.cursor
-          }`
-        )
+        .get(`/students?searchBy=none&page=${postVar.page + 1}`)
         .then((res: AxiosResponse) => {
           if (res.data.data.students.length !== 0) {
-            let cursorIndex = res.data.data.students.length - 1
             setStudentData((preStudentData: studentType[]) => [
               ...preStudentData,
               ...res.data.data.students
@@ -101,7 +90,6 @@ export default function StudentPage() {
             setPostVar((prePostVariable: postVarType) => ({
               ...prePostVariable,
               page: res.data.data.meta.page,
-              cursor: res.data.data.students[cursorIndex].id,
               hasNextPage: res.data.data.meta.hasNextPage
             }))
           }
@@ -118,11 +106,9 @@ export default function StudentPage() {
     SearchFeat('students', searchBy, inputValue).then(res => {
       setStudentData(res.students)
       if (res.meta.hasNextPage) {
-        const lastId = res.teachers.length - 1
         setPostVar({
           ...postVar,
           page: res.meta.page,
-          cursor: res.teachers[lastId].id,
           hasNextPage: res.meta.hasNextPage
         })
       } else {
@@ -138,12 +124,10 @@ export default function StudentPage() {
     setInputValue('')
     instance.get('/students?searchBy=none&page=1').then(res => {
       if (res.data.data.students.length !== 0) {
-        let cursorIndex = res.data.data.students.length - 1
         setStudentData(res.data.data.students)
         setPostVar((prePostVariable: postVarType) => ({
           ...prePostVariable,
           page: res.data.data.meta.page,
-          cursor: res.data.data.students[cursorIndex].id,
           hasNextPage: res.data.data.meta.hasNextPage
         }))
       }
@@ -194,7 +178,6 @@ export default function StudentPage() {
   useEffect(() => {
     instance.get(`/students?searchBy=none`).then((res: AxiosResponse) => {
       if (res.data.data.students.length !== 0) {
-        let cursorIndex = res.data.data.students.length - 1
         setStudentData((preStudentData: studentType[]) => [
           ...preStudentData,
           ...res.data.data.students
@@ -202,22 +185,21 @@ export default function StudentPage() {
         setPostVar((prePostVariable: postVarType) => ({
           ...prePostVariable,
           page: res.data.data.meta.page,
-          cursor: res.data.data.students[cursorIndex].id,
           hasNextPage: res.data.data.meta.hasNextPage
         }))
       }
     })
   }, [])
 
-  /* useEffect(() => {
-    if (scrollCount === 0 && postVar.hasNextPage) {
+  useEffect(() => {
+    if (scrollCount !== 0 && postVar.hasNextPage) {
       setLoading(true)
       setTimeout(() => {
         getStudentData()
         setLoading(false)
       }, 500)
     }
-  }, [scrollCount]) */
+  }, [scrollCount])
 
   const [modalValue, setModalValue] = useRecoilState(modalState)
   const [idValue, setIdValue] = useRecoilState(idState)
@@ -329,7 +311,7 @@ export default function StudentPage() {
         </div>
       </div>
       {loading && (
-        <div className="w-full h-14 flex justify-center items-center">
+        <div className="w-full h-14 flex justify-center items-center pt-[50px]">
           <div
             className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
             role="status"
