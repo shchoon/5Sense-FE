@@ -22,8 +22,14 @@ interface studentType {
 }
 
 export interface postVarType {
-  page: string
+  page: number
   hasNextPage: boolean
+}
+
+export interface getDataType {
+  id: string
+  name: string
+  phone: string
 }
 
 export default function StudentPage() {
@@ -32,7 +38,7 @@ export default function StudentPage() {
 
   const [studentData, setStudentData] = useState<studentType[]>([])
   const [postVar, setPostVar] = useState<postVarType>({
-    page: '',
+    page: 1,
     hasNextPage: false
   })
   const [refresh, setRefresh] = useState<boolean>(false)

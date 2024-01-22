@@ -3,10 +3,11 @@ import instance from '@/hooks/useAxios'
 import { useState } from 'react'
 import { postVarType } from '@/app/(nav)/student/page'
 
-export async function useSearchFeat(
+export async function useGetData(
   type: string,
-  searchBy: string,
-  inputValue: string
+  page?: number,
+  searchBy?: string,
+  inputValue?: string
 ) {
   //const [getData, setGetData] = useState()
   /* const [postVar, setPostVar] = useState<postVarType>({
@@ -14,12 +15,18 @@ export async function useSearchFeat(
     cursor: '',
     hasNextPage: true
   }) */
-  const res = await instance(
-    `/${type}?searchBy=${searchBy}&${searchBy}=${inputValue}`
-  )
+  if (searchBy) {
+    const res = await instance(
+      `/${type}?searchBy=${searchBy}&${searchBy}=${inputValue}&page=${page}`
+    )
+    const data = res.data.data
+    return { data: data[`${type}`], meta: data.meta }
+  } else {
+    const res = await instance(`/${type}?searchBy=none&page=${page}`)
+    const data = res.data.data
+    return { data: data[`${type}`], meta: data.meta }
+  }
 
-  const data = res.data.data
-  return data
   /* setGetData(data.students)
   if (data.meta.hasNextPage) {
     let cursorIndex = data.students.length - 1
