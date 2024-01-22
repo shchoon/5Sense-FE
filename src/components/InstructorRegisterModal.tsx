@@ -70,6 +70,10 @@ export default function () {
       onSubmit={e => {
         e.preventDefault()
         const data = postData
+        if (postData.name === '' && postData.phone === '') {
+          alert('강사정보를 올바르게 입려해주세요.')
+          return
+        }
         instance.post('/teachers', data).then((res: AxiosResponse) => {
           setModal(false)
         })
