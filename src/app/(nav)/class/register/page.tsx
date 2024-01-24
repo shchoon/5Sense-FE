@@ -2,9 +2,11 @@
 
 import Category from '@/components/class/register/Category'
 import ClassType from '@/components/class/register/ClassType'
-import ClassFilter from '@/components/classFilter/classFilter'
-import InputForm, { InputFormProps } from '@/components/InputForm'
-import TextareaForm, { TextareaFormProps } from '@/components/TextareaForm'
+import ClassFilter from '@/components/class/classFilter/classFilter'
+import InputForm, { InputFormProps } from '@/components/common/InputForm'
+import TextareaForm, {
+  TextareaFormProps
+} from '@/components/common/TextareaForm'
 import { ChangeEvent, useEffect, useState } from 'react'
 
 export type category = {

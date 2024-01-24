@@ -1,16 +1,10 @@
 'use client'
-
 import { useSelect } from '@/hooks/useSelect'
 import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { getMonth, getYear, getDate } from 'date-fns'
-
-import plus from '@/assets/icons/plus-circle.svg'
 import calendaricon from '@/assets/icons/calendar-month.svg'
-
-import minus from '@/assets/icon/minus-circle.svg'
-
+import minus from '@/assets/icons/minus-circle.svg'
 import Schedule from './Calendar'
-
 import Calendar from './Calendar'
 import Image from 'next/image'
 

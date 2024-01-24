@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
-import ArrowBack from '../../../assets/icon/allowBack.svg'
-import Ellipsis from '../../../assets/icon/ellipsis75.svg'
+import ArrowBack from '../../../assets/icons/allowBack.svg'
+import Ellipsis from '../../../assets/icons/ellipsis75.svg'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 

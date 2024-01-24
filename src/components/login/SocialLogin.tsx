@@ -1,9 +1,8 @@
 import '../app/globals.css'
 import Image from 'next/image'
-import kakaoLogo from '../assets/logo/kakaoLogo.svg'
-import naverLogo from '../assets/logo/naverLogo.svg'
-import googleLogo from '../assets/logo/googleLogo.svg'
-import appleLogo from '../assets/logo/appleLogo.svg'
+import kakaoLogo from '@/assets/logo/kakaoLogo.svg'
+import naverLogo from '@/assets/logo/naverLogo.svg'
+import googleLogo from '@/assets/logo/googleLogo.svg'
 import Script from 'next/script'
 import { useRouter } from 'next/navigation'
 

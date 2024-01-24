@@ -1,5 +1,7 @@
 'use client'
-import TextareaForm, { TextareaFormProps } from '@/components/TextareaForm'
+import TextareaForm, {
+  TextareaFormProps
+} from '@/components/common/TextareaForm'
 import { useState } from 'react'
 
 export default function WithDrawal() {

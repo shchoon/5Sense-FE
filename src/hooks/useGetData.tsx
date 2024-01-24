@@ -5,7 +5,7 @@ import { postVarType } from '@/app/(nav)/student/page'
 
 export async function useGetData(
   type: string,
-  page?: number,
+  page: number,
   searchBy?: string,
   inputValue?: string
 ) {

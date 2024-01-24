@@ -1,5 +1,5 @@
 import { ClassInfo } from '@/app/(nav)/class/register/page'
-import { InputFormProps, InputProps } from '@/components/InputForm'
+import { InputFormProps, InputProps } from '@/components/common/InputForm'
 import { ChangeEvent, SetStateAction, useState } from 'react'
 
 export function useInput({
