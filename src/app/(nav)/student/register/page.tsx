@@ -83,7 +83,7 @@ export default function StudentRegister() {
             alt=""
           />
         </Link>
-        <div className="absolute left-[92px] top-[60px] black-bold text-3xl font-['Pretendard'] leading-[30px]">
+        <div className="absolute left-[92px] top-[60px] black-bold text-3xl font-['Pretendard']">
           수강생 등록
         </div>
       </div>
@@ -91,7 +91,7 @@ export default function StudentRegister() {
         <form className="flex flex-col gap-5" onSubmit={studentRigister}>
           {/* 수강생 정보 등록 */}
           <div className="flex flex-col gap-10 w-[640px] px-6 py-8 border rounded-xl border-gray-200">
-            <div className="gray-900-bold text-xl font-['Pretendard'] leading-tight">
+            <div className="gray-900-bold text-xl font-['Pretendard']">
               수강생 정보
             </div>
             <div className="flex flex-col gap-4 w-full">
@@ -114,19 +114,19 @@ export default function StudentRegister() {
           </div>
           {/* 클래스 등록 */}
           <div className="flex flex-col gap-10 w-[640px] px-6 py-8 border rounded-xl border-gray-200">
-            <div className="gray-900-bold text-xl font-['Pretendard'] leading-tight">
+            <div className="gray-900-bold text-xl font-['Pretendard']">
               클래스 목록
             </div>
             <button className="flex justify-center gap-2 w-full px-6 py-3.5 border rounded-lg border-primary-600">
               <Image src={PlusCircle} width={24} height={24} alt="" />
-              <div className="text-base font-semibold text-primary-600 font-['Pretendard'] leading-normal">
+              <div className="text-base font-semibold text-primary-600 font-['Pretendard']">
                 클래스 추가
               </div>
             </button>
           </div>
           {/* 등록 버튼 */}
           <button type="submit" className="w-full py-3.5 btn-purple">
-            <div className="text-white text-base font-semibold font-['Pretendard'] leading-normal">
+            <div className="text-white text-base font-semibold font-['Pretendard']">
               등록하기
             </div>
           </button>

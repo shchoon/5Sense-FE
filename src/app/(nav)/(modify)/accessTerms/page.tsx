@@ -1,11 +1,9 @@
 export default function Accessterms() {
   return (
     <div className="w-[640px] px-6 py-8 flex flex-col gap-10 border rounded-xl border-gray-200">
-      <div className="text-gray-900 text-xl font-bold font-['Pretendard'] leading-tight">
-        이용약관
-      </div>
+      <div className="gray-900-bold text-xl font-['Pretendard']">이용약관</div>
       <div className="w-full flex flex-col gap-6">
-        <div className="w-[592px] text-black text-sm font-normal font-['Pretendard'] leading-[21px]">
+        <div className="w-[592px] text-black text-sm font-normal font-['Pretendard']">
           1. 개인정보처리방침이란?
           <br />
           주식회사 헤이컬렉티브(이하"회사")는 이용자의 ‘동의를 기반으로
@@ -29,7 +27,7 @@ export default function Accessterms() {
           어플리케이션이나 프로그램 등을 통해 아래와 같은 서비스 제공을 위해
           필요한 최소한의 개인정보를 수집하고 있습니다.
         </div>
-        <div className="w-[592px] text-black text-sm font-normal font-['Pretendard'] leading-[21px]">
+        <div className="w-[592px] text-black text-sm font-normal font-['Pretendard']">
           1. 개인정보처리방침이란?
           <br />
           주식회사 헤이컬렉티브(이하"회사")는 이용자의 ‘동의를 기반으로
@@ -53,7 +51,7 @@ export default function Accessterms() {
           어플리케이션이나 프로그램 등을 통해 아래와 같은 서비스 제공을 위해
           필요한 최소한의 개인정보를 수집하고 있습니다.
         </div>
-        <div className="w-[592px] text-black text-sm font-normal font-['Pretendard'] leading-[21px]">
+        <div className="w-[592px] text-black text-sm font-normal font-['Pretendard']">
           1. 개인정보처리방침이란?
           <br />
           주식회사 헤이컬렉티브(이하"회사")는 이용자의 ‘동의를 기반으로

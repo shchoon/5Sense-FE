@@ -58,12 +58,16 @@
     @apply text-gray-900 font-semibold;
   }
 
-  .gray-900-400 {
-    @apply text-gray-900 font-[400];
+  .gray-900-normal {
+    @apply text-gray-900 font-normal;
   }
 
   .gray-800-semibold {
     @apply text-gray-800 font-semibold;
+  }
+
+  .gray-600-normal {
+    @apply text-gray-600 font-normal
   }
 
   .gray-500-medium {

@@ -86,7 +86,7 @@ export default function DayDateTab() {
             </div>
             <div className="w-full px-3 py-2 flex justify-center gap-2 items-center">
               <Image src={calender} width={18} height={18} alt=" " />
-              <span className="text-gray-900 text-base font-semibold font-['Pretendard'] leading-normal">
+              <span className="gray-900-semibold text-base font-['Pretendard']">
                 {dateData.year}년 {dateData.month}월 {dateData.date}일
               </span>
             </div>

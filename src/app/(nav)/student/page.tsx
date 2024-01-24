@@ -32,9 +32,9 @@ export interface getDataType {
 
 export default function StudentPage() {
   const inputRef = useRef<HTMLInputElement>(null)
-  let target: HTMLElement | null = document.getElementById('test')
+  const target: HTMLElement | null = document.getElementById('test')
 
-  const [studentData, setStudentData] = useState<studentType[]>([])
+  const [studentList, setStudentList] = useState<studentType[]>([])
   const [postVar, setPostVar] = useState<postVarType>({
     page: 1,
     hasNextPage: false
@@ -43,6 +43,8 @@ export default function StudentPage() {
   const [scrollCount, setScrollCount] = useState(0)
   const [loading, setLoading] = useState(false)
   const [inputValue, setInputValue] = useState<string>('')
+  const [modalValue, setModalValue] = useRecoilState(modalState)
+  const [idValue, setIdValue] = useRecoilState(idState)
 
   let options = {
     root: null,
@@ -71,14 +73,14 @@ export default function StudentPage() {
         searchBy,
         inputValue
       )
-      setStudentData((preStudentData: getDataType[]) => [
+      setStudentList((preStudentData: getDataType[]) => [
         ...preStudentData,
         ...res.data
       ])
       setPostVar((prePostVar: postVarType) => res.meta)
     } else {
       const res = await useGetData('students', postVar.page + 1)
-      setStudentData((preStudentData: getDataType[]) => [
+      setStudentList((preStudentData: getDataType[]) => [
         ...preStudentData,
         ...res.data
       ])
@@ -93,14 +95,14 @@ export default function StudentPage() {
   const searchClick = async () => {
     const searchBy = inputRef.current?.name as string
     const res = await useGetData('students', 1, searchBy, inputValue)
-    setStudentData((preStudentData: getDataType[]) => [...res.data])
+    setStudentList((preStudentData: getDataType[]) => [...res.data])
     setPostVar((prePostVar: postVarType) => res.meta)
   }
 
   const onClickInputRefresh = async () => {
     setInputValue('')
     const res = await useGetData('students', 1)
-    setStudentData(res.data)
+    setStudentList(res.data)
     setPostVar((prePostVar: postVarType) => res.meta)
   }
 
@@ -146,7 +148,7 @@ export default function StudentPage() {
 
   useEffect(() => {
     useGetData('students', 1).then(res => {
-      setStudentData((preInstructorData: getDataType[]) => [...res.data])
+      setStudentList((preInstructorData: getDataType[]) => [...res.data])
       setPostVar((prePostVar: postVarType) => res.meta)
       setRefresh(true)
     })
@@ -162,21 +164,18 @@ export default function StudentPage() {
     }
   }, [scrollCount])
 
-  const [modalValue, setModalValue] = useRecoilState(modalState)
-  const [idValue, setIdValue] = useRecoilState(idState)
-
   return (
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-[60px]">
       {/* 수강생 관리 + 수강생 등록 버튼 */}
       <div className="flex w-full pt-12 mb-[30px] justify-between">
         <div className=" h-[30px]">
-          <div className="w-full text-black text-3xl font-bold font-['Pretendard'] leading-[30px]">
+          <div className="w-full black-bold text-3xl font-['Pretendard']">
             수강생 관리
           </div>
         </div>
         <Link
           href={'student/register'}
-          className="Button flex flex-row px-5 py-2.5 btn-purple text-sm"
+          className="flex px-5 py-2.5 btn-purple text-sm"
         >
           <Image
             src={plusCircle}
@@ -225,23 +224,23 @@ export default function StudentPage() {
       <div className="w-full flex flex-col gap-3">
         {/* 수강생 목록 설명 */}
         <div className="w-full h-[46px] lg:px-7 px-6 py-4 flex lg:gap-6 gap-4 rounded bg-[#F0EFFF]">
-          <div className="w-[100px] text-indigo-500 text-sm font-semibold font-['Pretendard'] leading-[14px]">
+          <div className="w-[100px] indigo-500-semibold text-sm font-['Pretendard']">
             이름
           </div>
-          <div className="lg:w-[160px] w-[130px] text-indigo-500 text-sm font-semibold font-['Pretendard'] leading-[14px]">
+          <div className="lg:w-[160px] w-[130px] indigo-500-semibold text-sm font-['Pretendard']">
             전화번호
           </div>
-          <div className="xl:flex-1 lg:w-[100px] flex-1 text-indigo-500 text-sm font-semibold font-['Pretendard'] leading-[14px]">
+          <div className="xl:flex-1 lg:w-[100px] flex-1 indigo-500-semibold text-sm font-['Pretendard']">
             클래스명
           </div>
-          <div className="xl:w-[400px] lg:flex-1 w-[200px] text-indigo-500 text-sm font-semibold font-['Pretendard'] leading-[14px]">
+          <div className="xl:w-[400px] lg:flex-1 w-[200px] indigo-500-semibold text-sm font-['Pretendard']">
             특이사항
           </div>
         </div>
         {/* 수강생 목록 시작 */}
         <div className="w-full flex flex-col gap-[14px]">
-          {refresh && studentData.length === 0 ? <NoneResult /> : null}
-          {studentData?.map((data: studentType, i: number) => {
+          {refresh && studentList.length === 0 ? <NoneResult /> : null}
+          {studentList?.map((data: studentType, i: number) => {
             return (
               <button
                 key={i}
@@ -252,17 +251,17 @@ export default function StudentPage() {
                 }}
               >
                 <div className="flex lg:gap-6 gap-4 flex-1">
-                  <div className="w-[100px] text-gray-800 text-sm font-semibold font-['Pretendard'] text-left">
+                  <div className="w-[100px] gray-800-semibold text-sm font-['Pretendard'] text-left">
                     {data.name}
                   </div>
-                  <div className="lg:w-[160px] w-[130px] text-gray-800 text-sm font-semibold font-['Pretendard'] text-left">
+                  <div className="lg:w-[160px] w-[130px] gray-800-semibold text-sm font-['Pretendard'] text-left">
                     {data.phone.slice(0, 3)}-{data.phone.slice(3, 7)}-
                     {data.phone.slice(7, 11)}
                   </div>
-                  <div className="xl:flex-1 lg:w-[100px] flex-1 text-gray-800 text-sm font-semibold font-['Pretendard'] text-left">
+                  <div className="xl:flex-1 lg:w-[100px] flex-1 gray-800-semibold text-sm font-['Pretendard'] text-left">
                     {data.className}
                   </div>
-                  <div className="xl:w-[400px] lg:flex-1 w-[200px] text-gray-900 text-base font-normal font-['Pretendard'] text-left">
+                  <div className="xl:w-[400px] lg:flex-1 w-[200px] gray-900-normal text-base font-['Pretendard'] text-left">
                     {data.particulars}
                   </div>
                 </div>

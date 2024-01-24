@@ -49,7 +49,7 @@ export default function DateTab() {
           className={`absolute z-0 w-14 h-9 outline outline-1 outline-[#9B81FE] bg-primary-600 rounded-full transition-transform ${slideTab}`}
         ></div>
         <div
-          className={` z-10 px-3 py-1.5 rounded-full text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal cursor-pointer
+          className={` z-10 px-3 py-1.5 rounded-full gray-500-medium text-base text-center font-['Pretendard'] cursor-pointer
               ${slideTab == 'translate-x-0' ? 'w-14' : 'w-12'}
               ${
                 slideTab === 'translate-x-0' ? 'text-white' : 'text-gray-500'
@@ -62,7 +62,7 @@ export default function DateTab() {
           <div className="flex justify-center">일</div>
         </div>
         <div
-          className={`z-10 px-3 py-1.5 rounded-full text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal cursor-pointer
+          className={`z-10 px-3 py-1.5 rounded-full gray-500-medium text-base text-center font-['Pretendard'] cursor-pointer
               ${slideTab === 'translate-x-[48px]' ? 'w-14' : 'w-12'}
               ${
                 slideTab === 'translate-x-[48px]'
@@ -77,7 +77,7 @@ export default function DateTab() {
           <div className="flex justify-center">주</div>
         </div>
         <div
-          className={`z-10 px-3 py-1.5 rounded-full text-gray-500 text-base text-center font-medium font-['Pretendard'] leading-normal cursor-pointer
+          className={`z-10 px-3 py-1.5 rounded-full gray-500-medium text-base text-center font-['Pretendard'] cursor-pointer
               ${slideTab === 'translate-x-[96px]' ? 'w-14' : 'w-12'}
               ${
                 slideTab === 'translate-x-[96px]'

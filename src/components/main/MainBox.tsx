@@ -119,7 +119,7 @@ export default function MainBox() {
                 className={`w-1/2 p-6 flex flex-col gap-5 outline outline-1 ${data.rounded} outline-gray-200 h-full`}
               >
                 <div className="w-full flex flex-col gap-2">
-                  <div className="text-gray-600 text-base font-semibold   leading-normal">
+                  <div className="text-gray-600 text-base font-semibold">
                     {data.title}
                   </div>
                   <span className="w-full h-[33px] text-black text-[28px] font-bold  ">
@@ -158,7 +158,7 @@ export default function MainBox() {
           } outline outline-1 rounded-xl outline-gray-200`}
         >
           <div className="w-full flex flex-col gap-2 ">
-            <div className="text-gray-600 text-base font-semibold   leading-normal">
+            <div className="text-gray-600 text-base font-semibold">
               전체 등록 학생 수
             </div>
             <div className="w-full h-[33px] text-black text-[28px] font-bold  ">

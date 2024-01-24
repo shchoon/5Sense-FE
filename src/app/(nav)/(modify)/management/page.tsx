@@ -31,8 +31,6 @@ export default function ManageMent() {
     })
   }
 
-  const onToggle = (e: any) => {}
-
   return (
     <div className="w-[640px] flex flex-col gap-5 justify-center">
       <form
@@ -41,7 +39,7 @@ export default function ManageMent() {
           e.preventDefault()
         }}
       >
-        <div className="gray-900-bold text-xl font-['Pretendard'] leading-tight">
+        <div className="gray-900-bold text-xl font-['Pretendard']">
           센터 정보
         </div>
         <div className="w-full flex flex-col gap-10">
@@ -49,7 +47,7 @@ export default function ManageMent() {
             <Image className="" src={profile} width={140} height={140} alt="" />
             <button className="absolute left-[35px] top-[124px] bg-white w-[70px] h-[34px] pl-2.5 pr-3 py-2 flex justify-center gap-1 rounded-lg border border-primary-600">
               <Image src={camera} width={16} height={16} alt="" />
-              <div className="indigo-500-semibold text-xs font-['Pretendard'] leading-[18px]">
+              <div className="indigo-500-semibold text-xs font-['Pretendard']">
                 수정
               </div>
             </button>
@@ -90,7 +88,7 @@ export default function ManageMent() {
         </div>
       </form>
       <div className="w-full px-6 py-8 flex flex-col gap-10 border rounded-xl border-gray-200">
-        <div className="gray-900-bold text-xl font-['Pretendard'] leading-tight">
+        <div className="gray-900-bold text-xl font-['Pretendard']">
           SNS 연결 설정
         </div>
         <div className="w-full flex flex-col gap-[14px]">
@@ -102,10 +100,10 @@ export default function ManageMent() {
               height={48}
               alt=""
             />
-            <div className="absolute left-[68px] text-stone-800 text-base font-semibold font-['Pretendard'] leading-none">
+            <div className="absolute left-[68px] text-stone-800 text-base font-semibold font-['Pretendard']">
               카카오 계정 연결
             </div>
-            <div className="absolute left-[200px] text-stone-800 text-sm font-medium font-['Pretendard'] leading-none">
+            <div className="absolute left-[200px] text-stone-800 text-sm font-medium font-['Pretendard']">
               2024.01.07
             </div>
             <Image
@@ -128,10 +126,10 @@ export default function ManageMent() {
               height={48}
               alt=""
             />
-            <div className="absolute left-[68px] text-[#2BB500] text-base font-semibold font-['Pretendard'] leading-none">
+            <div className="absolute left-[68px] text-[#2BB500] text-base font-semibold font-['Pretendard']">
               네이버 계정 연결
             </div>
-            <div className="absolute left-[200px] text-stone-800 text-sm font-medium font-['Pretendard'] leading-none">
+            <div className="absolute left-[200px] text-stone-800 text-sm font-medium font-['Pretendard']">
               2024.01.07
             </div>
             <Image
@@ -154,10 +152,10 @@ export default function ManageMent() {
               height={48}
               alt=""
             />
-            <div className="absolute left-[68px] text-stone-800 text-base font-semibold font-['Pretendard'] leading-none">
+            <div className="absolute left-[68px] text-stone-800 text-base font-semibold font-['Pretendard']">
               구글 계정 연결
             </div>
-            <div className="absolute left-[200px] text-stone-800 text-sm font-medium font-['Pretendard'] leading-none">
+            <div className="absolute left-[200px] text-stone-800 text-sm font-medium font-['Pretendard']">
               2024.01.07
             </div>
             <Image

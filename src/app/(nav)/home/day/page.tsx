@@ -1,7 +1,6 @@
 export default function MainPageDay() {
-  let date = new Date()
-  let currentHour = date.getHours()
-  console.log(date.getHours())
+  const date = new Date()
+  const currentHour = date.getHours()
   const classData = [
     {
       time: '09:00',
@@ -302,13 +301,13 @@ export default function MainPageDay() {
         <div className="w-[164px] h-4 flex gap-6 ">
           <div className="w-[70px] h-full flex gap-2 items-center justify-end">
             <span className="w-[16px] h-[16px] border rounded bg-[#FF7749]"></span>
-            <span className="text-orange-500 text-[13px] font-bold   leading-none">
+            <span className="text-orange-500 text-[13px] font-bold">
               회차반
             </span>
           </div>
           <div className="w-[70px] h-full flex gap-2 items-center justify-end">
             <span className="w-[16px] h-[16px] border rounded bg-primary-500"></span>
-            <span className="text-primary-500 text-[13px] font-bold   leading-none">
+            <span className="text-primary-500 text-[13px] font-bold">
               기간반
             </span>
           </div>
@@ -330,7 +329,7 @@ export default function MainPageDay() {
                       currentHour === Number(data.time.split(':')[0])
                         ? 'text-indigo-500'
                         : 'text-black'
-                    }  text-base font-semibold font-['Pretendard'] leading-normal`}
+                    }  text-base font-semibold font-['Pretendard']`}
                   >
                     {data.time}
                   </div>
@@ -338,7 +337,6 @@ export default function MainPageDay() {
                 </div>
                 <div className="w-full flex flex-col p-4 gap-[7px] outline outline-1 rounded-lg outline-gray-200">
                   {data.class.map((data, i) => {
-                    //console.log(currentHour, data.hour)
                     return (
                       <div key={i} className="flex gap-4 h-[45px]">
                         <div
@@ -355,7 +353,7 @@ export default function MainPageDay() {
                                 currentHour === Number(data.hour)
                                   ? data.textColorOn
                                   : data.textColorOff
-                              }  text-sm font-medium   leading-[21px]`}
+                              }  text-sm font-medium`}
                             >
                               {data.teacherName}
                             </div>
@@ -364,7 +362,7 @@ export default function MainPageDay() {
                                 currentHour === Number(data.hour)
                                   ? data.textColorOn
                                   : data.textColorOff
-                              }  text-sm font-medium   leading-[21px]`}
+                              }  text-sm font-medium`}
                             >
                               ·
                             </div>
@@ -373,7 +371,7 @@ export default function MainPageDay() {
                                 currentHour === Number(data.hour)
                                   ? data.textColorOn
                                   : data.textColorOff
-                              }  text-sm font-medium   leading-[21px]`}
+                              }  text-sm font-medium`}
                             >
                               {data.roomNum}
                             </div>
@@ -383,7 +381,7 @@ export default function MainPageDay() {
                               currentHour === Number(data.hour)
                                 ? data.textColorOn
                                 : data.textColorOff
-                            }  text-base font-semibold font-['Pretendard'] leading-normal truncate`}
+                            }  text-base font-semibold font-['Pretendard'] truncate`}
                           >
                             {data.className}
                           </div>

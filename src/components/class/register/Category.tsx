@@ -1,4 +1,4 @@
-import InputForm, { InputFormProps } from '@/components/common/InputForm'
+import InputForm, { InputFormProps } from '@/components/InputForm'
 import { useState } from 'react'
 
 export type category = {

@@ -19,10 +19,10 @@ export default function myCenterLayout({
               alt="main-logo"
             />
             <div className="flex flex-col w-[383px] h-[60px] items-center gap-2">
-              <div className="h-[33px] text-center text-[28px] font-bold leading-normal">
-                센스있는 매니저, 오센스
+              <div className="h-[33px] text-center text-[28px] gray-900-bold">
+                내 센터 정보를 입력해주세요.
               </div>
-              <div className="w-full h-[19px] text-center text-[13px] font-normal leading-normal text-[#4B5563]">
+              <div className="w-full h-[19px] text-center text-[13px] gray-600-normal">
                 오감을 깨우는 클래스 관리, 센스 만점 오센스에서 시작하세요!
               </div>
               {/* font-size 다름 */}
