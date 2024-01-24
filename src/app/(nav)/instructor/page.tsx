@@ -19,7 +19,7 @@ export default function InstructorPage() {
   const [refresh, setRefresh] = useState(false)
   const [loading, setLoading] = useState(false)
   const [scrollCount, setScrollCount] = useState(0)
-  const [instructorData, setInstructorData] = useState<any>([])
+  const [instructorList, setInstructorList] = useState<any>([])
 
   const [modalValue, setModalValue] = useRecoilState(instructorRegisterModal)
 
@@ -28,6 +28,12 @@ export default function InstructorPage() {
     page: 1,
     hasNextPage: false
   })
+
+  const options = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 1.0
+  }
   const handleObserver = (
     [entry]: IntersectionObserverEntry[],
     observer: IntersectionObserver
@@ -36,12 +42,6 @@ export default function InstructorPage() {
       observer.unobserve(entry.target)
       setScrollCount(prev => prev + 1)
     }
-  }
-
-  let options = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 1.0
   }
 
   const observer = new IntersectionObserver(handleObserver, options)
@@ -66,14 +66,14 @@ export default function InstructorPage() {
         searchBy,
         inputValue
       )
-      setInstructorData((preInstructorData: getDataType[]) => [
+      setInstructorList((preInstructorData: getDataType[]) => [
         ...preInstructorData,
         ...res.data
       ])
       setPostVar(prePostVar => res.meta)
     } else {
       const res = await useGetData('teachers', postVar.page + 1)
-      setInstructorData((preInstructorData: getDataType[]) => [
+      setInstructorList((preInstructorData: getDataType[]) => [
         ...preInstructorData,
         ...res.data
       ])
@@ -84,7 +84,7 @@ export default function InstructorPage() {
   useEffect(() => {
     if (!modalValue) {
       useGetData('teachers', 1).then(res => {
-        setInstructorData((preInstructorData: getDataType[]) => [...res.data])
+        setInstructorList((preInstructorData: getDataType[]) => [...res.data])
         setPostVar(prePostVar => res.meta)
         setRefresh(true)
       })
@@ -98,14 +98,14 @@ export default function InstructorPage() {
   const searchClick = async () => {
     const searchBy = inputRef.current?.name as string
     const res = await useGetData('teachers', 1, searchBy, inputValue)
-    setInstructorData((preInstructorData: getDataType[]) => [...res.data])
+    setInstructorList((preInstructorData: getDataType[]) => [...res.data])
     setPostVar(prePostVar => res.meta)
     console.log(res)
   }
   const onClickInputRefresh = async () => {
     setInputValue('')
     const res = await useGetData('teachers', 1)
-    setInstructorData((preInstructorData: getDataType[]) => [...res.data])
+    setInstructorList((preInstructorData: getDataType[]) => [...res.data])
     setPostVar(prePostVar => res.meta)
     setRefresh(true)
   }
@@ -160,7 +160,7 @@ export default function InstructorPage() {
       {/* 수강생 관리 + 수강생 등록 버튼 */}
       <div className="flex w-full pt-12 mb-[30px] justify-between">
         <div className=" h-[30px]">
-          <div className="w-full text-black text-3xl font-bold font-['Pretendard'] leading-[30px]">
+          <div className="w-full black-bold text-3xl font-['Pretendard']">
             강사 관리
           </div>
         </div>
@@ -169,7 +169,7 @@ export default function InstructorPage() {
           onClick={modalClick}
         >
           <Image src={plusCircle} width={20} height={20} alt=" " />
-          <div className="h-[21px] w-16 text-white text-[11.5px] font-semibold font-['Pretendard'] leading-[21px] cursor-pointer">
+          <div className="h-[21px] w-16 text-white text-[11.5px] font-semibold font-['Pretendard'] cursor-pointer">
             강사 등록
           </div>
         </div>
@@ -204,10 +204,10 @@ export default function InstructorPage() {
         </div>
       </div>
       {/* 강사 목록 시작 */}
-      {instructorData.length === 0 && refresh ? <NoneResult /> : null}
+      {instructorList.length === 0 && refresh ? <NoneResult /> : null}
       {/* 겅색 결과 없음 */}
       <div className="w-full grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-5">
-        {instructorData?.map(
+        {instructorList?.map(
           (data: { name: string; phone: string }, i: number) => {
             return (
               <div
@@ -215,15 +215,15 @@ export default function InstructorPage() {
                 className="w-full h-[240px] flex flex-col justify-between px-6 pt-8 pb-6 border border-gray-200 rounded-3xl shadow-[0px_5px_15px_0px_rgba(0, 0, 0, 0.02)]"
               >
                 <div className="w-full flex flex-col gap-2">
-                  <div className="w-[307px] text-gray-900 text-2xl font-semibold font-['Pretendard'] leading-9">
+                  <div className="w-[307px] gray-900-semibold text-2xl font-['Pretendard']">
                     {data.name}
                   </div>
-                  <div className="w-[307px] text-gray-500 text-base font-medium font-['Pretendard'] leading-normal">
+                  <div className="w-[307px] text-gray-500 text-base font-medium font-['Pretendard']">
                     {data.phone}
                   </div>
                 </div>
                 <div className="w-full px-5 py-2.5 flex gap-2 justify-center border border-primary-600 rounded-lg">
-                  <div className="text-indigo-500 text-sm font-semibold font-['Pretendard'] leading-[21px]">
+                  <div className="indigo-500-semibold text-sm font-['Pretendard']">
                     강사 정보
                   </div>
                   <Image src={chevronRight} width={20} height={20} alt="" />

@@ -216,7 +216,7 @@ export default function MyCenter() {
               onFocus={e => {
                 handleOnFocus(e.target.name)
               }}
-              className={`w-full px-3 py-5 text-sm text-gray-900  
+              className={`w-full px-3 py-5 text-sm gray-900-normal  
                 rounded-lg border-1 border-[#E5E7EB] ${
                   danger.name
                     ? 'border-red-600'
@@ -240,7 +240,7 @@ export default function MyCenter() {
                       : !onFocusInput.nameInput
                         ? 'text-green-600'
                         : 'text-indigo-700'
-                  }  text-xs font-medium font-['Inter'] leading-3`}
+                  }  text-xs font-medium font-['Inter']`}
                 >
                   센터명
                 </div>
@@ -256,7 +256,7 @@ export default function MyCenter() {
               onFocus={e => {
                 handleOnFocus(e.target.name)
               }}
-              className={`w-full px-3 py-5 text-sm text-gray-900  
+              className={`w-full px-3 py-5 text-sm gray-900-normal  
               rounded-lg border-1 border-[#E5E7EB] ${
                 danger.address
                   ? 'border-red-600'
@@ -278,7 +278,7 @@ export default function MyCenter() {
                       : !onFocusInput.addressInput
                         ? 'text-green-600'
                         : 'text-indigo-700'
-                  }  text-xs font-medium font-['Inter'] leading-3`}
+                  }  text-xs font-medium font-['Inter']`}
                 >
                   주소
                 </div>
@@ -293,7 +293,7 @@ export default function MyCenter() {
                 handleOnFocus(e.target.name)
               }}
               type="number"
-              className={`w-full px-3 py-5 text-sm text-gray-900  
+              className={`w-full px-3 py-5 text-sm gray-900-normal  
               rounded-lg border-1 border-[#E5E7EB] ${
                 danger.phone
                   ? 'border-red-600'
@@ -319,7 +319,7 @@ export default function MyCenter() {
                       : !onFocusInput.phoneInput
                         ? 'text-green-600'
                         : 'text-indigo-700'
-                  }  text-xs font-medium font-['Inter'] leading-3`}
+                  }  text-xs font-medium font-['Inter']`}
                 >
                   전화번호
                 </div>
@@ -338,7 +338,7 @@ export default function MyCenter() {
           </div>
           <button
             type="submit"
-            className="w-full h-[52px] px-6 py-[14px] rounded-lg bg-primary-600 hover:bg-primary-700 focus:ring-1 focus:ring-primary-200 text-[#FFF] font-semibold"
+            className="w-full h-[52px] px-6 py-[14px] rounded-lg bg-primary-600 btn-purple text-[#FFF] font-semibold"
           >
             등록
           </button>

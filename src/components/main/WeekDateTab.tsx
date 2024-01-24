@@ -205,7 +205,7 @@ export default function WeekDateTab() {
             </div>
             <div className="w-full px-3 py-2 flex justify-center gap-2 items-center">
               <Image src={calender} width={18} height={18} alt=" " />
-              <span className="text-gray-900 text-base font-semibold font-['Pretendard'] leading-normal">
+              <span className="gray-900-semibold text-base font-['Pretendard']">
                 {dateData.year}년 {dateData.month}월 {week}주차
               </span>
             </div>
@@ -240,7 +240,7 @@ export default function WeekDateTab() {
                     activeDay == data.date
                       ? 'text-primary-600'
                       : 'text-gray-400'
-                  } text-center text-sm font-medium   leading-[21px]`}
+                  } text-center text-sm font-medium`}
                 >
                   {data.day}
                 </div>
@@ -249,7 +249,7 @@ export default function WeekDateTab() {
                     activeDay == data.date
                       ? 'text-primary-600'
                       : 'text-gray-400'
-                  } text-center text-xl font-bold   leading-[30px]`}
+                  } text-center text-xl font-bold`}
                 >
                   {data.date}
                 </div>

@@ -1,4 +1,3 @@
-import '../app/globals.css'
 import Image from 'next/image'
 import kakaoLogo from '@/assets/logo/kakaoLogo.svg'
 import naverLogo from '@/assets/logo/naverLogo.svg'
@@ -97,7 +96,7 @@ export default function SocialLoginBtn() {
               <Image src={data.logo} width={48} height={48} alt={data.alt} />
             )}
             <div
-              className={`font-semibold w-[190px] h-[16px] leading-4 mt-[18px] mx-auto ${data.textColor}`}
+              className={`font-semibold w-[190px] h-[16px] mt-[18px] mx-auto ${data.textColor}`}
             >
               {data.title}
             </div>

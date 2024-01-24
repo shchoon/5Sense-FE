@@ -30,7 +30,7 @@ export default function ModifyPage({
             alt=""
           />
         </Link>
-        <div className="absolute left-[92px] top-[60px] black-bold text-3xl font-['Pretendard'] leading-[30px]">
+        <div className="absolute left-[92px] top-[60px] black-bold text-3xl font-['Pretendard']">
           내 프로필 관리
         </div>
       </div>
@@ -40,7 +40,7 @@ export default function ModifyPage({
             <div
               className={`${
                 router === '/management' ? 'text-indigo-500' : 'text-gray-400'
-              }  text-base font-bold font-['Pretendard'] leading-normal`}
+              }  text-base font-bold font-['Pretendard']`}
             >
               센터 정보
             </div>
@@ -49,7 +49,7 @@ export default function ModifyPage({
             <div
               className={`${
                 router === '/policy' ? 'text-indigo-500' : 'text-gray-400'
-              }  text-base font-bold font-['Pretendard'] leading-normal`}
+              }  text-base font-bold font-['Pretendard']`}
             >
               개인정보처리방침
             </div>
@@ -58,7 +58,7 @@ export default function ModifyPage({
             <div
               className={`${
                 router === '/accessTerms' ? 'text-indigo-500' : 'text-gray-400'
-              }  text-base font-bold font-['Pretendard'] leading-normal`}
+              }  text-base font-bold font-['Pretendard']`}
             >
               이용약관
             </div>
@@ -67,7 +67,7 @@ export default function ModifyPage({
             <div
               className={`${
                 router === '/withdrawal' ? 'text-indigo-500' : 'text-gray-400'
-              }  text-base font-bold font-['Pretendard'] leading-normal`}
+              }  text-base font-bold font-['Pretendard']`}
             >
               회원 탈퇴
             </div>

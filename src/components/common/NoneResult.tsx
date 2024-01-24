@@ -13,10 +13,10 @@ export default function NoneResult() {
           alt=" "
         />
         <div className="w-full flex flex-col gap-3">
-          <div className="w-[432px] text-center text-gray-900 text-2xl font-bold font-['Pretendard'] leading-9">
+          <div className="w-[432px] text-center gray-900-bold text-2xl font-['Pretendard']">
             검색결과가 없습니다.
           </div>
-          <div className="w-[432px] text-center text-gray-400 text-base font-medium font-['Pretendard'] leading-normal">
+          <div className="w-[432px] text-center text-gray-400 text-base font-medium font-['Pretendard']">
             다른 검색어를 통해 검색을 이어나가보세요
           </div>
         </div>

@@ -124,9 +124,7 @@ export default function () {
           type="submit"
           className="w-full h-[52px] btn-purple flex justify-center items-center"
         >
-          <div className="text-white text-base font-semibold leading-normal">
-            등록
-          </div>
+          <div className="text-white text-base font-semibold">등록</div>
         </button>
       </div>
     </form>
