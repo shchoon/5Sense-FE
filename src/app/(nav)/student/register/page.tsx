@@ -1,11 +1,13 @@
 'use client'
 import Image from 'next/image'
-import Ellipsis from '../../../../assets/icon/ellipsis75.svg'
-import ArrowBack from '../../../../assets/icon/allowBack.svg'
-import PlusCircle from '../../../../assets/icon/plusCirclePrimary600.svg'
+import Ellipsis from '@/assets/icons/ellipsis75.svg'
+import ArrowBack from '@/assets/icons/allowBack.svg'
+import PlusCircle from '@/assets/icons/plus_circle_bg_pri_600.svg'
 import { SetStateAction, useState } from 'react'
-import InputForm, { InputFormProps } from '@/components/InputForm'
-import TextareaForm, { TextareaFormProps } from '@/components/TextareaForm'
+import InputForm, { InputFormProps } from '@/components/common/InputForm'
+import TextareaForm, {
+  TextareaFormProps
+} from '@/components/common/TextareaForm'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import useInputNum from '@/hooks/useInputNum'

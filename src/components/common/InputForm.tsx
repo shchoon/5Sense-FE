@@ -1,7 +1,7 @@
 import { ClassInfo } from '@/app/(nav)/class/register/page'
 import { useInput } from '@/hooks/useInput'
 import { SetStateAction } from 'react'
-import ClassFilter from './classFilter/classFilter'
+import ClassFilter from '../class/classFilter/classFilter'
 
 export interface InputFormProps {
   title: string

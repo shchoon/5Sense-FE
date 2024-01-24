@@ -1,17 +1,14 @@
 'use client'
-import plusCircle from '@/assets/icon/plus-circle.svg'
-import search_16 from '../../../assets/icon/search.svg'
-import x_icon_12 from '../../../assets/icon/x_icon_12.svg'
-import search_20 from '../../../assets/icon/search_20.svg'
+import plusCircle from '@/assets/icons/plus-circle.svg'
+import searchIcon from '@/assets/icons/search.svg'
+import closeIcon from '@/assets/icons/close.svg'
+import searchIconWhite from '@/assets/icons/search_white.svg'
 import Image from 'next/image'
 import { useState, useEffect, useRef, use } from 'react'
 import Link from 'next/link'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 import { idState, modalState } from '@/state/modal'
-import instance from '@/hooks/useAxios'
-import { AxiosResponse, AxiosError } from 'axios'
-import SearchFeat from '@/components/SearchFeat'
-import NoneResult from '@/components/NoneResult'
+import NoneResult from '@/components/common/NoneResult'
 import { useGetData } from '@/hooks/useGetData'
 
 interface studentType {
@@ -194,7 +191,7 @@ export default function StudentPage() {
       {/* 검색창 */}
       <div className="flex gap-2.5 lg:w-[377px] lg:h-[42px] w-[326px] h-[37px] mb-5">
         <div className="lg:w-[325px] lg:gap-2.5 w-[280px] flex gap-2 px-4 lg:py-3 py-2 rounded-lg outline outline-1 outline-gray-300 focus-within:outline-[#563AC0]">
-          <Image src={search_16} width={16} height={16} alt=" " />
+          <Image src={searchIcon} width={16} height={16} alt=" " />
           <input
             ref={inputRef}
             className="w-[245px] border-none ring-0 focus:ring-0"
@@ -209,7 +206,7 @@ export default function StudentPage() {
           />
           <Image
             className="cursor-pointer"
-            src={x_icon_12}
+            src={closeIcon}
             width={12}
             height={12}
             alt=" "
@@ -221,7 +218,7 @@ export default function StudentPage() {
           className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer"
           onClick={searchClick}
         >
-          <Image src={search_20} width={20} height={20} alt=" " />
+          <Image src={searchIconWhite} width={20} height={20} alt=" " />
         </div>
       </div>
       {/* 수강생 목록 시작 */}

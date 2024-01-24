@@ -1,13 +1,12 @@
 'use client'
 import Image from 'next/image'
-import searchIcon from '../../assets/icon/search.svg'
-import x_icon from '../../assets/icon/x_icon.svg'
-import userIcon from '../../assets/icon/userIcon.svg'
-import vecterIcon from '../../assets/icon/vectorIcon.svg'
-import plusIcon from '../../assets/icon/plusIcon.svg'
-import x_circle from '../../assets/icon/x_circle.svg'
-import closeIcon from '../../assets/icon/closeIcon.svg'
-import userCircle from '../../assets/icon/user-circle.jpg'
+import searchIcon from '@/assets/icons/search.svg'
+import close_bg_gray from '@/assets/icons/close_bg_gray.svg'
+import vecterIcon from '@/assets/icons/vector.svg'
+import plusIcon from '@/assets/icons/plus.svg'
+import close_Circle_bg from '@/assets/icons/close_circle_bg_pri_600.svg'
+import close_Circle from '@/assets/icons/closeCircle.svg'
+import userCircle from '@/assets/icons/user_circle.svg'
 import { useEffect, useState, useRef } from 'react'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
 
@@ -96,7 +95,7 @@ export default function TeacherInfo() {
 
             {teacherName !== '' && teacherName !== nameValue ? (
               <Image
-                src={x_icon}
+                src={close_bg_gray}
                 width={16}
                 height={16}
                 alt="X"
@@ -106,7 +105,7 @@ export default function TeacherInfo() {
             {teacherName === nameValue && teacherName !== '' ? (
               <Image
                 className="absolute left-[80px]"
-                src={x_circle}
+                src={close_Circle_bg}
                 width={20}
                 height={20}
                 alt=""
@@ -176,7 +175,7 @@ export default function TeacherInfo() {
           <div className="relative flex flex-col w-[100%] h-[100px]">
             <Image
               className="absolute top-2 right-2 cursor-pointer hover:opacity-70"
-              src={closeIcon}
+              src={close_Circle}
               width={35}
               height={35}
               alt=""

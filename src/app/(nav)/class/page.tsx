@@ -1,8 +1,8 @@
 'use client'
 
-import ClassFilter from '@/components/classFilter/classFilter'
+import ClassFilter from '@/components/class/classFilter/classFilter'
 import Link from 'next/link'
-import plusCircle from '@/assets/icon/plus-circle.svg'
+import plusCircle from '@/assets/icons/plus-circle.svg'
 import Image from 'next/image'
 
 export default function ClassPage() {

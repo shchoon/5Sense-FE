@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import x_circle from '../assets/icon/x_circle_35.svg'
+import close_circle from '@/assets/icons/closeCircle.svg'
 import { instructorRegisterModal } from '@/state/modal'
 import { useRecoilState } from 'recoil'
 import React, { useState } from 'react'
@@ -86,7 +86,7 @@ export default function () {
       </div>
       <Image
         className="absolute right-4 top-4 cursor-pointer"
-        src={x_circle}
+        src={close_circle}
         width={35}
         height={35}
         alt=""
