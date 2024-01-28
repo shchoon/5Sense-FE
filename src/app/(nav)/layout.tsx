@@ -1,20 +1,21 @@
 'use client'
-import Navbar from '@/components/layout/Navbar'
 import Image from 'next/image'
-import mainLogo from '@/assets/logo/mainLogo.png'
-import logout from '@/assets/icons/logout.svg'
-import noticeActive from '@/assets/icons/notice-active.svg'
-import menu from '@/assets/icons/menu.svg'
-import profile from '@/assets/images/profile.png'
-import AcademyInfo from '@/components/layout/AcademyInfo'
 import { useState } from 'react'
-import SideModal from '@/components/SideModal'
-import TodaySchedule from '@/components/layout/TodaySchedule'
 import { useRecoilState } from 'recoil'
-import { modalState } from '@/state/modal'
-import DetailModal from '@/components/detailModal'
-import { instructorRegisterModal } from '@/state/modal'
+
+import logout from '@/assets/icons/logout.svg'
+import menu from '@/assets/icons/menu.svg'
+import noticeActive from '@/assets/icons/notice-active.svg'
+import mainLogo from '@/assets/logo/mainLogo.png'
 import InstructorRegisterModal from '@/components/InstructorRegisterModal'
+
+import DetailModal from '@/components/detailModal'
+import AcademyInfo from '@/components/layout/AcademyInfo'
+import Navbar from '@/components/layout/Navbar'
+import TodaySchedule from '@/components/layout/TodaySchedule'
+
+import { modalState } from '@/state/modal'
+import SideModal from '@/components/modal/SideModal'
 
 export default function MainLayout({
   children
@@ -27,33 +28,29 @@ export default function MainLayout({
     { id: 3, name: '팀소개' }
   ]
 
-  const [isModal, setIsModal] = useState<boolean>(false)
-  const [modalValue, setModalValue] = useRecoilState(modalState)
-  const [instructorModal, setInstrictorModal] = useRecoilState(
-    instructorRegisterModal
-  )
+  const [Modal, setModal] = useRecoilState(modalState)
   return (
     <div
       className={`wrapper ${
-        isModal ? 'fixed' : 'relative'
+        Modal.active ? 'fixed' : 'relative'
       } min-w-[768px] max-w-[2560px]`}
     >
       {/* purplebox를 위한 relative */}
-      {isModal && (
+      {/* {isModal && (
         <div className="absolute top-0 w-screen h-screen bg-black bg-opacity-20 backdrop-blur-[5px] shadow z-[100]">
           <SideModal isModal={isModal} setIsModal={setIsModal} />
         </div>
-      )}
-      {modalValue && (
+      )} */}
+      {Modal.active && (
         <div className="absolute top-0 w-screen h-screen bg-black bg-opacity-20 backdrop-blur-[5px] shadow z-[100]">
-          <DetailModal />
+          <SideModal id={Modal.id} type={Modal.type} />
         </div>
       )}
-      {instructorModal && (
+      {/* {instructorModal && (
         <div className="absolute flex justify-center items-center w-screen h-screen bg-black bg-opacity-20 backdrop-blur-[5px] shadow z-[100]">
           <InstructorRegisterModal />
         </div>
-      )}
+      )} */}
 
       <div className="w-full h-full px-6 2md:px-12 box-border lg:pl-0 lg:pr-4 xl:pr-8 2xl:pr-12">
         {/* 상위 relative가 없기때문에 body를 부모로 잡음 */}
@@ -63,9 +60,9 @@ export default function MainLayout({
               className="menu lg:hidden cursor-pointer"
               src={menu}
               alt="메뉴"
-              onClick={() => {
-                setIsModal(!isModal)
-              }}
+              // onClick={() => {
+              //   setIsModal(!isModal)
+              // }}
             />
             <div className="logoBox flex gap-[10px]">
               <Image src={mainLogo} alt="로고" />
