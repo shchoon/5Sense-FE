@@ -1,6 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import { Button } from 'flowbite-react'
+import angle_left from '@/assets/icon/angle-left.svg'
+import Image from 'next/image'
 
 export default function ClassRegisterLayout({
   children
@@ -14,7 +15,8 @@ export default function ClassRegisterLayout({
         className="w-full black-bold text-3xl text-start cursor-pointer"
         onClick={() => router.push('/class')}
       >
-        ◀︎ 클래스 등록
+        <Image src={angle_left} alt="angleleft" className="fill-[blue]" />
+        클래스 등록
       </button>
 
       <div className="flex flex-col items-center">{children}</div>

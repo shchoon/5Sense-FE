@@ -3,6 +3,7 @@ import {
   ChangeEvent,
   SetStateAction,
   useCallback,
+  useEffect,
   useRef,
   useState
 } from 'react'
@@ -42,6 +43,10 @@ export default function TextareaForm({
   const handelChage = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setSubmitData({ ...submitData, [name]: e.target.value })
   }
+
+  useEffect(() => {
+    setInputValue(submitData[name])
+  }, [submitData[name]])
 
   return (
     <>

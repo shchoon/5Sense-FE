@@ -28,7 +28,7 @@ export default function InstructorPage() {
   const [postVar, setPostVar] = useState({
     page: '',
     cursor: '',
-    hasNextPage: true
+    hasNextPage: false
   })
   const handleObserver = (
     [entry]: IntersectionObserverEntry[],
@@ -208,13 +208,17 @@ export default function InstructorPage() {
           </div>
         </div>
         <div
-          className="flex gap-2 items-center w-[132px] h-[41px] rounded-lg px-5 py-2.5 btn-purple"
+          className="flex px-5 py-2.5 btn-purple text-sm"
           onClick={modalClick}
         >
-          <Image src={plusCircle} width={20} height={20} alt=" " />
-          <div className="h-[21px] w-16 text-white text-[11.5px] font-semibold font-['Pretendard'] leading-[21px] cursor-pointer">
-            강사 등록
-          </div>
+          <Image
+            src={plusCircle}
+            width={20}
+            height={20}
+            alt=" "
+            className="mr-2"
+          />
+          강사 등록
         </div>
       </div>
       {/* 검색창 */}

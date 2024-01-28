@@ -1,7 +1,12 @@
 import { atom } from 'recoil'
 
-export const modalState = atom({
-  key: 'modalState',
+export const studentmodalState = atom({
+  key: 'studentState',
+  default: false
+})
+
+export const teachermodalState = atom({
+  key: 'teacherState',
   default: false
 })
 

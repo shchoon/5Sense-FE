@@ -1,6 +1,6 @@
 import { ClassInfo } from '@/app/(nav)/class/register/page'
 import { InputFormProps, InputProps } from '@/components/InputForm'
-import { ChangeEvent, SetStateAction, useState } from 'react'
+import { ChangeEvent, SetStateAction, useEffect, useState } from 'react'
 
 export function useInput({
   name,
@@ -8,7 +8,8 @@ export function useInput({
   submitData,
   setSubmitData
 }: InputProps): any {
-  const [inputValue, setInputValue] = useState<string>('')
+  const [inputValue, setInputValue] = useState<string>(submitData[name])
+  console.log(submitData[name])
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length <= maxLength) {
@@ -18,6 +19,10 @@ export function useInput({
     }
     setSubmitData({ ...submitData, [name]: e.target.value })
   }
+
+  useEffect(() => {
+    setInputValue(submitData[name])
+  }, [submitData[name]])
 
   return [inputValue, handleChange]
 }

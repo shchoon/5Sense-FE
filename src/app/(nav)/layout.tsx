@@ -12,8 +12,8 @@ import LogoLink from '@/components/LogoLink'
 import SideModal from '@/components/SideModal'
 import TodaySchedule from '@/components/layout/TodaySchedule'
 import { useRecoilState } from 'recoil'
-import { modalState } from '@/state/modal'
-import DetailModal from '@/components/detailModal'
+import { studentmodalState } from '@/state/modal'
+import DetailModal from '@/components/studentDetailModal'
 import { instructorRegisterModal } from '@/state/modal'
 import InstructorRegisterModal from '@/components/InstructorRegisterModal'
 
@@ -29,7 +29,7 @@ export default function MainLayout({
   ]
 
   const [isModal, setIsModal] = useState<boolean>(false)
-  const [modalValue, setModalValue] = useRecoilState(modalState)
+  const [modalValue, setModalValue] = useRecoilState(studentmodalState)
   const [instructorModal, setInstrictorModal] = useRecoilState(
     instructorRegisterModal
   )

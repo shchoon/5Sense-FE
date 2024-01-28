@@ -11,7 +11,7 @@ import { fetchApi } from '@/hooks/useApi'
 import { useState, useEffect, useRef, use } from 'react'
 import Link from 'next/link'
 import { useRecoilState, useSetRecoilState } from 'recoil'
-import { idState, modalState } from '@/state/modal'
+import { idState, studentmodalState } from '@/state/modal'
 import instance from '@/hooks/useAxios'
 import { AxiosResponse, AxiosError } from 'axios'
 import SearchFeat from '@/components/SearchFeat'
@@ -144,7 +144,6 @@ export default function StudentPage() {
     const forbidden = ['-']
 
     if (forbidden.includes(event.key)) {
-
       event.preventDefault()
     }
     if (event.key == 'Enter') {
@@ -220,12 +219,11 @@ export default function StudentPage() {
     }
   }, [infiniteScrollCount])
 
-  const [modalValue, setModalValue] = useRecoilState(modalState)
+  const [modalValue, setModalValue] = useRecoilState(studentmodalState)
   const [idValue, setIdValue] = useRecoilState(idState)
 
   return (
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-[60px]">
-
       {/* 수강생 관리 + 수강생 등록 버튼 */}
       <div className="flex w-full pt-12 mb-[30px] justify-between">
         <div className=" h-[30px]">
@@ -234,8 +232,8 @@ export default function StudentPage() {
           </div>
         </div>
         <Link
-          href={'class/register'}
-          className="Button flex flex-row px-5 py-2.5 btn-purple text-sm"
+          href={'student/register'}
+          className="Button flex px-5 py-2.5 btn-purple text-sm"
         >
           <Image
             src={plusCircle}
