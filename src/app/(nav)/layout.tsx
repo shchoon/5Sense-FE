@@ -7,7 +7,7 @@ import noticeActive from '@/assets/icons/notice-active.svg'
 import menu from '@/assets/icons/menu.svg'
 import profile from '@/assets/images/profile.png'
 import AcademyInfo from '@/components/layout/AcademyInfo'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import SideModal from '@/components/SideModal'
 import TodaySchedule from '@/components/layout/TodaySchedule'
 import { useRecoilState } from 'recoil'
@@ -32,6 +32,15 @@ export default function MainLayout({
   const [instructorModal, setInstrictorModal] = useRecoilState(
     instructorRegisterModal
   )
+  /* useEffect(() => {
+    const root = document.getElementsByTagName('body')[0]
+    if (instructorModal || modalValue) {
+      root.style.overflow = 'hidden'
+    } else {
+      root.style.overflow = 'scroll'
+    }
+  }, [instructorModal, modalValue]) */
+
   return (
     <div
       className={`wrapper ${

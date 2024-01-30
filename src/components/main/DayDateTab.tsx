@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import { useWindowSize } from '@/hooks/useWindowSize'
-import chevronLeft from '../../assets/icons/chevron-left.svg'
-import chevronRight from '../../assets/icons/chevron-right.svg'
-import calender from '../../assets/icons/calendar.svg'
+import chevronLeft from '@/assets/icons/chevron-left.svg'
+import chevronRight from '@/assets/icons/chevron-right.svg'
+import calender from '@/assets/icons/calendar.svg'
 import { useState } from 'react'
 import DateSlideTab from './DateSlideTab'
 

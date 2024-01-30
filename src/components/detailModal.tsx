@@ -1,5 +1,5 @@
 'use client'
-import { fetchApi } from '@/hooks/useApi'
+import instance from '@/hooks/useAxios'
 import { idState, modalState } from '@/state/modal'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
@@ -21,7 +21,7 @@ const DetailModal = () => {
   })
 
   useEffect(() => {
-    fetchApi(`/students/${idValue}`, 'GET').then(res => {
+    instance(`/students/${idValue}`).then(res => {
       setStudent(res.data)
     })
   }, [])
