@@ -25,7 +25,6 @@ export default function DropDown({
     setIsClickDropDown(prev => !prev)
   }
   const handleClickList = (e: React.MouseEvent<HTMLDivElement>) => {
-    console.log(e.currentTarget.title)
     setClickedItem(e.currentTarget.title)
     setIsClickDropDown(prev => !prev)
   }

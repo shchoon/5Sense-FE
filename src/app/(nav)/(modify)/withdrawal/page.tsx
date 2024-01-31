@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import chevron_gray from '@/assets/icons/chevron_down_gray.svg'
+import DropDown from '@/components/common/DropDown'
 
 export default function WithDrawal() {
   const [postData, setPostData] = useState('')
@@ -10,6 +11,20 @@ export default function WithDrawal() {
     setPostData(e.target.value)
   }
 
+  const dropDownList = [
+    '기능의 버그가 많아서',
+    '필요한 기능들이 부족해서',
+    '속도가 느려서',
+    '그냥'
+  ]
+
+  const dropDownProps = {
+    height: 'h-[52px]',
+    px: 'px-4',
+    py: 'py-3.5',
+    name: '선택해주세요.',
+    dropDownList
+  }
   return (
     <form
       className="w-[640px] px-6 py-8 flex flex-col gap-10 border rounded-xl border-gray-200"
@@ -40,19 +55,7 @@ export default function WithDrawal() {
           <div className="w-[592px] gray-800-semibold text-base font-['Pretendard']">
             탈퇴 사유 및 개선점(선택)
           </div>
-          <div className="relative flex items-center">
-            <input
-              className="w-full px-4 py-3.5 h-[52px] border rounded-lg border-gray-200 focus:outline-none focus:border-primary-700 focus:bg-gray-50"
-              placeholder="선택해 주세요."
-            />
-            <Image
-              className="absolute right-4"
-              src={chevron_gray}
-              width={16}
-              height={16}
-              alt="cheveon_gray"
-            />
-          </div>
+          <DropDown {...dropDownProps} />
         </div>
         <textarea
           placeholder="탈퇴 사유 및 개선점을 적어주세요"
