@@ -3,11 +3,9 @@ import '../globals.css'
 import Script from 'next/script'
 import React, { useRef, useState } from 'react'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
-import Router from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import instance from '@/hooks/useAxios'
-import { AxiosResponse, AxiosError } from 'axios'
-import local from 'next/font/local'
+import DropDown from '@/components/common/DropDown'
 
 declare global {
   interface Window {
@@ -161,6 +159,40 @@ export default function MyCenter() {
     }
   }
 
+  const getTimeList = () => {
+    const list = []
+    for (var i = 0; i <= 48; i++) {
+      let standard = i * 30
+      let hour: string | number = Math.floor(standard / 60)
+      let min: string | number = standard % 60
+      if (hour < 10) {
+        hour = `0${hour}`
+      }
+      if (min === 0) {
+        min = `0${min}`
+      }
+      let time = `${hour}:${min}`
+      list.push(time)
+    }
+    return list
+  }
+
+  const DropDownProps1 = {
+    height: 'h-[58px]',
+    px: 'px-3',
+    py: 'py-5',
+    dropDownList: getTimeList(),
+    name: '오픈 시간'
+  }
+
+  const DropDownProps2 = {
+    height: 'h-[58px]',
+    px: 'px-3',
+    py: 'py-5',
+    dropDownList: getTimeList(),
+    name: '마감 시간'
+  }
+
   return (
     <>
       <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></Script>
@@ -206,7 +238,7 @@ export default function MyCenter() {
           }
         }}
       >
-        <div className="w-[430px] h-[209px] flex flex-col items-center gap-4">
+        <div className="w-[430px] flex flex-col items-center gap-4">
           <div className="relative w-[430px] h-[60px] flex items-center rounded-lg">
             <input
               ref={centerNameInputRef}
@@ -325,6 +357,13 @@ export default function MyCenter() {
                 </div>
               </label>
             )}
+          </div>
+          <div className="w-full flex gap-2">
+            <DropDown {...DropDownProps1} />
+            <div className="flex items-center gray-800-semibold text-base font-['Pretendard']">
+              -
+            </div>
+            <DropDown {...DropDownProps2} />
           </div>
         </div>
         <div className="w-full flex gap-[10px]">
