@@ -37,18 +37,23 @@ export default function DatePicker() {
       for (var i = lastDateOfLastMonthData.getDay(); i >= 0; i--) {
         list.push({
           date: lastDateOfLastMonthData.getDate() - i,
-          textColor: 'font-semibold text-gray-500'
+          textColor: 'font-semibold text-gray-500',
+          clickable: false
         })
       }
     }
 
     for (var i = 1; i <= lastDateOfCurrnetMonthData.getDate(); i++) {
-      list.push({ date: i, textColor: 'gray-900-bold' })
+      list.push({ date: i, textColor: 'gray-900-bold', clickable: true })
     }
 
     if (lastDateOfCurrnetMonthData.getDay() !== 6) {
       for (var i = 1; i <= 7 - firstDateOfNextMonthData.getDay(); i++) {
-        list.push({ date: i, textColor: 'font-semibold text-gray-500' })
+        list.push({
+          date: i,
+          textColor: 'font-semibold text-gray-500',
+          clickable: false
+        })
       }
     }
 
@@ -142,17 +147,19 @@ export default function DatePicker() {
                     key={i}
                     id={dateData.date.toString()}
                     className={`px-1 py-2 cursor-pointer ${
-                      clickedDate === dateData.date.toString()
+                      clickedDate === dateData.date.toString() &&
+                      dateData.clickable
                         ? 'bg-primary-700 border rounded-lg'
                         : ''
                     }`}
                     onClick={e => {
-                      onClickDateHandler(e)
+                      dateData.clickable && onClickDateHandler(e)
                     }}
                   >
                     <div
                       className={`text-xs text-center ${
-                        clickedDate === dateData.date.toString()
+                        clickedDate === dateData.date.toString() &&
+                        dateData.clickable
                           ? 'text-white font-bold'
                           : `${dateData.textColor}`
                       } font-['Pretendard']`}
@@ -167,15 +174,11 @@ export default function DatePicker() {
         })}
       </div>
       <div className="w-full flex h-[37px] justify-between">
-        <div className="w-[121px] h-full px-3 py-2 flex justify-center border rounded-lg border-gray-200">
-          <div className="flex items-center text-sm gray-800-semibold">
-            취소
-          </div>
+        <div className="w-[121px] h-full px-3 py-2 flex justify-center btn-white text-sm gray-800-semibold">
+          취소
         </div>
-        <div className="w-[121px] h-full flex justify-center btn-purple">
-          <div className="flex items-center text-sm font-semibold text-white">
-            확인
-          </div>
+        <div className="w-[121px] h-full px-3 py-2 flex justify-center text-sm font-semibold btn-purple">
+          확인
         </div>
       </div>
     </div>

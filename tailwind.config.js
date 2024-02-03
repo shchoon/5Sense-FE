@@ -31,6 +31,23 @@ module.exports = {
             border: '3px solid #D3C4F9'
           }
         },
+        '.btn-white': {
+          boxSizing: 'border-box',
+          background: 'white',
+          borderRadius: 8,
+          textAlign: 'center',
+          color: 'black',
+          fontWeight: '600',
+          cursor: 'pointer',
+          border: '1px solid #E5E7EB',
+          '&:hover': {
+            backgroundColor: '#F3F4F6',
+            color: '#7354E8'
+          },
+          '&:active': {
+            outline: '3px solid #F3F4F6'
+          }
+        },
         '.btn-line-purple': {
           boxSizing: 'border-box',
           background: 'white',
@@ -41,8 +58,7 @@ module.exports = {
           fontWeight: '600',
           cursor: 'pointer',
           '&:hover': {
-            background: '#563AC0',
-            color: 'white'
+            background: '#563AC0'
           }
         },
         '.input-line-gray': {
