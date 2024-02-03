@@ -126,10 +126,6 @@ export default function MyCenter() {
     }
   }
 
-  useOnClickOutside(addressNameInputRef, handelClickOutsideAddress)
-  useOnClickOutside(phoneNumInputRef, handelClickOutsidePhone)
-  useOnClickOutside(centerNameInputRef, handelClickOutsideCenter)
-
   /* 전화번호 입력 -> '-' &  number type 아닌 것들 입력 방지*/
   const allowOnlyNum = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const forbiddenKeys = ['-', 'e']
@@ -142,9 +138,6 @@ export default function MyCenter() {
     ) {
       e.preventDefault()
     }
-    /* if (e.currentTarget.value.length > 12 && e.key !== 'Backspace') {
-      e.preventDefault()
-    } */
   }
 
   const checkPostableData = (postData: postDataType) => {
@@ -192,6 +185,10 @@ export default function MyCenter() {
     dropDownList: getTimeList(),
     name: '마감 시간'
   }
+
+  useOnClickOutside(addressNameInputRef, handelClickOutsideAddress)
+  useOnClickOutside(phoneNumInputRef, handelClickOutsidePhone)
+  useOnClickOutside(centerNameInputRef, handelClickOutsideCenter)
 
   return (
     <>

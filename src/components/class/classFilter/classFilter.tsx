@@ -1,9 +1,9 @@
 import Image from 'next/image'
-import { useState, useRef, useEffect, BaseSyntheticEvent } from 'react'
-import chevronDownBlue from '@/assets/icons/chevron-down-blue.svg'
+import { useState, useRef } from 'react'
+import chevronDownBlue from '@/assets/icons/chevron_down_blue.svg'
 import chevronUpBlue from '@/assets/icons/chevron-up-blue.svg'
 import searchIcon from '@/assets/icons/search.svg'
-import chevronDownGray from '@/assets/icons/chevron-down-gray.svg'
+import chevronDownGray from '@/assets/icons/chevron_down_gray.svg'
 import chevronUpGray from '@/assets/icons/chevron-up-gray.svg'
 import { useOnClickOutside } from '../../../hooks/useOnclickOutside'
 
