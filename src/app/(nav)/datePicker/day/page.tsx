@@ -10,7 +10,7 @@ interface dateType {
   date: number
 }
 
-export default function DatePicker() {
+export default function DatePickerDay() {
   const dateName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const currentDate = new Date()
   const [dateData, setDateData] = useState<dateType>({
