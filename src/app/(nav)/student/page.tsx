@@ -4,12 +4,13 @@ import searchIconGray from '@/assets/icons/search.svg'
 import closeIcon from '@/assets/icons/close.svg'
 import searchIconWhite from '@/assets/icons/search_white.svg'
 import Image from 'next/image'
-import { useState, useEffect, useRef, use } from 'react'
 import Link from 'next/link'
-import { useRecoilState, useSetRecoilState } from 'recoil'
-import { idState, modalState } from '@/state/modal'
+import { useEffect, useRef, useState } from 'react'
+import { useRecoilState } from 'recoil'
+
 import NoneResult from '@/components/common/NoneResult'
 import { useGetData } from '@/hooks/useGetData'
+import { modalState } from '@/state/modal'
 
 interface studentType {
   id: string
@@ -45,7 +46,6 @@ export default function StudentPage() {
   const [scrollCount, setScrollCount] = useState(0)
   const [inputValue, setInputValue] = useState<string>('')
   const [modalValue, setModalValue] = useRecoilState(modalState)
-  const [idValue, setIdValue] = useRecoilState(idState)
 
   const options = {
     root: null,
@@ -245,8 +245,7 @@ export default function StudentPage() {
                 key={id}
                 className="w-full flex lg:gap-10 gap-8 lg:p-7 p-6 outline rounded-md outline-1 outline-gray-200 shadow-[0_5px_15px_0px_rgba(0,0,0,0.02)] hover:outline-primary-600"
                 onClick={() => {
-                  setModalValue(!modalValue)
-                  setIdValue(id)
+                  //handleModal(data.id)
                 }}
               >
                 <div className="flex lg:gap-6 gap-4 flex-1">

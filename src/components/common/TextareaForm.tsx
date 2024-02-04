@@ -3,6 +3,7 @@ import {
   ChangeEvent,
   SetStateAction,
   useCallback,
+  useEffect,
   useRef,
   useState
 } from 'react'
@@ -27,7 +28,7 @@ export default function TextareaForm({
 }: TextareaFormProps) {
   console.log(name)
   const [inputValue, setInputValue] = useState<string>('')
-  const ValueLength = inputValue.length
+  const ValueLength = inputValue?.length
 
   const textarea = useRef<HTMLTextAreaElement | null>(null)
   const handleResizeHeight = useCallback(
@@ -40,8 +41,17 @@ export default function TextareaForm({
     [textarea]
   )
   const handelChage = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    if (e.target.value.length <= maxLength) {
+      setInputValue(e.target.value)
+    } else if (e.target.value.length > maxLength) {
+      setInputValue(e.target.value.slice(0, maxLength))
+    }
     setSubmitData({ ...submitData, [name]: e.target.value })
   }
+
+  useEffect(() => {
+    setInputValue(submitData[name])
+  }, [submitData[name]])
 
   return (
     <>
@@ -49,7 +59,7 @@ export default function TextareaForm({
       <textarea
         ref={textarea}
         className={`${
-          inputValue.length > 0 ? 'bg-gray-50' : 'bg-white'
+          inputValue?.length > 0 ? 'bg-gray-50' : 'bg-white'
         } w-full h-auto input-line-gray gray-900-400 resize-none overflow-hidden`}
         placeholder={placeholder}
         name={name}

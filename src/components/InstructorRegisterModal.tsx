@@ -12,7 +12,7 @@ interface postDataType {
   phone: string
 }
 
-export default function () {
+export default function RegisterModal() {
   const router = useRouter()
 
   const [modal, setModal] = useRecoilState(instructorRegisterModal)

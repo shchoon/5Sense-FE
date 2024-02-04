@@ -1,15 +1,16 @@
 'use client'
+import chevronRight from '@/assets/icons/chevron/chevron_right_pri_600.svg'
 import plusCircle from '@/assets/icons/plus-circle.svg'
 import searchIconGray from '@/assets/icons/search.svg'
 import closeIcon from '@/assets/icons/close.svg'
 import searchIconWhite from '@/assets/icons/search_white.svg'
-import chevronRight from '@/assets/icons/chevron_right_pri_600.svg'
 import NoneResult from '@/components/common/NoneResult'
 import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
-import { useRecoilState } from 'recoil'
-import { instructorRegisterModal } from '@/state/modal'
 import { useGetData } from '@/hooks/useGetData'
+import { useRecoilState } from 'recoil'
+import { modalState } from '@/state/modal'
+import Link from 'next/link'
 import { postVarType, getDataType } from '../student/page'
 
 interface instructorType {
@@ -20,6 +21,19 @@ interface instructorType {
 
 export default function InstructorPage() {
   const inputRef = useRef<HTMLInputElement>(null)
+
+  // 모달 상태관리
+  const [Modal, setModal] = useRecoilState(modalState)
+
+  const handleModal = (id: string) => {
+    setModal(prevModal => ({
+      ...prevModal,
+      active: true,
+      id: id,
+      type: 'instructor'
+    }))
+  }
+
   const target: HTMLElement | null = document.getElementById('test')
   const numberCheckList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
@@ -32,7 +46,6 @@ export default function InstructorPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [scrollCount, setScrollCount] = useState(0)
   const [inputValue, setInputValue] = useState<any>('')
-  const [isModal, setIsModal] = useRecoilState(instructorRegisterModal)
   const options = {
     root: null,
     rootMargin: '0px',
@@ -75,6 +88,16 @@ export default function InstructorPage() {
     }
   }
 
+  useEffect(() => {
+    if (!Modal.active) {
+      useGetData('teachers', 1).then(res => {
+        setInstructorList((preInstructorData: getDataType[]) => [...res.data])
+        setPostVar(prePostVar => res.meta)
+        setIsRefresh(true)
+      })
+    }
+  }, [Modal.active])
+
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value)
   }
@@ -93,9 +116,9 @@ export default function InstructorPage() {
     setPostVar(prePostVar => res.meta)
   }
 
-  const handleClickModal = () => {
-    setIsModal(true)
-  }
+  /* const handleClickModal = () => {
+    setModal(true)
+  } */
 
   const checkInputType = () => {
     if (inputValue !== '' && numberCheckList.includes(inputValue[0])) {
@@ -135,7 +158,7 @@ export default function InstructorPage() {
     }
   }
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (!isModal) {
       useGetData('teachers', 1).then(res => {
         setInstructorList((preInstructorData: getDataType[]) => [...res.data])
@@ -143,7 +166,7 @@ export default function InstructorPage() {
         setIsRefresh(true)
       })
     }
-  }, [isModal])
+  }, [isModal]) */
 
   useEffect(() => {
     if (scrollCount !== 0 && postVar.hasNextPage) {
@@ -164,15 +187,19 @@ export default function InstructorPage() {
             강사 관리
           </div>
         </div>
-        <div
-          className="flex gap-2 items-center w-[132px] h-[41px] rounded-lg px-5 py-2.5 btn-purple"
-          onClick={handleClickModal}
+        <Link
+          href={'student/register'}
+          className="flex px-5 py-2.5 btn-purple text-sm"
         >
-          <Image src={plusCircle} width={20} height={20} alt=" " />
-          <div className="flex items-center h-[21px] w-16 text-white text-[11.5px] font-semibold font-['Pretendard'] cursor-pointer">
-            강사 등록
-          </div>
-        </div>
+          <Image
+            src={plusCircle}
+            alt="plus"
+            width={20}
+            height={20}
+            className="mr-2"
+          />
+          강사 등록
+        </Link>
       </div>
       {/* 검색창 */}
       <div className="flex gap-2.5 lg:w-[377px] lg:h-[42px] w-[326px] h-[37px] mb-5">
@@ -243,7 +270,7 @@ export default function InstructorPage() {
           </div>
         </div>
       ) : null}
-      {!isLoading && !isModal ? <div id="test"></div> : null}
+      {/* {!isLoading && !isModal ? <div id="test"></div> : null} */}
     </div>
   )
 }
