@@ -1,6 +1,5 @@
 'use client'
 import Image from 'next/image'
-import { useState } from 'react'
 import { useRecoilState } from 'recoil'
 
 import logout from '@/assets/icons/logout.svg'
@@ -11,9 +10,9 @@ import InstructorRegisterModal from '@/components/InstructorRegisterModal'
 
 import DetailModal from '@/components/detailModal'
 import AcademyInfo from '@/components/layout/AcademyInfo'
-import Navbar from '@/components/layout/Navbar'
+import { useState, useRef, useEffect } from 'react'
 import TodaySchedule from '@/components/layout/TodaySchedule'
-
+import Navbar from '@/components/layout/Navbar'
 import { modalState } from '@/state/modal'
 import SideModal from '@/components/modal/SideModal'
 

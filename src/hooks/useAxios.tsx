@@ -25,6 +25,7 @@ instance.interceptors.request.use(
 
     if (accessToken) {
       if (accessTokenExp && checkToken(accessTokenExp) < 5) {
+        console.log('expired')
         try {
           const res = await axios.post(
             process.env.NEXT_PUBLIC_IP_ADDRESS + '/auth/reissue',
@@ -41,6 +42,7 @@ instance.interceptors.request.use(
           config.headers.Authorization = `Bearer ${res.data.data.accessToken}`
         } catch (error) {
           console.log(error)
+          window.location.replace('/login')
         }
       }
       config.headers.Authorization = `Bearer ${accessToken}`

@@ -1,7 +1,7 @@
 'use client'
-import closeIcon from '@/assets/icons/close.svg'
 import plusCircle from '@/assets/icons/plus-circle.svg'
-import searchIcon from '@/assets/icons/search.svg'
+import searchIconGray from '@/assets/icons/search.svg'
+import closeIcon from '@/assets/icons/close.svg'
 import searchIconWhite from '@/assets/icons/search_white.svg'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -34,28 +34,20 @@ export interface getDataType {
 export default function StudentPage() {
   const inputRef = useRef<HTMLInputElement>(null)
   const target: HTMLElement | null = document.getElementById('test')
+  const numberCheckList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
   const [studentList, setStudentList] = useState<studentType[]>([])
   const [postVar, setPostVar] = useState<postVarType>({
     page: 1,
     hasNextPage: false
   })
-  const [refresh, setRefresh] = useState<boolean>(false)
+  const [isRefresh, setIsRefresh] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [scrollCount, setScrollCount] = useState(0)
-  const [loading, setLoading] = useState(false)
   const [inputValue, setInputValue] = useState<string>('')
+  const [modalValue, setModalValue] = useRecoilState(modalState)
 
-  const [Modal, setModal] = useRecoilState(modalState)
-  const handleModal = (id: string) => {
-    setModal(prevModal => ({
-      ...prevModal,
-      active: true,
-      id: id,
-      type: 'student'
-    }))
-  }
-
-  let options = {
+  const options = {
     root: null,
     rootMargin: '0px',
     threshold: 1.0
@@ -75,7 +67,7 @@ export default function StudentPage() {
 
   const getStudentListToScroll = async () => {
     if (inputValue !== '') {
-      const searchBy = inputRef.current?.name as string
+      const searchBy = inputRef.current?.name
       const res = await useGetData(
         'students',
         postVar.page + 1,
@@ -97,18 +89,18 @@ export default function StudentPage() {
     }
   }
 
-  const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value)
   }
 
-  const searchClick = async () => {
-    const searchBy = inputRef.current?.name as string
+  const handleClickSearch = async () => {
+    const searchBy = inputRef.current?.name
     const res = await useGetData('students', 1, searchBy, inputValue)
     setStudentList((preStudentData: getDataType[]) => [...res.data])
     setPostVar((prePostVar: postVarType) => res.meta)
   }
 
-  const onClickInputRefresh = async () => {
+  const handleClickInputRefresh = async () => {
     setInputValue('')
     const res = await useGetData('students', 1)
     setStudentList(res.data)
@@ -116,8 +108,7 @@ export default function StudentPage() {
   }
 
   const checkInputType = () => {
-    const checkList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-    if (inputValue !== '' && checkList.includes(inputValue[0])) {
+    if (inputValue !== '' && numberCheckList.includes(inputValue[0])) {
       return false
     } else {
       return true
@@ -138,37 +129,36 @@ export default function StudentPage() {
       alert('이름과 전화번호를 동시에 검색할 수 없습니다. 각각 입력해주세요.')
     }
     if (e.key == 'Enter') {
-      searchClick()
+      handleClickSearch()
     }
   }
 
   const preventInputDifferentType = (
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
-    const checkList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-    if (inputValue !== '' && checkList.includes(e.key)) {
+    if (inputValue !== '' && numberCheckList.includes(e.key)) {
       e.preventDefault()
       alert('이름과 전화번호를 동시에 검색할 수 없습니다. 각각 입력해주세요.')
     }
     if (e.key == 'Enter') {
-      searchClick()
+      handleClickSearch()
     }
   }
 
   useEffect(() => {
     useGetData('students', 1).then(res => {
       setStudentList((preInstructorData: getDataType[]) => [...res.data])
-      setPostVar((prePostVar: postVarType) => res.meta)
-      setRefresh(true)
+      setPostVar(res.meta)
+      setIsRefresh(true)
     })
   }, [])
 
   useEffect(() => {
     if (scrollCount !== 0 && postVar.hasNextPage) {
-      setLoading(true)
+      setIsLoading(true)
       setTimeout(() => {
         getStudentListToScroll()
-        setLoading(false)
+        setIsLoading(false)
       }, 500)
     }
   }, [scrollCount])
@@ -199,7 +189,7 @@ export default function StudentPage() {
       {/* 검색창 */}
       <div className="flex gap-2.5 lg:w-[377px] lg:h-[42px] w-[326px] h-[37px] mb-5">
         <div className="lg:w-[325px] lg:gap-2.5 w-[280px] flex gap-2 px-4 lg:py-3 py-2 rounded-lg outline outline-1 outline-gray-300 focus-within:outline-[#563AC0]">
-          <Image src={searchIcon} width={16} height={16} alt=" " />
+          <Image src={searchIconGray} width={16} height={16} alt=" " />
           <input
             ref={inputRef}
             className="w-[245px] border-none ring-0 focus:ring-0"
@@ -207,7 +197,7 @@ export default function StudentPage() {
             name={checkInputType() ? 'name' : 'phone'}
             type={checkInputType() ? 'text' : 'number'}
             value={inputValue}
-            onChange={onChangeInput}
+            onChange={handleChangeInput}
             onKeyDown={
               checkInputType() ? preventInputDifferentType : allowOnlyNum
             }
@@ -218,15 +208,14 @@ export default function StudentPage() {
             width={12}
             height={12}
             alt=" "
-            onClick={onClickInputRefresh}
+            onClick={handleClickInputRefresh}
           />
         </div>
-
         <div
           className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer"
-          onClick={searchClick}
+          onClick={handleClickSearch}
         >
-          <Image src={searchIconWhite} width={20} height={20} alt=" " />
+          <Image src={searchIconWhite} width={20} height={20} alt="" />
         </div>
       </div>
       {/* 수강생 목록 시작 */}
@@ -248,29 +237,29 @@ export default function StudentPage() {
         </div>
         {/* 수강생 목록 시작 */}
         <div className="w-full flex flex-col gap-[14px]">
-          {refresh && studentList.length === 0 ? <NoneResult /> : null}
-          {studentList?.map((data: studentType, i: number) => {
+          {isRefresh && studentList.length === 0 ? <NoneResult /> : null}
+          {/* 검색 결과 없음 */}
+          {studentList?.map(({ id, name, className, phone, particulars }) => {
             return (
               <button
-                key={i}
+                key={id}
                 className="w-full flex lg:gap-10 gap-8 lg:p-7 p-6 outline rounded-md outline-1 outline-gray-200 shadow-[0_5px_15px_0px_rgba(0,0,0,0.02)] hover:outline-primary-600"
                 onClick={() => {
-                  handleModal(data.id)
+                  //handleModal(data.id)
                 }}
               >
                 <div className="flex lg:gap-6 gap-4 flex-1">
                   <div className="w-[100px] gray-800-semibold text-sm font-['Pretendard'] text-left">
-                    {data.name}
+                    {name}
                   </div>
                   <div className="lg:w-[160px] w-[130px] gray-800-semibold text-sm font-['Pretendard'] text-left">
-                    {data.phone.slice(0, 3)}-{data.phone.slice(3, 7)}-
-                    {data.phone.slice(7, 11)}
+                    {phone.slice(0, 3)}-{phone.slice(3, 7)}-{phone.slice(7, 11)}
                   </div>
                   <div className="xl:flex-1 lg:w-[100px] flex-1 gray-800-semibold text-sm font-['Pretendard'] text-left">
-                    {data.className}
+                    {className}
                   </div>
                   <div className="xl:w-[400px] lg:flex-1 w-[200px] gray-900-normal text-base font-['Pretendard'] text-left">
-                    {data.particulars}
+                    {particulars}
                   </div>
                 </div>
               </button>
@@ -278,7 +267,7 @@ export default function StudentPage() {
           })}
         </div>
       </div>
-      {loading && (
+      {isLoading && (
         <div className="w-full h-14 flex justify-center items-center pt-[50px]">
           <div
             className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
@@ -290,7 +279,7 @@ export default function StudentPage() {
           </div>
         </div>
       )}
-      {!loading ? <div id="test"></div> : null}
+      {!isLoading ? <div id="test"></div> : null}
     </div>
   )
 }
