@@ -1,17 +1,19 @@
 'use client'
+import Image from 'next/image'
+import { useRef } from 'react'
+
+import chevronRight from '@/assets/icons/chevron/chevron_right_pri_600.svg'
+import closeIcon from '@/assets/icons/close.svg'
 import plusCircle from '@/assets/icons/plus-circle.svg'
 import searchIcon from '@/assets/icons/search.svg'
-import closeIcon from '@/assets/icons/close.svg'
 import searchIconWhite from '@/assets/icons/search_white.svg'
-import chevronRight from '@/assets/icons/chevron_right_pri_600.svg'
 import NoneResult from '@/components/common/NoneResult'
-import Image from 'next/image'
-import { useState, useEffect, useCallback } from 'react'
-import { useRecoilState } from 'recoil'
-import { instructorRegisterModal } from '@/state/modal'
 import { useGetData } from '@/hooks/useGetData'
-import { useRef } from 'react'
-import { postVarType, getDataType } from '../student/page'
+import { useEffect, useState } from 'react'
+import { useRecoilState } from 'recoil'
+import { getDataType, postVarType } from '../student/page'
+import { modalState } from '@/state/modal'
+import Link from 'next/link'
 
 export default function InstructorPage() {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -21,7 +23,17 @@ export default function InstructorPage() {
   const [scrollCount, setScrollCount] = useState(0)
   const [instructorList, setInstructorList] = useState<any>([])
 
-  const [modalValue, setModalValue] = useRecoilState(instructorRegisterModal)
+  // 모달 상태관리
+  const [Modal, setModal] = useRecoilState(modalState)
+
+  const handleModal = (id: string) => {
+    setModal(prevModal => ({
+      ...prevModal,
+      active: true,
+      id: id,
+      type: 'instructor'
+    }))
+  }
 
   const [inputValue, setInputValue] = useState<any>('')
   const [postVar, setPostVar] = useState<postVarType>({
@@ -82,14 +94,14 @@ export default function InstructorPage() {
   }
 
   useEffect(() => {
-    if (!modalValue) {
+    if (!Modal.active) {
       useGetData('teachers', 1).then(res => {
         setInstructorList((preInstructorData: getDataType[]) => [...res.data])
         setPostVar(prePostVar => res.meta)
         setRefresh(true)
       })
     }
-  }, [modalValue])
+  }, [Modal.active])
 
   const onChangeInput = (event: any) => {
     setInputValue(event.target.value)
@@ -108,10 +120,6 @@ export default function InstructorPage() {
     setInstructorList((preInstructorData: getDataType[]) => [...res.data])
     setPostVar(prePostVar => res.meta)
     setRefresh(true)
-  }
-
-  const modalClick = () => {
-    setModalValue(true)
   }
 
   const checkInputType = () => {
@@ -164,15 +172,19 @@ export default function InstructorPage() {
             강사 관리
           </div>
         </div>
-        <div
-          className="flex gap-2 items-center w-[132px] h-[41px] rounded-lg px-5 py-2.5 btn-purple"
-          onClick={modalClick}
+        <Link
+          href={'student/register'}
+          className="flex px-5 py-2.5 btn-purple text-sm"
         >
-          <Image src={plusCircle} width={20} height={20} alt=" " />
-          <div className="h-[21px] w-16 text-white text-[11.5px] font-semibold font-['Pretendard'] cursor-pointer">
-            강사 등록
-          </div>
-        </div>
+          <Image
+            src={plusCircle}
+            alt="plus"
+            width={20}
+            height={20}
+            className="mr-2"
+          />
+          강사 등록
+        </Link>
       </div>
       {/* 검색창 */}
       <div className="flex gap-2.5 lg:w-[377px] lg:h-[42px] w-[326px] h-[37px] mb-5">
@@ -208,11 +220,12 @@ export default function InstructorPage() {
       {/* 겅색 결과 없음 */}
       <div className="w-full grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-5">
         {instructorList?.map(
-          (data: { name: string; phone: string }, i: number) => {
+          (data: { name: string; phone: string; id: string }, idx: number) => {
             return (
               <div
-                key={i}
-                className="w-full h-[240px] flex flex-col justify-between px-6 pt-8 pb-6 border border-gray-200 rounded-3xl shadow-[0px_5px_15px_0px_rgba(0, 0, 0, 0.02)]"
+                key={idx}
+                className="w-full h-[240px] flex flex-col justify-between px-6 pt-8 pb-6 border border-gray-200 rounded-3xl shadow-[0px_5px_15px_0px_rgba(0, 0, 0, 0.02)] cursor-pointer"
+                onClick={() => handleModal(data.id)}
               >
                 <div className="w-full flex flex-col gap-2">
                   <div className="w-[307px] gray-900-semibold text-2xl font-['Pretendard']">
@@ -233,8 +246,8 @@ export default function InstructorPage() {
           }
         )}
       </div>
-      {!loading && !modalValue ? <div id="test"></div> : null}
-      {loading ? (
+      {!loading && !Modal.active ? <div id="test"></div> : null}
+      {loading && (
         <div className="w-full h-[70px] pt-[50px] flex justify-center items-center">
           <div
             className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
@@ -245,7 +258,7 @@ export default function InstructorPage() {
             </span>
           </div>
         </div>
-      ) : null}
+      )}
     </div>
   )
 }
