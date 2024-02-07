@@ -2,7 +2,8 @@
 import allowLeft from '@/assets/icons/allow_left.svg'
 import allowRight from '@/assets/icons/allow_right.svg'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import useGetHolidayData from '@/hooks/useGetHolidayData'
 
 interface dateType {
   year: number
@@ -28,8 +29,9 @@ export default function DatePickerDay() {
     month: currentDate.getMonth() + 1,
     date: currentDate.getDate()
   })
-  console.log(firstDateData)
   const [clickedDate, setClickedDate] = useState<string>('')
+  const getFirstHoliData = useGetHolidayData(firstDateData.year)
+  const getSecondHoliData = useGetHolidayData(secondDateData.year)
 
   const getCalanderData = (monthData: dateType) => {
     const lastDateOfLastMonthData = new Date(monthData.year, monthData.month, 0)

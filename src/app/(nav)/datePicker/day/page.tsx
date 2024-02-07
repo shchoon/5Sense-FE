@@ -2,7 +2,9 @@
 import allowLeft from '@/assets/icons/allow_left.svg'
 import allowRight from '@/assets/icons/allow_right.svg'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import useGetHolidayData from '@/hooks/useGetHolidayData'
 
 interface dateType {
   year: number
@@ -18,8 +20,8 @@ export default function DatePickerDay() {
     month: currentDate.getMonth(),
     date: currentDate.getDate()
   })
-  console.log(dateData)
   const [clickedDate, setClickedDate] = useState<string>('')
+  const getHoliData = useGetHolidayData(dateData.year)
 
   const getCalanderData = () => {
     const lastDateOfLastMonthData = new Date(dateData.year, dateData.month, 0)
@@ -41,9 +43,33 @@ export default function DatePickerDay() {
         })
       }
     }
-
-    for (var i = 1; i <= lastDateOfCurrnetMonthData.getDate(); i++) {
-      list.push({ date: i, textColor: 'gray-900-bold', clickable: true })
+    if (getHoliData[dateData.month + 1]) {
+      const monthHoliData = getHoliData[dateData.month + 1].date
+      console.log(monthHoliData)
+      for (var i = 1; i <= lastDateOfCurrnetMonthData.getDate(); i++) {
+        if (monthHoliData.includes(i)) {
+          console.log(i)
+          list.push({
+            date: i,
+            textColor: 'font-bold text-red-600',
+            clickable: true
+          })
+        } else {
+          list.push({
+            date: i,
+            textColor: 'gray-900-bold',
+            clickable: true
+          })
+        }
+      }
+    } else {
+      for (var i = 1; i <= lastDateOfCurrnetMonthData.getDate(); i++) {
+        list.push({
+          date: i,
+          textColor: 'gray-900-bold',
+          clickable: true
+        })
+      }
     }
 
     if (lastDateOfCurrnetMonthData.getDay() !== 6) {
@@ -64,12 +90,17 @@ export default function DatePickerDay() {
     return result
   }
 
+  const dateList = getCalanderData()
+
   const onClickDateHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     console.log(e.currentTarget.id)
     setClickedDate(e.currentTarget.id)
   }
 
   const onClickMonthForwardHandler = () => {
+    if (dateData.year === 2025 && dateData.month === 11) {
+      return
+    }
     if (dateData.month === 11) {
       setDateData((preDateData: dateType) => ({
         ...preDateData,
@@ -85,6 +116,9 @@ export default function DatePickerDay() {
   }
 
   const onClickMonthBackHandler = () => {
+    if (dateData.year === 2021 && dateData.month === 0) {
+      return
+    }
     if (dateData.month === 0) {
       setDateData((preDateData: dateType) => ({
         ...preDateData,
@@ -102,8 +136,6 @@ export default function DatePickerDay() {
   const onClickCancelBtn = () => {
     setClickedDate('')
   }
-
-  const dateList = getCalanderData()
 
   return (
     <div className="flex flex-col gap-2 w-[283px] p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
@@ -144,7 +176,7 @@ export default function DatePickerDay() {
         {dateList.map((data, i) => {
           return (
             <div key={i} className="w-full h-[34px] grid grid-cols-7">
-              {data.map((dateData, i) => {
+              {data.map((dateData: any, i: number) => {
                 return (
                   <div
                     key={i}

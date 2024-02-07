@@ -29,10 +29,12 @@ export default function DropDown({
     setIsClickDropDown(prev => !prev)
   }
   return (
-    <div className="relative w-full flex items-center">
+    <div
+      className="relative w-full flex items-center cursor-pointer"
+      onClick={handleClickDropDown}
+    >
       <div
-        className={`w-full ${height} px-4 ${px} ${py} py-3.5 h-[52px] border rounded-lg border-gray-200 focus:outline-none focus:border-primary-700 focus:bg-gray-50 cursor-pointer`}
-        onClick={handleClickDropDown}
+        className={`w-full ${height} px-4 ${px} ${py} py-3.5 h-[52px] border rounded-lg border-gray-200 focus:outline-none focus:border-primary-700 focus:bg-gray-50`}
       >
         <div className="h-[18px] gray-500-normal text-sm font-['Pretendard']">
           {clickedItem}
