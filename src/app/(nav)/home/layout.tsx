@@ -1,5 +1,5 @@
-import MainBox from '@/components/mainPage/MainBox'
-import WriteBox from '@/components/mainPage/WriteBox'
+import MainBox from '@/components/main/MainBox'
+import WriteBox from '@/components/main/WriteBox'
 
 export default function HomeLayout({
   children

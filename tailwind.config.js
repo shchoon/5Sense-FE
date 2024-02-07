@@ -8,7 +8,8 @@ module.exports = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/**/*.{js,jsx,ts,tsx}'
+    './src/**/*.{js,jsx,ts,tsx}',
+    './node_modules/flowbite/**/*.js'
   ],
   plugins: [
     require('flowbite/plugin'),
@@ -22,8 +23,29 @@ module.exports = {
           color: 'white',
           fontWeight: '600',
           cursor: 'pointer',
+          border: '3px solid transparent',
           '&:hover': {
             backgroundColor: '#563AC0'
+          },
+          '&:active': {
+            border: '3px solid #D3C4F9'
+          }
+        },
+        '.btn-white': {
+          boxSizing: 'border-box',
+          background: 'white',
+          borderRadius: 8,
+          textAlign: 'center',
+          color: 'black',
+          fontWeight: '600',
+          cursor: 'pointer',
+          border: '1px solid #E5E7EB',
+          '&:hover': {
+            backgroundColor: '#F3F4F6',
+            color: '#7354E8'
+          },
+          '&:active': {
+            outline: '3px solid #F3F4F6'
           }
         },
         '.btn-line-purple': {
@@ -36,8 +58,7 @@ module.exports = {
           fontWeight: '600',
           cursor: 'pointer',
           '&:hover': {
-            background: '#563AC0',
-            color: 'white'
+            background: '#563AC0'
           }
         },
         '.input-line-gray': {
@@ -58,6 +79,24 @@ module.exports = {
           '&:focus': {
             outline: 'none',
             border: '1px #5539C0 solid',
+            boxShadow: 'none' //textarea default로 shadow 존재
+          }
+        },
+        'input-instructor-register': {
+          paddingLeft: 12,
+          paddingRight: 12,
+          paddingBottom: 20,
+          paddingTop: 20,
+          border: '1px #E5E7EB solid',
+          borderRadius: 8,
+          cursor: 'pointer',
+          '&:placeholder': {
+            color: '#9CA3AF',
+            fontWeight: '400'
+          },
+          '&:focus': {
+            outline: 'none',
+            border: '1px #563AC0 solid',
             boxShadow: 'none' //textarea default로 shadow 존재
           }
         }
