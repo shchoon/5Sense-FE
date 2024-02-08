@@ -5,22 +5,29 @@ import chevronRight from '../../assets/icons/chevron/chevron-right.svg'
 import calender from '../../assets/icons/calendar.svg'
 import { useState } from 'react'
 import DateSlideTab from './DateSlideTab'
+import MonthDatePicker from '../datePicker/monthDatePicker'
+import { dateDataType } from '../datePicker/dayDatePicker'
 
 export default function MonthDateTab() {
   const { width, height } = useWindowSize()
   const currentDate = new Date()
   const [dateData, setDateData] = useState({
     year: currentDate.getFullYear(),
-    month: currentDate.getMonth() + 1,
+    month: currentDate.getMonth(),
     date: currentDate.getDate()
   })
+  const [isClickedDatePicker, setIsClickedDatePicker] = useState<boolean>(false)
+
+  const onClickDatePickerHandler = () => {
+    setIsClickedDatePicker(prev => !prev)
+  }
 
   function moveForwardMonth() {
-    if (dateData.month == 12) {
+    if (dateData.month === 11) {
       setDateData({
         ...dateData,
         year: dateData.year + 1,
-        month: 1
+        month: 0
       })
     } else {
       setDateData({
@@ -31,16 +38,33 @@ export default function MonthDateTab() {
   }
 
   function moveBackMonth() {
-    if (dateData.month == 1) {
+    if (dateData.month === 0) {
       setDateData({
         ...dateData,
         year: dateData.year - 1,
-        month: 12
+        month: 11
       })
     } else {
       setDateData({
         ...dateData,
         month: dateData.month - 1
+      })
+    }
+  }
+
+  const setDateDataFromChild = (data: dateDataType, type: string) => {
+    if (type === 'check') {
+      setDateData({
+        ...dateData,
+        year: data.year,
+        month: data.month
+      })
+      setIsClickedDatePicker(false)
+    } else {
+      setDateData({
+        ...dateData,
+        year: data.year,
+        month: data.month
       })
     }
   }
@@ -60,11 +84,12 @@ export default function MonthDateTab() {
             >
               <Image src={chevronLeft} width={24} height={24} alt=" " />
             </div>
-            <div className="w-full px-3 py-2 flex justify-center gap-2 items-center">
+            <div
+              className="w-full px-3 py-2 flex justify-center gap-2 items-center gray-900-semibold text-base font-['Pretendard'] hover:text-primary-600 cursor-pointer"
+              onClick={onClickDatePickerHandler}
+            >
               <Image src={calender} width={18} height={18} alt=" " />
-              <span className="gray-900-semibold text-base font-['Pretendard']">
-                {dateData.year}년 {dateData.month}월
-              </span>
+              {dateData.year}년 {dateData.month + 1}월
             </div>
             <div
               className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
@@ -74,6 +99,14 @@ export default function MonthDateTab() {
             </div>
           </div>
           <DateSlideTab />
+          {isClickedDatePicker && (
+            <div className="absolute w-[255px] z-10 right-0 left-0 mx-auto top-[60px]">
+              <MonthDatePicker
+                changeParentsDateData={setDateDataFromChild}
+                parentsDateData={dateData}
+              />
+            </div>
+          )}
         </div>
       </div>
     </>

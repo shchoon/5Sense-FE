@@ -5,8 +5,8 @@ import chevronRight from '../../assets/icons/chevron/chevron-right.svg'
 import calender from '../../assets/icons/calendar.svg'
 import { useState } from 'react'
 import DateSlideTab from './DateSlideTab'
-import DayDatePicker from '../datePicker/dayDatePIcker'
-import { dateDataType } from '../datePicker/dayDatePIcker'
+import { dateDataType } from '../datePicker/dayDatePicker'
+import DayDatePicker from '../datePicker/dayDatePicker'
 
 export default function DayDateTab() {
   const { width, height } = useWindowSize()
@@ -25,7 +25,7 @@ export default function DayDateTab() {
   )
   const lastDateOfLastMonthData = new Date(dateData.year, dateData.month, 0)
 
-  const clickDatePicker = () => {
+  const onClickDatePickerHandler = () => {
     setIsClickedDatePicker(prev => !prev)
   }
 
@@ -107,7 +107,7 @@ export default function DayDateTab() {
             </div>
             <div
               className="w-full px-3 py-2 flex justify-center gap-2 items-center gray-900-semibold text-base font-['Pretendard'] hover:text-primary-600 cursor-pointer"
-              onClick={clickDatePicker}
+              onClick={onClickDatePickerHandler}
             >
               <Image
                 src={calender}
