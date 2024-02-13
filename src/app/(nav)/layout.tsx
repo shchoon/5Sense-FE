@@ -9,7 +9,7 @@ import noticeActive from '@/assets/icons/notice-active.svg'
 import mainLogo from '@/assets/logo/mainLogo.png'
 import InstructorRegisterModal from '@/components/InstructorRegisterModal'
 
-import DetailModal from '@/components/detailModal'
+// import DetailModal from '@/components/detailModal'
 import AcademyInfo from '@/components/layout/AcademyInfo'
 import Navbar from '@/components/layout/Navbar'
 import TodaySchedule from '@/components/layout/TodaySchedule'
