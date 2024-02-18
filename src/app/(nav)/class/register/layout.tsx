@@ -1,6 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import arrowBack from '@/assets/icons/arrow-back.svg'
+import arrowBack from 'public/assets/icons/arrow-back.svg'
 import Image from 'next/image'
 
 export default function ClassRegisterLayout({
@@ -15,7 +15,12 @@ export default function ClassRegisterLayout({
         className="w-full flex gap-4 items-center black-bold text-3xl text-start cursor-pointer"
         onClick={() => router.push('/class')}
       >
-        <Image src={arrowBack} alt="arrow-back" width={28} height={28} />
+        <Image
+          src={'/public/assets/icons/arrow-back.svg'}
+          alt="arrow-back"
+          width={28}
+          height={28}
+        />
         클래스 등록
       </button>
 

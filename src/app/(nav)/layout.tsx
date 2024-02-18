@@ -2,15 +2,15 @@
 import Image from 'next/image'
 import { useRecoilState } from 'recoil'
 
-import logout from '@/assets/icons/logout.svg'
-import menu from '@/assets/icons/menu.svg'
-import noticeActive from '@/assets/icons/notice-active.svg'
-import mainLogo from '@/assets/logo/mainLogo.png'
+import logout from 'public/assets/icons/logout.svg'
+import menu from 'public/assets/icons/menu.svg'
+import noticeActive from 'public/assets/icons/notice-active.svg'
+import mainLogo from 'public/assets/logo/mainLogo.png'
 import DetailModal from '@/components/detailModal'
 import AcademyInfo from '@/components/layout/AcademyInfo'
 import TodaySchedule from '@/components/layout/TodaySchedule'
 import Navbar from '@/components/layout/Navbar'
-import { modalState } from '@/state/modal'
+import { modalState } from '@/lib/state/modal'
 import SideModal from '@/components/modal/SideModal'
 
 export default function MainLayout({

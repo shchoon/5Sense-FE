@@ -1,21 +1,24 @@
 'use client'
+// 모듈
 import Image from 'next/image'
 import { useRef } from 'react'
-
-import chevronRight from '@/assets/icons/chevron/chevron_right_pri_600.svg'
-import closeIcon from '@/assets/icons/close.svg'
-import plusCircle from '@/assets/icons/plus-circle.svg'
-import searchIcon from '@/assets/icons/search.svg'
-import searchIconWhite from '@/assets/icons/search_white.svg'
-import NoneResult from '@/components/common/NoneResult'
-import { useGetData } from '@/hooks/useGetData'
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { getDataType, postVarType } from '../student/page'
-import { modalState } from '@/state/modal'
-import Link from 'next/link'
 
-interface instructorType {
+//내장
+import { getDataType, postVarType } from '../student/page'
+import { useGetData } from '@/hooks/useGetData'
+import { modalState } from '@/lib/state/modal'
+import NoneResult from '@/components/common/NoneResult'
+
+//이미지
+import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
+import closeIcon from 'public/assets/icons/close.svg'
+import plusCircle from 'public/assets/icons/plus-circle.svg'
+import searchIcon from 'public/assets/icons/search.svg'
+import searchIconWhite from 'public/assets/icons/search_white.svg'
+
+interface instruct {
   id: string
   name: string
   phone: string
@@ -70,10 +73,7 @@ export default function InstructorPage() {
     rootMargin: '0px',
     threshold: 1.0
   }
-  const handleObserver = (
-    [entry]: IntersectionObserverEntry[],
-    observer: IntersectionObserver
-  ) => {
+  const handleObserver = ([entry]: IntersectionObserverEntry[], observer: IntersectionObserver) => {
     if (entry.isIntersecting) {
       observer.unobserve(entry.target)
       setScrollCount(prev => prev + 1)
@@ -86,23 +86,12 @@ export default function InstructorPage() {
   const getInstructorListToScroll = async () => {
     if (inputValue !== '') {
       const searchBy = inputRef.current?.name
-      const res = await useGetData(
-        'teachers',
-        postVar.page + 1,
-        searchBy,
-        inputValue
-      )
-      setInstructorList((preInstructorData: getDataType[]) => [
-        ...preInstructorData,
-        ...res.data
-      ])
+      const res = await useGetData('teachers', postVar.page + 1, searchBy, inputValue)
+      setInstructorList((preInstructorData: getDataType[]) => [...preInstructorData, ...res.data])
       setPostVar((prePostVar: postVarType) => res.meta)
     } else {
       const res = await useGetData('teachers', postVar.page + 1)
-      setInstructorList((preInstructorData: getDataType[]) => [
-        ...preInstructorData,
-        ...res.data
-      ])
+      setInstructorList((preInstructorData: getDataType[]) => [...preInstructorData, ...res.data])
       setPostVar((prePostVar: postVarType) => res.meta)
     }
   }
@@ -146,11 +135,7 @@ export default function InstructorPage() {
   const allowOnlyNum = (e: React.KeyboardEvent<HTMLInputElement>) => {
     let regex = /^[a-zA-Z]+$/
     const forbiddenKeys = ['-', 'e', 'ArrowUp', 'ArrowDown']
-    if (
-      forbiddenKeys.includes(e.key) ||
-      e.currentTarget.value.length > 12 ||
-      (e.currentTarget.value.length === 12 && e.key !== 'Backspace')
-    ) {
+    if (forbiddenKeys.includes(e.key) || e.currentTarget.value.length > 12 || (e.currentTarget.value.length === 12 && e.key !== 'Backspace')) {
       e.preventDefault()
     }
     if (regex.test(e.key) && e.key !== 'Backspace' && e.key !== 'Enter') {
@@ -161,9 +146,7 @@ export default function InstructorPage() {
     }
   }
 
-  const preventInputDifferentType = (
-    e: React.KeyboardEvent<HTMLInputElement>
-  ) => {
+  const preventInputDifferentType = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (inputValue !== '' && numberCheckList.includes(e.key)) {
       e.preventDefault()
       alert('이름과 전화번호를 동시에 검색할 수 없습니다. 각각 입력해주세요.')
@@ -198,21 +181,10 @@ export default function InstructorPage() {
       {/* 수강생 관리 + 수강생 등록 버튼 */}
       <div className="flex w-full pt-12 mb-[30px] justify-between">
         <div className=" h-[30px]">
-          <div className="w-full black-bold text-3xl font-['Pretendard']">
-            강사 관리
-          </div>
+          <div className="w-full black-bold text-3xl font-['Pretendard']">강사 관리</div>
         </div>
-        <button
-          onClick={() => handleSmallModal('instructor')}
-          className="flex px-5 py-2.5 btn-purple text-sm"
-        >
-          <Image
-            src={plusCircle}
-            alt="plus"
-            width={20}
-            height={20}
-            className="mr-2"
-          />
+        <button onClick={() => handleSmallModal('instructor')} className="flex px-5 py-2.5 btn-purple text-sm">
+          <Image src={plusCircle} alt="plus" width={20} height={20} className="mr-2" />
           강사 등록
         </button>
       </div>
@@ -228,18 +200,9 @@ export default function InstructorPage() {
             type={checkInputType() ? 'text' : 'number'}
             value={inputValue}
             onChange={handleChangeInput}
-            onKeyDown={
-              checkInputType() ? preventInputDifferentType : allowOnlyNum
-            }
+            onKeyDown={checkInputType() ? preventInputDifferentType : allowOnlyNum}
           />
-          <Image
-            className="cursor-pointer"
-            src={closeIcon}
-            width={12}
-            height={12}
-            alt=" "
-            onClick={handleClickInputRefresh}
-          />
+          <Image className="cursor-pointer" src={closeIcon} width={12} height={12} alt=" " onClick={handleClickInputRefresh} />
         </div>
         <div className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer">
           <Image src={searchIconWhite} width={20} height={20} alt=" " />
@@ -256,17 +219,13 @@ export default function InstructorPage() {
               className="w-full h-[240px] flex flex-col justify-between px-6 pt-8 pb-6 border border-gray-200 rounded-3xl shadow-[0px_5px_15px_0px_rgba(0, 0, 0, 0.02)]"
             >
               <div className="w-full flex flex-col gap-2">
-                <div className="w-[307px] gray-900-semibold text-2xl font-['Pretendard']">
-                  {name}
-                </div>
+                <div className="w-[307px] gray-900-semibold text-2xl font-['Pretendard']">{name}</div>
                 <div className="w-[307px] text-gray-500 text-base font-medium font-['Pretendard']">
                   {phone.slice(0, 3)}-{phone.slice(3, 7)}-{phone.slice(7, 11)}
                 </div>
               </div>
               <div className="w-full px-5 py-2.5 flex gap-2 justify-center border border-primary-600 rounded-lg">
-                <div className="indigo-500-semibold text-sm font-['Pretendard']">
-                  강사 정보
-                </div>
+                <div className="indigo-500-semibold text-sm font-['Pretendard']">강사 정보</div>
                 <Image src={chevronRight} width={20} height={20} alt="" />
               </div>
             </div>
@@ -281,9 +240,7 @@ export default function InstructorPage() {
             className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
             role="status"
           >
-            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-              Loading...
-            </span>
+            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
           </div>
         </div>
       )}

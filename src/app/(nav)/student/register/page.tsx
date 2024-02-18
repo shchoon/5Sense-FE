@@ -1,8 +1,8 @@
 'use client'
 import Image from 'next/image'
-import Ellipsis from '@/assets/icons/ellipsis75.svg'
-import ArrowBack from '@/assets/icons/allowBack.svg'
-import PlusCircle from '@/assets/icons/plus_circle_bg_pri_600.svg'
+import Ellipsis from 'public/assets/icons/ellipsis75.svg'
+import ArrowBack from 'public/assets/icons/allowBack.svg'
+import PlusCircle from 'public/assets/icons/plus_circle_bg_pri_600.svg'
 import { SetStateAction, useState } from 'react'
 import InputForm, { InputFormProps } from '@/components/common/InputForm'
 import TextareaForm, {
@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import useInputNum from '@/hooks/useInputNum'
 import { AxiosError, AxiosResponse } from 'axios'
-import instance from '@/hooks/useAxios'
+import instance from '@/lib/api/axios'
 
 type studentInfo = {
   name: string

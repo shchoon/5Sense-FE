@@ -1,10 +1,10 @@
 'use client'
-import closeIcon from '@/assets/icons/close.svg'
-import plusCircle from '@/assets/icons/plus-circle.svg'
+import closeIcon from 'public/assets/icons/close.svg'
+import plusCircle from 'public/assets/icons/plus-circle.svg'
 
-import searchIconGray from '@/assets/icons/search.svg'
+import searchIconGray from 'public/assets/icons/search.svg'
 
-import searchIconWhite from '@/assets/icons/search_white.svg'
+import searchIconWhite from 'public/assets/icons/search_white.svg'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
@@ -12,7 +12,7 @@ import { useRecoilState } from 'recoil'
 
 import NoneResult from '@/components/common/NoneResult'
 import { useGetData } from '@/hooks/useGetData'
-import { modalState } from '@/state/modal'
+import { modalState } from '@/lib/state/modal'
 
 interface studentType {
   id: string

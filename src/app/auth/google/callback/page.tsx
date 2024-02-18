@@ -1,7 +1,7 @@
 'use client'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import instance from '@/hooks/useAxios'
+import instance from '@/lib/api/axios'
 
 export default function GoogleCallbak() {
   const searchParams = useSearchParams()

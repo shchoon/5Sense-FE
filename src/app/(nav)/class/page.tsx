@@ -2,7 +2,7 @@
 
 import ClassFilter from '@/components/class/classFilter'
 import Link from 'next/link'
-import plusCircle from '@/assets/icons/plus-circle.svg'
+import plusCircle from '/public/assets/icons/plus-circle.svg'
 import Image from 'next/image'
 
 export default function ClassPage() {
@@ -188,7 +188,7 @@ export default function ClassPage() {
           className="Button flex flex-row px-5 py-2.5 btn-purple text-sm"
         >
           <Image
-            src={plusCircle}
+            src={'/public/assets/icons/plus-circle.svg'}
             alt="plus"
             width={20}
             height={20}

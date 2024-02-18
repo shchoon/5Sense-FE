@@ -1,11 +1,11 @@
 import Image from 'next/image'
-import close_circle from '@/assets/icons/closeCircle.svg'
+import close_circle from 'public/assets/icons/closeCircle.svg'
 
 import { useRecoilState } from 'recoil'
 import React, { useState } from 'react'
-import instance from '@/hooks/useAxios'
+import instance from '@/lib/api/axios'
 import { AxiosResponse } from 'axios'
-import { modalState } from '@/state/modal'
+import { modalState } from '@/lib/state/modal'
 
 interface postDataType {
   name: string

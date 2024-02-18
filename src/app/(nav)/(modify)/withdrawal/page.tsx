@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import Image from 'next/image'
-import chevron_gray from '@/assets/icons/chevron_down_gray.svg'
+import chevron_gray from 'public/assets/icons/chevron_down_gray.svg'
 import DropDown from '@/components/common/DropDown'
 
 export default function WithDrawal() {

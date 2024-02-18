@@ -3,8 +3,8 @@ import Image from 'next/image'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 import DetailStudent from './DetailStudent'
-import { modalState } from '@/state/modal'
-import close_Circle_bg from '@/assets/icons/close_circle_bg_pri_600.svg'
+import { modalState } from '@/lib/state/modal'
+import close_Circle_bg from 'public/assets/icons/close_circle_bg_pri_600.svg'
 
 import DetailInstructor from './DetailInstructor'
 import InstructorRegisterModal from '../InstructorRegisterModal'

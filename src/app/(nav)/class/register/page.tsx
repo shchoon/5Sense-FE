@@ -2,7 +2,7 @@
 
 import ClassType from '@/components/class/register/classType'
 import ClassInfo from '@/components/class/register/classInfo'
-import instance from '@/hooks/useAxios'
+import instance from '@/lib/api/axios'
 import { useEffect, useState } from 'react'
 
 export default function RegisterPage() {

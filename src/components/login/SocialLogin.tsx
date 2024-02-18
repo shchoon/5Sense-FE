@@ -1,7 +1,7 @@
 import Image from 'next/image'
-import kakaoLogo from '@/assets/logo/kakaoLogo.svg'
-import naverLogo from '@/assets/logo/naverLogo.svg'
-import googleLogo from '@/assets/logo/googleLogo.svg'
+import kakaoLogo from 'public/assets/logo/kakaoLogo.svg'
+import naverLogo from 'public/assets/logo/naverLogo.svg'
+import googleLogo from 'public/assets/logo/googleLogo.svg'
 import Script from 'next/script'
 import { useRouter } from 'next/navigation'
 

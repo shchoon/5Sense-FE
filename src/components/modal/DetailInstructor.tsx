@@ -1,8 +1,8 @@
-import instance from '@/hooks/useAxios'
+import instance from '@/lib/api/axios'
 import { useEffect, useState } from 'react'
 import { SideProps } from './SideModal'
 import { useRecoilState } from 'recoil'
-import { modalState } from '@/state/modal'
+import { modalState } from '@/lib/state/modal'
 import { useRouter } from 'next/navigation'
 
 export default function DetailInstructor({ id }: SideProps) {

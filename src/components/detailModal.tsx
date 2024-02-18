@@ -1,6 +1,6 @@
 'use client'
-import instance from '@/hooks/useAxios'
-import { idState, modalState } from '@/state/modal'
+import instance from '@/lib/api/axios'
+import { idState, modalState } from '@/lib/state/modal'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 
