@@ -1,7 +1,5 @@
-import { ClassInfo } from '@/app/(nav)/class/register/page'
 import { useInput } from '@/hooks/useInput'
 import { SetStateAction } from 'react'
-import ClassFilter from '../class/classFilter/classFilter'
 
 export interface InputFormProps {
   title: string
@@ -11,16 +9,10 @@ export interface InputFormProps {
   submitData: any
   setSubmitData: React.Dispatch<SetStateAction<any>>
 }
-
-export type InputProps = Pick<
-  InputFormProps,
-  'name' | 'maxLength' | 'submitData' | 'setSubmitData'
->
-
 export default function InputForm({
+  name,
   title,
   placeholder,
-  name,
   maxLength,
   submitData,
   setSubmitData
@@ -31,7 +23,7 @@ export default function InputForm({
     submitData,
     setSubmitData
   })
-  const ValueLength = inputValue.length
+  const valueLength = inputValue.length
 
   return (
     <div className="flex flex-col gap-2">
@@ -39,19 +31,18 @@ export default function InputForm({
 
       <input
         className={`${
-          inputValue.length > 0 ? 'bg-gray-50' : 'bg-white'
-        } w-full h-auto input-line-gray gray-900-400`}
+          valueLength > 0 ? 'bg-gray-50' : 'bg-white'
+        } w-full h-auto input-line-gray`}
         placeholder={placeholder}
         name={name}
         value={inputValue}
         onChange={handleChange}
         maxLength={maxLength}
       />
-      {maxLength && (
-        <span className="text-gray-500 text-sm font-normal font-['Inter'] text-right">
-          {ValueLength}/{maxLength}
-        </span>
-      )}
+
+      <span className="text-gray-500 text-sm font-normal font-['Inter'] text-right">
+        {valueLength}/{maxLength}
+      </span>
     </div>
   )
 }

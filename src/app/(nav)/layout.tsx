@@ -6,11 +6,8 @@ import logout from '@/assets/icons/logout.svg'
 import menu from '@/assets/icons/menu.svg'
 import noticeActive from '@/assets/icons/notice-active.svg'
 import mainLogo from '@/assets/logo/mainLogo.png'
-import InstructorRegisterModal from '@/components/InstructorRegisterModal'
-
 import DetailModal from '@/components/detailModal'
 import AcademyInfo from '@/components/layout/AcademyInfo'
-import { useState, useRef, useEffect } from 'react'
 import TodaySchedule from '@/components/layout/TodaySchedule'
 import Navbar from '@/components/layout/Navbar'
 import { modalState } from '@/state/modal'
@@ -45,6 +42,7 @@ export default function MainLayout({
           <SideModal id={Modal.id} type={Modal.type} />
         </div>
       )}
+
       {/* {instructorModal && (
         <div className="absolute flex justify-center items-center w-screen h-screen bg-black bg-opacity-20 backdrop-blur-[5px] shadow z-[100]">
           <InstructorRegisterModal />

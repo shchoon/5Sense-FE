@@ -1,7 +1,9 @@
 'use client'
-import plusCircle from '@/assets/icons/plus-circle.svg'
-import searchIconGray from '@/assets/icons/search.svg'
 import closeIcon from '@/assets/icons/close.svg'
+import plusCircle from '@/assets/icons/plus-circle.svg'
+
+import searchIconGray from '@/assets/icons/search.svg'
+
 import searchIconWhite from '@/assets/icons/search_white.svg'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -45,7 +47,16 @@ export default function StudentPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [scrollCount, setScrollCount] = useState(0)
   const [inputValue, setInputValue] = useState<string>('')
-  const [modalValue, setModalValue] = useRecoilState(modalState)
+
+  const [Modal, setModal] = useRecoilState(modalState)
+  const handleModal = (id: string) => {
+    setModal(prevModal => ({
+      ...prevModal,
+      active: true,
+      id: id,
+      type: 'student'
+    }))
+  }
 
   const options = {
     root: null,

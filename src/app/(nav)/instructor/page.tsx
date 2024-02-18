@@ -1,17 +1,19 @@
 'use client'
+import Image from 'next/image'
+import { useRef } from 'react'
+
 import chevronRight from '@/assets/icons/chevron/chevron_right_pri_600.svg'
-import plusCircle from '@/assets/icons/plus-circle.svg'
-import searchIconGray from '@/assets/icons/search.svg'
 import closeIcon from '@/assets/icons/close.svg'
+import plusCircle from '@/assets/icons/plus-circle.svg'
+import searchIcon from '@/assets/icons/search.svg'
 import searchIconWhite from '@/assets/icons/search_white.svg'
 import NoneResult from '@/components/common/NoneResult'
-import Image from 'next/image'
-import { useState, useEffect, useRef } from 'react'
 import { useGetData } from '@/hooks/useGetData'
+import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
+import { getDataType, postVarType } from '../student/page'
 import { modalState } from '@/state/modal'
 import Link from 'next/link'
-import { postVarType, getDataType } from '../student/page'
 
 interface instructorType {
   id: string
@@ -24,6 +26,23 @@ export default function InstructorPage() {
 
   // 모달 상태관리
   const [Modal, setModal] = useRecoilState(modalState)
+
+  const handleLargeModal = (id: string, type: string) => {
+    setModal(prevModal => ({
+      ...prevModal,
+      active: true,
+      id: id,
+      type: type
+    }))
+  }
+
+  const handleSmallModal = (type: string) => {
+    setModal(prevModal => ({
+      ...prevModal,
+      active: true,
+      type: type
+    }))
+  }
 
   const handleModal = (id: string) => {
     setModal(prevModal => ({
@@ -116,10 +135,6 @@ export default function InstructorPage() {
     setPostVar(prePostVar => res.meta)
   }
 
-  /* const handleClickModal = () => {
-    setModal(true)
-  } */
-
   const checkInputType = () => {
     if (inputValue !== '' && numberCheckList.includes(inputValue[0])) {
       return false
@@ -187,8 +202,8 @@ export default function InstructorPage() {
             강사 관리
           </div>
         </div>
-        <Link
-          href={'student/register'}
+        <button
+          onClick={() => handleSmallModal('instructor')}
           className="flex px-5 py-2.5 btn-purple text-sm"
         >
           <Image
@@ -199,12 +214,12 @@ export default function InstructorPage() {
             className="mr-2"
           />
           강사 등록
-        </Link>
+        </button>
       </div>
       {/* 검색창 */}
       <div className="flex gap-2.5 lg:w-[377px] lg:h-[42px] w-[326px] h-[37px] mb-5">
         <div className="lg:w-[325px] lg:gap-2.5 w-[280px] flex gap-2 px-4 lg:py-3 py-2 rounded-lg outline outline-1 outline-gray-300 focus-within:outline-[#563AC0]">
-          <Image src={searchIconGray} width={16} height={16} alt=" " />
+          <Image src={searchIcon} width={16} height={16} alt=" " />
           <input
             ref={inputRef}
             className="w-[245px] border-none focus:ring-0"
@@ -258,7 +273,9 @@ export default function InstructorPage() {
           )
         })}
       </div>
-      {isLoading ? (
+
+      {!isLoading && !Modal.active ? <div id="test"></div> : null}
+      {isLoading && (
         <div className="w-full h-[70px] pt-[50px] flex justify-center items-center">
           <div
             className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
@@ -269,8 +286,7 @@ export default function InstructorPage() {
             </span>
           </div>
         </div>
-      ) : null}
-      {/* {!isLoading && !isModal ? <div id="test"></div> : null} */}
+      )}
     </div>
   )
 }

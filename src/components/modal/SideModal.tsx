@@ -5,8 +5,9 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import DetailStudent from './DetailStudent'
 import { modalState } from '@/state/modal'
 import close_Circle_bg from '@/assets/icons/close_circle_bg_pri_600.svg'
-import { useEffect } from 'react'
+
 import DetailInstructor from './DetailInstructor'
+import InstructorRegisterModal from '../InstructorRegisterModal'
 
 export type SideProps = {
   id?: string
@@ -24,10 +25,13 @@ export default function SideModal({ id, type }: SideProps) {
   }
 
   const render = () => {
+    if (type === 'instructor') {
+      return <InstructorRegisterModal />
+    }
     if (type === 'student') {
       return <DetailStudent id={id} />
     }
-    if (type === 'instructor') {
+    if (type === 'instructorDetail') {
       return <DetailInstructor id={id} />
     }
   }
