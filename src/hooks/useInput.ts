@@ -22,6 +22,7 @@ export function useInput({
   setSubmitData
 }: IProps): UseInputReturn {
   const [inputValue, setInputValue] = useState<string>('')
+  console.log(submitData.name)
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length <= maxLength) {

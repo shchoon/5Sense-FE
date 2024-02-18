@@ -1,13 +1,19 @@
 'use client'
 import Image from 'next/image'
-import profile from '../../../../assets/images/profile 1.png'
-import camera from '../../../../assets/icons/camera.svg'
-import KakaoLogo from '../../../../assets/logo/kakaoLogo.svg'
-import ToggleOn from '../../../../assets/icons/toggle_on.svg'
-import ToggleOff from '../../../../assets/icons/toggle_off.svg'
-import GoogleLogo from '../../../../assets/logo/googleLogo.svg'
-import NaverLogo from '../../../../assets/logo/naverLogo.svg'
+import profile from '@/assets/images/profile 1.png'
+import camera from '@/assets/icons/camera.svg'
+import KakaoLogo from '@/assets/logo/kakaoLogo.svg'
+import ToggleOn from '@/assets/icons/toggle_on.svg'
+import ToggleOff from '@/assets/icons/toggle_off.svg'
+import GoogleLogo from '@/assets/logo/googleLogo.svg'
+import NaverLogo from '@/assets/logo/naverLogo.svg'
 import React, { useState } from 'react'
+
+interface toogleTargetType {
+  kakao: boolean
+  naver: boolean
+  google: boolean
+}
 
 export default function ManageMent() {
   const [postData, setPostData] = useState({
@@ -16,11 +22,17 @@ export default function ManageMent() {
     phone: ''
   })
 
-  const [toggleTarget, setToggleTarget] = useState('kakao')
-
+  const [toggleTarget, setToggleTarget] = useState<toogleTargetType>({
+    kakao: true,
+    naver: false,
+    google: false
+  })
   const onClickToggle = (e: React.MouseEvent<HTMLImageElement>) => {
-    console.log(e.currentTarget.id)
-    setToggleTarget(e.currentTarget.id)
+    const title = e.currentTarget.title
+    setToggleTarget((prevToggleTarget: toogleTargetType) => ({
+      ...prevToggleTarget,
+      [title]: !prevToggleTarget[title as keyof toogleTargetType]
+    }))
   }
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,12 +119,12 @@ export default function ManageMent() {
               2024.01.07
             </div>
             <Image
-              id="kakao"
+              title="kakao"
               className="absolute right-6 cursor-pointer"
               onClick={e => {
                 onClickToggle(e)
               }}
-              src={toggleTarget === 'kakao' ? ToggleOn : ToggleOff}
+              src={toggleTarget.kakao ? ToggleOn : ToggleOff}
               width={44}
               height={24}
               alt=""
@@ -133,12 +145,12 @@ export default function ManageMent() {
               2024.01.07
             </div>
             <Image
-              id="naver"
+              title="naver"
               className="absolute right-6 cursor-pointer"
               onClick={e => {
                 onClickToggle(e)
               }}
-              src={toggleTarget === 'naver' ? ToggleOn : ToggleOff}
+              src={toggleTarget.naver ? ToggleOn : ToggleOff}
               width={44}
               height={24}
               alt=""
@@ -159,12 +171,12 @@ export default function ManageMent() {
               2024.01.07
             </div>
             <Image
-              id="google"
+              title="google"
               className="absolute right-6 cursor-pointer"
               onClick={e => {
                 onClickToggle(e)
               }}
-              src={toggleTarget === 'google' ? ToggleOn : ToggleOff}
+              src={toggleTarget.google ? ToggleOn : ToggleOff}
               width={44}
               height={24}
               alt=""

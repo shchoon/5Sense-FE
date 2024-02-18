@@ -8,7 +8,7 @@ export default function myCenterLayout({
 }) {
   return (
     <div className="flex justify-center w-screen h-screen items-center">
-      <div className="flex items-start flex-col w-[478px] h-[583px] px-6 pt-12 pb-8 border rounded-2xl border-[#E5E7EB] bg-[#FFF] shadow-[-3px_5px_20px_0px_rgba(0,0,0,0.03)]">
+      <div className="flex items-start flex-col w-[478px] h-[657px] px-6 pt-12 pb-8 border rounded-2xl border-[#E5E7EB] bg-[#FFF] shadow-[-3px_5px_20px_0px_rgba(0,0,0,0.03)]">
         <div className="flex flex-col items-center gap-14 mx-auto">
           <div className="flex items-center flex-col w-[383px] h-[150px] gap-[30px]">
             <Image

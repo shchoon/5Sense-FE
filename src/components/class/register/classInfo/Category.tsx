@@ -1,4 +1,3 @@
-// import InputForm, { InputFormProps } from '@/components/InputForm'
 import InputForm, { InputFormProps } from '@/components/common/InputForm'
 import { useState } from 'react'
 

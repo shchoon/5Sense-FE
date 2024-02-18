@@ -15,13 +15,14 @@ import { getDataType, postVarType } from '../student/page'
 import { modalState } from '@/state/modal'
 import Link from 'next/link'
 
+interface instructorType {
+  id: string
+  name: string
+  phone: string
+}
+
 export default function InstructorPage() {
   const inputRef = useRef<HTMLInputElement>(null)
-  let target: HTMLElement | null = document.getElementById('test')
-  const [refresh, setRefresh] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [scrollCount, setScrollCount] = useState(0)
-  const [instructorList, setInstructorList] = useState<any>([])
 
   // 모달 상태관리
   const [Modal, setModal] = useRecoilState(modalState)
@@ -43,12 +44,27 @@ export default function InstructorPage() {
     }))
   }
 
-  const [inputValue, setInputValue] = useState<any>('')
+  const handleModal = (id: string) => {
+    setModal(prevModal => ({
+      ...prevModal,
+      active: true,
+      id: id,
+      type: 'instructor'
+    }))
+  }
+
+  const target: HTMLElement | null = document.getElementById('test')
+  const numberCheckList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+
+  const [instructorList, setInstructorList] = useState<instructorType[]>([])
   const [postVar, setPostVar] = useState<postVarType>({
     page: 1,
     hasNextPage: false
   })
-
+  const [isRefresh, setIsRefresh] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [scrollCount, setScrollCount] = useState(0)
+  const [inputValue, setInputValue] = useState<any>('')
   const options = {
     root: null,
     rootMargin: '0px',
@@ -67,19 +83,9 @@ export default function InstructorPage() {
   const observer = new IntersectionObserver(handleObserver, options)
   postVar.hasNextPage && target && observer.observe(target)
 
-  useEffect(() => {
-    if (scrollCount !== 0 && postVar.hasNextPage) {
-      setLoading(true)
-      setTimeout(() => {
-        getInstructorListToScroll()
-        setLoading(false)
-      }, 500)
-    }
-  }, [scrollCount])
-
   const getInstructorListToScroll = async () => {
     if (inputValue !== '') {
-      const searchBy = inputRef.current?.name as string
+      const searchBy = inputRef.current?.name
       const res = await useGetData(
         'teachers',
         postVar.page + 1,
@@ -90,14 +96,14 @@ export default function InstructorPage() {
         ...preInstructorData,
         ...res.data
       ])
-      setPostVar(prePostVar => res.meta)
+      setPostVar((prePostVar: postVarType) => res.meta)
     } else {
       const res = await useGetData('teachers', postVar.page + 1)
       setInstructorList((preInstructorData: getDataType[]) => [
         ...preInstructorData,
         ...res.data
       ])
-      setPostVar(prePostVar => res.meta)
+      setPostVar((prePostVar: postVarType) => res.meta)
     }
   }
 
@@ -106,33 +112,31 @@ export default function InstructorPage() {
       useGetData('teachers', 1).then(res => {
         setInstructorList((preInstructorData: getDataType[]) => [...res.data])
         setPostVar(prePostVar => res.meta)
-        setRefresh(true)
+        setIsRefresh(true)
       })
     }
   }, [Modal.active])
 
-  const onChangeInput = (event: any) => {
+  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value)
   }
 
-  const searchClick = async () => {
-    const searchBy = inputRef.current?.name as string
+  const handleClickSearch = async () => {
+    const searchBy = inputRef.current?.name
     const res = await useGetData('teachers', 1, searchBy, inputValue)
     setInstructorList((preInstructorData: getDataType[]) => [...res.data])
-    setPostVar(prePostVar => res.meta)
-    console.log(res)
+    setPostVar((prePostVar: postVarType) => res.meta)
   }
-  const onClickInputRefresh = async () => {
+
+  const handleClickInputRefresh = async () => {
     setInputValue('')
     const res = await useGetData('teachers', 1)
-    setInstructorList((preInstructorData: getDataType[]) => [...res.data])
+    setInstructorList(res.data)
     setPostVar(prePostVar => res.meta)
-    setRefresh(true)
   }
 
   const checkInputType = () => {
-    const checkList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-    if (inputValue !== '' && checkList.includes(inputValue[0])) {
+    if (inputValue !== '' && numberCheckList.includes(inputValue[0])) {
       return false
     } else {
       return true
@@ -142,7 +146,6 @@ export default function InstructorPage() {
   const allowOnlyNum = (e: React.KeyboardEvent<HTMLInputElement>) => {
     let regex = /^[a-zA-Z]+$/
     const forbiddenKeys = ['-', 'e', 'ArrowUp', 'ArrowDown']
-    const checkList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     if (
       forbiddenKeys.includes(e.key) ||
       e.currentTarget.value.length > 12 ||
@@ -154,23 +157,42 @@ export default function InstructorPage() {
       alert('이름과 전화번호를 동시에 검색할 수 없습니다. 각각 입력해주세요.')
     }
     if (e.key == 'Enter') {
-      searchClick()
+      handleClickSearch()
     }
   }
 
   const preventInputDifferentType = (
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
-    const checkList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-    if (inputValue !== '' && checkList.includes(e.key)) {
+    if (inputValue !== '' && numberCheckList.includes(e.key)) {
       e.preventDefault()
       alert('이름과 전화번호를 동시에 검색할 수 없습니다. 각각 입력해주세요.')
     }
     if (e.key == 'Enter') {
-      searchClick()
+      handleClickSearch()
     }
   }
 
+  /* useEffect(() => {
+    if (!isModal) {
+      useGetData('teachers', 1).then(res => {
+        setInstructorList((preInstructorData: getDataType[]) => [...res.data])
+        setPostVar(prePostVar => res.meta)
+        setIsRefresh(true)
+      })
+    }
+  }, [isModal]) */
+
+  useEffect(() => {
+    if (scrollCount !== 0 && postVar.hasNextPage) {
+      setIsLoading(true)
+      setTimeout(() => {
+        getInstructorListToScroll()
+        setIsLoading(false)
+      }, 500)
+    }
+  }, [scrollCount])
+  console.log(instructorList)
   return (
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-16">
       {/* 수강생 관리 + 수강생 등록 버튼 */}
@@ -205,7 +227,7 @@ export default function InstructorPage() {
             name={checkInputType() ? 'name' : 'phone'}
             type={checkInputType() ? 'text' : 'number'}
             value={inputValue}
-            onChange={onChangeInput}
+            onChange={handleChangeInput}
             onKeyDown={
               checkInputType() ? preventInputDifferentType : allowOnlyNum
             }
@@ -216,7 +238,7 @@ export default function InstructorPage() {
             width={12}
             height={12}
             alt=" "
-            onClick={onClickInputRefresh}
+            onClick={handleClickInputRefresh}
           />
         </div>
         <div className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer">
@@ -224,38 +246,36 @@ export default function InstructorPage() {
         </div>
       </div>
       {/* 강사 목록 시작 */}
-      {instructorList.length === 0 && refresh ? <NoneResult /> : null}
-      {/* 겅색 결과 없음 */}
+      {isRefresh && instructorList.length === 0 ? <NoneResult /> : null}
+      {/* 검색 결과 없음 */}
       <div className="w-full grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-5">
-        {instructorList?.map(
-          (data: { name: string; phone: string; id: string }, idx: number) => {
-            return (
-              <div
-                key={idx}
-                className="w-full h-[240px] flex flex-col justify-between px-6 pt-8 pb-6 border border-gray-200 rounded-3xl shadow-[0px_5px_15px_0px_rgba(0, 0, 0, 0.02)] cursor-pointer"
-                onClick={() => handleLargeModal(data.id, 'instructorDetail')}
-              >
-                <div className="w-full flex flex-col gap-2">
-                  <div className="w-[307px] gray-900-semibold text-2xl font-['Pretendard']">
-                    {data.name}
-                  </div>
-                  <div className="w-[307px] text-gray-500 text-base font-medium font-['Pretendard']">
-                    {data.phone}
-                  </div>
+        {instructorList?.map(({ name, phone, id }) => {
+          return (
+            <div
+              key={id}
+              className="w-full h-[240px] flex flex-col justify-between px-6 pt-8 pb-6 border border-gray-200 rounded-3xl shadow-[0px_5px_15px_0px_rgba(0, 0, 0, 0.02)]"
+            >
+              <div className="w-full flex flex-col gap-2">
+                <div className="w-[307px] gray-900-semibold text-2xl font-['Pretendard']">
+                  {name}
                 </div>
-                <div className="w-full px-5 py-2.5 flex gap-2 justify-center border border-primary-600 rounded-lg">
-                  <div className="indigo-500-semibold text-sm font-['Pretendard']">
-                    강사 정보
-                  </div>
-                  <Image src={chevronRight} width={20} height={20} alt="" />
+                <div className="w-[307px] text-gray-500 text-base font-medium font-['Pretendard']">
+                  {phone.slice(0, 3)}-{phone.slice(3, 7)}-{phone.slice(7, 11)}
                 </div>
               </div>
-            )
-          }
-        )}
+              <div className="w-full px-5 py-2.5 flex gap-2 justify-center border border-primary-600 rounded-lg">
+                <div className="indigo-500-semibold text-sm font-['Pretendard']">
+                  강사 정보
+                </div>
+                <Image src={chevronRight} width={20} height={20} alt="" />
+              </div>
+            </div>
+          )
+        })}
       </div>
-      {!loading && !Modal.active ? <div id="test"></div> : null}
-      {loading && (
+
+      {!isLoading && !Modal.active ? <div id="test"></div> : null}
+      {isLoading && (
         <div className="w-full h-[70px] pt-[50px] flex justify-center items-center">
           <div
             className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"

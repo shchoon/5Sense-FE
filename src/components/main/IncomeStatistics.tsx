@@ -5,7 +5,7 @@ import { IncomeStatisticsType } from './MainBox'
 ChartJS.register(ArcElement, Tooltip, Legend)
 
 export default function IncomeStatistics({ props }: any) {
-  console.log(props)
+  //console.log(props)
   const data = {
     datasets: [
       {

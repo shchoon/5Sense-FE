@@ -24,7 +24,11 @@ instance.interceptors.request.use(
     const accessTokenExp = localStorage.getItem('accessTokenExp')
 
     if (accessToken) {
-      if (accessTokenExp && checkToken(accessTokenExp) < 5) {
+      if (
+        accessTokenExp &&
+        0 < checkToken(accessTokenExp) &&
+        checkToken(accessTokenExp) < 5
+      ) {
         try {
           const res = await axios.post(
             process.env.NEXT_PUBLIC_IP_ADDRESS + '/auth/reissue',
@@ -40,7 +44,9 @@ instance.interceptors.request.use(
           localStorage.setItem('accessTokenExp', res.data.data.accessTokenExp)
           config.headers.Authorization = `Bearer ${res.data.data.accessToken}`
         } catch (error) {
+          localStorage.clear()
           console.log(error)
+          window.location.replace('/login')
         }
       }
       config.headers.Authorization = `Bearer ${accessToken}`
