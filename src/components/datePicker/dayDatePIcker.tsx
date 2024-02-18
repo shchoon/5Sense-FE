@@ -3,20 +3,20 @@ import allowLeft from '@/assets/icons/allow_left.svg'
 import allowRight from '@/assets/icons/allow_right.svg'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import useGetHolidayData from '@/hooks/useGetHolidayData'
 
-interface dateType {
+export interface dateDataType {
   year: number
   month: number
   date: number
 }
 
-export default function DatePickerDay() {
+export default function DayDatePicker(props: any) {
+  console.log(props.parentsDateData)
   const dateName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const currentDate = new Date()
-  const [dateData, setDateData] = useState<dateType>({
-    year: currentDate.getFullYear(),
+  const [dateData, setDateData] = useState<dateDataType>({
+    year: props.parentsDateData.year,
     month: currentDate.getMonth(),
     date: currentDate.getDate()
   })
@@ -45,10 +45,8 @@ export default function DatePickerDay() {
     }
     if (getHoliData[dateData.month + 1]) {
       const monthHoliData = getHoliData[dateData.month + 1].date
-      console.log(monthHoliData)
       for (var i = 1; i <= lastDateOfCurrnetMonthData.getDate(); i++) {
         if (monthHoliData.includes(i)) {
-          console.log(i)
           list.push({
             date: i,
             textColor: 'font-bold text-red-600',
@@ -102,13 +100,13 @@ export default function DatePickerDay() {
       return
     }
     if (dateData.month === 11) {
-      setDateData((preDateData: dateType) => ({
+      setDateData((preDateData: dateDataType) => ({
         ...preDateData,
         year: preDateData.year + 1,
         month: 0
       }))
     } else {
-      setDateData((preDateData: dateType) => ({
+      setDateData((preDateData: dateDataType) => ({
         ...preDateData,
         month: preDateData.month + 1
       }))
@@ -120,25 +118,33 @@ export default function DatePickerDay() {
       return
     }
     if (dateData.month === 0) {
-      setDateData((preDateData: dateType) => ({
+      setDateData((preDateData: dateDataType) => ({
         ...preDateData,
         year: preDateData.year - 1,
         month: 11
       }))
     } else {
-      setDateData((preDateData: dateType) => ({
+      setDateData((preDateData: dateDataType) => ({
         ...preDateData,
         month: preDateData.month - 1
       }))
     }
   }
 
-  const onClickCancelBtn = () => {
+  const onClickCancelHandler = () => {
     setClickedDate('')
   }
 
+  const onClickCheckHandler = () => {
+    props.changeParentsDateData({
+      year: dateData.year,
+      month: dateData.month,
+      date: Number(clickedDate)
+    })
+  }
+
   return (
-    <div className="flex flex-col gap-2 w-[283px] p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
+    <div className="flex flex-col bg-white gap-2 w-[283px] p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
       <div className="w-full flex justify-between">
         <Image
           src={allowLeft}
@@ -211,11 +217,14 @@ export default function DatePickerDay() {
       <div className="w-full flex h-[37px] justify-between">
         <div
           className="w-[121px] h-full px-3 py-2 flex justify-center btn-white text-sm gray-800-semibold"
-          onClick={onClickCancelBtn}
+          onClick={onClickCancelHandler}
         >
           취소
         </div>
-        <div className="w-[121px] h-full px-3 py-2 flex justify-center text-sm font-semibold btn-purple">
+        <div
+          className="w-[121px] h-full px-3 py-2 flex justify-center text-sm font-semibold btn-purple"
+          onClick={onClickCheckHandler}
+        >
           확인
         </div>
       </div>

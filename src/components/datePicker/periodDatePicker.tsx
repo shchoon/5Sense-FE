@@ -16,7 +16,7 @@ interface clickDateType {
   secondDate: string
 }
 
-export default function DatePickerDay() {
+export default function PeriodDatePicker() {
   const dateName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const currentDate = new Date()
   const [firstDateData, setFirstDateData] = useState<dateType>({

@@ -10,18 +10,16 @@ interface dateType {
   date: number
 }
 
-export default function DatePickerWeek() {
+export default function WeekDatePicker(props: any) {
   const dateName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const currentDate = new Date()
-  const [dateData, setDateData] = useState<dateType>({
-    year: currentDate.getFullYear(),
-    month: currentDate.getMonth(),
-    date: currentDate.getDate()
-  })
-  const [week, setWeek] = useState<number>()
+  const [dateData, setDateData] = useState<dateType>(props.parentsDateData)
+  const [week, setWeek] = useState<number>(props.parentsWeekData)
   const [clickedDate, setClickedDate] = useState<string>(
     dateData.date.toString()
   )
+  const [isClickedDate, setIsClickedDate] = useState<boolean>(false)
+  console.log(clickedDate)
 
   const getCalanderData = () => {
     const lastDateOfLastMonthData = new Date(dateData.year, dateData.month, 0)
@@ -69,7 +67,9 @@ export default function DatePickerWeek() {
   }
 
   const onClickDateHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    setWeek(Number(e.currentTarget.title))
     setClickedDate(e.currentTarget.id)
+    setIsClickedDate(true)
   }
 
   const onClickMonthForwardHandler = () => {
@@ -104,26 +104,37 @@ export default function DatePickerWeek() {
 
   const onClickCancelBtn = () => {
     setClickedDate('')
+    setWeek(0)
+  }
+
+  const onClickCheckHandler = () => {
+    props.changeParentsDateData({
+      year: dateData.year,
+      month: dateData.month
+    })
+    props.changeParentsWeekData(week)
   }
 
   const dateList = getCalanderData()
 
   useEffect(() => {
-    const dateList = getCalanderData()
-    for (var i = 0; i < dateList.length; i++) {
-      for (var j = 0; j < dateList[i].date.length; j++) {
-        if (
-          dateList[i].date[j].date === clickedDate &&
-          dateList[i].date[j].clickable
-        ) {
-          setWeek(dateList[i].week)
+    if (isClickedDate) {
+      const dateList = getCalanderData()
+      for (var i = 0; i < dateList.length; i++) {
+        for (var j = 0; j < dateList[i].date.length; j++) {
+          if (
+            dateList[i].date[j].date === clickedDate &&
+            dateList[i].date[j].clickable
+          ) {
+            setWeek(dateList[i].week)
+          }
         }
       }
     }
   }, [clickedDate])
 
   return (
-    <div className="flex flex-col gap-2 w-[283px] p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
+    <div className="flex flex-col z-10 bg-white gap-2 w-[283px] p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
       <div className="w-full flex justify-between">
         <Image
           src={allowLeft}
@@ -166,6 +177,7 @@ export default function DatePickerWeek() {
                   <div
                     key={i}
                     id={dateData.date}
+                    title={data.week.toString()}
                     className={`px-1 py-2 cursor-pointer ${
                       dateData.textColor
                     } ${
@@ -201,7 +213,10 @@ export default function DatePickerWeek() {
         >
           취소
         </div>
-        <div className="w-[121px] h-full px-3 py-2 flex justify-center text-sm font-semibold btn-purple">
+        <div
+          className="w-[121px] h-full px-3 py-2 flex justify-center text-sm font-semibold btn-purple"
+          onClick={onClickCheckHandler}
+        >
           확인
         </div>
       </div>

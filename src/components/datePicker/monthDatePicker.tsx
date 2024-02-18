@@ -10,41 +10,60 @@ interface dateType {
   date: number
 }
 
-export default function DatePickerMonth() {
+export default function MonthDatePicker(props: any) {
   let monthData = []
-  for (var i = 1; i <= 12; i++) {
-    monthData.push(`${i}월`)
+  for (var i = 0; i <= 11; i++) {
+    monthData.push(`${i}`)
   }
   const currentDate = new Date()
-  const [dateData, setDateData] = useState<dateType>({
+  /* const [dateData, setDateData] = useState<dateType>({
     year: currentDate.getFullYear(),
     month: currentDate.getMonth(),
     date: currentDate.getDate()
-  })
+  }) */
+  const dateData = props.parentsDateData
   const [clickedMonth, setClickedMonth] = useState<string>('')
   const onClickMonthHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    console.log(e.currentTarget.id)
     setClickedMonth(e.currentTarget.id)
   }
 
   const onClickYearForwardHandler = () => {
-    setDateData((preDateData: dateType) => ({
-      ...preDateData,
-      year: preDateData.year + 1
-    }))
+    props.changeParentsDateData(
+      {
+        year: dateData.year + 1,
+        month: 0
+      },
+      'arrow'
+    )
   }
 
   const onClickYearBackHandler = () => {
-    setDateData((preDateData: dateType) => ({
-      ...preDateData,
-      year: preDateData.year - 1
-    }))
+    props.changeParentsDateData(
+      {
+        year: dateData.year - 1,
+        month: 11
+      },
+      'arrow'
+    )
   }
 
   const onClickCancelHandler = () => {
     setClickedMonth('')
   }
+
+  const onClickCheckHandler = () => {
+    props.changeParentsDateData(
+      {
+        year: dateData.year,
+        month: Number(clickedMonth)
+      },
+      'check'
+    )
+  }
+
   return (
-    <div className="flex flex-col gap-2 w-[255px] p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
+    <div className="flex flex-col gap-2 w-[255px] bg-white p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
       <div className="w-full flex justify-between">
         <Image
           src={allowLeft}
@@ -72,7 +91,7 @@ export default function DatePickerMonth() {
           return (
             <div
               key={i}
-              id={date}
+              id={`${i}`}
               className={`px-1 py-2 h-[32px] cursor-pointer text-xs text-center gray-900-medium font-['Pretendard'] ${
                 clickedMonth === date
                   ? 'border rounded-lg bg-primary-700 text-white'
@@ -82,7 +101,7 @@ export default function DatePickerMonth() {
                 onClickMonthHandler(e)
               }}
             >
-              {date}
+              {Number(date) + 1}월
             </div>
           )
         })}
@@ -94,7 +113,10 @@ export default function DatePickerMonth() {
         >
           취소
         </div>
-        <div className="w-full px-3 py-2 flex justify-center text-sm font-semibold btn-purple">
+        <div
+          className="w-full px-3 py-2 flex justify-center text-sm font-semibold btn-purple"
+          onClick={onClickCheckHandler}
+        >
           확인
         </div>
       </div>
