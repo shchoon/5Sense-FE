@@ -1,4 +1,4 @@
-import instance from '@/hooks/useAxios'
+import instance from '@/lib/api/axios'
 
 export default async function SearchFeat(
   type: string,

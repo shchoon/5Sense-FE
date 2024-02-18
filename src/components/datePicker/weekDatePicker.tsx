@@ -1,6 +1,6 @@
 'use client'
-import allowLeft from '@/assets/icons/allow_left.svg'
-import allowRight from '@/assets/icons/allow_right.svg'
+import allowLeft from 'public/assets/icons/allow_left.svg'
+import allowRight from 'public/assets/icons/allow_right.svg'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 

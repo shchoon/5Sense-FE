@@ -1,10 +1,10 @@
 'use client'
 import Image from 'next/image'
 import { SetStateAction, useEffect, useState } from 'react'
-import ArrowBack from '@/assets/icons/allowBack.svg'
-import Ellipsis from '@/assets/icons/ellipsis75.svg'
+import ArrowBack from 'public/assets/icons/allowBack.svg'
+import Ellipsis from 'public/assets/icons/ellipsis75.svg'
 
-import instance from '@/hooks/useAxios'
+import instance from '@/lib/api/axios'
 import useInputNum from '@/hooks/useInputNum'
 import { AxiosResponse } from 'axios'
 import Link from 'next/link'
@@ -14,7 +14,7 @@ import InputForm, { InputFormProps } from '@/components/common/InputForm'
 import TextareaForm, {
   TextareaFormProps
 } from '@/components/common/TextareaForm'
-import { modalState } from '@/state/modal'
+import { modalState } from '@/lib/state/modal'
 
 type studentInfo = {
   name: string

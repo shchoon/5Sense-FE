@@ -4,7 +4,7 @@ import Script from 'next/script'
 import React, { useRef, useState } from 'react'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
 import { useRouter } from 'next/navigation'
-import instance from '@/hooks/useAxios'
+import instance from '@/lib/api/axios'
 import DropDown from '@/components/common/DropDown'
 
 declare global {

@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import noneResult from '@/assets/icons/noneResult.svg'
+import noneResult from 'public/assets/icons/noneResult.svg'
 
 export default function NoneResult() {
   return (

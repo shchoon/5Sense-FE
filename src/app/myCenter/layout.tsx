@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import mainLogo from '../../assets/logo/mainlogo.svg'
+import mainLogo from 'public/assets/logo/mainlogo.svg'
 
 export default function myCenterLayout({
   children

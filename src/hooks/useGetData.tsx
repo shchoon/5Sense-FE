@@ -1,5 +1,5 @@
 'use client'
-import instance from '@/hooks/useAxios'
+import instance from '@/lib/api/axios'
 import { useState } from 'react'
 import { postVarType } from '@/app/(nav)/student/page'
 

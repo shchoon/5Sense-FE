@@ -1,7 +1,7 @@
 'use client'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
-import instance from '@/hooks/useAxios'
+import instance from '@/lib/api/axios'
 
 interface data {
   code: string | null

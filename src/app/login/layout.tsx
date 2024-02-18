@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import mainLogo from '../../assets/logo/mainLogo.svg'
+import mainLogo from 'public/assets/logo/mainLogo.svg'
 
 export default function loginLayout({
   children
