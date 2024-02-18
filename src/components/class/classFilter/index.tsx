@@ -5,7 +5,7 @@ import chevronUpBlue from '@/assets/icons/chevron/chevron-up-blue.svg'
 import searchIcon from '@/assets/icons/search.svg'
 import chevronDownGray from '@/assets/icons/chevron/chevron-down-gray.svg'
 import chevronUpGray from '@/assets/icons/chevron/chevron-up-gray.svg'
-import { useOnClickOutside } from '../../../hooks/useOnclickOutside'
+import useOnClickOutside from 'usehooks-ts/dist/esm/useOnClickOutside/useOnClickOutside'
 
 export default function ClassFilter() {
   //const teacherTypeRef = useRef<HTMLButtonElement>(null);

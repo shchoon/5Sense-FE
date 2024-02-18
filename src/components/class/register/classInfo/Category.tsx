@@ -1,4 +1,5 @@
-import InputForm, { InputFormProps } from '@/components/InputForm'
+// import InputForm, { InputFormProps } from '@/components/InputForm'
+import InputForm, { InputFormProps } from '@/components/common/InputForm'
 import { useState } from 'react'
 
 export type category = {
@@ -14,6 +15,18 @@ type subCategory = {
 }
 
 export default function Category() {
+  // categories : [
+  //   { id: 1, name : 악기 , parentId : null },
+  //   { id: 2, name : 첼로 , parentId : 1 },
+  //   { id: 3, name : 연기 , parentId : null },
+  //   { id: 4, name : 댄스 , parentId : null },
+  //   { id: 5, name : 탭댄스 , parentId : 4 },
+  //   { id: 6, name : 방송댄스 , parentId : 4 },
+  //   ...
+  //   ]
+
+  // 통신 후 데이터 변환 필요
+
   const categorydata: category[] = [
     {
       id: '1',
@@ -122,48 +135,48 @@ export default function Category() {
     setSelectedOption(optionId)
   }
 
-  const renderOptions = (item: any, groupId: string) => {
-    const optionProps: InputFormProps = {
-      title: '기타',
-      placeholder: '직접 입력',
-      name: 'options',
-      maxLength: 10
-    }
-    return (
-      <>
-        {groupId === '9' ? (
-          <InputForm {...optionProps} />
-        ) : (
-          <div className="grid grid-cols-4 w-full gap-2">
-            {item.map((option: subCategory) => (
-              <div
-                key={option.id}
-                className={`flex justify-center items-center w-[142px] h-[45px] p-3 rounded-md border border-indigo-400 ${
-                  selectedOption === option.id ? 'bg-[#F0EFFF]' : 'bg-white'
-                }`}
-                onClick={() => handleOptionChange(option.id)}
-              >
-                <>
-                  <input
-                    type="radio"
-                    id={option.id}
-                    value={option.id}
-                    className="hidden"
-                  />
-                  <label
-                    htmlFor={option.id}
-                    className={`text-base font-medium   leading-normal text-primary-600`}
-                  >
-                    {option.name}
-                  </label>
-                </>
-              </div>
-            ))}
-          </div>
-        )}
-      </>
-    )
-  }
+  // const renderOptions = (item: any, groupId: string) => {
+  //   const optionProps: InputFormProps = {
+  //     title: '기타',
+  //     placeholder: '직접 입력',
+  //     name: 'options',
+  //     maxLength: 10
+  //   }
+  //   return (
+  //     <>
+  //       {groupId === '9' ? (
+  //         <InputForm {...optionProps} />
+  //       ) : (
+  //         <div className="grid grid-cols-4 w-full gap-2">
+  //           {item.map((option: subCategory) => (
+  //             <div
+  //               key={option.id}
+  //               className={`flex justify-center items-center w-[142px] h-[45px] p-3 rounded-md border border-indigo-400 ${
+  //                 selectedOption === option.id ? 'bg-[#F0EFFF]' : 'bg-white'
+  //               }`}
+  //               onClick={() => handleOptionChange(option.id)}
+  //             >
+  //               <>
+  //                 <input
+  //                   type="radio"
+  //                   id={option.id}
+  //                   value={option.id}
+  //                   className="hidden"
+  //                 />
+  //                 <label
+  //                   htmlFor={option.id}
+  //                   className={`text-base font-medium   leading-normal text-primary-600`}
+  //                 >
+  //                   {option.name}
+  //                 </label>
+  //               </>
+  //             </div>
+  //           ))}
+  //         </div>
+  //       )}
+  //     </>
+  //   )
+  // }
   return (
     <div>
       <p className="gray-800-semibold">카테고리</p>
@@ -198,7 +211,7 @@ export default function Category() {
             </>
           ))}
         </div>
-        {renderOptions(selectedOptionList, selectedGroup)}
+        {/* {renderOptions(selectedOptionList, selectedGroup)} */}
       </div>
     </div>
   )

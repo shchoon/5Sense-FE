@@ -1,11 +1,11 @@
 import Image from 'next/image'
 import close_circle from '@/assets/icons/closeCircle.svg'
-import { instructorRegisterModal } from '@/state/modal'
+
 import { useRecoilState } from 'recoil'
 import React, { useState } from 'react'
 import instance from '@/hooks/useAxios'
 import { AxiosResponse } from 'axios'
-import { useRouter } from 'next/navigation'
+import { modalState } from '@/state/modal'
 
 interface postDataType {
   name: string
@@ -13,18 +13,12 @@ interface postDataType {
 }
 
 export default function RegisterModal() {
-  const router = useRouter()
-
-  const [modal, setModal] = useRecoilState(instructorRegisterModal)
+  const [modal, setModal] = useRecoilState(modalState)
 
   const [postData, setPostData] = useState<postDataType>({
     name: '',
     phone: ''
   })
-
-  const clickClose = () => {
-    setModal(false)
-  }
 
   const onChangeHandler = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -75,23 +69,24 @@ export default function RegisterModal() {
           return
         }
         instance.post('/teachers', data).then((res: AxiosResponse) => {
-          setModal(false)
+          setModal(prevModal => ({
+            ...prevModal,
+            active: false
+          }))
         })
-
-        //console.log(postData)
       }}
     >
       <div className="absolute left-6 top-10 gray-900-bold text-[22px]">
         강사 등록
       </div>
-      <Image
+      {/* <Image
         className="absolute right-4 top-4 cursor-pointer"
         src={close_circle}
         width={35}
         height={35}
         alt=""
         onClick={clickClose}
-      />
+      /> */}
       <div className="absolute top-[90px] w-[376px] flex flex-col gap-7">
         <div className="w-full flex flex-col gap-4">
           <input

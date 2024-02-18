@@ -1,6 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import { Button } from 'flowbite-react'
+import arrowBack from '@/assets/icons/arrow-back.svg'
+import Image from 'next/image'
 
 export default function ClassRegisterLayout({
   children
@@ -11,10 +12,11 @@ export default function ClassRegisterLayout({
   return (
     <div className="w-full h-full flex flex-col gap-[30px]">
       <button
-        className="w-full black-bold text-3xl text-start cursor-pointer"
+        className="w-full flex gap-4 items-center black-bold text-3xl text-start cursor-pointer"
         onClick={() => router.push('/class')}
       >
-        ◀︎ 클래스 등록
+        <Image src={arrowBack} alt="arrow-back" width={28} height={28} />
+        클래스 등록
       </button>
 
       <div className="flex flex-col items-center">{children}</div>

@@ -1,15 +1,27 @@
-import { ClassInfo } from '@/app/(nav)/class/register/page'
-import { InputFormProps, InputProps } from '@/components/common/InputForm'
-import { ChangeEvent, SetStateAction, useEffect, useState } from 'react'
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState
+} from 'react'
+
+interface IProps {
+  name: string
+  maxLength: number
+  submitData: { [key: string]: string }
+  setSubmitData: Dispatch<SetStateAction<{ [key: string]: string }>>
+}
+
+type UseInputReturn = [string, (e: ChangeEvent<HTMLInputElement>) => void]
 
 export function useInput({
   name,
   maxLength,
   submitData,
   setSubmitData
-}: InputProps): any {
+}: IProps): UseInputReturn {
   const [inputValue, setInputValue] = useState<string>('')
-  console.log(submitData.name)
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length <= maxLength) {

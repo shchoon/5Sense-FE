@@ -46,12 +46,6 @@ export default function MainLayout({
           <SideModal id={Modal.id} type={Modal.type} />
         </div>
       )}
-      {/* {instructorModal && (
-        <div className="absolute flex justify-center items-center w-screen h-screen bg-black bg-opacity-20 backdrop-blur-[5px] shadow z-[100]">
-          <InstructorRegisterModal />
-        </div>
-      )} */}
-
       <div className="w-full h-full px-6 2md:px-12 box-border lg:pl-0 lg:pr-4 xl:pr-8 2xl:pr-12">
         {/* 상위 relative가 없기때문에 body를 부모로 잡음 */}
         <div className="header w-full h-[124px] flex justify-between items-center lg:flex-none lg:h-[66px]">

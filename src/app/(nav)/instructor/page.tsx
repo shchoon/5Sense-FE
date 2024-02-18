@@ -26,12 +26,20 @@ export default function InstructorPage() {
   // 모달 상태관리
   const [Modal, setModal] = useRecoilState(modalState)
 
-  const handleModal = (id: string) => {
+  const handleLargeModal = (id: string, type: string) => {
     setModal(prevModal => ({
       ...prevModal,
       active: true,
       id: id,
-      type: 'instructor'
+      type: type
+    }))
+  }
+
+  const handleSmallModal = (type: string) => {
+    setModal(prevModal => ({
+      ...prevModal,
+      active: true,
+      type: type
     }))
   }
 
@@ -172,8 +180,8 @@ export default function InstructorPage() {
             강사 관리
           </div>
         </div>
-        <Link
-          href={'student/register'}
+        <button
+          onClick={() => handleSmallModal('instructor')}
           className="flex px-5 py-2.5 btn-purple text-sm"
         >
           <Image
@@ -184,7 +192,7 @@ export default function InstructorPage() {
             className="mr-2"
           />
           강사 등록
-        </Link>
+        </button>
       </div>
       {/* 검색창 */}
       <div className="flex gap-2.5 lg:w-[377px] lg:h-[42px] w-[326px] h-[37px] mb-5">
@@ -225,7 +233,7 @@ export default function InstructorPage() {
               <div
                 key={idx}
                 className="w-full h-[240px] flex flex-col justify-between px-6 pt-8 pb-6 border border-gray-200 rounded-3xl shadow-[0px_5px_15px_0px_rgba(0, 0, 0, 0.02)] cursor-pointer"
-                onClick={() => handleModal(data.id)}
+                onClick={() => handleLargeModal(data.id, 'instructorDetail')}
               >
                 <div className="w-full flex flex-col gap-2">
                   <div className="w-[307px] gray-900-semibold text-2xl font-['Pretendard']">
