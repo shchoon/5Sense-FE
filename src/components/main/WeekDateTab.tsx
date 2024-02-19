@@ -117,6 +117,10 @@ export default function WeekDateTab() {
     setIsClickedDatePicker(false)
   }
 
+  const setActiveDayFromChild = (date: number) => {
+    setActiveDay(date)
+  }
+
   const setWeekDataFromChild = (week: number) => {
     setWeekData(week)
   }
@@ -219,6 +223,7 @@ export default function WeekDateTab() {
               <WeekDatePicker
                 changeParentsDateData={setDateDataFromChild}
                 changeParentsWeekData={setWeekDataFromChild}
+                changeParentsActiveDay={setActiveDayFromChild}
                 parentsDateData={dateData}
                 parentsWeekData={weekData}
               />

@@ -107,6 +107,7 @@ export default function WeekDatePicker(props: any) {
       month: dateData.month,
       date: Number(clickedDate)
     })
+    props.changeParentsActiveDay(Number(clickedDate))
     props.changeParentsWeekData(week)
   }
 
