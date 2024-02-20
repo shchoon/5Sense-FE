@@ -16,33 +16,44 @@ export default function MonthDatePicker(props: any) {
     monthData.push(`${i}`)
   }
   const currentDate = new Date()
-  /* const [dateData, setDateData] = useState<dateType>({
-    year: currentDate.getFullYear(),
-    month: currentDate.getMonth(),
-    date: currentDate.getDate()
-  }) */
-  const dateData = props.parentsDateData
-  const [clickedMonth, setClickedMonth] = useState<string>('')
+
+  const [dateData, setDateData] = useState<dateType>(props.parentsDateData)
+  const [clickedMonth, setClickedMonth] = useState<string>(dateData.month.toString())
   const onClickMonthHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-    console.log(e.currentTarget.id)
     setClickedMonth(e.currentTarget.id)
   }
 
   const onClickYearForwardHandler = () => {
+    if (dateData.year === 2025) {
+      return
+    }
+    setDateData((prevDateData: dateType) => ({
+      ...prevDateData,
+      year: dateData.year + 1,
+      month: dateData.month
+    }))
     props.changeParentsDateData(
       {
         year: dateData.year + 1,
-        month: 0
+        month: dateData.month
       },
       'arrow'
     )
   }
 
   const onClickYearBackHandler = () => {
+    if (dateData.year === 2021) {
+      return
+    }
+    setDateData((prevDateData: dateType) => ({
+      ...prevDateData,
+      year: dateData.year - 1,
+      month: dateData.month
+    }))
     props.changeParentsDateData(
       {
         year: dateData.year - 1,
-        month: 11
+        month: dateData.month
       },
       'arrow'
     )
@@ -73,9 +84,7 @@ export default function MonthDatePicker(props: any) {
           className="cursor-pointer"
           onClick={onClickYearBackHandler}
         />
-        <div className="w-[126px] text-center gray-900-bold text-xs font-['Pretendard']">
-          {dateData.year}년
-        </div>
+        <div className="w-[126px] text-center gray-900-bold text-xs font-['Pretendard']">{dateData.year}년</div>
         <Image
           src={allowRight}
           width={20}
@@ -93,9 +102,7 @@ export default function MonthDatePicker(props: any) {
               key={i}
               id={`${i}`}
               className={`px-1 py-2 h-[32px] cursor-pointer text-xs text-center gray-900-medium font-['Pretendard'] ${
-                clickedMonth === date
-                  ? 'border rounded-lg bg-primary-700 text-white'
-                  : ''
+                clickedMonth === date ? 'border rounded-lg bg-primary-700 text-white' : ''
               }`}
               onClick={e => {
                 onClickMonthHandler(e)

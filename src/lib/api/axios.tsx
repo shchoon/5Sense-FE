@@ -70,6 +70,7 @@ instance.interceptors.response.use(
           }
         )
         //console.log(res)
+        localStorage.setItem('hasCenter', 'true')
         localStorage.setItem('accessToken', res.data.data.accessToken)
         localStorage.setItem('accessTokenExp', res.data.data.accessTokenExp)
       } catch (error) {

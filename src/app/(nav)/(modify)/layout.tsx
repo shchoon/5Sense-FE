@@ -41,7 +41,9 @@ export default function ModifyPage({ children }: { children: React.ReactNode }) 
             return (
               <div
                 key={i}
-                className={`${pathName === data.url ? 'text-indigo-500' : 'text-gray-400'} text-base font-bold`}
+                className={`${
+                  pathName === data.url ? 'text-indigo-500' : 'text-gray-400'
+                } text-base font-bold cursor-pointer`}
                 onClick={() => router.push(data.url)}
               >
                 {data.title}
