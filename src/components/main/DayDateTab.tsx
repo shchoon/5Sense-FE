@@ -18,11 +18,7 @@ export default function DayDateTab() {
   })
   const [isClickedDatePicker, setIsClickedDatePicker] = useState<boolean>(false)
 
-  const lastDateOfCurrnetMonthData = new Date(
-    dateData.year,
-    dateData.month + 1,
-    0
-  )
+  const lastDateOfCurrnetMonthData = new Date(dateData.year, dateData.month + 1, 0)
   const lastDateOfLastMonthData = new Date(dateData.year, dateData.month, 0)
 
   const onClickDatePickerHandler = () => {
@@ -109,13 +105,7 @@ export default function DayDateTab() {
               className="w-full px-3 py-2 flex justify-center gap-2 items-center gray-900-semibold text-base font-['Pretendard'] hover:text-primary-600 cursor-pointer"
               onClick={onClickDatePickerHandler}
             >
-              <Image
-                src={calender}
-                width={18}
-                height={18}
-                alt=" "
-                className="hover:fill-primary-600"
-              />
+              <Image src={calender} width={18} height={18} alt=" " className="hover:fill-primary-600" />
               {dateData.year}년 {dateData.month + 1}월 {dateData.date}일
             </div>
             <div
@@ -128,10 +118,7 @@ export default function DayDateTab() {
           <DateSlideTab />
           {isClickedDatePicker && (
             <div className="absolute w-[283px] z-10 right-0 left-0 mx-auto top-[60px]">
-              <DayDatePicker
-                changeParentsDateData={setDateDataFromChild}
-                parentsDateData={dateData}
-              />
+              <DayDatePicker changeParentsDateData={setDateDataFromChild} parentsDateData={dateData} />
             </div>
           )}
         </div>

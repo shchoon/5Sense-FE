@@ -35,14 +35,11 @@ instance.interceptors.request.use(
               }
             }
           )
-          //console.log(res)
           localStorage.setItem('accessToken', res.data.data.accessToken)
           localStorage.setItem('accessTokenExp', res.data.data.accessTokenExp)
           config.headers.Authorization = `Bearer ${res.data.data.accessToken}`
         } catch (error) {
-          localStorage.clear()
           console.log(error)
-          window.location.replace('/login')
         }
       }
       config.headers.Authorization = `Bearer ${accessToken}`
@@ -85,6 +82,10 @@ instance.interceptors.response.use(
     return response
   },
   error => {
+    if (error?.response.data.message === 'The token time has expired') {
+      localStorage.clear()
+      window.location.replace('/login')
+    }
     if (error?.response) {
       console.log(error.response)
       alert(error.response.data.message)

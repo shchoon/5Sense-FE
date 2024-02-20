@@ -12,23 +12,17 @@ interface dateType {
 
 export default function WeekDatePicker(props: any) {
   const dateName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-  const currentDate = new Date()
   const [dateData, setDateData] = useState<dateType>(props.parentsDateData)
   const [week, setWeek] = useState<number>(props.parentsWeekData)
-  const [clickedDate, setClickedDate] = useState<string>(
-    dateData.date.toString()
-  )
+  const [clickedDate, setClickedDate] = useState<string>(dateData.date.toString())
   const [isClickedDate, setIsClickedDate] = useState<boolean>(false)
+  console.log(dateData)
   console.log(clickedDate)
 
   const getCalanderData = () => {
     const lastDateOfLastMonthData = new Date(dateData.year, dateData.month, 0)
     const firstDateOfCurrentMonthData = new Date(dateData.year, dateData.month)
-    const lastDateOfCurrnetMonthData = new Date(
-      dateData.year,
-      dateData.month + 1,
-      0
-    )
+    const lastDateOfCurrnetMonthData = new Date(dateData.year, dateData.month + 1, 0)
     const firstDateOfNextMonthData = new Date(dateData.year, dateData.month + 1)
 
     let list = []
@@ -110,8 +104,10 @@ export default function WeekDatePicker(props: any) {
   const onClickCheckHandler = () => {
     props.changeParentsDateData({
       year: dateData.year,
-      month: dateData.month
+      month: dateData.month,
+      date: Number(clickedDate)
     })
+    props.changeParentsActiveDay(Number(clickedDate))
     props.changeParentsWeekData(week)
   }
 
@@ -122,10 +118,7 @@ export default function WeekDatePicker(props: any) {
       const dateList = getCalanderData()
       for (var i = 0; i < dateList.length; i++) {
         for (var j = 0; j < dateList[i].date.length; j++) {
-          if (
-            dateList[i].date[j].date === clickedDate &&
-            dateList[i].date[j].clickable
-          ) {
+          if (dateList[i].date[j].date === clickedDate && dateList[i].date[j].clickable) {
             setWeek(dateList[i].week)
           }
         }
@@ -162,9 +155,7 @@ export default function WeekDatePicker(props: any) {
           {dateName.map((date, i) => {
             return (
               <div key={i} className="px-1 py-2 ">
-                <div className="text-xs text-center font-semibold text-gray-500 font-['Pretendard']">
-                  {date}
-                </div>
+                <div className="text-xs text-center font-semibold text-gray-500 font-['Pretendard']">{date}</div>
               </div>
             )
           })}
@@ -178,21 +169,11 @@ export default function WeekDatePicker(props: any) {
                     key={i}
                     id={dateData.date}
                     title={data.week.toString()}
-                    className={`px-1 py-2 cursor-pointer ${
-                      dateData.textColor
-                    } ${
-                      data.week === week && i !== 0 && i !== 6
-                        ? 'bg-primary-50'
-                        : ''
-                    } ${
-                      data.week === week && i === 0
-                        ? 'bg-primary-700 rounded-l-lg text-white font-bold'
-                        : ''
-                    } 
+                    className={`px-1 py-2 cursor-pointer ${dateData.textColor} ${
+                      data.week === week && i !== 0 && i !== 6 ? 'bg-primary-50' : ''
+                    } ${data.week === week && i === 0 ? 'bg-primary-700 rounded-l-lg text-white font-bold' : ''} 
                         ${
-                          data.week === week && i === 6
-                            ? 'bg-primary-700 rounded-r-lg text-white font-bold'
-                            : ''
+                          data.week === week && i === 6 ? 'bg-primary-700 rounded-r-lg text-white font-bold' : ''
                         } text-xs text-center font-['Pretendard']`}
                     onClick={e => {
                       dateData.clickable && onClickDateHandler(e)

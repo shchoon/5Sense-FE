@@ -17,15 +17,7 @@ export default function WeekDateTab() {
     month: currentDate.getMonth(),
     date: currentDate.getDate()
   })
-  const dayName = [
-    '일요일',
-    '월요일',
-    '화요일',
-    '수요일',
-    '목요일',
-    '금요일',
-    '토요일'
-  ]
+  const dayName = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일']
   const [weekData, setWeekData] = useState<number>(0)
   const [weekLength, setWeekLength] = useState<{
     lastMonthLength: number
@@ -104,11 +96,6 @@ export default function WeekDateTab() {
         }))
         setActiveDay(new Date(dateData.year, dateData.month, 0).getDate())
       }
-      /* if (dateData.month === 0) {
-        setActiveDay(31)
-      } else {
-        setActiveDay(new Date(dateData.year, dateData.month, 0).getDate())
-      } */
     } else {
       setDateData(prevDateData => ({
         ...prevDateData,
@@ -119,31 +106,19 @@ export default function WeekDateTab() {
     }
     setIsClickedArrow(true)
     setIsClickedDatePicker(false)
-    /* if (weekData === 1) {
-      setWeekData(weekLength.lastMonthLength)
-      if (dateData.month === 0) {
-        setDateData({
-          ...dateData,
-          year: dateData.year - 1,
-          month: 11
-        })
-      } else {
-        setDateData({
-          ...dateData,
-          month: dateData.month - 1
-        })
-      }
-    } else {
-      setWeekData(weekData - 1)
-    } */
   }
-  const setDateDataFromChild = (data: dateDataType, type: string) => {
+  const setDateDataFromChild = (data: dateDataType, date: number, type: string) => {
     setDateData({
       ...dateData,
       year: data.year,
-      month: data.month
+      month: data.month,
+      date: data.date
     })
     setIsClickedDatePicker(false)
+  }
+
+  const setActiveDayFromChild = (date: number) => {
+    setActiveDay(date)
   }
 
   const setWeekDataFromChild = (week: number) => {
@@ -248,6 +223,7 @@ export default function WeekDateTab() {
               <WeekDatePicker
                 changeParentsDateData={setDateDataFromChild}
                 changeParentsWeekData={setWeekDataFromChild}
+                changeParentsActiveDay={setActiveDayFromChild}
                 parentsDateData={dateData}
                 parentsWeekData={weekData}
               />
@@ -265,27 +241,19 @@ export default function WeekDateTab() {
                 key={i}
                 id={data.date}
                 className={`xl:max-w-[129px] lg:max-w-[119px] h-full px-3 py-2 flex flex-col border rounded-lg bg-white cursor-pointer
-                ${
-                  activeDay == data.date
-                    ? 'border-primary-600'
-                    : 'border-gray-200'
-                }`}
+                ${activeDay == data.date ? 'border-primary-600' : 'border-gray-200'}`}
                 onClick={clickDayTab}
               >
                 <div
                   className={`text-center text-sm font-medium ${
-                    activeDay == data.date
-                      ? 'text-primary-600'
-                      : 'text-gray-400'
+                    activeDay == data.date ? 'text-primary-600' : 'text-gray-400'
                   }`}
                 >
                   {dayName[i]}
                 </div>
                 <div
                   className={`text-center text-xl font-bold ${
-                    activeDay == data.date
-                      ? 'text-primary-600'
-                      : 'text-gray-400'
+                    activeDay == data.date ? 'text-primary-600' : 'text-gray-400'
                   }`}
                 >
                   {data.date}

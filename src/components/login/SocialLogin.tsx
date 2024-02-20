@@ -73,10 +73,7 @@ export default function SocialLoginBtn() {
         src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js"
         charSet="utf-8"
       ></Script>
-      <Script
-        type="text/javascript"
-        src="http://code.jquery.com/jquery-1.11.3.min.js"
-      ></Script>
+      <Script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></Script>
       {loginBtnData.map((data, i) => {
         return (
           <div
@@ -85,19 +82,11 @@ export default function SocialLoginBtn() {
             onClick={data.login}
           >
             {data.alt === 'google' ? (
-              <Image
-                className="p-[15px]"
-                src={data.logo}
-                width={48}
-                height={48}
-                alt={data.alt}
-              />
+              <Image className="p-[15px]" src={data.logo} width={48} height={48} alt={data.alt} />
             ) : (
               <Image src={data.logo} width={48} height={48} alt={data.alt} />
             )}
-            <div
-              className={`font-semibold w-[190px] h-[16px] mt-[18px] mx-auto ${data.textColor}`}
-            >
+            <div className={`font-semibold w-[190px] h-[16px] mt-[18px] mx-auto leading-4 ${data.textColor}`}>
               {data.title}
             </div>
           </div>

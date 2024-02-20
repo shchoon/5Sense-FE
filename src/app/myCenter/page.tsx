@@ -109,10 +109,7 @@ export default function MyCenter() {
     })
   }
 
-  const handelChangeName = (
-    name: string,
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handelChangeName = (name: string, e: React.ChangeEvent<HTMLInputElement>) => {
     if (name === 'name') {
       setPostData({
         ...postData,
@@ -141,11 +138,7 @@ export default function MyCenter() {
   }
 
   const checkPostableData = (postData: postDataType) => {
-    if (
-      postData.name !== '' &&
-      postData.address !== '' &&
-      postData.mainPhone.length >= 9
-    ) {
+    if (postData.name !== '' && postData.address !== '' && postData.mainPhone.length >= 9) {
       return true
     } else {
       false
@@ -197,7 +190,13 @@ export default function MyCenter() {
         className="flex flex-col w-[430px] h-[297px] gap-9"
         onSubmit={async e => {
           e.preventDefault()
-
+          let hasCenter
+          if (localStorage.getItem('hasCenter') === 'false') {
+            hasCenter = false
+          } else {
+            hasCenter = true
+          }
+          console.log(hasCenter)
           Object.entries(postData).forEach(([key, value]) => {
             if (key === 'name' && value === '') {
               setDanger(danger => ({
@@ -217,17 +216,19 @@ export default function MyCenter() {
             }
           })
 
-          if (
-            checkPostableData(postData) &&
-            !localStorage.getItem('hasCenter')
-          ) {
-            instance.post('/centers', {
-              name: postData.name,
-              address: postData.address,
-              mainPhone: postData.mainPhone
-            })
+          if (checkPostableData(postData) && !hasCenter) {
+            console.log('test')
+            instance
+              .post('/centers', {
+                name: postData.name,
+                address: postData.address,
+                mainPhone: postData.mainPhone
+              })
+              .then(() => {
+                router.push('/home')
+              })
           } else {
-            if (localStorage.getItem('hasCenter')) {
+            if (hasCenter) {
               alert('한 개 이상의 센터는 등록할 수 없습니다.')
             } else {
               alert('학원 정보를 올바르게 입력해주세요.')
@@ -258,17 +259,11 @@ export default function MyCenter() {
                 handelChangeName('name', e)
               }}
             />
-            {(onFocusInput.nameInput ||
-              postData.name !== '' ||
-              danger.name) && (
+            {(onFocusInput.nameInput || postData.name !== '' || danger.name) && (
               <label className="absolute -top-2 left-3 w-[42px] h-5 bg-white">
                 <div
                   className={`flex justify-center ${
-                    danger.name
-                      ? 'text-red-600'
-                      : !onFocusInput.nameInput
-                        ? 'text-green-600'
-                        : 'text-indigo-700'
+                    danger.name ? 'text-red-600' : !onFocusInput.nameInput ? 'text-green-600' : 'text-indigo-700'
                   }  text-xs font-medium font-['Inter']`}
                 >
                   센터명
@@ -296,17 +291,11 @@ export default function MyCenter() {
               placeholder="주소"
               onClick={onClickAdd}
             />
-            {(onFocusInput.addressInput ||
-              postData.address !== '' ||
-              danger.address) && (
+            {(onFocusInput.addressInput || postData.address !== '' || danger.address) && (
               <label className="absolute -top-2 left-3 w-[28px] h-3 bg-white">
                 <div
                   className={`flex justify-center ${
-                    danger.address
-                      ? 'text-red-600'
-                      : !onFocusInput.addressInput
-                        ? 'text-green-600'
-                        : 'text-indigo-700'
+                    danger.address ? 'text-red-600' : !onFocusInput.addressInput ? 'text-green-600' : 'text-indigo-700'
                   }  text-xs font-medium font-['Inter']`}
                 >
                   주소
@@ -337,17 +326,11 @@ export default function MyCenter() {
                 handelChangeName('phone', e)
               }}
             />
-            {(onFocusInput.phoneInput ||
-              postData.mainPhone !== '' ||
-              danger.phone) && (
+            {(onFocusInput.phoneInput || postData.mainPhone !== '' || danger.phone) && (
               <label className="absolute -top-2 left-3 w-[60px] h-5 bg-white">
                 <div
                   className={`flex justify-center ${
-                    danger.phone
-                      ? 'text-red-600'
-                      : !onFocusInput.phoneInput
-                        ? 'text-green-600'
-                        : 'text-indigo-700'
+                    danger.phone ? 'text-red-600' : !onFocusInput.phoneInput ? 'text-green-600' : 'text-indigo-700'
                   }  text-xs font-medium font-['Inter']`}
                 >
                   전화번호
@@ -357,9 +340,7 @@ export default function MyCenter() {
           </div>
           <div className="w-full flex gap-2">
             <DropDown {...DropDownProps1} />
-            <div className="flex items-center gray-800-semibold text-base font-['Pretendard']">
-              -
-            </div>
+            <div className="flex items-center gray-800-semibold text-base font-['Pretendard']">-</div>
             <DropDown {...DropDownProps2} />
           </div>
         </div>
