@@ -3,11 +3,11 @@ import Image from 'next/image'
 import ArrowBack from 'public/assets/icons/allowBack.svg'
 import Ellipsis from 'public/assets/icons/ellipsis75.svg'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 export default function ModifyPage({ children }: { children: React.ReactNode }) {
   const pathName = usePathname()
-
+  const router = useRouter()
   const linkList = [
     {
       url: '/centerInfo',
@@ -39,54 +39,15 @@ export default function ModifyPage({ children }: { children: React.ReactNode }) 
         <div className="w-[384px] h-6 flex gap-3.5">
           {linkList.map((data, i) => {
             return (
-              <Link href={data.url}>
-                <div
-                  key={i}
-                  className={`${
-                    pathName === `${data.url}` ? 'text-indigo-500' : 'text-gray-400'
-                  }  text-base font-bold font-['Pretendard']`}
-                >
-                  {data.title}
-                </div>
-              </Link>
+              <div
+                key={i}
+                className={`${pathName === data.url ? 'text-indigo-500' : 'text-gray-400'} text-base font-bold`}
+                onClick={() => router.push(data.url)}
+              >
+                {data.title}
+              </div>
             )
           })}
-          {/* <Link href={'/centerInfo'}>
-            <div
-              className={`${
-                pathName === '/centerInfo' ? 'text-indigo-500' : 'text-gray-400'
-              }  text-base font-bold font-['Pretendard']`}
-            >
-              센터 정보
-            </div>
-          </Link>
-          <Link href={'/policy'}>
-            <div
-              className={`${
-                pathName === '/policy' ? 'text-indigo-500' : 'text-gray-400'
-              }  text-base font-bold font-['Pretendard']`}
-            >
-              개인정보처리방침
-            </div>
-          </Link>
-          <Link href={'/accessTerms'}>
-            <div
-              className={`${
-                pathName === '/accessTerms' ? 'text-indigo-500' : 'text-gray-400'
-              }  text-base font-bold font-['Pretendard']`}
-            >
-              이용약관
-            </div>
-          </Link>
-          <Link href={'/withDrawal'}>
-            <div
-              className={`${
-                pathName === '/withDrawal' ? 'text-indigo-500' : 'text-gray-400'
-              }  text-base font-bold font-['Pretendard']`}
-            >
-              회원 탈퇴
-            </div>
-          </Link> */}
         </div>
       </div>
       {/* box */}
