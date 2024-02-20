@@ -6,7 +6,26 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 export default function ModifyPage({ children }: { children: React.ReactNode }) {
-  const router = usePathname()
+  const pathName = usePathname()
+
+  const linkList = [
+    {
+      url: '/centerInfo',
+      title: '센터 정보'
+    },
+    {
+      url: '/policy',
+      title: '개인정보처리방침'
+    },
+    {
+      url: '/accessTerms',
+      title: '이용 약관'
+    },
+    {
+      url: '/withdrawal',
+      title: '회원 탈퇴'
+    }
+  ]
   return (
     <div className="w-full">
       <div className="relative">
@@ -17,11 +36,25 @@ export default function ModifyPage({ children }: { children: React.ReactNode }) 
         <div className="absolute left-[92px] top-[60px] black-bold text-3xl font-['Pretendard']">내 프로필 관리</div>
       </div>
       <div className="w-full flex justify-center pt-[120px] pb-6">
-        <div className="w-[384px] h-6 flex  gap-4">
-          <Link href={'/centerInfo'}>
+        <div className="w-[384px] h-6 flex gap-3.5">
+          {linkList.map((data, i) => {
+            return (
+              <Link href={data.url}>
+                <div
+                  key={i}
+                  className={`${
+                    pathName === `${data.url}` ? 'text-indigo-500' : 'text-gray-400'
+                  }  text-base font-bold font-['Pretendard']`}
+                >
+                  {data.title}
+                </div>
+              </Link>
+            )
+          })}
+          {/* <Link href={'/centerInfo'}>
             <div
               className={`${
-                router === '/centerInfo' ? 'text-indigo-500' : 'text-gray-400'
+                pathName === '/centerInfo' ? 'text-indigo-500' : 'text-gray-400'
               }  text-base font-bold font-['Pretendard']`}
             >
               센터 정보
@@ -30,7 +63,7 @@ export default function ModifyPage({ children }: { children: React.ReactNode }) 
           <Link href={'/policy'}>
             <div
               className={`${
-                router === '/policy' ? 'text-indigo-500' : 'text-gray-400'
+                pathName === '/policy' ? 'text-indigo-500' : 'text-gray-400'
               }  text-base font-bold font-['Pretendard']`}
             >
               개인정보처리방침
@@ -39,7 +72,7 @@ export default function ModifyPage({ children }: { children: React.ReactNode }) 
           <Link href={'/accessTerms'}>
             <div
               className={`${
-                router === '/accessTerms' ? 'text-indigo-500' : 'text-gray-400'
+                pathName === '/accessTerms' ? 'text-indigo-500' : 'text-gray-400'
               }  text-base font-bold font-['Pretendard']`}
             >
               이용약관
@@ -48,12 +81,12 @@ export default function ModifyPage({ children }: { children: React.ReactNode }) 
           <Link href={'/withDrawal'}>
             <div
               className={`${
-                router === '/withDrawal' ? 'text-indigo-500' : 'text-gray-400'
+                pathName === '/withDrawal' ? 'text-indigo-500' : 'text-gray-400'
               }  text-base font-bold font-['Pretendard']`}
             >
               회원 탈퇴
             </div>
-          </Link>
+          </Link> */}
         </div>
       </div>
       {/* box */}
