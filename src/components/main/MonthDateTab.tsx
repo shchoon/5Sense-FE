@@ -11,7 +11,7 @@ import { dateDataType } from '../datePicker/dayDatePicker'
 export default function MonthDateTab() {
   const { width, height } = useWindowSize()
   const currentDate = new Date()
-  const [dateData, setDateData] = useState({
+  const [dateData, setDateData] = useState<dateDataType>({
     year: currentDate.getFullYear(),
     month: currentDate.getMonth(),
     date: currentDate.getDate()
@@ -23,6 +23,7 @@ export default function MonthDateTab() {
   }
 
   function moveForwardMonth() {
+    setIsClickedDatePicker(false)
     if (dateData.month === 11) {
       setDateData({
         ...dateData,
@@ -38,6 +39,7 @@ export default function MonthDateTab() {
   }
 
   function moveBackMonth() {
+    setIsClickedDatePicker(false)
     if (dateData.month === 0) {
       setDateData({
         ...dateData,
@@ -68,7 +70,7 @@ export default function MonthDateTab() {
       })
     }
   }
-
+  console.log(dateData)
   return (
     <>
       <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
@@ -101,10 +103,7 @@ export default function MonthDateTab() {
           <DateSlideTab />
           {isClickedDatePicker && (
             <div className="absolute w-[255px] z-10 right-0 left-0 mx-auto top-[60px]">
-              <MonthDatePicker
-                changeParentsDateData={setDateDataFromChild}
-                parentsDateData={dateData}
-              />
+              <MonthDatePicker changeParentsDateData={setDateDataFromChild} parentsDateData={dateData} />
             </div>
           )}
         </div>
