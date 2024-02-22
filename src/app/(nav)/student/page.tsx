@@ -63,10 +63,7 @@ export default function StudentPage() {
     rootMargin: '0px',
     threshold: 1.0
   }
-  const handleObserver = (
-    [entry]: IntersectionObserverEntry[],
-    observer: IntersectionObserver
-  ) => {
+  const handleObserver = ([entry]: IntersectionObserverEntry[], observer: IntersectionObserver) => {
     if (entry.isIntersecting) {
       observer.unobserve(entry.target)
       setScrollCount(prev => prev + 1)
@@ -79,23 +76,12 @@ export default function StudentPage() {
   const getStudentListToScroll = async () => {
     if (inputValue !== '') {
       const searchBy = inputRef.current?.name
-      const res = await useGetData(
-        'students',
-        postVar.page + 1,
-        searchBy,
-        inputValue
-      )
-      setStudentList((preStudentData: getDataType[]) => [
-        ...preStudentData,
-        ...res.data
-      ])
+      const res = await useGetData('students', postVar.page + 1, 10, searchBy, inputValue)
+      setStudentList((preStudentData: getDataType[]) => [...preStudentData, ...res.data])
       setPostVar((prePostVar: postVarType) => res.meta)
     } else {
-      const res = await useGetData('students', postVar.page + 1)
-      setStudentList((preStudentData: getDataType[]) => [
-        ...preStudentData,
-        ...res.data
-      ])
+      const res = await useGetData('students', postVar.page + 1, 10)
+      setStudentList((preStudentData: getDataType[]) => [...preStudentData, ...res.data])
       setPostVar((prePostVar: postVarType) => res.meta)
     }
   }
@@ -106,14 +92,14 @@ export default function StudentPage() {
 
   const handleClickSearch = async () => {
     const searchBy = inputRef.current?.name
-    const res = await useGetData('students', 1, searchBy, inputValue)
+    const res = await useGetData('students', 1, 10, searchBy, inputValue)
     setStudentList((preStudentData: getDataType[]) => [...res.data])
     setPostVar((prePostVar: postVarType) => res.meta)
   }
 
   const handleClickInputRefresh = async () => {
     setInputValue('')
-    const res = await useGetData('students', 1)
+    const res = await useGetData('students', 1, 10)
     setStudentList(res.data)
     setPostVar((prePostVar: postVarType) => res.meta)
   }
@@ -144,9 +130,7 @@ export default function StudentPage() {
     }
   }
 
-  const preventInputDifferentType = (
-    e: React.KeyboardEvent<HTMLInputElement>
-  ) => {
+  const preventInputDifferentType = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (inputValue !== '' && numberCheckList.includes(e.key)) {
       e.preventDefault()
       alert('이름과 전화번호를 동시에 검색할 수 없습니다. 각각 입력해주세요.')
@@ -157,7 +141,7 @@ export default function StudentPage() {
   }
 
   useEffect(() => {
-    useGetData('students', 1).then(res => {
+    useGetData('students', 1, 10).then(res => {
       setStudentList((preInstructorData: getDataType[]) => [...res.data])
       setPostVar(res.meta)
       setIsRefresh(true)
@@ -179,21 +163,10 @@ export default function StudentPage() {
       {/* 수강생 관리 + 수강생 등록 버튼 */}
       <div className="flex w-full pt-12 mb-[30px] justify-between">
         <div className=" h-[30px]">
-          <div className="w-full black-bold text-3xl font-['Pretendard']">
-            수강생 관리
-          </div>
+          <div className="w-full black-bold text-3xl font-['Pretendard']">수강생 관리</div>
         </div>
-        <Link
-          href={'student/register'}
-          className="flex px-5 py-2.5 btn-purple text-sm"
-        >
-          <Image
-            src={plusCircle}
-            alt="plus"
-            width={20}
-            height={20}
-            className="mr-2"
-          />
+        <Link href={'student/register'} className="flex px-5 py-2.5 btn-purple text-sm">
+          <Image src={plusCircle} alt="plus" width={20} height={20} className="mr-2" />
           수강생 등록
         </Link>
       </div>
@@ -209,9 +182,7 @@ export default function StudentPage() {
             type={checkInputType() ? 'text' : 'number'}
             value={inputValue}
             onChange={handleChangeInput}
-            onKeyDown={
-              checkInputType() ? preventInputDifferentType : allowOnlyNum
-            }
+            onKeyDown={checkInputType() ? preventInputDifferentType : allowOnlyNum}
           />
           <Image
             className="cursor-pointer"
@@ -233,15 +204,9 @@ export default function StudentPage() {
       <div className="w-full flex flex-col gap-3">
         {/* 수강생 목록 설명 */}
         <div className="w-full h-[46px] lg:px-7 px-6 py-4 flex lg:gap-6 gap-4 rounded bg-[#F0EFFF]">
-          <div className="w-[100px] indigo-500-semibold text-sm font-['Pretendard']">
-            이름
-          </div>
-          <div className="lg:w-[160px] w-[130px] indigo-500-semibold text-sm font-['Pretendard']">
-            전화번호
-          </div>
-          <div className="xl:flex-1 lg:w-[100px] flex-1 indigo-500-semibold text-sm font-['Pretendard']">
-            클래스명
-          </div>
+          <div className="w-[100px] indigo-500-semibold text-sm font-['Pretendard']">이름</div>
+          <div className="lg:w-[160px] w-[130px] indigo-500-semibold text-sm font-['Pretendard']">전화번호</div>
+          <div className="xl:flex-1 lg:w-[100px] flex-1 indigo-500-semibold text-sm font-['Pretendard']">클래스명</div>
           <div className="xl:w-[400px] lg:flex-1 w-[200px] indigo-500-semibold text-sm font-['Pretendard']">
             특이사항
           </div>
@@ -260,9 +225,7 @@ export default function StudentPage() {
                 }}
               >
                 <div className="flex lg:gap-6 gap-4 flex-1">
-                  <div className="w-[100px] gray-800-semibold text-sm font-['Pretendard'] text-left">
-                    {name}
-                  </div>
+                  <div className="w-[100px] gray-800-semibold text-sm font-['Pretendard'] text-left">{name}</div>
                   <div className="lg:w-[160px] w-[130px] gray-800-semibold text-sm font-['Pretendard'] text-left">
                     {phone.slice(0, 3)}-{phone.slice(3, 7)}-{phone.slice(7, 11)}
                   </div>

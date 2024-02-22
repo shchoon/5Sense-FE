@@ -18,7 +18,7 @@ import plusCircle from 'public/assets/icons/plus-circle.svg'
 import searchIcon from 'public/assets/icons/search.svg'
 import searchIconWhite from 'public/assets/icons/search_white.svg'
 
-interface instruct {
+interface instructorType {
   id: string
   name: string
   phone: string
@@ -135,7 +135,11 @@ export default function InstructorPage() {
   const allowOnlyNum = (e: React.KeyboardEvent<HTMLInputElement>) => {
     let regex = /^[a-zA-Z]+$/
     const forbiddenKeys = ['-', 'e', 'ArrowUp', 'ArrowDown']
-    if (forbiddenKeys.includes(e.key) || e.currentTarget.value.length > 12 || (e.currentTarget.value.length === 12 && e.key !== 'Backspace')) {
+    if (
+      forbiddenKeys.includes(e.key) ||
+      e.currentTarget.value.length > 12 ||
+      (e.currentTarget.value.length === 12 && e.key !== 'Backspace')
+    ) {
       e.preventDefault()
     }
     if (regex.test(e.key) && e.key !== 'Backspace' && e.key !== 'Enter') {
@@ -202,7 +206,14 @@ export default function InstructorPage() {
             onChange={handleChangeInput}
             onKeyDown={checkInputType() ? preventInputDifferentType : allowOnlyNum}
           />
-          <Image className="cursor-pointer" src={closeIcon} width={12} height={12} alt=" " onClick={handleClickInputRefresh} />
+          <Image
+            className="cursor-pointer"
+            src={closeIcon}
+            width={12}
+            height={12}
+            alt=" "
+            onClick={handleClickInputRefresh}
+          />
         </div>
         <div className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer">
           <Image src={searchIconWhite} width={20} height={20} alt=" " />
@@ -240,7 +251,9 @@ export default function InstructorPage() {
             className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
             role="status"
           >
-            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+              Loading...
+            </span>
           </div>
         </div>
       )}
