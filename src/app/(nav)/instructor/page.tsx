@@ -86,11 +86,11 @@ export default function InstructorPage() {
   const getInstructorListToScroll = async () => {
     if (inputValue !== '') {
       const searchBy = inputRef.current?.name
-      const res = await useGetData('teachers', postVar.page + 1, searchBy, inputValue)
+      const res = await useGetData('teachers', postVar.page + 1, 10, searchBy, inputValue)
       setInstructorList((preInstructorData: getDataType[]) => [...preInstructorData, ...res.data])
       setPostVar((prePostVar: postVarType) => res.meta)
     } else {
-      const res = await useGetData('teachers', postVar.page + 1)
+      const res = await useGetData('teachers', postVar.page + 1, 10)
       setInstructorList((preInstructorData: getDataType[]) => [...preInstructorData, ...res.data])
       setPostVar((prePostVar: postVarType) => res.meta)
     }
@@ -98,7 +98,7 @@ export default function InstructorPage() {
 
   useEffect(() => {
     if (!Modal.active) {
-      useGetData('teachers', 1).then(res => {
+      useGetData('teachers', 1, 10).then(res => {
         setInstructorList((preInstructorData: getDataType[]) => [...res.data])
         setPostVar(prePostVar => res.meta)
         setIsRefresh(true)
@@ -112,14 +112,14 @@ export default function InstructorPage() {
 
   const handleClickSearch = async () => {
     const searchBy = inputRef.current?.name
-    const res = await useGetData('teachers', 1, searchBy, inputValue)
+    const res = await useGetData('teachers', 1, 10, searchBy, inputValue)
     setInstructorList((preInstructorData: getDataType[]) => [...res.data])
     setPostVar((prePostVar: postVarType) => res.meta)
   }
 
   const handleClickInputRefresh = async () => {
     setInputValue('')
-    const res = await useGetData('teachers', 1)
+    const res = await useGetData('teachers', 1, 10)
     setInstructorList(res.data)
     setPostVar(prePostVar => res.meta)
   }
