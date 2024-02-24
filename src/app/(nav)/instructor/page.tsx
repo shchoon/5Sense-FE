@@ -17,7 +17,7 @@ import closeIcon from 'public/assets/icons/close.svg'
 import plusCircle from 'public/assets/icons/plus-circle.svg'
 import searchIcon from 'public/assets/icons/search.svg'
 import searchIconWhite from 'public/assets/icons/search_white.svg'
-import Modal from '@/components/common/modal/Small'
+import Modal from '@/components/common/modal'
 
 interface instruct {
   id: string
