@@ -17,6 +17,7 @@ import closeIcon from 'public/assets/icons/close.svg'
 import plusCircle from 'public/assets/icons/plus-circle.svg'
 import searchIcon from 'public/assets/icons/search.svg'
 import searchIconWhite from 'public/assets/icons/search_white.svg'
+import Modal from '@/components/common/modal/Small'
 
 interface instruct {
   id: string
@@ -28,38 +29,40 @@ export default function InstructorPage() {
   const inputRef = useRef<HTMLInputElement>(null)
 
   // 모달 상태관리
-  const [Modal, setModal] = useRecoilState(modalState)
+  // const [Modal, setModal] = useRecoilState(modalState)
 
-  const handleLargeModal = (id: string, type: string) => {
-    setModal(prevModal => ({
-      ...prevModal,
-      active: true,
-      id: id,
-      type: type
-    }))
-  }
+  // const handleLargeModal = (id: string, type: string) => {
+  //   setModal(prevModal => ({
+  //     ...prevModal,
+  //     active: true,
+  //     id: id,
+  //     type: type
+  //   }))
+  // }
 
-  const handleSmallModal = (type: string) => {
-    setModal(prevModal => ({
-      ...prevModal,
-      active: true,
-      type: type
-    }))
-  }
+  // const handleSmallModal = (type: string) => {
+  //   setModal(prevModal => ({
+  //     ...prevModal,
+  //     active: true,
+  //     type: type
+  //   }))
+  // }
 
-  const handleModal = (id: string) => {
-    setModal(prevModal => ({
-      ...prevModal,
-      active: true,
-      id: id,
-      type: 'instructor'
-    }))
-  }
+  // const handleModal = (id: string) => {
+  //   setModal(prevModal => ({
+  //     ...prevModal,
+  //     active: true,
+  //     id: id,
+  //     type: 'instructor'
+  //   }))
+  // }
+
+  const [modal, setMomal] = useState(false)
 
   const target: HTMLElement | null = document.getElementById('test')
   const numberCheckList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
-  const [instructorList, setInstructorList] = useState<instructorType[]>([])
+  const [instructorList, setInstructorList] = useState<instruct[]>([])
   const [postVar, setPostVar] = useState<postVarType>({
     page: 1,
     hasNextPage: false
@@ -135,7 +138,11 @@ export default function InstructorPage() {
   const allowOnlyNum = (e: React.KeyboardEvent<HTMLInputElement>) => {
     let regex = /^[a-zA-Z]+$/
     const forbiddenKeys = ['-', 'e', 'ArrowUp', 'ArrowDown']
-    if (forbiddenKeys.includes(e.key) || e.currentTarget.value.length > 12 || (e.currentTarget.value.length === 12 && e.key !== 'Backspace')) {
+    if (
+      forbiddenKeys.includes(e.key) ||
+      e.currentTarget.value.length > 12 ||
+      (e.currentTarget.value.length === 12 && e.key !== 'Backspace')
+    ) {
       e.preventDefault()
     }
     if (regex.test(e.key) && e.key !== 'Backspace' && e.key !== 'Enter') {
@@ -183,7 +190,7 @@ export default function InstructorPage() {
         <div className=" h-[30px]">
           <div className="w-full black-bold text-3xl font-['Pretendard']">강사 관리</div>
         </div>
-        <button onClick={() => handleSmallModal('instructor')} className="flex px-5 py-2.5 btn-purple text-sm">
+        <button onClick={() => setMomal(true)} className="flex px-5 py-2.5 btn-purple text-sm">
           <Image src={plusCircle} alt="plus" width={20} height={20} className="mr-2" />
           강사 등록
         </button>
@@ -202,7 +209,14 @@ export default function InstructorPage() {
             onChange={handleChangeInput}
             onKeyDown={checkInputType() ? preventInputDifferentType : allowOnlyNum}
           />
-          <Image className="cursor-pointer" src={closeIcon} width={12} height={12} alt=" " onClick={handleClickInputRefresh} />
+          <Image
+            className="cursor-pointer"
+            src={closeIcon}
+            width={12}
+            height={12}
+            alt=" "
+            onClick={handleClickInputRefresh}
+          />
         </div>
         <div className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer">
           <Image src={searchIconWhite} width={20} height={20} alt=" " />
@@ -232,15 +246,18 @@ export default function InstructorPage() {
           )
         })}
       </div>
-
-      {!isLoading && !Modal.active ? <div id="test"></div> : null}
+      <Modal small onClose={() => setMomal(false)}>
+        <div>hihihih</div>
+      </Modal>
       {isLoading && (
         <div className="w-full h-[70px] pt-[50px] flex justify-center items-center">
           <div
             className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
             role="status"
           >
-            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+              Loading...
+            </span>
           </div>
         </div>
       )}
