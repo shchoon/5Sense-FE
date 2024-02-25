@@ -1,9 +1,7 @@
 'use client'
 import { useState } from 'react'
 import Image from 'next/image'
-import chevron_gray from 'public/assets/icons/chevron_down_gray.svg'
 import DropDown from '@/components/common/DropDown'
-import ReactDropDown from '@/components/common/ReactDropDown'
 
 export default function WithDrawal() {
   const [postData, setPostData] = useState('')
@@ -18,6 +16,11 @@ export default function WithDrawal() {
     title: '선택해주세요.',
     list: dropDownList
   }
+
+  const handleChangeReasonFromChild = (data: { reason: string }) => {
+    setPostData(data.reason)
+  }
+
   return (
     <form
       className="w-[640px] px-6 py-8 flex flex-col gap-10 border rounded-xl border-gray-200"
@@ -44,7 +47,7 @@ export default function WithDrawal() {
         <div className="w-full flex flex-col gap-2">
           <div className="w-[592px] gray-800-semibold text-base font-['Pretendard']">탈퇴 사유 및 개선점(선택)</div>
           {/* <DropDown {...dropDownProps} /> */}
-          <ReactDropDown {...dropDownProps} />
+          <DropDown {...dropDownProps} handleChangeParentsReasonData={handleChangeReasonFromChild} type="withdrawl" />
         </div>
         <textarea
           placeholder="탈퇴 사유 및 개선점을 적어주세요"
@@ -53,7 +56,13 @@ export default function WithDrawal() {
           className="w-full h-[144px] p-x-4 py-3.5 border rounded-lg border-gray-200 focus:ring-0 focus:border-primary-700 focus:bg-gray-50 resize-none overflow-hidden"
         />
       </div>
-      <button type="submit" className="w-full h-[52px] btn-purple">
+      <button
+        type="submit"
+        className="w-full h-[52px] btn-purple"
+        onClick={() => {
+          console.log(postData)
+        }}
+      >
         수정하기
       </button>
     </form>
