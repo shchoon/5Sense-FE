@@ -3,16 +3,13 @@ const plugin = require('tailwindcss/plugin')
 
 module.exports = {
   content: [
-    './node_modules/flowbite-react/**/*.js',
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/**/*.{js,jsx,ts,tsx}',
-    './node_modules/flowbite/**/*.js'
+    './src/**/*.{js,jsx,ts,tsx}'
   ],
   plugins: [
-    require('flowbite/plugin'),
     plugin(function ({ addComponents }) {
       addComponents({
         '.btn-purple': {
@@ -123,7 +120,8 @@ module.exports = {
           400: '#907AE5',
           500: '#917AE5',
           600: '#7354E8',
-          700: '#5539C0'
+          700: '#5539C0',
+          DEFAULT: '#5539C0'
         },
         gray: {
           50: '#F8FAFD',

@@ -1,18 +1,15 @@
 'use client'
-import closeIcon from 'public/assets/icons/close.svg'
-import plusCircle from 'public/assets/icons/plus-circle.svg'
-
-import searchIconGray from 'public/assets/icons/search.svg'
-
-import searchIconWhite from 'public/assets/icons/search_white.svg'
 import Image from 'next/image'
 import Link from 'next/link'
+import searchIconWhite from 'public/assets/icons/search_white.svg'
 import { useEffect, useRef, useState } from 'react'
-import { useRecoilState } from 'recoil'
 
 import NoneResult from '@/components/common/NoneResult'
 import { useGetData } from '@/hooks/useGetData'
-import { modalState } from '@/lib/state/modal'
+
+import closeIcon from 'public/assets/icons/close.svg'
+import plusCircle from 'public/assets/icons/plus-circle.svg'
+import searchIconGray from 'public/assets/icons/search.svg'
 
 interface studentType {
   id: string
@@ -48,15 +45,15 @@ export default function StudentPage() {
   const [scrollCount, setScrollCount] = useState(0)
   const [inputValue, setInputValue] = useState<string>('')
 
-  const [Modal, setModal] = useRecoilState(modalState)
-  const handleModal = (id: string) => {
-    setModal(prevModal => ({
-      ...prevModal,
-      active: true,
-      id: id,
-      type: 'student'
-    }))
-  }
+  // const [Modal, setModal] = useRecoilState(modalState)
+  // const handleModal = (id: string) => {
+  //   setModal(prevModal => ({
+  //     ...prevModal,
+  //     active: true,
+  //     id: id,
+  //     type: 'student'
+  //   }))
+  // }
 
   const options = {
     root: null,
@@ -76,6 +73,7 @@ export default function StudentPage() {
   const getStudentListToScroll = async () => {
     if (inputValue !== '') {
       const searchBy = inputRef.current?.name
+
       const res = await useGetData('students', postVar.page + 1, 10, searchBy, inputValue)
       setStudentList((preStudentData: getDataType[]) => [...preStudentData, ...res.data])
       setPostVar((prePostVar: postVarType) => res.meta)
@@ -253,7 +251,6 @@ export default function StudentPage() {
           </div>
         </div>
       )}
-      {!isLoading ? <div id="test"></div> : null}
     </div>
   )
 }
