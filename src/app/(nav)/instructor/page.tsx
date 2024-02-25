@@ -17,6 +17,7 @@ import closeIcon from 'public/assets/icons/close.svg'
 import plusCircle from 'public/assets/icons/plus-circle.svg'
 import searchIcon from 'public/assets/icons/search.svg'
 import searchIconWhite from 'public/assets/icons/search_white.svg'
+import Modal from '@/components/common/modal'
 
 interface instructorType {
   id: string
@@ -28,38 +29,40 @@ export default function InstructorPage() {
   const inputRef = useRef<HTMLInputElement>(null)
 
   // 모달 상태관리
-  const [Modal, setModal] = useRecoilState(modalState)
+  // const [Modal, setModal] = useRecoilState(modalState)
 
-  const handleLargeModal = (id: string, type: string) => {
-    setModal(prevModal => ({
-      ...prevModal,
-      active: true,
-      id: id,
-      type: type
-    }))
-  }
+  // const handleLargeModal = (id: string, type: string) => {
+  //   setModal(prevModal => ({
+  //     ...prevModal,
+  //     active: true,
+  //     id: id,
+  //     type: type
+  //   }))
+  // }
 
-  const handleSmallModal = (type: string) => {
-    setModal(prevModal => ({
-      ...prevModal,
-      active: true,
-      type: type
-    }))
-  }
+  // const handleSmallModal = (type: string) => {
+  //   setModal(prevModal => ({
+  //     ...prevModal,
+  //     active: true,
+  //     type: type
+  //   }))
+  // }
 
-  const handleModal = (id: string) => {
-    setModal(prevModal => ({
-      ...prevModal,
-      active: true,
-      id: id,
-      type: 'instructor'
-    }))
-  }
+  // const handleModal = (id: string) => {
+  //   setModal(prevModal => ({
+  //     ...prevModal,
+  //     active: true,
+  //     id: id,
+  //     type: 'instructor'
+  //   }))
+  // }
+
+  const [modal, setMomal] = useState(false)
 
   const target: HTMLElement | null = document.getElementById('test')
   const numberCheckList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
-  const [instructorList, setInstructorList] = useState<instructorType[]>([])
+  const [instructorList, setInstructorList] = useState<instruct[]>([])
   const [postVar, setPostVar] = useState<postVarType>({
     page: 1,
     hasNextPage: false
@@ -187,7 +190,7 @@ export default function InstructorPage() {
         <div className=" h-[30px]">
           <div className="w-full black-bold text-3xl font-['Pretendard']">강사 관리</div>
         </div>
-        <button onClick={() => handleSmallModal('instructor')} className="flex px-5 py-2.5 btn-purple text-sm">
+        <button onClick={() => setMomal(true)} className="flex px-5 py-2.5 btn-purple text-sm">
           <Image src={plusCircle} alt="plus" width={20} height={20} className="mr-2" />
           강사 등록
         </button>
@@ -243,8 +246,9 @@ export default function InstructorPage() {
           )
         })}
       </div>
-
-      {!isLoading && !Modal.active ? <div id="test"></div> : null}
+      <Modal small onClose={() => setMomal(false)}>
+        <div>hihihih</div>
+      </Modal>
       {isLoading && (
         <div className="w-full h-[70px] pt-[50px] flex justify-center items-center">
           <div
