@@ -54,7 +54,7 @@ export default function MonthDateTab() {
     }
   }
 
-  const setDateDataFromChild = (data: dateDataType, type: string) => {
+  const handleChangeDateDataFromChild = (data: dateDataType, type: string) => {
     if (type === 'check') {
       setDateData({
         ...dateData,
@@ -103,7 +103,7 @@ export default function MonthDateTab() {
           <DateSlideTab />
           {isClickedDatePicker && (
             <div className="absolute w-[255px] z-10 right-0 left-0 mx-auto top-[60px]">
-              <MonthDatePicker changeParentsDateData={setDateDataFromChild} parentsDateData={dateData} />
+              <MonthDatePicker changeParentsDateData={handleChangeDateDataFromChild} parentsDateData={dateData} />
             </div>
           )}
         </div>

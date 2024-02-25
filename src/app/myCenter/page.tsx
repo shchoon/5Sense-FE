@@ -164,19 +164,13 @@ export default function MyCenter() {
   }
 
   const DropDownProps1 = {
-    height: 'h-[58px]',
-    px: 'px-3',
-    py: 'py-5',
-    dropDownList: getTimeList(),
-    name: '오픈 시간'
+    title: '오픈 시간',
+    list: getTimeList()
   }
 
   const DropDownProps2 = {
-    height: 'h-[58px]',
-    px: 'px-3',
-    py: 'py-5',
-    dropDownList: getTimeList(),
-    name: '마감 시간'
+    title: '마감 시간',
+    list: getTimeList()
   }
 
   useOnClickOutside(addressNameInputRef, handelClickOutsideAddress)

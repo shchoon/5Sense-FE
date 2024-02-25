@@ -8,7 +8,8 @@ import ToggleOff from 'public/assets/icons/toggle_off.svg'
 import GoogleLogo from 'public/assets/logo/googleLogo.svg'
 import NaverLogo from 'public/assets/logo/naverLogo.svg'
 import React, { useState } from 'react'
-import ReactDropDown from '@/components/common/ReactDropDown'
+import DropDown from '@/components/common/DropDown'
+import Script from 'next/script'
 
 interface toogleTargetType {
   kakao: boolean
@@ -17,6 +18,31 @@ interface toogleTargetType {
 }
 
 export default function ManageMent() {
+  const [postData, setPostData] = useState({
+    name: '',
+    address: '',
+    phone: '',
+    openTime: '',
+    closeTime: ''
+  })
+  const [toggleTarget, setToggleTarget] = useState<toogleTargetType>({
+    kakao: true,
+    naver: false,
+    google: false
+  })
+
+  const onClickAddress = () => {
+    new window.daum.Postcode({
+      oncomplete: function (data: any) {
+        // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+        // 예제를 참고하여 다양한 활용법을 확인해 보세요.
+        setPostData({
+          ...postData,
+          address: data.address
+        })
+      }
+    }).open()
+  }
   const getTimeList = () => {
     const list = []
     for (var i = 0; i <= 48; i++) {
@@ -44,17 +70,7 @@ export default function ManageMent() {
     title: '마감 시간',
     list: getTimeList()
   }
-  const [postData, setPostData] = useState({
-    name: '',
-    address: '',
-    phone: ''
-  })
 
-  const [toggleTarget, setToggleTarget] = useState<toogleTargetType>({
-    kakao: true,
-    naver: false,
-    google: false
-  })
   const onClickToggle = (e: React.MouseEvent<HTMLImageElement>) => {
     const title = e.currentTarget.title
     setToggleTarget((prevToggleTarget: toogleTargetType) => ({
@@ -71,12 +87,27 @@ export default function ManageMent() {
     })
   }
 
+  const handleChangeDropwdownFromChild = (data: { time: string }) => {
+    setPostData(prevPostData => ({
+      ...prevPostData,
+      openTime: data.time
+    }))
+  }
+
+  const handleChangeCloseTimeFromChild = (data: { time: string }) => {
+    setPostData(prevPostData => ({
+      ...prevPostData,
+      closeTime: data.time
+    }))
+  }
   return (
     <div className="w-[640px] flex flex-col gap-5 justify-center">
+      <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></Script>
       <form
         className="w-full px-6 py-8 flex flex-col rounded-xl border border-gray-200 justify-center gap-10"
         onSubmit={e => {
           e.preventDefault()
+          console.log(postData)
         }}
       >
         <div className="gray-900-bold text-xl font-['Pretendard']">센터 정보</div>
@@ -105,6 +136,7 @@ export default function ManageMent() {
               onChange={e => {
                 onChangeHandler(e)
               }}
+              onClick={onClickAddress}
               className="w-full h-[60px] px-4 border rounded-lg border-gray-200 focus:outline-none focus:border-primary-700 focus:bg-gray-50"
               placeholder="주소를 입력해주세요"
             />
@@ -118,9 +150,17 @@ export default function ManageMent() {
               placeholder="대표번호를 입력해주세요"
             />
             <div className="flex gap-2">
-              <ReactDropDown {...DropDownProps1} />
+              <DropDown
+                {...DropDownProps1}
+                handleChangeParentsOpenTimeData={handleChangeDropwdownFromChild}
+                type="open"
+              />
               <span className="flex items-center">-</span>
-              <ReactDropDown {...DropDownProps1} />
+              <DropDown
+                {...DropDownProps2}
+                handleChangeParentsCloseTimeData={handleChangeCloseTimeFromChild}
+                type="close"
+              />
             </div>
           </div>
           <button type="submit" className="w-full h-[52px] btn-purple">
