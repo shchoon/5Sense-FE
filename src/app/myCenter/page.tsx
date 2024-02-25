@@ -22,6 +22,8 @@ interface postDataType {
   name: string
   address: string
   mainPhone: string
+  openTime: string
+  closeTime: string
 }
 
 export default function MyCenter() {
@@ -33,7 +35,9 @@ export default function MyCenter() {
   const [postData, setPostData] = useState<postDataType>({
     name: '',
     address: '',
-    mainPhone: ''
+    mainPhone: '',
+    openTime: '',
+    closeTime: ''
   })
   const [onFocusInput, setOnFocusInput] = useState({
     nameInput: false,
@@ -163,6 +167,20 @@ export default function MyCenter() {
     return list
   }
 
+  const handleChangeDropwdownFromChild = (data: { time: string }) => {
+    setPostData(prevPostData => ({
+      ...prevPostData,
+      openTime: data.time
+    }))
+  }
+
+  const handleChangeCloseTimeFromChild = (data: { time: string }) => {
+    setPostData(prevPostData => ({
+      ...prevPostData,
+      closeTime: data.time
+    }))
+  }
+
   const DropDownProps1 = {
     title: '오픈 시간',
     list: getTimeList()
@@ -184,6 +202,7 @@ export default function MyCenter() {
         className="flex flex-col w-[430px] h-[297px] gap-9"
         onSubmit={async e => {
           e.preventDefault()
+          console.log(postData)
           let hasCenter
           if (localStorage.getItem('hasCenter') === 'false') {
             hasCenter = false
@@ -241,7 +260,7 @@ export default function MyCenter() {
                 handleOnFocus(e.target.name)
               }}
               className={`w-full px-3 py-5 text-sm gray-900-normal  
-                rounded-lg border-1 border-[#E5E7EB] ${
+                rounded-lg border border-1 border-[#E5E7EB] ${
                   danger.name
                     ? 'border-red-600'
                     : !onFocusInput.nameInput && postData.name !== ''
@@ -275,7 +294,7 @@ export default function MyCenter() {
                 handleOnFocus(e.target.name)
               }}
               className={`w-full px-3 py-5 text-sm gray-900-normal  
-              rounded-lg border-1 border-[#E5E7EB] ${
+              rounded-lg border border-1 border-[#E5E7EB] ${
                 danger.address
                   ? 'border-red-600'
                   : !onFocusInput.addressInput && postData.address !== ''
@@ -306,7 +325,7 @@ export default function MyCenter() {
               }}
               type="number"
               className={`w-full px-3 py-5 text-sm gray-900-normal  
-              rounded-lg border-1 border-[#E5E7EB] ${
+              rounded-lg border border-1 border-[#E5E7EB] ${
                 danger.phone
                   ? 'border-red-600'
                   : !onFocusInput.phoneInput && postData.mainPhone !== ''
@@ -333,9 +352,17 @@ export default function MyCenter() {
             )}
           </div>
           <div className="w-full flex gap-2">
-            <DropDown {...DropDownProps1} />
+            <DropDown
+              {...DropDownProps1}
+              handleChangeParentsOpenTimeData={handleChangeDropwdownFromChild}
+              type="open"
+            />
             <div className="flex items-center gray-800-semibold text-base font-['Pretendard']">-</div>
-            <DropDown {...DropDownProps2} />
+            <DropDown
+              {...DropDownProps2}
+              handleChangeParentsCloseTimeData={handleChangeCloseTimeFromChild}
+              type="close"
+            />
           </div>
         </div>
         <div className="w-full flex gap-[10px]">

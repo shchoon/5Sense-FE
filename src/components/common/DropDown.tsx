@@ -54,6 +54,7 @@ export default function DropDown(props: IProps) {
   return (
     <div ref={dropdownRef} className="relative w-full flex items-center cursor-pointer" onClick={handleClickDropDown}>
       <button
+        type="button"
         className={`w-full px-4 py-3.5 h-[52px] border rounded-lg border-gray-200 focus:outline-none focus:border-primary-700 focus:bg-gray-50`}
       >
         <div
