@@ -26,6 +26,7 @@ export default function DayDateTab() {
   }
 
   const moveForwardDay = () => {
+    setIsClickedDatePicker(false)
     let lastDateOfCurrentMonth = lastDateOfCurrnetMonthData.getDate()
 
     if (dateData.date === lastDateOfCurrentMonth) {
@@ -52,6 +53,7 @@ export default function DayDateTab() {
   }
 
   const moveBackDay = () => {
+    setIsClickedDatePicker(false)
     let lastDateOfLastMonth = lastDateOfLastMonthData.getDate()
 
     if (dateData.date === 1) {

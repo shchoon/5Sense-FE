@@ -12,28 +12,19 @@ export interface dateDataType {
 }
 
 export default function DayDatePicker(props: any) {
-  console.log(props.parentsDateData)
   const dateName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-  const currentDate = new Date()
-  const [dateData, setDateData] = useState<dateDataType>({
-    year: props.parentsDateData.year,
-    month: currentDate.getMonth(),
-    date: currentDate.getDate()
-  })
-  const [clickedDate, setClickedDate] = useState<string>('')
+  const [dateData, setDateData] = useState<dateDataType>(props.parentsDateData)
+  const [clickedDate, setClickedDate] = useState<string>(`${dateData.date}`)
   const getHoliData = useGetHolidayData(dateData.year)
 
   const getCalanderData = () => {
     const lastDateOfLastMonthData = new Date(dateData.year, dateData.month, 0)
     const firstDateOfCurrentMonthData = new Date(dateData.year, dateData.month)
-    const lastDateOfCurrnetMonthData = new Date(
-      dateData.year,
-      dateData.month + 1,
-      0
-    )
+    const lastDateOfCurrnetMonthData = new Date(dateData.year, dateData.month + 1, 0)
     const firstDateOfNextMonthData = new Date(dateData.year, dateData.month + 1)
 
     let list = []
+    /* 이전 월 정보 */
     if (firstDateOfCurrentMonthData.getDay() !== 0) {
       for (var i = lastDateOfLastMonthData.getDay(); i >= 0; i--) {
         list.push({
@@ -43,6 +34,8 @@ export default function DayDatePicker(props: any) {
         })
       }
     }
+
+    /* 해당 월에 공휴일이 유무 확인 */
     if (getHoliData[dateData.month + 1]) {
       const monthHoliData = getHoliData[dateData.month + 1].date
       for (var i = 1; i <= lastDateOfCurrnetMonthData.getDate(); i++) {
@@ -69,7 +62,7 @@ export default function DayDatePicker(props: any) {
         })
       }
     }
-
+    /* 월의 마지막 주 */
     if (lastDateOfCurrnetMonthData.getDay() !== 6) {
       for (var i = 1; i <= 7 - firstDateOfNextMonthData.getDay(); i++) {
         list.push({
@@ -91,7 +84,6 @@ export default function DayDatePicker(props: any) {
   const dateList = getCalanderData()
 
   const onClickDateHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-    console.log(e.currentTarget.id)
     setClickedDate(e.currentTarget.id)
   }
 
@@ -172,9 +164,7 @@ export default function DayDatePicker(props: any) {
           {dateName.map((date, i) => {
             return (
               <div key={i} className="px-1 py-2 ">
-                <div className="text-xs text-center font-semibold text-gray-500 font-['Pretendard']">
-                  {date}
-                </div>
+                <div className="text-xs text-center font-semibold text-gray-500 font-['Pretendard']">{date}</div>
               </div>
             )
           })}
@@ -188,8 +178,7 @@ export default function DayDatePicker(props: any) {
                     key={i}
                     id={dateData.date.toString()}
                     className={`px-1 py-2 cursor-pointer ${
-                      clickedDate === dateData.date.toString() &&
-                      dateData.clickable
+                      clickedDate === dateData.date.toString() && dateData.clickable
                         ? 'bg-primary-700 border rounded-lg'
                         : ''
                     }`}
@@ -199,8 +188,7 @@ export default function DayDatePicker(props: any) {
                   >
                     <div
                       className={`text-xs text-center ${
-                        clickedDate === dateData.date.toString() &&
-                        dateData.clickable
+                        clickedDate === dateData.date.toString() && dateData.clickable
                           ? 'text-white font-bold'
                           : `${dateData.textColor}`
                       } font-['Pretendard']`}
