@@ -1,459 +1,134 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
+import instance from '@/lib/api/axios'
+import DaySchedule from '@/components/main/DaySchedule'
+import Image from 'next/image'
+import { useWindowSize } from '@/hooks/useWindowSize'
+import chevronLeft from 'public/assets/icons/chevron/chevron-left.svg'
+import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
+import calender from 'public/assets/icons/calendar.svg'
+import DateSlideTab from '@/components/main/DateSlideTab'
+import { dateDataType } from '@/components/datePicker/dayDatePicker'
+import DayDatePicker from '@/components/datePicker/dayDatePicker'
 
 export default function MainPageDay() {
-  const date = new Date()
-  const currentHour = date.getHours()
-  const classData = [
-    {
-      time: '09:00',
-      class: [
-        {
-          classType: 'preiod',
-          hour: '9',
-          bgColorOn: 'bg-primary-600',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '조성훈',
-          roomNum: '1호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        },
-        {
-          classType: 'time',
-          hour: '9',
-          bgColorOn: 'bg-orange-500',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '조영은',
-          roomNum: '2호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        },
-        {
-          classType: 'preiod',
-          hour: '9',
-          bgColorOn: 'bg-primary-600',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '엄세리',
-          roomNum: '3호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        },
-        {
-          classType: 'time',
-          hour: '9',
-          bgColorOn: 'bg-orange-500',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '정은담',
-          roomNum: '4호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        }
-      ]
-    },
-    {
-      time: '11:00',
-      class: [
-        {
-          classType: 'preiod',
-          hour: '11',
-          bgColorOn: 'bg-primary-600',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '윤태식',
-          roomNum: '1호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        }
-      ]
-    },
-    {
-      time: '12:00',
-      class: [
-        {
-          classType: 'preiod',
-          hour: '12',
-          bgColorOn: 'bg-primary-600',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '조성훈',
-          roomNum: '1호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        }
-      ]
-    },
-    {
-      time: '13:00',
-      class: [
-        {
-          classType: 'preiod',
-          hour: '13',
-          bgColorOn: 'bg-primary-600',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '조영은',
-          roomNum: '1호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        },
-        {
-          classType: 'time',
-          hour: '13',
-          bgColorOn: 'bg-orange-500',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '엄세리',
-          roomNum: '2호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        }
-      ]
-    },
-    {
-      time: '14:00',
-      class: [
-        {
-          classType: 'preiod',
-          hour: '14',
-          bgColorOn: 'bg-primary-600',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '조영은',
-          roomNum: '1호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        },
-        {
-          classType: 'time',
-          hour: '14',
-          bgColorOn: 'bg-orange-500',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '엄세리',
-          roomNum: '2호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        }
-      ]
-    },
+  const { width, height } = useWindowSize()
+  const currentDate = new Date()
+  const [dateData, setDateData] = useState<dateDataType>({
+    year: currentDate.getFullYear(),
+    month: currentDate.getMonth(),
+    date: currentDate.getDate()
+  })
+  const [isClickedDatePicker, setIsClickedDatePicker] = useState<boolean>(false)
 
-    {
-      time: '17:00',
-      class: [
-        {
-          classType: 'preiod',
-          hour: '17',
-          bgColorOn: 'bg-primary-600',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '조영은',
-          roomNum: '1호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        },
-        {
-          classType: 'time',
-          hour: '17',
-          bgColorOn: 'bg-orange-500',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '엄세리',
-          roomNum: '2호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        }
-      ]
-    },
-    {
-      time: '18:00',
-      class: [
-        {
-          classType: 'preiod',
-          hour: '18',
-          bgColorOn: 'bg-primary-600',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '조영은',
-          roomNum: '1호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        },
-        {
-          classType: 'time',
-          hour: '18',
-          bgColorOn: 'bg-orange-500',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '엄세리',
-          roomNum: '2호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        }
-      ]
-    },
-    {
-      time: '19:00',
-      class: [
-        {
-          classType: 'preiod',
-          hour: '19',
-          bgColorOn: 'bg-primary-600',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '조영은',
-          roomNum: '1호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        },
-        {
-          classType: 'time',
-          hour: '19',
-          bgColorOn: 'bg-orange-500',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '엄세리',
-          roomNum: '2호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        }
-      ]
-    },
+  const lastDateOfCurrnetMonthData = new Date(dateData.year, dateData.month + 1, 0)
+  const lastDateOfLastMonthData = new Date(dateData.year, dateData.month, 0)
 
-    {
-      time: '21:00',
-      class: [
-        {
-          classType: 'preiod',
-          hour: '21',
-          bgColorOn: 'bg-primary-600',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '조영은',
-          roomNum: '1호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        },
-        {
-          classType: 'time',
-          hour: '21',
-          bgColorOn: 'bg-orange-500',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '엄세리',
-          roomNum: '2호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        }
-      ]
-    },
-    {
-      time: '22:00',
-      class: [
-        {
-          classType: 'preiod',
-          hour: '22',
-          bgColorOn: 'bg-primary-600',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '조영은',
-          roomNum: '1호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        },
-        {
-          classType: 'time',
-          hour: '22',
-          bgColorOn: 'bg-orange-500',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '엄세리',
-          roomNum: '2호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        }
-      ]
-    },
-    {
-      time: '23:00',
-      class: [
-        {
-          classType: 'preiod',
-          hour: '23',
-          bgColorOn: 'bg-primary-600',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '조영은',
-          roomNum: '1호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        },
-        {
-          classType: 'time',
-          hour: '23',
-          bgColorOn: 'bg-orange-500',
-          bgColorOff: 'bg-gray-200',
-          textColorOn: 'text-gray-800',
-          textColorOff: 'text-gray-400',
-          teacherName: '엄세리',
-          roomNum: '2호실',
-          className:
-            '체형 교정 및 이완을 위한 삶의 균형 찾기/ 스트레스로부터 벗어 나기'
-        }
-      ]
-    }
-  ]
+  const onClickDatePickerHandler = () => {
+    setIsClickedDatePicker(prev => !prev)
+  }
 
-  useEffect(() => {
-    let currentTimeClassIndex = classData.findIndex(
-      data => data.time.split(':')[0] == String(currentHour)
-    )
+  const moveForwardDay = () => {
+    setIsClickedDatePicker(false)
+    let lastDateOfCurrentMonth = lastDateOfCurrnetMonthData.getDate()
 
-    if (currentTimeClassIndex == -1) {
-      for (var i = 0; i < classData.length; i++) {
-        if (classData[i].time.split(':')[0] > String(currentHour)) {
-          currentTimeClassIndex = i
-          break
-        }
+    if (dateData.date === lastDateOfCurrentMonth) {
+      if (dateData.month === 11) {
+        setDateData({
+          ...dateData,
+          year: dateData.year + 1,
+          month: 0,
+          date: 1
+        })
+      } else {
+        setDateData({
+          ...dateData,
+          month: dateData.month + 1,
+          date: 1
+        })
       }
+    } else {
+      setDateData({
+        ...dateData,
+        date: dateData.date + 1
+      })
     }
-    let targetRef = document.getElementById(`ref${currentTimeClassIndex}`)
-    let position = targetRef?.offsetTop
-    const classSchedule = document.getElementById('classSchedule')
-    classSchedule?.scrollTo(0, Number(position))
-  }, [])
+  }
 
+  const moveBackDay = () => {
+    setIsClickedDatePicker(false)
+    let lastDateOfLastMonth = lastDateOfLastMonthData.getDate()
+
+    if (dateData.date === 1) {
+      if (dateData.month === 0) {
+        setDateData({
+          ...dateData,
+          year: dateData.year - 1,
+          month: 11,
+          date: 31
+        })
+      } else {
+        setDateData({
+          ...dateData,
+          month: dateData.month - 1,
+          date: lastDateOfLastMonth
+        })
+      }
+    } else {
+      setDateData({
+        ...dateData,
+        date: dateData.date - 1
+      })
+    }
+  }
+
+  const setDateDataFromChild = (data: dateDataType) => {
+    setDateData({
+      ...dateData,
+      year: data.year,
+      month: data.month,
+      date: data.date
+    })
+    setIsClickedDatePicker(false)
+  }
   return (
-    <div className="flex flex-col gap-4 mx-auto xl:max-w-[1016px] pt-8 pb-[80px]">
-      {/* 회차반 / 기간반 */}
-      <div className="w-full h-4 flex justify-end">
-        <div className="w-[164px] h-4 flex gap-6 ">
-          <div className="w-[70px] h-full flex gap-2 items-center justify-end">
-            <span className="w-[16px] h-[16px] border rounded bg-[#FF7749]"></span>
-            <span className="text-orange-500 text-[13px] font-bold">
-              회차반
-            </span>
+    <>
+      <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
+        <div className="relative mx-auto flex gap-[138px] items-center w-full  h-[52px]  md:w-full ">
+          <div
+            className={`flex mx-auto ${
+              width > 950 ? 'w-[420px]' : 'w-[312px]'
+            }  h-full p-1.5 border rounded-md border-gray-100 bg-[#F8FAFD]`}
+          >
+            <div
+              className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
+              onClick={moveBackDay}
+            >
+              <Image src={chevronLeft} width={24} height={24} alt=" " />
+            </div>
+            <div
+              className="w-full px-3 py-2 flex justify-center gap-2 items-center gray-900-semibold text-base font-['Pretendard'] hover:text-primary-600 cursor-pointer"
+              onClick={onClickDatePickerHandler}
+            >
+              <Image src={calender} width={18} height={18} alt=" " className="hover:fill-primary-600" />
+              {dateData.year}년 {dateData.month + 1}월 {dateData.date}일
+            </div>
+            <div
+              className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
+              onClick={moveForwardDay}
+            >
+              <Image src={chevronRight} width={24} height={24} alt=" " />
+            </div>
           </div>
-          <div className="w-[70px] h-full flex gap-2 items-center justify-end">
-            <span className="w-[16px] h-[16px] border rounded bg-primary-500"></span>
-            <span className="text-primary-500 text-[13px] font-bold">
-              기간반
-            </span>
-          </div>
+          <DateSlideTab />
+          {isClickedDatePicker && (
+            <div className="absolute w-[283px] z-10 right-0 left-0 mx-auto top-[60px]">
+              <DayDatePicker changeParentsDateData={setDateDataFromChild} parentsDateData={dateData} />
+            </div>
+          )}
         </div>
       </div>
-      {/* 일 시간표 */}
-      <div
-        id="classSchedule"
-        className="relative flex flex-col gap-7 w-full max-h-[800px] p-2 overflow-y-auto"
-      >
-        {classData.map((data, i) => {
-          if (true) {
-            return (
-              <div
-                key={i}
-                className="w-full flex xl:gap-[60px] md:gap-12 gap-6"
-              >
-                {/* 시간 */}
-                <div className="flex w-[77px] h-6 gap-5 items-center">
-                  <div
-                    className={`w-[51px] text-right ${
-                      currentHour === Number(data.time.split(':')[0])
-                        ? 'text-indigo-500'
-                        : 'text-black'
-                    }  text-base font-semibold font-['Pretendard']`}
-                  >
-                    {data.time}
-                  </div>
-                  <div className="w-1.5 h-1.5 bg-primary-600"></div>
-                </div>
-                <div
-                  id={`ref${i}`}
-                  className="w-full flex flex-col p-4 gap-[7px] outline outline-1 rounded-lg outline-gray-200"
-                >
-                  {data.class.map((data, i) => {
-                    return (
-                      <div key={i} className="flex gap-4 h-[45px]">
-                        <div
-                          className={`w-[3px] h-full rounded ${
-                            currentHour === Number(data.hour)
-                              ? data.bgColorOn
-                              : data.bgColorOff
-                          }`}
-                        ></div>
-                        <div className="flex flex-col w-full h-full">
-                          <div className="flex gap-[6px]">
-                            <div
-                              className={`${
-                                currentHour === Number(data.hour)
-                                  ? data.textColorOn
-                                  : data.textColorOff
-                              }  text-sm font-medium`}
-                            >
-                              {data.teacherName}
-                            </div>
-                            <div
-                              className={`${
-                                currentHour === Number(data.hour)
-                                  ? data.textColorOn
-                                  : data.textColorOff
-                              }  text-sm font-medium`}
-                            >
-                              ·
-                            </div>
-                            <div
-                              className={`${
-                                currentHour === Number(data.hour)
-                                  ? data.textColorOn
-                                  : data.textColorOff
-                              }  text-sm font-medium`}
-                            >
-                              {data.roomNum}
-                            </div>
-                          </div>
-                          <div
-                            className={`${
-                              currentHour === Number(data.hour)
-                                ? data.textColorOn
-                                : data.textColorOff
-                            }  text-base font-semibold font-['Pretendard'] truncate`}
-                          >
-                            {data.className}
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-            )
-          }
-        })}
-      </div>
-    </div>
+      <DaySchedule dateData={dateData} />
+    </>
   )
 }
