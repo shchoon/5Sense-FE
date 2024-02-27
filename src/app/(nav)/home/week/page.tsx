@@ -189,8 +189,7 @@ export default function MainPageWeek() {
   }, [dateData.month])
 
   /* post 할 데이터 dateData 바꾸기 */
-  console.log(dateData)
-
+  console.log(weekData)
   return (
     <>
       <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
@@ -266,7 +265,7 @@ export default function MainPageWeek() {
           })}
         </div>
       </div>
-      <WeekSchedule dateData={dateData} />
+      <WeekSchedule dateData={dateData} week={weekData} />
     </>
   )
 }

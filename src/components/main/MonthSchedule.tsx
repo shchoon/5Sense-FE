@@ -11,7 +11,7 @@ export default function MonthSchedule({ dateData }: IProps) {
   const currentDay = new Date().getDate()
   const dayOfTheWeek = ['SUN', 'MON', 'TUE', 'WED', 'THUR', 'FRI', 'SAT']
 
-  const [lessonData, setLessonData] = useState<{ day?: number; duration?: number; session?: number }[]>([])
+  const [classData, setClassData] = useState<{ day?: number; duration?: number; session?: number }[]>([])
 
   useEffect(() => {
     const startDay = new Date(dateData.year, dateData.month, 0).getDay()
@@ -31,7 +31,7 @@ export default function MonthSchedule({ dateData }: IProps) {
           session: session
         })
       }
-      setLessonData(returnData)
+      setClassData(returnData)
     })
   }, [dateData.month])
 
@@ -65,7 +65,7 @@ export default function MonthSchedule({ dateData }: IProps) {
           })}
         </div>
         <div className="w-full grid grid-cols-7">
-          {lessonData.map((data, i) => {
+          {classData.map((data, i) => {
             return (
               <div
                 key={i}

@@ -1,13 +1,15 @@
 'use client'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { dateDataType } from '../datePicker/dayDatePicker'
+import instance from '@/lib/api/axios'
 
 interface IProps {
   dateData: dateDataType
+  week: number
 }
 
-export default function WeekSchedule({ dateData }: IProps) {
-  console.log(dateData)
+export default function WeekSchedule({ dateData, week }: IProps) {
+  console.log(week)
   const classInfo = [
     {
       time: '09:00',
@@ -389,6 +391,36 @@ export default function WeekSchedule({ dateData }: IProps) {
       y: e.clientY - minusYValue + 20
     })
   }
+
+  const [classData, setClassData] = useState<{ day?: number; duration?: number; session?: number }[][]>([])
+
+  useEffect(() => {
+    instance(`/lessons/${dateData.year}/${dateData.month + 1}`).then(res => {
+      const data = res.data.data
+      let returnData = []
+      console.log(data)
+      for (var i = 0; i < data.length; i++) {
+        data[i].sort((a: any, b: any) => a.startTime.split(':')[0] - b.startTime.split(':')[0])
+      }
+      console.log(data)
+      const startDay = new Date(dateData.year, dateData.month, 0).getDay()
+      for (var i = 0; i <= startDay; i++) {
+        returnData.push({})
+      }
+      for (var i = 0; i < data.length; i++) {
+        returnData.push(data[i])
+      }
+      let result = []
+      for (var i = 0; i < data.length; i += 7) {
+        result.push(returnData.slice(i, i + 7))
+      }
+      console.log(returnData)
+      console.log(result)
+      setClassData(result)
+    })
+  }, [])
+
+  console.log(classData)
 
   return (
     <>
