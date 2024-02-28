@@ -62,25 +62,27 @@ export default function DaySchedule({ dateData }: IProps) {
     })
   }, [dateData.month])
 
-  /* 
-  let currentTimeClassIndex = lessonData[dateData.date - 1].findIndex(
-      (data: { startTime: string; data: { teacher: string; room: string; name: string; type: string } }) =>
-        data.startTime.split(':')[0] == String(currentHour)
-    )
+  /* useEffect(() => {
+    if (lessonData.length !== 0) {
+      let currentTimeClassIndex = lessonData[dateData.date - 1].findIndex(
+        data => data.startTime.split(':')[0] == String(currentHour)
+      )
 
-    if (currentTimeClassIndex == -1) {
-      for (var i = 0; i < lessonData[dateData.date - 1].length; i++) {
-        if (lessonData[dateData.date - 1].startTime.split(':')[0] > String(currentHour)) {
-          currentTimeClassIndex = i
-          break
+      if (currentTimeClassIndex == -1) {
+        for (var i = 0; i < lessonData[dateData.date - 1].length; i++) {
+          if (lessonData[dateData.date - 1][i].startTime.split(':')[0] > String(currentHour)) {
+            currentTimeClassIndex = i
+            break
+          }
         }
       }
+      let targetRef = document.getElementById(`ref${currentTimeClassIndex}`)
+      console.log(targetRef)
+      let position = targetRef?.offsetTop
+      const classSchedule = document.getElementById('classSchedule')
+      classSchedule?.scrollTo(0, Number(position))
     }
-
-    let targetRef = document.getElementById(`ref${4}`)
-    let position = targetRef?.offsetTop
-    const classSchedule = document.getElementById('classSchedule')
-    classSchedule?.scrollTo(0, Number(position)) */
+  }, []) */
 
   return (
     <div className="flex flex-col gap-4 mx-auto xl:max-w-[1016px] pt-8 pb-[80px]">

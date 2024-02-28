@@ -9,364 +9,6 @@ interface IProps {
 }
 
 export default function WeekSchedule({ dateData, week }: IProps) {
-  console.log(week)
-  const classInfo = [
-    {
-      time: '09:00',
-      classData: [
-        {
-          classTime: {
-            checkId: '1',
-            time: '10:00',
-            classTime: '90분',
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          },
-          periodTime: {
-            checkId: '2',
-            time: '10:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          periodTime: {
-            checkId: '3',
-            time: '10:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          classTime: {
-            checkId: '4',
-            time: '10:00',
-            classTime: '90분',
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        },
-        {},
-        {},
-        {
-          classTime: {
-            checkId: '5',
-            time: '10:00',
-            classTime: '90분',
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          },
-          periodTime: {
-            checkId: '6',
-            time: '10:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          classTime: {
-            checkId: '7',
-            time: '10:00',
-            classTime: '90분',
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        }
-      ]
-    },
-    {
-      time: '11:00',
-      classData: [
-        {
-          periodTime: {
-            checkId: '8',
-            time: '11:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          periodTime: {
-            checkId: '9',
-            time: '11:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {},
-        {},
-        {},
-        {
-          periodTime: {
-            checkId: '10',
-            time: '11:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          classTime: {
-            checkId: '11',
-            time: '11:00',
-            classTime: '90분',
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        }
-      ]
-    },
-    {
-      time: '12:00',
-      classData: [
-        {},
-        {
-          classTime: {
-            checkId: '12',
-            time: '12:00',
-            classTime: '90분',
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        },
-        {
-          periodTime: {
-            checkId: '13',
-            time: '12:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          classTime: {
-            checkId: '14',
-            time: '12:00',
-            classTime: '90분',
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          },
-          periodTime: {
-            checkId: '15',
-            time: '12:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          classTime: {
-            checkId: '16',
-            time: '12:00',
-            classTime: '90분',
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        },
-        {},
-        {}
-      ]
-    },
-    {
-      time: '13:00',
-      classData: [
-        {
-          classTime: {
-            checkId: '17',
-            time: '13:00',
-            classTime: '90분',
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          },
-          periodTime: {
-            checkId: '18',
-            time: '13:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          periodTime: {
-            checkId: '19',
-            time: '13:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          classTime: {
-            checkId: '20',
-            time: '13:00',
-            classTime: '90분',
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        },
-        {},
-        {},
-        {
-          classTime: {
-            checkId: '21',
-            time: '13:00',
-            classTime: '90분',
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          },
-          periodTime: {
-            checkId: '22',
-            time: '13:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          classTime: {
-            checkId: '23',
-            time: '13:00',
-            classTime: '90분',
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        }
-      ]
-    },
-    {
-      time: '14:00',
-      classData: [
-        {},
-        {
-          classTime: {
-            checkId: '24',
-            time: '14:00',
-            classTime: '90분',
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        },
-        {
-          periodTime: {
-            checkId: '25',
-            time: '14:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          classTime: {
-            checkId: '26',
-            time: '14:00',
-            classTime: '90분',
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        },
-        {
-          classTime: {
-            checkId: '27',
-            time: '14:00',
-            classTime: '90분',
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        },
-        {},
-        {}
-      ]
-    },
-    {
-      time: '15:00',
-      classData: [
-        {
-          classTime: {
-            checkId: '28',
-            time: '15:00',
-            classTime: '90분',
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          },
-          periodTime: {
-            checkId: '29',
-            time: '15:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          periodTime: {
-            checkId: '30',
-            time: '15:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {},
-        {},
-        {},
-        {
-          periodTime: {
-            checkId: '31',
-            time: '15:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          classTime: {
-            checkId: '32',
-            time: '15:00',
-            classTime: '90분',
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        }
-      ]
-    }
-  ]
-
   const [cursorPosition, setCursorPosition] = useState<{
     x: number
     y: number
@@ -392,17 +34,15 @@ export default function WeekSchedule({ dateData, week }: IProps) {
     })
   }
 
-  const [classData, setClassData] = useState<{ day?: number; duration?: number; session?: number }[][]>([])
+  const [lessonData, setLessonData] = useState<any>([])
 
   useEffect(() => {
     instance(`/lessons/${dateData.year}/${dateData.month + 1}`).then(res => {
       const data = res.data.data
       let returnData = []
-      console.log(data)
       for (var i = 0; i < data.length; i++) {
         data[i].sort((a: any, b: any) => a.startTime.split(':')[0] - b.startTime.split(':')[0])
       }
-      console.log(data)
       const startDay = new Date(dateData.year, dateData.month, 0).getDay()
       for (var i = 0; i <= startDay; i++) {
         returnData.push({})
@@ -410,17 +50,103 @@ export default function WeekSchedule({ dateData, week }: IProps) {
       for (var i = 0; i < data.length; i++) {
         returnData.push(data[i])
       }
-      let result = []
-      for (var i = 0; i < data.length; i += 7) {
-        result.push(returnData.slice(i, i + 7))
-      }
       console.log(returnData)
-      console.log(result)
-      setClassData(result)
-    })
-  }, [])
+      let result: any = []
+      for (var i = 0; i < returnData.length; i += 7) {
+        result.push(returnData.slice(i, i + 7))
+        console.log(result)
+      }
 
-  console.log(classData)
+      let resultList: {
+        time: string
+        classData: {
+          index: number
+          data: {
+            id: string
+            lessonTime: number
+            name: string
+            startTime: string
+            type: string
+            teacher: string
+          }[]
+        }[]
+      }[][] = []
+
+      for (var k = 0; k < result.length; k++) {
+        let list: {
+          time: string
+          classData: {
+            index: number
+            data: {
+              id: string
+              lessonTime: number
+              name: string
+              startTime: string
+              type: string
+              teacher: string
+            }[]
+          }[]
+        }[] = []
+
+        for (var i = 0; i < result[k].length; i++) {
+          for (var j = 0; j < result[k][i].length; j++) {
+            //console.log(list.filter(item => item.time === result[4][i][j].startTime))
+            if (list.filter(item => item.time === result[k][i][j].startTime).length === 0) {
+              list.push({ time: result[k][i][j].startTime, classData: [] })
+            }
+            const timeIndex = list.findIndex(item => item.time === result[k][i][j].startTime)
+            if (list[timeIndex].classData.filter(item => item.index === i).length !== 0) {
+              list[timeIndex].classData[list[timeIndex].classData.length - 1].data.push({
+                id: result[k][i][j].id,
+                lessonTime: result[k][i][j].lessonTime,
+                name: result[k][i][j].name,
+                startTime: result[k][i][j].startTime,
+                type: result[k][i][j].type,
+                teacher: result[k][i][j].teacher
+              })
+            } else {
+              list[timeIndex].classData.push({
+                index: i,
+                data: [
+                  {
+                    id: result[k][i][j].id,
+                    lessonTime: result[k][i][j].lessonTime,
+                    name: result[k][i][j].name,
+                    startTime: result[k][i][j].startTime,
+                    type: result[k][i][j].type,
+                    teacher: result[k][i][j].teacher
+                  }
+                ]
+              })
+            }
+          }
+        }
+        resultList.push(list)
+      }
+
+      for (var i = 0; i < resultList.length; i++) {
+        resultList[i].sort(
+          (a: { time: string }, b: { time: string }) => Number(a.time.split(':')[0]) - Number(b.time.split(':')[0])
+        )
+      }
+
+      for (var k = 0; k < resultList.length; k++) {
+        for (var i = 0; i < resultList[k].length; i++) {
+          for (var j = 0; j < 7; j++) {
+            if (resultList[k][i].classData.filter(item => item.index === j).length === 0) {
+              resultList[k][i].classData.push({ index: j, data: [] })
+            }
+          }
+          resultList[k][i].classData.sort((a: any, b: any) => a.index - b.index)
+        }
+      }
+
+      setLessonData(resultList)
+    })
+    return () => {
+      setLessonData([])
+    }
+  }, [dateData.month])
 
   return (
     <>
@@ -440,147 +166,130 @@ export default function WeekSchedule({ dateData, week }: IProps) {
         </div>
         {/* 시간표 */}
         <div className="flex flex-col w-full">
-          {classInfo.map((data1, pI) => {
-            return (
-              <div key={pI} className="w-full flex xl:gap-5 lg:gap-4 md:gap-[14px] gap-3.5">
-                <div className="xl:w-[51px] lg:w-[45px] md:w-12 w-[49px] text-right gray-800-semibold text-base">
-                  {data1.time}
-                </div>
-                <div
-                  className={`w-full outline outline-1 ${pI === 0 ? 'rounded-t-lg' : null} ${
-                    pI === classInfo.length - 1 ? 'rounded-b-lg' : null
-                  } outline-gray-200 grid grid-cols-7`}
-                >
-                  {data1.classData.map((data2, cI) => {
-                    return (
-                      <div
-                        key={cI}
-                        className={`p-[6px] flex flex-col gap-1 outline outline-1 outline-gray-200 ${
-                          pI == 0 && cI == 0 ? 'rounded-tl-lg' : null
-                        } ${pI == 0 && cI == data1.classData.length - 1 ? 'rounded-tr-lg' : null} ${
-                          pI == classInfo.length - 1 && cI == 0 ? 'rounded-bl-lg' : null
-                        } ${pI == classInfo.length - 1 && cI == data1.classData.length - 1 ? 'rounded-br-lg' : null}`}
-                      >
-                        {data2.classTime !== undefined ? (
-                          <div
-                            id={data2.classTime.checkId}
-                            className="relative flex flex-col p-[5px] gap-2 outline outline-1 rounded outline-orange-200 bg-[#FDFCF8] cursor-pointer"
-                            onMouseMove={handleMouseMove}
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handelMouseLeave}
-                          >
-                            {mouseOverId === data2.classTime.checkId ? (
+          {lessonData.length !== 0 &&
+            lessonData[week - 1].map((data1: any, pI: number) => {
+              return (
+                <div key={pI} className="w-full flex xl:gap-5 lg:gap-4 md:gap-[14px] gap-3.5">
+                  <div className="xl:w-[51px] lg:w-[45px] md:w-12 w-[49px] text-right gray-800-semibold text-base">
+                    {data1.time.split(':')[0]}:{data1.time.split(':')[1]}
+                  </div>
+                  <div className={`w-full  grid grid-cols-7`}>
+                    {data1.classData.map((data2: any, cI: number) => {
+                      return (
+                        <div key={cI} className={`p-[6px] flex flex-col gap-1 outline outline-1 outline-gray-200 `}>
+                          {data2.data.map((data: any, i: number) => {
+                            console.log(data)
+                            return (
                               <div
-                                className="absolute z-10 left-10 top-10 w-[180px] p-[5px] flex flex-col gap-2 outline outline-1 outline-orange-200 bg-stone-50 rounded "
-                                style={{
-                                  left: `${cursorPosition.x}px`,
-                                  top: `${cursorPosition.y}px`
-                                }}
+                                id={`${pI}` + `${cI}` + i.toString()}
+                                key={i}
+                                className={`relative flex flex-col p-[5px] gap-2 outline outline-1 rounded ${
+                                  data.type === 'duration' ? 'outline-primary-200' : 'outline-orange-200'
+                                } bg-[#FDFCF8] cursor-pointer`}
+                                onMouseMove={handleMouseMove}
+                                onMouseEnter={handleMouseEnter}
+                                onMouseLeave={handelMouseLeave}
                               >
-                                <div className="flex flex-col gap-[2px] px-1 py-[5px] rounded bg-orange-500">
-                                  <span className="h-4 text-white text-[13px] font-bold font-['Pretendard']">
-                                    {data2.classTime.time}
-                                  </span>
-                                  <span className="w-full h-[15px] text-orange-200 text-xs font-semibold font-['Pretendard']">
-                                    {data2.classTime.classTime}
-                                  </span>
-                                </div>
-                                <div className="flex flex-col gap-[2px]">
-                                  <span className="w-full text-orange-400 text-[14px] font-bold font-['Pretendard'] ">
-                                    {data2.classTime.className}
-                                  </span>
-                                  <div className="w-full flex flex-col">
-                                    <span className="w-full text-orange-500 text-xs font-bold font-['Pretendard']">
-                                      {data2.classTime.teacherName}
-                                    </span>
-                                    <span className="text-orange-500 text-xs font-semibold font-['Pretendard']">
-                                      5명
-                                    </span>
+                                {mouseOverId === `${pI}` + `${cI}` + i.toString() ? (
+                                  <div
+                                    className={`absolute z-10 left-10 top-10 w-[180px] p-[5px] flex flex-col gap-2 outline outline-1 ${
+                                      data.type === 'duration' ? 'outline-primary-200' : 'outline-orange-200'
+                                    } bg-stone-50 rounded`}
+                                    style={{
+                                      left: `${cursorPosition.x}px`,
+                                      top: `${cursorPosition.y}px`
+                                    }}
+                                  >
+                                    <div
+                                      className={`flex flex-col gap-[2px] px-1 py-[5px] rounded ${
+                                        data.type == 'duration' ? 'bg-primary-600' : 'bg-orange-500'
+                                      }`}
+                                    >
+                                      <span className="h-4 text-white text-[13px] font-bold font-['Pretendard']">
+                                        {data.startTime}
+                                      </span>
+                                      <span
+                                        className={`w-full h-[15px] ${
+                                          data.type === 'duration' ? 'text-primary-200' : 'text-orange-400'
+                                        } text-xs font-semibold font-['Pretendard']`}
+                                      >
+                                        {data.lessonTime}분
+                                      </span>
+                                    </div>
+                                    <div className="flex flex-col gap-[2px]">
+                                      <span
+                                        className={`w-full ${
+                                          data.type === 'duration' ? 'text-primary-500' : 'text-orange-400'
+                                        } text-[14px] font-bold font-['Pretendard']`}
+                                      >
+                                        {data.name}
+                                      </span>
+                                      <div className="w-full flex flex-col">
+                                        <span
+                                          className={`w-full ${
+                                            data.type === 'duration' ? 'text-primary-600' : 'text-orange-500'
+                                          } text-xs font-bold font-['Pretendard']`}
+                                        >
+                                          {data.teacher}
+                                        </span>
+                                        <span
+                                          className={`${
+                                            data.type === 'duration' ? 'text-primary-600' : 'text-orange-500'
+                                          } text-xs font-semibold font-['Pretendard']`}
+                                        >
+                                          5명
+                                        </span>
+                                      </div>
+                                    </div>
                                   </div>
-                                </div>
-                              </div>
-                            ) : null}
+                                ) : null}
 
-                            <div className="flex flex-col gap-[2px] px-1 py-[5px] rounded bg-[#FFF0E3]">
-                              <span className="h-4 text-orange-500 text-[13px] font-bold">{data2.classTime.time}</span>
-                              <span className="w-full h-[15px] text-orange-400 text-xs font-semibold">
-                                {data2.classTime.classTime}
-                              </span>
-                            </div>
-                            <div className="flex flex-col gap-[2px]">
-                              <div className="w-full max-h-[42px] overflow-hidden text-ellipsis line-clamp-2  text-orange-400 text-[14px] font-bold">
-                                {data2.classTime.className}
-                              </div>
-                              <span className="w-full text-orange-500 text-xs font-bold">
-                                {data2.classTime.teacherName}
-                              </span>
-                            </div>
-                          </div>
-                        ) : null}
-                        {data2.periodTime !== undefined ? (
-                          <div
-                            id={data2.periodTime.checkId}
-                            className="relative flex flex-col p-[5px] gap-2 outline outline-1 rounded outline-orange-200 bg-[#FDFCF8] cursor-pointer"
-                            onMouseMove={handleMouseMove}
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handelMouseLeave}
-                          >
-                            {mouseOverId === data2.periodTime.checkId ? (
-                              <div
-                                className="absolute z-10 left-10 top-10 w-[180px] p-[5px] flex flex-col gap-2 outline outline-1 outline-primary-200 bg-stone-50 rounded "
-                                style={{
-                                  left: `${cursorPosition.x}px`,
-                                  top: `${cursorPosition.y}px`
-                                }}
-                              >
-                                <div className="flex flex-col gap-[2px] px-1 py-[5px] rounded bg-primary-600">
-                                  <span className="h-4 text-white text-[13px] font-bold font-['Pretendard']">
-                                    {data2.periodTime.time}
+                                <div
+                                  className={`flex flex-col gap-[2px] px-1 py-[5px] rounded ${
+                                    data.type === 'duration' ? 'bg-[#F0EFFF]' : 'bg-[#FFF0E3]'
+                                  }`}
+                                >
+                                  <span
+                                    className={`h-4 ${
+                                      data.type === 'duration' ? 'text-primary-600' : 'text-orange-500'
+                                    } text-[13px] font-bold`}
+                                  >
+                                    {data.startTime}
                                   </span>
-                                  <span className="w-full h-[15px] text-primary-200 text-xs font-semibold font-['Pretendard']">
-                                    {data2.periodTime.classTime}
+                                  <span
+                                    className={`w-full h-[15px] ${
+                                      data.type === 'duration' ? 'text-[#9B81FE]' : 'text-orange-400'
+                                    } text-xs font-semibold`}
+                                  >
+                                    {data.lessonTime}분
                                   </span>
                                 </div>
                                 <div className="flex flex-col gap-[2px]">
-                                  <span className="w-full text-primary-500 text-[14px] font-bold font-['Pretendard']">
-                                    {data2.periodTime.className}
-                                  </span>
-                                  <div className="w-full flex flex-col">
-                                    <span className="w-full text-primary-600 text-xs font-bold font-['Pretendard']">
-                                      {data2.periodTime.teacherName}
-                                    </span>
-                                    <span className="text-primary-600 text-xs font-semibold font-['Pretendard']">
-                                      5명
-                                    </span>
+                                  <div
+                                    className={`w-full max-h-[42px] overflow-hidden text-ellipsis line-clamp-2 ${
+                                      data.type === 'duration' ? 'text-primary-500' : 'text-orange-400'
+                                    } text-[14px] font-bold`}
+                                  >
+                                    {data.name}
                                   </div>
+                                  <span
+                                    className={`w-full ${
+                                      data.type === 'duration' ? 'text-primary-600' : 'text-orange-500'
+                                    } text-xs font-bold`}
+                                  >
+                                    {data.teacher}
+                                  </span>
                                 </div>
                               </div>
-                            ) : null}
-                            <div className="flex flex-col gap-[2px] px-1 py-[5px] rounded bg-[#F0EFFF]">
-                              <span className="w-full text-primary-600 text-[13px] font-bold font-['Pretendard']">
-                                {data2.periodTime.time}
-                              </span>
-                              <span className="w-full text-[#9B81FE] text-xs font-semibold">
-                                {data2.periodTime.classTime}
-                              </span>
-                            </div>
-                            <div className="flex flex-col gap-[2px]">
-                              <span className="w-full text-primary-500 text-sm font-semibold">
-                                {data2.periodTime.className}
-                              </span>
-                              <span className="w-full text-primary-600 text-xs font-bold">
-                                {data2.periodTime.teacherName}
-                              </span>
-                            </div>
-                          </div>
-                        ) : null}
-                      </div>
-                    )
-                  })}
+                            )
+                          })}
+                        </div>
+                      )
+                    })}
+                  </div>
                 </div>
-              </div>
-            )
-          })}
+              )
+            })}
         </div>
       </div>
     </>

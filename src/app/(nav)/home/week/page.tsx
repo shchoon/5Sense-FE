@@ -14,13 +14,21 @@ export default function MainPageWeek() {
   const [dayData, setDayData] = useState<any>([])
   const { width, height } = useWindowSize()
   const currentDate = new Date()
+  const currentDateData = {
+    year: currentDate.getFullYear(),
+    month: currentDate.getMonth(),
+    date: currentDate.getDate()
+  }
   const [dateData, setDateData] = useState({
     year: currentDate.getFullYear(),
     month: currentDate.getMonth(),
     date: currentDate.getDate()
   })
+  console.log(currentDateData, dateData)
   const dayName = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일']
-  const [weekData, setWeekData] = useState<number>(0)
+  const [weekData, setWeekData] = useState<number>(
+    Math.ceil((dateData.date + new Date(dateData.year, dateData.month, 0).getDay() + 1) / 7)
+  )
   const [weekLength, setWeekLength] = useState<{
     lastMonthLength: number
     currentMonthLength: number
@@ -28,7 +36,6 @@ export default function MainPageWeek() {
     lastMonthLength: 0,
     currentMonthLength: 0
   })
-  const [activeDay, setActiveDay] = useState(dateData.date)
   const [isClickedDatePicker, setIsClickedDatePicker] = useState<boolean>(false)
   const [isClickedArrow, setIsClickedArrow] = useState<boolean>(false)
   const [clickArrowCount, setClickArrowCount] = useState(0)
@@ -43,7 +50,6 @@ export default function MainPageWeek() {
       ...prevDateData,
       date: date
     }))
-    setActiveDay(e.currentTarget.id)
   }
 
   function moveForwardWeek() {
@@ -64,11 +70,9 @@ export default function MainPageWeek() {
           date: 1
         })
       }
-      setActiveDay(1)
       setWeekData(1)
     } else {
       setWeekData(weekData + 1)
-      setActiveDay(dayData[weekData].date[0].date)
       setDateData(prevDateData => ({
         ...prevDateData,
         date: Number(dayData[weekData].date[0].date)
@@ -89,21 +93,18 @@ export default function MainPageWeek() {
           month: 11,
           date: 31
         }))
-        setActiveDay(31)
       } else {
         setDateData(prevDateData => ({
           ...prevDateData,
           month: dateData.month - 1,
           date: new Date(dateData.year, dateData.month, 0).getDate()
         }))
-        setActiveDay(new Date(dateData.year, dateData.month, 0).getDate())
       }
     } else {
       setDateData(prevDateData => ({
         ...prevDateData,
         date: Number(dayData[weekData - 2].date[6].date)
       }))
-      setActiveDay(dayData[weekData - 2].date[6].date)
       setWeekData(weekData - 1)
     }
     setIsClickedArrow(true)
@@ -119,9 +120,7 @@ export default function MainPageWeek() {
     setIsClickedDatePicker(false)
   }
 
-  const setActiveDayFromChild = (date: number) => {
-    setActiveDay(date)
-  }
+  const setActiveDayFromChild = (date: number) => {}
 
   const setWeekDataFromChild = (week: number) => {
     setWeekData(week)
@@ -189,7 +188,7 @@ export default function MainPageWeek() {
   }, [dateData.month])
 
   /* post 할 데이터 dateData 바꾸기 */
-  console.log(weekData)
+  console.log(dayData)
   return (
     <>
       <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
@@ -225,7 +224,6 @@ export default function MainPageWeek() {
               <WeekDatePicker
                 changeParentsDateData={setDateDataFromChild}
                 changeParentsWeekData={setWeekDataFromChild}
-                changeParentsActiveDay={setActiveDayFromChild}
                 parentsDateData={dateData}
                 parentsWeekData={weekData}
               />
@@ -243,19 +241,33 @@ export default function MainPageWeek() {
                 key={i}
                 id={data.date}
                 className={`xl:max-w-[129px] lg:max-w-[119px] h-full px-3 py-2 flex flex-col border rounded-lg bg-white cursor-pointer
-                ${activeDay == data.date ? 'border-primary-600' : 'border-gray-200'}`}
+                ${
+                  currentDateData.year === dateData.year &&
+                  currentDateData.month === dateData.month &&
+                  currentDateData.date === Number(data.date)
+                    ? 'border-primary-600'
+                    : 'border-gray-200'
+                }`}
                 onClick={clickDayTab}
               >
                 <div
                   className={`text-center text-sm font-medium ${
-                    activeDay == data.date ? 'text-primary-600' : 'text-gray-400'
+                    currentDateData.year === dateData.year &&
+                    currentDateData.month === dateData.month &&
+                    currentDateData.date === Number(data.date)
+                      ? 'text-primary-600'
+                      : 'text-gray-400'
                   }`}
                 >
                   {dayName[i]}
                 </div>
                 <div
                   className={`text-center text-xl font-bold ${
-                    activeDay == data.date ? 'text-primary-600' : 'text-gray-400'
+                    currentDateData.year === dateData.year &&
+                    currentDateData.month === dateData.month &&
+                    currentDateData.date === Number(data.date)
+                      ? 'text-primary-600'
+                      : 'text-gray-400'
                   }`}
                 >
                   {data.date}
