@@ -74,7 +74,7 @@ export default function DropDown(props: IProps) {
       />
       {isClickDropDown && (
         <div
-          className={`absolute top-full w-full h-[174px] border rounded-lg border-gray-200 bg-white overflow-y-scroll`}
+          className={`absolute z-10 top-full w-full h-[174px] border rounded-lg border-gray-200 bg-white overflow-y-scroll`}
         >
           {props.list.map((item: string, i: number) => {
             return (
