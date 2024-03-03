@@ -11,32 +11,119 @@ import clock from 'public/assets/icons/clock.svg'
 import user from 'public/assets/icons/user.svg'
 import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
 import chevronLeft from 'public/assets/icons/chevron/chevron-left.svg'
+import DayDatePicker from '../datePicker/dayDatePicker'
+import { dateDataType } from '../datePicker/dayDatePicker'
 
 import { useRef, useState } from 'react'
 
+interface RoomDataType {
+  id: number
+  name: string
+  personNum: number
+  list: {
+    openTimeList: string[]
+    roomClickList: string[]
+  }
+}
+
 export default function AddClassModal() {
+  const [clickedRoomData, setClickedRoomData] = useState<{
+    roomId: undefined | number
+    clickedTime: undefined | number
+  }>({
+    roomId: undefined,
+    clickedTime: undefined
+  })
+  const [clickedTime, setClickedTime] = useState<number | undefined>(undefined)
+  const currentDate = new Date()
+  const [dateData, setDateData] = useState<dateDataType>({
+    year: currentDate.getFullYear(),
+    month: currentDate.getMonth(),
+    date: currentDate.getDate()
+  })
+
+  const setDateDataFromChild = (data: dateDataType) => {
+    setDateData({
+      ...dateData,
+      year: data.year,
+      month: data.month,
+      date: data.date
+    })
+
+    setIsClickedTab(prev => ({
+      ...prev,
+      date: false
+    }))
+  }
+
+  const [lessonTime, setLessonTime] = useState<string | number>('시간')
+
+  const handleChangeLessonTimeFromChild = (time: number) => {
+    setLessonTime(time)
+    setIsClickedTab(prev => ({
+      ...prev,
+      time: false
+    }))
+  }
   const refs = useRef<(HTMLDivElement | null)[]>([])
-  const openTimeList = ['8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22']
-  const roomData = [
+  const openTimeList: string[] = [
+    '8',
+    '9',
+    '10',
+    '11',
+    '12',
+    '13',
+    '14',
+    '15',
+    '16',
+    '17',
+    '18',
+    '19',
+    '20',
+    '21',
+    '22'
+  ]
+  const roomClickList: string[] = []
+  for (var i = 0; i < openTimeList.length * 2; i++) {
+    roomClickList.push('')
+  }
+
+  const roomData: RoomDataType[] = [
     {
+      id: 1,
       name: 'A룸',
       personNum: 15,
-      timeList: openTimeList
+      list: {
+        openTimeList: openTimeList,
+        roomClickList: roomClickList
+      }
     },
     {
+      id: 2,
       name: 'B룸',
       personNum: 10,
-      timeList: openTimeList
+      list: {
+        openTimeList: openTimeList,
+        roomClickList: roomClickList
+      }
     },
     {
+      id: 3,
       name: 'C룸',
       personNum: 20,
-      timeList: openTimeList
+      list: {
+        openTimeList: openTimeList,
+        roomClickList: roomClickList
+      }
     },
     {
+      id: 4,
       name: 'D룸',
       personNum: 5,
-      timeList: openTimeList
+      list: {
+        openTimeList: openTimeList,
+        roomClickList: roomClickList
+      }
     }
   ]
 
@@ -86,7 +173,6 @@ export default function AddClassModal() {
       element.scrollLeft -= 50 // 스크롤되는 양을 조절할 값 전달
     }
   }
-  console.log(refs)
 
   return (
     <div className="absolute left-10 top-10 w-[768px] border border-1 border-gray-200 rounded-xl bg-white">
@@ -153,7 +239,9 @@ export default function AddClassModal() {
               </div>
               <div className="w-full h-full flex flex-col">
                 <div className="w-full h-full text-left text-gray-700 font-medium text-sm">날짜</div>
-                <div className="w-full h-full text-left text-gray-400 font-medium text-[15px]">날짜</div>
+                <div className="w-full h-full text-left text-gray-400 font-medium text-[15px]">
+                  {dateData.year}.{dateData.month + 1}.{dateData.date}
+                </div>
               </div>
             </button>
             {!isClickedTab.date && !isClickedTab.time && <div className="w-px h-7 bg-gray-300"></div>}
@@ -171,14 +259,19 @@ export default function AddClassModal() {
               </div>
               <div className="w-full h-full flex flex-col">
                 <div className="w-full h-full text-left text-gray-700 font-medium text-sm">소요시간</div>
-                <div className="w-full h-full text-left text-gray-400 font-medium text-[15px]">시간</div>
+                <div className="w-full h-full text-left text-gray-400 font-medium text-[15px]">{lessonTime}</div>
               </div>
             </button>
             <div className="w-12 h-12 rounded-full bg-primary-600 flex items-center justify-center">
               <Image src={searchIconWhite} width={20} height={20} alt="search" />
             </div>
           </div>
-          {isClickedTab.time && <LessonTimeModal />}
+          <div>
+            {isClickedTab.date && (
+              <DayDatePicker parentsDateData={dateData} changeParentsDateData={setDateDataFromChild} />
+            )}
+          </div>
+          {isClickedTab.time && <LessonTimeModal handleChangeLessonTimeFromChild={handleChangeLessonTimeFromChild} />}
         </div>
         {/* 일정 선택 문구 */}
         {/* <div className="w-full h-[422px] border border-1 border-gray-200 rounded-lg flex items-center">
@@ -212,8 +305,10 @@ export default function AddClassModal() {
           {/* 룸 선택*/}
           <div className="w-full flex flex-col gap-10">
             {roomData.map((data, i) => {
+              const roomId = data.id
+              const timeRange: number | undefined = typeof lessonTime === 'number' ? lessonTime / 30 : undefined
               return (
-                <div className="relative flex flex-col gap-4">
+                <div key={i} className="relative flex flex-col gap-4">
                   <div className="flex justify-between">
                     <div className="flex gap-2">
                       <div className="gray-900-semibold text-xl flex items-center">{data.name}</div>
@@ -244,25 +339,57 @@ export default function AddClassModal() {
                   </button>
                   <div
                     ref={el => (refs.current[i] = el)}
-                    className="w-full mr-[50px] grid grid-flow-col overflow-y-auto scrollbar-hide"
+                    className="w-full grid grid-flow-col overflow-y-auto scrollbar-hide"
                   >
-                    {data.timeList.map((time, i) => {
-                      return (
-                        <div className={`w-[54px] flex flex-col`}>
-                          <div
-                            className={`relative w-full flex flex-col h-[42px] py-[11px] ${
-                              i === 0 ? 'border border-1' : 'border-y border-r'
-                            }  border-gray-200 flex items-center justify-center gray-800-medium text-[13px]`}
-                          >
-                            {time}
-                          </div>
-                          <div className="w-full flex">
-                            <div className={`w-full h-9 ${i === 0 && 'border-l'} border-r border-b  border-gray-200`} />
-                            <div className="w-full h-9 border-b border-r border-gray-200" />
-                          </div>
-                        </div>
-                      )
-                    })}
+                    <div className="w-full flex flex-col">
+                      <div className="w-full flex">
+                        {data.list.openTimeList.map((time, i) => {
+                          return (
+                            <div key={i} className={`w-[54px] flex flex-col`}>
+                              <div
+                                className={`relative w-full flex flex-col h-[42px] py-[11px] ${
+                                  i === 0 ? 'border border-1' : 'border-y border-r'
+                                }  border-gray-200 flex items-center justify-center gray-800-medium text-[13px]`}
+                              >
+                                {time}
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                      <div className="w-full flex">
+                        {data.list.roomClickList.map((data, i) => {
+                          return (
+                            <button
+                              key={i}
+                              className={`w-[27px] ${
+                                clickedRoomData.roomId === roomId &&
+                                clickedRoomData.clickedTime !== undefined &&
+                                timeRange !== undefined &&
+                                clickedRoomData.clickedTime <= i &&
+                                i <= clickedRoomData.clickedTime + timeRange - 1 &&
+                                'bg-primary-300'
+                              }`}
+                              onClick={() => {
+                                if (timeRange === undefined) {
+                                  return
+                                } else {
+                                  setClickedRoomData(prev => ({
+                                    ...prev,
+                                    roomId: roomId,
+                                    clickedTime: i
+                                  }))
+                                }
+                              }}
+                            >
+                              <div
+                                className={`w-full h-9 ${i === 0 && 'border-l'} border-r border-b  border-gray-200`}
+                              />
+                            </button>
+                          )
+                        })}
+                      </div>
+                    </div>
                   </div>
                 </div>
               )
