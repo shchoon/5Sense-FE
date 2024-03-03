@@ -1,589 +1,283 @@
 'use client'
-import { useState, useRef } from 'react'
+import WeekSchedule from '@/components/main/WeekSchedule'
+import Image from 'next/image'
+import { useWindowSize } from '@/hooks/useWindowSize'
+import chevronLeft from 'public/assets/icons/chevron/chevron-left.svg'
+import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
+import calender from 'public/assets/icons/calendar.svg'
+import { useState, useEffect } from 'react'
+import DateSlideTab from '@/components/main/DateSlideTab'
+import WeekDatePicker from '@/components/datePicker/weekDatePicker'
+import { dateDataType } from '@/components/datePicker/dayDatePicker'
 
 export default function MainPageWeek() {
-  const classInfo = [
-    {
-      time: '09:00',
-      classData: [
-        {
-          classTime: {
-            checkId: '1',
-            time: '10:00',
-            classTime: '90분',
-            className:
-              '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          },
-          periodTime: {
-            checkId: '2',
-            time: '10:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          periodTime: {
-            checkId: '3',
-            time: '10:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          classTime: {
-            checkId: '4',
-            time: '10:00',
-            classTime: '90분',
-            className:
-              '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        },
-        {},
-        {},
-        {
-          classTime: {
-            checkId: '5',
-            time: '10:00',
-            classTime: '90분',
-            className:
-              '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          },
-          periodTime: {
-            checkId: '6',
-            time: '10:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          classTime: {
-            checkId: '7',
-            time: '10:00',
-            classTime: '90분',
-            className:
-              '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        }
-      ]
-    },
-    {
-      time: '11:00',
-      classData: [
-        {
-          periodTime: {
-            checkId: '8',
-            time: '11:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          periodTime: {
-            checkId: '9',
-            time: '11:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {},
-        {},
-        {},
-        {
-          periodTime: {
-            checkId: '10',
-            time: '11:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          classTime: {
-            checkId: '11',
-            time: '11:00',
-            classTime: '90분',
-            className:
-              '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        }
-      ]
-    },
-    {
-      time: '12:00',
-      classData: [
-        {},
-        {
-          classTime: {
-            checkId: '12',
-            time: '12:00',
-            classTime: '90분',
-            className:
-              '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        },
-        {
-          periodTime: {
-            checkId: '13',
-            time: '12:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          classTime: {
-            checkId: '14',
-            time: '12:00',
-            classTime: '90분',
-            className:
-              '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          },
-          periodTime: {
-            checkId: '15',
-            time: '12:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          classTime: {
-            checkId: '16',
-            time: '12:00',
-            classTime: '90분',
-            className:
-              '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        },
-        {},
-        {}
-      ]
-    },
-    {
-      time: '13:00',
-      classData: [
-        {
-          classTime: {
-            checkId: '17',
-            time: '13:00',
-            classTime: '90분',
-            className:
-              '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          },
-          periodTime: {
-            checkId: '18',
-            time: '13:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          periodTime: {
-            checkId: '19',
-            time: '13:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          classTime: {
-            checkId: '20',
-            time: '13:00',
-            classTime: '90분',
-            className:
-              '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        },
-        {},
-        {},
-        {
-          classTime: {
-            checkId: '21',
-            time: '13:00',
-            classTime: '90분',
-            className:
-              '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          },
-          periodTime: {
-            checkId: '22',
-            time: '13:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          classTime: {
-            checkId: '23',
-            time: '13:00',
-            classTime: '90분',
-            className:
-              '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        }
-      ]
-    },
-    {
-      time: '14:00',
-      classData: [
-        {},
-        {
-          classTime: {
-            checkId: '24',
-            time: '14:00',
-            classTime: '90분',
-            className:
-              '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        },
-        {
-          periodTime: {
-            checkId: '25',
-            time: '14:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          classTime: {
-            checkId: '26',
-            time: '14:00',
-            classTime: '90분',
-            className:
-              '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        },
-        {
-          classTime: {
-            checkId: '27',
-            time: '14:00',
-            classTime: '90분',
-            className:
-              '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        },
-        {},
-        {}
-      ]
-    },
-    {
-      time: '15:00',
-      classData: [
-        {
-          classTime: {
-            checkId: '28',
-            time: '15:00',
-            classTime: '90분',
-            className:
-              '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          },
-          periodTime: {
-            checkId: '29',
-            time: '15:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          periodTime: {
-            checkId: '30',
-            time: '15:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {},
-        {},
-        {},
-        {
-          periodTime: {
-            checkId: '31',
-            time: '15:00',
-            classTime: '90분',
-            className: '반야사요가',
-            teacherName: '정은담',
-            studentNum: '10명'
-          }
-        },
-        {
-          classTime: {
-            checkId: '32',
-            time: '15:00',
-            classTime: '90분',
-            className:
-              '체형 교정 및 이완을 통한 삶의 균형 찾기 / 스트레스로부터 벗어나기',
-            teacherName: '조성훈',
-            studentNum: '10명'
-          }
-        }
-      ]
+  const [dayData, setDayData] = useState<any>([])
+  const { width, height } = useWindowSize()
+  const currentDate = new Date()
+  const currentDateData = {
+    year: currentDate.getFullYear(),
+    month: currentDate.getMonth(),
+    date: currentDate.getDate()
+  }
+  const [dateData, setDateData] = useState({
+    year: currentDate.getFullYear(),
+    month: currentDate.getMonth(),
+    date: currentDate.getDate()
+  })
+  console.log(currentDateData, dateData)
+  const dayName = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일']
+  const [weekData, setWeekData] = useState<number>(
+    Math.ceil((dateData.date + new Date(dateData.year, dateData.month, 0).getDay() + 1) / 7)
+  )
+  const [weekLength, setWeekLength] = useState<{
+    lastMonthLength: number
+    currentMonthLength: number
+  }>({
+    lastMonthLength: 0,
+    currentMonthLength: 0
+  })
+  const [isClickedDatePicker, setIsClickedDatePicker] = useState<boolean>(false)
+  const [isClickedArrow, setIsClickedArrow] = useState<boolean>(false)
+  const [clickArrowCount, setClickArrowCount] = useState(0)
+
+  const onClickDatePickerHandler = () => {
+    setIsClickedDatePicker(prev => !prev)
+  }
+
+  function clickDayTab(e: any) {
+    const date = Number(e.currentTarget.id)
+    setDateData(prevDateData => ({
+      ...prevDateData,
+      date: date
+    }))
+  }
+
+  function moveForwardWeek() {
+    const maxWeek = weekLength.currentMonthLength
+    setClickArrowCount(clickArrowCount => (clickArrowCount += 1))
+    if (weekData === maxWeek) {
+      if (dateData.month === 11) {
+        setDateData({
+          ...dateData,
+          year: dateData.year + 1,
+          month: 0,
+          date: 1
+        })
+      } else {
+        setDateData({
+          ...dateData,
+          month: dateData.month + 1,
+          date: 1
+        })
+      }
+      setWeekData(1)
+    } else {
+      setWeekData(weekData + 1)
+      setDateData(prevDateData => ({
+        ...prevDateData,
+        date: Number(dayData[weekData].date[0].date)
+      }))
     }
-  ]
-
-  const [cursorPosition, setCursorPosition] = useState<{
-    x: number
-    y: number
-  }>({ x: 0, y: 0 })
-  const [mouseOverId, setMouseOverId] = useState<string>('')
-
-  const handleMouseEnter = (e: any) => {
-    setMouseOverId(e.currentTarget.id)
+    setIsClickedArrow(true)
+    setIsClickedDatePicker(false)
   }
 
-  const handelMouseLeave = (e: any) => {
-    setMouseOverId('')
+  function moveBackWeek() {
+    setClickArrowCount(clickArrowCount => (clickArrowCount += 1))
+    if (weekData === 1) {
+      setWeekData(weekLength.lastMonthLength)
+      if (dateData.month === 0) {
+        setDateData(prevDateData => ({
+          ...prevDateData,
+          year: dateData.year - 1,
+          month: 11,
+          date: 31
+        }))
+      } else {
+        setDateData(prevDateData => ({
+          ...prevDateData,
+          month: dateData.month - 1,
+          date: new Date(dateData.year, dateData.month, 0).getDate()
+        }))
+      }
+    } else {
+      setDateData(prevDateData => ({
+        ...prevDateData,
+        date: Number(dayData[weekData - 2].date[6].date)
+      }))
+      setWeekData(weekData - 1)
+    }
+    setIsClickedArrow(true)
+    setIsClickedDatePicker(false)
   }
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const y = scrollY
-    const minusXValue: number = e.currentTarget.getBoundingClientRect().left
-    const minusYValue: number = e.currentTarget.getBoundingClientRect().top
-
-    setCursorPosition({
-      x: e.clientX - minusXValue + 20,
-      y: e.clientY - minusYValue + 20
+  const setDateDataFromChild = (data: dateDataType, date: number, type: string) => {
+    setDateData({
+      ...dateData,
+      year: data.year,
+      month: data.month,
+      date: data.date
     })
+    setIsClickedDatePicker(false)
   }
 
+  const setActiveDayFromChild = (date: number) => {}
+
+  const setWeekDataFromChild = (week: number) => {
+    setWeekData(week)
+  }
+
+  const getCalanderData = (monthData: number) => {
+    const lastDateOfLastMonthData = new Date(dateData.year, monthData, 0)
+    const firstDateOfCurrentMonthData = new Date(dateData.year, monthData)
+    const lastDateOfCurrnetMonthData = new Date(dateData.year, monthData + 1, 0)
+    const firstDateOfNextMonthData = new Date(dateData.year, monthData + 1)
+
+    let list = []
+    if (firstDateOfCurrentMonthData.getDay() !== 0) {
+      for (var i = lastDateOfLastMonthData.getDay(); i >= 0; i--) {
+        list.push({
+          date: `${lastDateOfLastMonthData.getDate() - i}`
+        })
+      }
+    }
+
+    for (var i = 1; i <= lastDateOfCurrnetMonthData.getDate(); i++) {
+      list.push({ date: `${i}` })
+    }
+
+    if (lastDateOfCurrnetMonthData.getDay() !== 6) {
+      for (var i = 1; i <= 7 - firstDateOfNextMonthData.getDay(); i++) {
+        list.push({
+          date: `${i}`
+        })
+      }
+    }
+
+    let result = []
+    let weekNumber = 1
+    for (var i = 0; i < list.length; i += 7) {
+      result.push({ date: list.slice(i, i + 7), week: weekNumber })
+      weekNumber++
+    }
+
+    return result
+  }
+
+  useEffect(() => {
+    const lastWeekList = getCalanderData(dateData.month - 1)
+    const currentWeekList = getCalanderData(dateData.month)
+    setWeekLength(prev => ({
+      ...prev,
+      lastMonthLength: lastWeekList.length,
+      currentMonthLength: currentWeekList.length
+    }))
+    if (
+      currentDate.getFullYear() === dateData.year &&
+      currentDate.getMonth() === dateData.month &&
+      clickArrowCount === 0
+    ) {
+      for (var i = 0; i < currentWeekList.length; i++) {
+        for (var j = 0; j < currentWeekList[i].date.length; j++) {
+          if (currentWeekList[i].date[j].date === dateData.date.toString()) {
+            setWeekData(currentWeekList[i].week)
+          }
+        }
+      }
+    }
+    setDayData(currentWeekList)
+  }, [dateData.month])
+
+  /* post 할 데이터 dateData 바꾸기 */
+  console.log(dayData)
   return (
     <>
-      {/* 회차반 / 기간반 */}
-      <div className="flex flex-col gap-4 mx-auto xl:max-w-[1016px] pt-8 pb-[80px]">
-        <div className="w-full h-4 flex justify-end">
-          <div className="w-[164px] h-4 flex gap-6 ">
-            <div className="w-[70px] h-full flex gap-2 items-center justify-end">
-              <span className="w-[16px] h-[16px] border rounded bg-[#FF7749]"></span>
-              <span className="text-orange-500 text-[13px] font-bold">
-                회차반
-              </span>
+      <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
+        <div className="relative mx-auto flex gap-[138px] items-center w-full  h-[52px]  md:w-full ">
+          <div
+            className={`flex mx-auto ${
+              width > 950 ? 'w-[420px]' : 'w-[312px]'
+            }  h-full p-1.5 border rounded-md border-gray-100 bg-[#F8FAFD]`}
+          >
+            <div
+              className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
+              onClick={moveBackWeek}
+            >
+              <Image src={chevronLeft} width={24} height={24} alt=" " />
             </div>
-            <div className="w-[70px] h-full flex gap-2 items-center justify-end">
-              <span className="w-[16px] h-[16px] border rounded bg-primary-500"></span>
-              <span className="text-primary-500 text-[13px] font-bold">
-                기간반
-              </span>
+            <div
+              className="w-full px-3 py-2 flex justify-center gap-2 items-center gray-900-semibold text-base font-['Pretendard'] cursor-pointer hover:text-primary-600"
+              onClick={onClickDatePickerHandler}
+            >
+              <Image src={calender} width={18} height={18} alt=" " />
+              {dateData.year}년 {dateData.month + 1}월 {weekData}주차
+            </div>
+            <div
+              className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
+              onClick={moveForwardWeek}
+            >
+              <Image src={chevronRight} width={24} height={24} alt=" " />
             </div>
           </div>
+          <DateSlideTab />
+          {isClickedDatePicker && (
+            <div className="absolute w-[255px] z-10 right-0 left-0 mx-auto top-[60px]">
+              <WeekDatePicker
+                changeParentsDateData={setDateDataFromChild}
+                changeParentsWeekData={setWeekDataFromChild}
+                parentsDateData={dateData}
+                parentsWeekData={weekData}
+              />
+            </div>
+          )}
         </div>
-        {/* 시간표 */}
-        <div className="flex flex-col w-full">
-          {classInfo.map((data1, pI) => {
+      </div>
+      {/* 요일 선택 탭 */}
+      <div className="w-full flex max-w-[1016px] mx-auto justify-end pt-[32px]">
+        <div className="w-[51px] xl:mr-5 lg:mr-4"></div>
+        <div className="w-full grid grid-cols-7 gap-[7px]">
+          {dayData[weekData - 1]?.date.map((data: any, i: number) => {
             return (
               <div
-                key={pI}
-                className="w-full flex xl:gap-5 lg:gap-4 md:gap-[14px] gap-3.5"
+                key={i}
+                id={data.date}
+                className={`xl:max-w-[129px] lg:max-w-[119px] h-full px-3 py-2 flex flex-col border rounded-lg bg-white cursor-pointer
+                ${
+                  currentDateData.year === dateData.year &&
+                  currentDateData.month === dateData.month &&
+                  currentDateData.date === Number(data.date)
+                    ? 'border-primary-600'
+                    : 'border-gray-200'
+                }`}
+                onClick={clickDayTab}
               >
-                <div className="xl:w-[51px] lg:w-[45px] md:w-12 w-[49px] text-right gray-800-semibold text-base">
-                  {data1.time}
+                <div
+                  className={`text-center text-sm font-medium ${
+                    currentDateData.year === dateData.year &&
+                    currentDateData.month === dateData.month &&
+                    currentDateData.date === Number(data.date)
+                      ? 'text-primary-600'
+                      : 'text-gray-400'
+                  }`}
+                >
+                  {dayName[i]}
                 </div>
                 <div
-                  className={`w-full outline outline-1 ${
-                    pI === 0 ? 'rounded-t-lg' : null
-                  } ${
-                    pI === classInfo.length - 1 ? 'rounded-b-lg' : null
-                  } outline-gray-200 grid grid-cols-7`}
+                  className={`text-center text-xl font-bold ${
+                    currentDateData.year === dateData.year &&
+                    currentDateData.month === dateData.month &&
+                    currentDateData.date === Number(data.date)
+                      ? 'text-primary-600'
+                      : 'text-gray-400'
+                  }`}
                 >
-                  {data1.classData.map((data2, cI) => {
-                    return (
-                      <div
-                        key={cI}
-                        className={`p-[6px] flex flex-col gap-1 outline outline-1 outline-gray-200 ${
-                          pI == 0 && cI == 0 ? 'rounded-tl-lg' : null
-                        } ${
-                          pI == 0 && cI == data1.classData.length - 1
-                            ? 'rounded-tr-lg'
-                            : null
-                        } ${
-                          pI == classInfo.length - 1 && cI == 0
-                            ? 'rounded-bl-lg'
-                            : null
-                        } ${
-                          pI == classInfo.length - 1 &&
-                          cI == data1.classData.length - 1
-                            ? 'rounded-br-lg'
-                            : null
-                        }`}
-                      >
-                        {data2.classTime !== undefined ? (
-                          <div
-                            id={data2.classTime.checkId}
-                            className="relative flex flex-col p-[5px] gap-2 outline outline-1 rounded outline-orange-200 bg-[#FDFCF8] cursor-pointer"
-                            onMouseMove={handleMouseMove}
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handelMouseLeave}
-                          >
-                            {mouseOverId === data2.classTime.checkId ? (
-                              <div
-                                className="absolute z-10 left-10 top-10 w-[180px] p-[5px] flex flex-col gap-2 outline outline-1 outline-orange-200 bg-stone-50 rounded "
-                                style={{
-                                  left: `${cursorPosition.x}px`,
-                                  top: `${cursorPosition.y}px`
-                                }}
-                              >
-                                <div className="flex flex-col gap-[2px] px-1 py-[5px] rounded bg-orange-500">
-                                  <span className="h-4 text-white text-[13px] font-bold font-['Pretendard']">
-                                    {data2.classTime.time}
-                                  </span>
-                                  <span className="w-full h-[15px] text-orange-200 text-xs font-semibold font-['Pretendard']">
-                                    {data2.classTime.classTime}
-                                  </span>
-                                </div>
-                                <div className="flex flex-col gap-[2px]">
-                                  <span className="w-full text-orange-400 text-[14px] font-bold font-['Pretendard'] ">
-                                    {data2.classTime.className}
-                                  </span>
-                                  <div className="w-full flex flex-col">
-                                    <span className="w-full text-orange-500 text-xs font-bold font-['Pretendard']">
-                                      {data2.classTime.teacherName}
-                                    </span>
-                                    <span className="text-orange-500 text-xs font-semibold font-['Pretendard']">
-                                      5명
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            ) : null}
-
-                            <div className="flex flex-col gap-[2px] px-1 py-[5px] rounded bg-[#FFF0E3]">
-                              <span className="h-4 text-orange-500 text-[13px] font-bold">
-                                {data2.classTime.time}
-                              </span>
-                              <span className="w-full h-[15px] text-orange-400 text-xs font-semibold">
-                                {data2.classTime.classTime}
-                              </span>
-                            </div>
-                            <div className="flex flex-col gap-[2px]">
-                              <div className="w-full max-h-[42px] overflow-hidden text-ellipsis line-clamp-2  text-orange-400 text-[14px] font-bold">
-                                {data2.classTime.className}
-                              </div>
-                              <span className="w-full text-orange-500 text-xs font-bold">
-                                {data2.classTime.teacherName}
-                              </span>
-                            </div>
-                          </div>
-                        ) : null}
-                        {data2.periodTime !== undefined ? (
-                          <div
-                            id={data2.periodTime.checkId}
-                            className="relative flex flex-col p-[5px] gap-2 outline outline-1 rounded outline-orange-200 bg-[#FDFCF8] cursor-pointer"
-                            onMouseMove={handleMouseMove}
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handelMouseLeave}
-                          >
-                            {mouseOverId === data2.periodTime.checkId ? (
-                              <div
-                                className="absolute z-10 left-10 top-10 w-[180px] p-[5px] flex flex-col gap-2 outline outline-1 outline-primary-200 bg-stone-50 rounded "
-                                style={{
-                                  left: `${cursorPosition.x}px`,
-                                  top: `${cursorPosition.y}px`
-                                }}
-                              >
-                                <div className="flex flex-col gap-[2px] px-1 py-[5px] rounded bg-primary-600">
-                                  <span className="h-4 text-white text-[13px] font-bold font-['Pretendard']">
-                                    {data2.periodTime.time}
-                                  </span>
-                                  <span className="w-full h-[15px] text-primary-200 text-xs font-semibold font-['Pretendard']">
-                                    {data2.periodTime.classTime}
-                                  </span>
-                                </div>
-                                <div className="flex flex-col gap-[2px]">
-                                  <span className="w-full text-primary-500 text-[14px] font-bold font-['Pretendard']">
-                                    {data2.periodTime.className}
-                                  </span>
-                                  <div className="w-full flex flex-col">
-                                    <span className="w-full text-primary-600 text-xs font-bold font-['Pretendard']">
-                                      {data2.periodTime.teacherName}
-                                    </span>
-                                    <span className="text-primary-600 text-xs font-semibold font-['Pretendard']">
-                                      5명
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            ) : null}
-                            <div className="flex flex-col gap-[2px] px-1 py-[5px] rounded bg-[#F0EFFF]">
-                              <span className="w-full text-primary-600 text-[13px] font-bold font-['Pretendard']">
-                                {data2.periodTime.time}
-                              </span>
-                              <span className="w-full text-[#9B81FE] text-xs font-semibold">
-                                {data2.periodTime.classTime}
-                              </span>
-                            </div>
-                            <div className="flex flex-col gap-[2px]">
-                              <span className="w-full text-primary-500 text-sm font-semibold">
-                                {data2.periodTime.className}
-                              </span>
-                              <span className="w-full text-primary-600 text-xs font-bold">
-                                {data2.periodTime.teacherName}
-                              </span>
-                            </div>
-                          </div>
-                        ) : null}
-                      </div>
-                    )
-                  })}
+                  {data.date}
                 </div>
               </div>
             )
           })}
         </div>
       </div>
+      <WeekSchedule dateData={dateData} week={weekData} />
     </>
   )
 }

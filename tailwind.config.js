@@ -10,6 +10,15 @@ module.exports = {
     './src/**/*.{js,jsx,ts,tsx}'
   ],
   plugins: [
+    plugin(function ({ addUtilities }) {
+      addUtilities({
+        '.scrollbar-hide': {
+          '&::-webkit-scrollbar': {
+            display: 'none'
+          }
+        }
+      })
+    }),
     plugin(function ({ addComponents }) {
       addComponents({
         '.btn-purple': {
@@ -114,7 +123,7 @@ module.exports = {
         current: 'currentColor',
         white: '#ffffff',
         primary: {
-          50: '#F0EFFF',
+          50: '#F8FAFD',
           200: '#D3C4F9',
           300: '#B6A3EF',
           400: '#907AE5',
