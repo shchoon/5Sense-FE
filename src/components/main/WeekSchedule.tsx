@@ -233,13 +233,6 @@ export default function WeekSchedule({ dateData, week }: IProps) {
                                         >
                                           {data.teacher}
                                         </span>
-                                        <span
-                                          className={`${
-                                            data.type === 'duration' ? 'text-primary-600' : 'text-orange-500'
-                                          } text-xs font-semibold font-['Pretendard']`}
-                                        >
-                                          5명
-                                        </span>
                                       </div>
                                     </div>
                                   </div>
