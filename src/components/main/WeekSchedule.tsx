@@ -54,7 +54,6 @@ export default function WeekSchedule({ dateData, week }: IProps) {
       let result: any = []
       for (var i = 0; i < returnData.length; i += 7) {
         result.push(returnData.slice(i, i + 7))
-        console.log(result)
       }
 
       let resultList: {
@@ -90,7 +89,6 @@ export default function WeekSchedule({ dateData, week }: IProps) {
 
         for (var i = 0; i < result[k].length; i++) {
           for (var j = 0; j < result[k][i].length; j++) {
-            //console.log(list.filter(item => item.time === result[4][i][j].startTime))
             if (list.filter(item => item.time === result[k][i][j].startTime).length === 0) {
               list.push({ time: result[k][i][j].startTime, classData: [] })
             }
@@ -147,6 +145,9 @@ export default function WeekSchedule({ dateData, week }: IProps) {
       setLessonData([])
     }
   }, [dateData.month])
+
+  console.log(week)
+  console.log(lessonData)
 
   return (
     <>
