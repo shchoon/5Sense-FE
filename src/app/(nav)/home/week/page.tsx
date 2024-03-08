@@ -29,6 +29,7 @@ export default function MainPageWeek() {
   const [weekData, setWeekData] = useState<number>(
     Math.ceil((dateData.date + new Date(dateData.year, dateData.month, 0).getDay() + 1) / 7)
   )
+  console.log(dateData.date, new Date(dateData.year, dateData.month, 0).getDay())
   const [weekLength, setWeekLength] = useState<{
     lastMonthLength: number
     currentMonthLength: number
@@ -171,24 +172,26 @@ export default function MainPageWeek() {
       lastMonthLength: lastWeekList.length,
       currentMonthLength: currentWeekList.length
     }))
-    if (
-      currentDate.getFullYear() === dateData.year &&
-      currentDate.getMonth() === dateData.month &&
-      clickArrowCount === 0
-    ) {
-      for (var i = 0; i < currentWeekList.length; i++) {
-        for (var j = 0; j < currentWeekList[i].date.length; j++) {
-          if (currentWeekList[i].date[j].date === dateData.date.toString()) {
-            setWeekData(currentWeekList[i].week)
-          }
-        }
-      }
-    }
     setDayData(currentWeekList)
   }, [dateData.month])
+  /* console.log(
+    Math.ceil(
+      (new Date(dateData.year, dateData.month, 1).getDay() +
+        1 +
+        new Date(dateData.year, dateData.month + 1, 0).getDate()) /
+        7
+    )
+  )
+  console.log(
+    Math.ceil(
+      (new Date(dateData.year, dateData.month - 1, 1).getDay() +
+        1 +
+        new Date(dateData.year, dateData.month, 0).getDate()) /
+        7
+    )
+  ) */
 
   /* post 할 데이터 dateData 바꾸기 */
-  console.log(dayData)
   return (
     <>
       <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">

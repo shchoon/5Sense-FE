@@ -179,7 +179,6 @@ export default function WeekSchedule({ dateData, week }: IProps) {
                       return (
                         <div key={cI} className={`p-[6px] flex flex-col gap-1 outline outline-1 outline-gray-200 `}>
                           {data2.data.map((data: any, i: number) => {
-                            console.log(data)
                             return (
                               <div
                                 id={`${pI}` + `${cI}` + i.toString()}
@@ -191,7 +190,7 @@ export default function WeekSchedule({ dateData, week }: IProps) {
                                 onMouseEnter={handleMouseEnter}
                                 onMouseLeave={handelMouseLeave}
                               >
-                                {mouseOverId === `${pI}` + `${cI}` + i.toString() ? (
+                                {mouseOverId === `${pI}` + `${cI}` + i.toString() && (
                                   <div
                                     className={`absolute z-10 left-10 top-10 w-[180px] p-[5px] flex flex-col gap-2 outline outline-1 ${
                                       data.type === 'duration' ? 'outline-primary-200' : 'outline-orange-200'
@@ -207,7 +206,7 @@ export default function WeekSchedule({ dateData, week }: IProps) {
                                       }`}
                                     >
                                       <span className="h-4 text-white text-[13px] font-bold font-['Pretendard']">
-                                        {data.startTime}
+                                        {data.startTime.split(':')[0]}:{data.startTime.split(':')[1]}
                                       </span>
                                       <span
                                         className={`w-full h-[15px] ${
@@ -236,7 +235,7 @@ export default function WeekSchedule({ dateData, week }: IProps) {
                                       </div>
                                     </div>
                                   </div>
-                                ) : null}
+                                )}
 
                                 <div
                                   className={`flex flex-col gap-[2px] px-1 py-[5px] rounded ${
@@ -248,7 +247,7 @@ export default function WeekSchedule({ dateData, week }: IProps) {
                                       data.type === 'duration' ? 'text-primary-600' : 'text-orange-500'
                                     } text-[13px] font-bold`}
                                   >
-                                    {data.startTime}
+                                    {data.startTime.split(':')[0]}:{data.startTime.split(':')[1]}
                                   </span>
                                   <span
                                     className={`w-full h-[15px] ${
