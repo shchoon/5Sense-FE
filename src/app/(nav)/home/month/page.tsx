@@ -1,616 +1,116 @@
-export default function MainPageMonth() {
-  const date = new Date()
-  const currentDate = date.getDate()
-  const dayInMonth = ['SUN', 'MON', 'TUE', 'WED', 'THUR', 'FRI', 'SAT']
+'use client'
+import Image from 'next/image'
+import { useWindowSize } from '@/hooks/useWindowSize'
+import chevronLeft from 'public/assets/icons/chevron/chevron-left.svg'
+import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
+import calender from 'public/assets/icons/calendar.svg'
+import { useState } from 'react'
+import DateSlideTab from '@/components/main/DateSlideTab'
+import MonthDatePicker from '@/components/datePicker/monthDatePicker'
+import { dateDataType } from '@/components/datePicker/dayDatePicker'
+import MonthSchedule from '@/components/main/MonthSchedule'
 
-  const classData = [
-    [
-      {
-        day: 1,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 2,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 3,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 4,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 5,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 6,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 7,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      }
-    ],
-    [
-      {
-        day: 8,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 9,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 10,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 11,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 12,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 13,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 14,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      }
-    ],
-    [
-      {
-        day: 15,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 16,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 17,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 18,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 19,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 20,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 21,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      }
-    ],
-    [
-      {
-        day: 22,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 23,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 24,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 25,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 26,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 27,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 28,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      }
-    ],
-    [
-      {
-        day: 29,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      },
-      {
-        day: 30,
-        preiodClass: {
-          bg: 'bg-primary-50',
-          outline: 'outline-primary-300',
-          boxBg: 'bg-primary-500',
-          textColor: 'text-indigo-500',
-          classCount: '30개'
-        },
-        timeClass: {
-          bg: 'bg-stone-50',
-          outline: 'outline-orange-300',
-          boxBg: 'bg-orange-500',
-          textColor: 'text-orange-500',
-          classCount: '30개'
-        }
-      }
-    ]
-  ]
+export default function MonthDateTab() {
+  const { width, height } = useWindowSize()
+  const currentDate = new Date()
+  const [dateData, setDateData] = useState<dateDataType>({
+    year: currentDate.getFullYear(),
+    month: currentDate.getMonth(),
+    date: currentDate.getDate()
+  })
+  const [isClickedDatePicker, setIsClickedDatePicker] = useState<boolean>(false)
 
+  const onClickDatePickerHandler = () => {
+    setIsClickedDatePicker(prev => !prev)
+  }
+
+  function moveForwardMonth() {
+    setIsClickedDatePicker(false)
+    if (dateData.month === 11) {
+      setDateData({
+        ...dateData,
+        year: dateData.year + 1,
+        month: 0
+      })
+    } else {
+      setDateData({
+        ...dateData,
+        month: dateData.month + 1
+      })
+    }
+  }
+
+  function moveBackMonth() {
+    setIsClickedDatePicker(false)
+    if (dateData.month === 0) {
+      setDateData({
+        ...dateData,
+        year: dateData.year - 1,
+        month: 11
+      })
+    } else {
+      setDateData({
+        ...dateData,
+        month: dateData.month - 1
+      })
+    }
+  }
+
+  const handleChangeDateDataFromChild = (data: dateDataType, type: string) => {
+    if (type === 'check') {
+      setDateData({
+        ...dateData,
+        year: data.year,
+        month: data.month
+      })
+      setIsClickedDatePicker(false)
+    } else {
+      setDateData({
+        ...dateData,
+        year: data.year,
+        month: data.month
+      })
+    }
+  }
+  console.log(dateData)
   return (
-    <div className="flex flex-col gap-4 mx-auto xl:max-w-[1016px] pt-8 pb-[80px]">
-      {/* 회차반 / 기간반 */}
-      <div className="w-full h-4 flex justify-end">
-        <div className="w-[164px] h-4 flex gap-6 ">
-          <div className="w-[70px] h-full flex gap-2 items-center justify-end">
-            <span className="w-[16px] h-[16px] border rounded bg-[#FF7749]"></span>
-            <span className="text-orange-500 text-[13px] font-bold">
-              회차반
-            </span>
-          </div>
-          <div className="w-[70px] h-full flex gap-2 items-center justify-end">
-            <span className="w-[16px] h-[16px] border rounded bg-primary-500"></span>
-            <span className="text-primary-500 text-[13px] font-bold">
-              기간반
-            </span>
-          </div>
-        </div>
-      </div>
-      {/* 월 시간표 */}
-      <div className="w-full flex flex-col outline outline-1 outline-gray-200 rounded-md">
-        <div className="w-full h-[43px] grid grid-cols-7">
-          {dayInMonth.map((day, i) => {
-            return (
-              <div
-                key={i}
-                className="w-full h-[43px] px-[10px] py-3 flex items-center outline outline-1 outline-gray-200"
-              >
-                <span className=" gray-500-medium text-base">{day}</span>
-              </div>
-            )
-          })}
-        </div>
-        {classData.map((data, i) => {
-          return (
-            <div key={i} className="w-full h-[180px] grid grid-cols-7">
-              {data.map((data, i) => {
-                return (
-                  <div
-                    key={i}
-                    className="w-full h-full px-[10px] pt-[10px] pb-3 flex flex-col justify-between outline outline-1 outline-gray-200"
-                  >
-                    {currentDate === data.day ? (
-                      <div className="w-7 h-7 flex items-center justify-center rounded-full bg-primary-600 text-white text-lg font-medium">
-                        {data.day}
-                      </div>
-                    ) : (
-                      <div className="w-7 h-[21px] flex items-center justify-center gray-500-medium text-lg">
-                        {data.day}
-                      </div>
-                    )}
-
-                    <div className="w-full h-[62px] flex flex-col gap-1.5 ">
-                      <div
-                        className={`w-full flex gap-1 h-7 px-2 py-[6px] ${data.preiodClass.bg} outline outline-1 ${data.preiodClass.outline} rounded`}
-                      >
-                        <div
-                          className={`w-[14px] h-[14px] ${data.preiodClass.boxBg} rounded`}
-                        ></div>
-                        <div
-                          className={`flex-1 text-right ${data.preiodClass.textColor} text-[13px] font-bold`}
-                        >
-                          {data.preiodClass.classCount}
-                        </div>
-                      </div>
-                      <div
-                        className={`w-full flex gap-1 h-7 px-2 py-[6px] ${data.timeClass.bg} outline outline-1 ${data.timeClass.outline} rounded`}
-                      >
-                        <div
-                          className={`w-[14px] h-[14px] ${data.timeClass.boxBg}  rounded`}
-                        ></div>
-                        <div
-                          className={`flex-1 text-right ${data.timeClass.textColor} text-[13px] font-bold`}
-                        >
-                          {data.timeClass.classCount}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )
-              })}
+    <>
+      <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
+        <div className="relative mx-auto flex gap-[138px] items-center w-full  h-[52px]  md:w-full ">
+          <div
+            className={`flex mx-auto ${
+              width > 950 ? 'w-[420px]' : 'w-[312px]'
+            }  h-full p-1.5 border rounded-md border-gray-100 bg-[#F8FAFD]`}
+          >
+            <div
+              className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
+              onClick={moveBackMonth}
+            >
+              <Image src={chevronLeft} width={24} height={24} alt=" " />
             </div>
-          )
-        })}
+            <div
+              className="w-full px-3 py-2 flex justify-center gap-2 items-center gray-900-semibold text-base font-['Pretendard'] hover:text-primary-600 cursor-pointer"
+              onClick={onClickDatePickerHandler}
+            >
+              <Image src={calender} width={18} height={18} alt=" " />
+              {dateData.year}년 {dateData.month + 1}월
+            </div>
+            <div
+              className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
+              onClick={moveForwardMonth}
+            >
+              <Image src={chevronRight} width={24} height={24} alt=" " />
+            </div>
+          </div>
+          <DateSlideTab />
+          {isClickedDatePicker && (
+            <div className="absolute w-[255px] z-10 right-0 left-0 mx-auto top-[60px]">
+              <MonthDatePicker changeParentsDateData={handleChangeDateDataFromChild} parentsDateData={dateData} />
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+      <MonthSchedule dateData={dateData} />
+    </>
   )
 }

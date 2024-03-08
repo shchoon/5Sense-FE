@@ -1,6 +1,6 @@
 'use client'
 
-import ClassFilter from '@/components/class/classFilter'
+import ClassFilter from '@/components/class/classFilter/ClassFilter'
 
 export default function ClassPage() {
   const classList = [

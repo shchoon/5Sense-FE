@@ -70,6 +70,14 @@
     @apply text-gray-800 font-semibold;
   }
 
+  .gray-800-medium {
+    @apply text-gray-800 font-medium
+  }
+
+  .gray-700-medium {
+    @apply text-gray-700 font-medium
+  }
+
   .gray-600-normal {
     @apply text-gray-600 font-normal
   }

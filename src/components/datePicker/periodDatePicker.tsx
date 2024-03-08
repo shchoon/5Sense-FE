@@ -1,117 +1,93 @@
 'use client'
+import Image from 'next/image'
+
+import { useEffect, useState } from 'react'
+import { dateDataType } from './dayDatePicker'
+import { useGetCalendarData } from '@/hooks/useGetCalendarData'
+
 import allowLeft from 'public/assets/icons/allow_left.svg'
 import allowRight from 'public/assets/icons/allow_right.svg'
-import Image from 'next/image'
-import { useEffect, useState } from 'react'
-import useGetHolidayData from '@/hooks/useGetHolidayData'
 
-interface dateType {
-  year: number
-  month: number
-  date: number
-}
-
-interface clickDateType {
-  firstDate: string
-  secondDate: string
+interface clickedDateType {
+  year: undefined | number
+  month: undefined | number
+  date: undefined | number
 }
 
 export default function PeriodDatePicker() {
-  const dateName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const currentDate = new Date()
-  const [firstDateData, setFirstDateData] = useState<dateType>({
+  const dateName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  const [firstDateData, setFirstDateData] = useState<dateDataType>({
     year: currentDate.getFullYear(),
     month: currentDate.getMonth(),
     date: currentDate.getDate()
   })
-  const [secondDateData, setSecondDateData] = useState<dateType>({
+
+  const [secondDateData, setSecondDateData] = useState<dateDataType>({
     year: currentDate.getFullYear(),
     month: currentDate.getMonth() + 1,
     date: currentDate.getDate()
   })
-  const [clickedDate, setClickedDate] = useState<string>('')
-  const getFirstHoliData = useGetHolidayData(firstDateData.year)
-  const getSecondHoliData = useGetHolidayData(secondDateData.year)
 
-  const getCalanderData = (monthData: dateType) => {
-    const lastDateOfLastMonthData = new Date(monthData.year, monthData.month, 0)
-    const firstDateOfCurrentMonthData = new Date(
-      monthData.year,
-      monthData.month
-    )
-    const lastDateOfCurrnetMonthData = new Date(
-      monthData.year,
-      monthData.month + 1,
-      0
-    )
-    const firstDateOfNextMonthData = new Date(
-      monthData.year,
-      monthData.month + 1
-    )
+  const [clickedDate, setClickedDate] = useState<string>(``)
+  const [firstClickedDate, setFirstClickedDate] = useState<clickedDateType>({
+    year: undefined,
+    month: undefined,
+    date: undefined
+  })
+  const [secondClickedDate, setSecondClickedDate] = useState<clickedDateType>({
+    year: undefined,
+    month: undefined,
+    date: undefined
+  })
 
-    let list = []
-    if (firstDateOfCurrentMonthData.getDay() !== 0) {
-      for (var i = lastDateOfLastMonthData.getDay(); i >= 0; i--) {
-        list.push({
-          date: lastDateOfLastMonthData.getDate() - i,
-          textColor: 'font-semibold text-gray-500',
-          clickable: false
-        })
-      }
-    }
+  const firstDateList = useGetCalendarData(firstDateData)
+  const secondDateList = useGetCalendarData(secondDateData)
 
-    for (var i = 1; i <= lastDateOfCurrnetMonthData.getDate(); i++) {
-      list.push({ date: i, textColor: 'gray-900-bold', clickable: true })
-    }
-
-    if (lastDateOfCurrnetMonthData.getDay() !== 6) {
-      for (var i = 1; i <= 7 - firstDateOfNextMonthData.getDay(); i++) {
-        list.push({
-          date: i,
-          textColor: 'font-semibold text-gray-500',
-          clickable: false
-        })
-      }
-    }
-
-    let result = []
-    for (var i = 0; i < list.length; i += 7) {
-      result.push(list.slice(i, i + 7))
-    }
-
-    return result
+  const onClickFirstDateHandler = (date: number) => {
+    setFirstClickedDate(prev => ({
+      ...prev,
+      year: firstDateData.year,
+      month: firstDateData.month,
+      date: date
+    }))
   }
 
-  const onClickDateHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-    console.log(e.currentTarget.id)
-    setClickedDate(e.currentTarget.id)
+  const onClickSecondDateHandler = (date: number) => {
+    setSecondClickedDate(prev => ({
+      ...prev,
+      year: secondDateData.year,
+      month: secondDateData.month,
+      date: date
+    }))
   }
 
-  const onClickMonthForwardHandler = (
-    e: React.MouseEvent<HTMLImageElement>
-  ) => {
-    if (e.currentTarget.id === 'first') {
-      if (firstDateData.month === 11) {
-        setFirstDateData((preDateData: dateType) => ({
+  const onClickMonthForwardHandler = (dateData: dateDataType, type: string) => {
+    if (dateData.year === 2025 && dateData.month === 11) {
+      return
+    }
+    if (dateData.month === 11) {
+      if (type === 'first') {
+        setFirstDateData((preDateData: dateDataType) => ({
           ...preDateData,
           year: preDateData.year + 1,
           month: 0
         }))
-      } else {
-        setFirstDateData((preDateData: dateType) => ({
+      } else if (type === 'second') {
+        setSecondDateData((preDateData: dateDataType) => ({
+          ...preDateData,
+          year: preDateData.year + 1,
+          month: 0
+        }))
+      }
+    } else {
+      if (type === 'first') {
+        setFirstDateData((preDateData: dateDataType) => ({
           ...preDateData,
           month: preDateData.month + 1
         }))
-      }
-    } else if (e.currentTarget.id === 'second') {
-      if (secondDateData.month === 11) {
-        setSecondDateData((preDateData: dateType) => ({
-          ...preDateData,
-          year: preDateData.year + 1,
-          month: 0
-        }))
-      } else {
-        setSecondDateData((preDateData: dateType) => ({
+      } else if (type === 'second') {
+        setSecondDateData((preDateData: dateDataType) => ({
           ...preDateData,
           month: preDateData.month + 1
         }))
@@ -119,29 +95,39 @@ export default function PeriodDatePicker() {
     }
   }
 
-  const onClickMonthBackHandler = (e: React.MouseEvent<HTMLImageElement>) => {
-    if (e.currentTarget.id === 'first') {
-      if (firstDateData.month === 0) {
-        setFirstDateData((preDateData: dateType) => ({
+  const onClickMonthBackHandler = (dateData: dateDataType, type: string) => {
+    if (
+      dateData.year === currentDate.getFullYear() &&
+      ((type === 'first' && dateData.month === currentDate.getMonth()) ||
+        (type === 'second' && dateData.month === currentDate.getMonth() + 1))
+    ) {
+      return
+    }
+    if (dateData.year === 2021 && dateData.month === 0) {
+      return
+    }
+    if (dateData.month === 0) {
+      if (type === 'first') {
+        setFirstDateData((preDateData: dateDataType) => ({
           ...preDateData,
           year: preDateData.year - 1,
           month: 11
         }))
-      } else {
-        setFirstDateData((preDateData: dateType) => ({
+      } else if (type === 'second') {
+        setSecondDateData((preDateData: dateDataType) => ({
+          ...preDateData,
+          year: preDateData.year - 1,
+          month: 11
+        }))
+      }
+    } else {
+      if (type === 'first') {
+        setFirstDateData((preDateData: dateDataType) => ({
           ...preDateData,
           month: preDateData.month - 1
         }))
-      }
-    } else if (e.currentTarget.id === 'second') {
-      if (secondDateData.month === 0) {
-        setSecondDateData((preDateData: dateType) => ({
-          ...preDateData,
-          year: preDateData.year - 1,
-          month: 11
-        }))
-      } else {
-        setSecondDateData((preDateData: dateType) => ({
+      } else if (type === 'second') {
+        setSecondDateData((preDateData: dateDataType) => ({
           ...preDateData,
           month: preDateData.month - 1
         }))
@@ -149,39 +135,54 @@ export default function PeriodDatePicker() {
     }
   }
 
-  const onClickCancelBtn = () => {
-    setClickedDate('')
+  const onClickCancelHandler = () => {
+    setFirstClickedDate(prev => ({
+      ...prev,
+      date: undefined
+    }))
+    setSecondClickedDate(prev => ({
+      ...prev,
+      date: undefined
+    }))
   }
 
-  const currentMonthDateList = getCalanderData(firstDateData)
-  const nextMonthDateList = getCalanderData(secondDateData)
+  const onClickCheckHandler = () => {
+    console.log(firstClickedDate, secondClickedDate)
+    /* props.changeParentsDateData({
+      year: dateData.year,
+      month: dateData.month,
+      date: Number(clickedDate)
+    }) */
+  }
 
+  console.log(firstClickedDate, secondClickedDate)
   return (
-    <div className="flex gap-6">
-      {/* current month */}
-      <div className="flex flex-col gap-2 w-[283px] p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
+    <div className="w-[592px] p-4 flex gap-6">
+      {/* 첫 번째 달력 */}
+      <div className="flex flex-col bg-white gap-2 w-[283px] p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
         <div className="w-full flex justify-between">
           <Image
-            id="first"
             src={allowLeft}
             width={20}
             height={20}
             alt="allowLeft"
             className="cursor-pointer"
-            onClick={e => onClickMonthBackHandler(e)}
+            onClick={() => {
+              onClickMonthBackHandler(firstDateData, 'first')
+              onClickMonthBackHandler(secondDateData, 'second')
+            }}
           />
-          <div className="w-[126px] text-center gray-900-bold text-xs font-['Pretendard']">
+          <div className="w-full text-center gray-900-bold text-xs font-['Pretendard']">
             {firstDateData.year}년 {firstDateData.month + 1}월
           </div>
-          <Image
-            id="first"
+          {/* <Image
             src={allowRight}
             width={20}
             height={20}
             alt="allowRight"
             className="cursor-pointer"
-            onClick={e => onClickMonthForwardHandler(e)}
-          />
+            onClick={onClickMonthForwardHandler}
+          /> */}
         </div>
         {/* 달력 */}
         <div className="w-[252px] h-[238px]">
@@ -189,35 +190,68 @@ export default function PeriodDatePicker() {
             {dateName.map((date, i) => {
               return (
                 <div key={i} className="px-1 py-2 ">
-                  <div className="text-xs text-center font-semibold text-gray-500 font-['Pretendard']">
-                    {date}
-                  </div>
+                  <div className="text-xs text-center font-semibold text-gray-500 font-['Pretendard']">{date}</div>
                 </div>
               )
             })}
           </div>
-          {currentMonthDateList.map((data, i) => {
+          {firstDateList.map((data, i) => {
             return (
               <div key={i} className="w-full h-[34px] grid grid-cols-7">
-                {data.map((dateData, i) => {
+                {data.map((dateData: any, i: number) => {
                   return (
                     <div
                       key={i}
-                      id={dateData.date.toString()}
                       className={`px-1 py-2 cursor-pointer ${
-                        clickedDate === dateData.date.toString() &&
-                        dateData.clickable
+                        (dateData.clickable &&
+                          firstDateData.year === firstClickedDate.year &&
+                          firstDateData.month === firstClickedDate.month &&
+                          firstClickedDate.date === dateData.date) ||
+                        (firstDateData.month === secondClickedDate.month && secondClickedDate.date === dateData.date)
                           ? 'bg-primary-700 border rounded-lg'
                           : ''
-                      }`}
+                      }
+                      /* 같은 월인 경우 */
+                      ${
+                        secondClickedDate.month !== firstDateData.month &&
+                        secondClickedDate.date !== undefined &&
+                        firstClickedDate.date !== undefined &&
+                        firstClickedDate.month !== undefined &&
+                        dateData.clickable &&
+                        firstDateData.month === firstClickedDate.month &&
+                        dateData.date > firstClickedDate.date &&
+                        'bg-red-100'
+                      }
+                      /* 달력 월 > 시작 지정 월 */
+                      ${
+                        secondClickedDate.month !== undefined &&
+                        secondClickedDate.month > firstDateData.month &&
+                        secondClickedDate.date !== undefined &&
+                        firstClickedDate.date !== undefined &&
+                        firstClickedDate.month !== undefined &&
+                        dateData.clickable &&
+                        firstDateData.month > firstClickedDate.month &&
+                        'bg-red-100'
+                      }
+                      /* 달력 월 == 종료 지정 월 */
+                      ${
+                        secondClickedDate.month === firstDateData.month &&
+                        dateData.clickable &&
+                        secondClickedDate.date !== undefined &&
+                        dateData.date < secondClickedDate.date &&
+                        'bg-red-100'
+                      }
+                      `}
                       onClick={e => {
-                        dateData.clickable && onClickDateHandler(e)
+                        dateData.clickable && onClickFirstDateHandler(dateData.date)
                       }}
                     >
                       <div
                         className={`text-xs text-center ${
-                          clickedDate === dateData.date.toString() &&
-                          dateData.clickable
+                          (dateData.clickable &&
+                            firstClickedDate.month === firstDateData.month &&
+                            firstClickedDate.date === dateData.date) ||
+                          (firstDateData.month === secondClickedDate.month && secondClickedDate.date === dateData.date)
                             ? 'text-white font-bold'
                             : `${dateData.textColor}`
                         } font-['Pretendard']`}
@@ -231,39 +265,39 @@ export default function PeriodDatePicker() {
             )
           })}
         </div>
-        <div
-          className="w-full flex h-[37px] px-3 py-2 justify-center btn-white text-sm gray-800-semibold"
-          onClick={onClickCancelBtn}
-        >
-          취소
-          {/* <div className="w-[121px] h-full px-3 py-2 flex justify-center text-sm font-semibold btn-purple">
-          확인
-        </div> */}
+        <div className="w-full h-[37px]">
+          <div
+            className="w-full h-full px-3 py-2 flex justify-center btn-white text-sm gray-800-semibold"
+            onClick={onClickCancelHandler}
+          >
+            취소
+          </div>
         </div>
       </div>
-      {/* next month */}
-      <div className="flex flex-col gap-2 w-[283px] p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
+      {/* 두번째 달력 */}
+      <div className="flex flex-col bg-white gap-2 w-[283px] p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
         <div className="w-full flex justify-between">
-          <Image
-            id="second"
+          {/* <Image
             src={allowLeft}
             width={20}
             height={20}
             alt="allowLeft"
             className="cursor-pointer"
-            onClick={e => onClickMonthBackHandler(e)}
-          />
-          <div className="w-[126px] text-center gray-900-bold text-xs font-['Pretendard']">
+            onClick={onClickMonthBackHandler}
+          /> */}
+          <div className="w-full text-center gray-900-bold text-xs font-['Pretendard']">
             {secondDateData.year}년 {secondDateData.month + 1}월
           </div>
           <Image
-            id="second"
             src={allowRight}
             width={20}
             height={20}
             alt="allowRight"
             className="cursor-pointer"
-            onClick={e => onClickMonthForwardHandler(e)}
+            onClick={() => {
+              onClickMonthForwardHandler(firstDateData, 'first')
+              onClickMonthForwardHandler(secondDateData, 'second')
+            }}
           />
         </div>
         {/* 달력 */}
@@ -272,35 +306,66 @@ export default function PeriodDatePicker() {
             {dateName.map((date, i) => {
               return (
                 <div key={i} className="px-1 py-2 ">
-                  <div className="text-xs text-center font-semibold text-gray-500 font-['Pretendard']">
-                    {date}
-                  </div>
+                  <div className="text-xs text-center font-semibold text-gray-500 font-['Pretendard']">{date}</div>
                 </div>
               )
             })}
           </div>
-          {nextMonthDateList.map((data, i) => {
+          {secondDateList.map((data, i) => {
             return (
               <div key={i} className="w-full h-[34px] grid grid-cols-7">
-                {data.map((dateData, i) => {
+                {data.map((dateData: any, i: number) => {
                   return (
                     <div
                       key={i}
-                      id={dateData.date.toString()}
                       className={`px-1 py-2 cursor-pointer ${
-                        clickedDate === dateData.date.toString() &&
-                        dateData.clickable
+                        dateData.clickable &&
+                        ((secondClickedDate.month === secondDateData.month &&
+                          secondClickedDate.date === dateData.date) ||
+                          (secondDateData.month === firstClickedDate.month && firstClickedDate.date === dateData.date))
                           ? 'bg-primary-700 border rounded-lg'
                           : ''
-                      }`}
+                      }
+                      /* 현재 월 == 종료 지정 월 */
+                      ${
+                        dateData.clickable &&
+                        firstClickedDate.date !== undefined &&
+                        secondClickedDate.month !== undefined &&
+                        secondClickedDate.date !== undefined &&
+                        secondDateData.month === secondClickedDate.month &&
+                        dateData.date < secondClickedDate.date &&
+                        'bg-red-100'
+                      }
+                      /* 현재 월 < 종료 지정 월 */
+                      ${
+                        dateData.clickable &&
+                        firstClickedDate.month !== undefined &&
+                        firstClickedDate.date !== undefined &&
+                        secondClickedDate.month !== undefined &&
+                        secondClickedDate.date !== undefined &&
+                        secondDateData.month > firstClickedDate.month &&
+                        secondDateData.month < secondClickedDate.month &&
+                        'bg-red-100'
+                      }
+                      ${
+                        dateData.clickable &&
+                        firstClickedDate.date !== undefined &&
+                        secondDateData.month === firstClickedDate.month &&
+                        dateData.date > firstClickedDate.date &&
+                        'bg-red-100'
+                      }
+                      `}
                       onClick={e => {
-                        dateData.clickable && onClickDateHandler(e)
+                        dateData.clickable && onClickSecondDateHandler(dateData.date)
                       }}
                     >
                       <div
                         className={`text-xs text-center ${
-                          clickedDate === dateData.date.toString() &&
-                          dateData.clickable
+                          dateData.clickable &&
+                          ((secondClickedDate.month === secondDateData.month &&
+                            secondClickedDate.date === dateData.date) ||
+                            (secondDateData.month === firstClickedDate.month &&
+                              firstClickedDate.date === dateData.date))
                             ? 'text-white font-bold'
                             : `${dateData.textColor}`
                         } font-['Pretendard']`}
@@ -314,11 +379,13 @@ export default function PeriodDatePicker() {
             )
           })}
         </div>
-        <div
-          className="w-full flex h-[37px] px-3 py-2 justify-center text-sm font-semibold btn-purple"
-          //onClick={onClickCancelBtn}
-        >
-          확인
+        <div className="w-full h-[37px]">
+          <div
+            className="w-full h-full px-3 py-2 flex justify-center text-sm font-semibold btn-purple"
+            onClick={onClickCheckHandler}
+          >
+            확인
+          </div>
         </div>
       </div>
     </div>
