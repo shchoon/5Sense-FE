@@ -41,14 +41,17 @@ export default function AddClassModal() {
     month: currentDate.getMonth(),
     date: currentDate.getDate()
   })
+  const [dateValue, setDateValue] = useState<string>('날짜')
 
   const setDateDataFromChild = (data: dateDataType) => {
+    console.log(data)
     setDateData({
       ...dateData,
       year: data.year,
       month: data.month,
       date: data.date
     })
+    setDateValue(`${data.year}.${data.month + 1}.${data.date}`)
 
     setIsClickedTab(prev => ({
       ...prev,
@@ -239,9 +242,7 @@ export default function AddClassModal() {
               </div>
               <div className="w-full h-full flex flex-col">
                 <div className="w-full h-full text-left text-gray-700 font-medium text-sm">날짜</div>
-                <div className="w-full h-full text-left text-gray-400 font-medium text-[15px]">
-                  {dateData.year}.{dateData.month + 1}.{dateData.date}
-                </div>
+                <div className="w-full h-full text-left text-gray-400 font-medium text-[15px]">{dateValue}</div>
               </div>
             </button>
             {!isClickedTab.date && !isClickedTab.time && <div className="w-px h-7 bg-gray-300"></div>}

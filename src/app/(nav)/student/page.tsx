@@ -174,7 +174,7 @@ export default function StudentPage() {
           <Image src={searchIconGray} width={16} height={16} alt=" " />
           <input
             ref={inputRef}
-            className="w-[245px] border-none ring-0 focus:ring-0"
+            className="w-[245px] focus:outline-none"
             placeholder="Search"
             name={checkInputType() ? 'name' : 'phone'}
             type={checkInputType() ? 'text' : 'number'}

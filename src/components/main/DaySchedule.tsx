@@ -17,8 +17,22 @@ interface getClassDataType {
 }
 
 export default function DaySchedule({ dateData }: IProps) {
+  console.log(dateData)
   const date = new Date()
   const currentHour = date.getHours()
+
+  const checkCurrentDate = (startTime: string) => {
+    if (
+      date.getFullYear() === dateData.year &&
+      date.getMonth() === dateData.month &&
+      date.getDate() === dateData.date &&
+      currentHour === Number(startTime)
+    ) {
+      return true
+    } else {
+      return false
+    }
+  }
 
   const [lessonData, setLessonData] = useState<any>([])
   useEffect(() => {
@@ -109,7 +123,7 @@ export default function DaySchedule({ dateData }: IProps) {
                 <div className="flex w-[77px] h-6 gap-5 items-center">
                   <div
                     className={`w-[51px] text-right ${
-                      currentHour === Number(data.startTime.split(':')[0]) ? 'text-indigo-500' : 'text-black'
+                      checkCurrentDate(data.startTime.split(':')[0]) ? 'text-indigo-500' : 'text-black'
                     }  text-base font-semibold font-['Pretendard']`}
                   >
                     {data.startTime.split(':')[0]}:{data.startTime.split(':')[1]}
@@ -125,7 +139,7 @@ export default function DaySchedule({ dateData }: IProps) {
                       <div key={i} className="flex gap-4 h-[45px]">
                         <div
                           className={`w-[3px] h-full rounded ${
-                            currentHour === Number(startTime)
+                            checkCurrentDate(startTime)
                               ? data.type === 'duration'
                                 ? 'bg-primary-600'
                                 : 'bg-orange-500'
@@ -136,21 +150,21 @@ export default function DaySchedule({ dateData }: IProps) {
                           <div className="flex gap-[6px]">
                             <div
                               className={`${
-                                currentHour === Number(startTime) ? 'text-gray-800' : 'text-gray-400'
+                                checkCurrentDate(startTime) ? 'text-gray-800' : 'text-gray-400'
                               }  text-sm font-medium`}
                             >
                               {data.teacher}
                             </div>
                             <div
                               className={`${
-                                currentHour === Number(startTime) ? 'text-gray-800' : 'text-gray-400'
+                                checkCurrentDate(startTime) ? 'text-gray-800' : 'text-gray-400'
                               }  text-sm font-medium`}
                             >
                               ·
                             </div>
                             <div
                               className={`${
-                                currentHour === Number(startTime) ? 'text-gray-800' : 'text-gray-400'
+                                checkCurrentDate(startTime) ? 'text-gray-800' : 'text-gray-400'
                               }  text-sm font-medium`}
                             >
                               1호실
@@ -158,7 +172,7 @@ export default function DaySchedule({ dateData }: IProps) {
                           </div>
                           <div
                             className={`${
-                              currentHour === Number(startTime) ? 'text-gray-800' : 'text-gray-400'
+                              checkCurrentDate(startTime) ? 'text-gray-800' : 'text-gray-400'
                             }  text-base font-semibold font-['Pretendard'] truncate`}
                           >
                             {data.name}
