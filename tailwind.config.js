@@ -137,6 +137,13 @@ module.exports = {
           200: '#E5E7EB',
           400: '#9CA3AF',
           500: '#6B7280'
+        },
+        secondary: {
+          50: '#FDFCF8',
+          100: '#FFF0E3',
+          200: '#FCD9BD',
+          400: '#FF8240',
+          600: '#FF5A1F'
         }
       },
       boxShadow: {

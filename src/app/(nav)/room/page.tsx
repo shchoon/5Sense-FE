@@ -4,11 +4,15 @@ import Link from 'next/link'
 
 import { useState } from 'react'
 import { useWindowSize } from '@/hooks/useWindowSize'
+import DayDatePicker from '@/components/datePicker/dayDatePicker'
 
 import chevronLeft from 'public/assets/icons/chevron/chevron-left.svg'
 import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
 import calender from 'public/assets/icons/calendar.svg'
 import user from 'public/assets/icons/user_icon.svg'
+import ImgPlusCircle from 'public/assets/icons/plus-circle.svg'
+import calendar from 'public/assets/icons/calendar-white.svg'
+import { dateDataType } from '@/components/datePicker/dayDatePicker'
 
 export default function Room() {
   const { width, height } = useWindowSize()
@@ -26,33 +30,258 @@ export default function Room() {
       room: 'Room D'
     }
   ]
+
+  const timeData = [
+    { time: '9:00' },
+    { time: '9:30' },
+    { time: '10:00' },
+    { time: '10:30' },
+    { time: '11:00' },
+    { time: '11:30' },
+    { time: '12:00' }
+  ]
   const roomData = [
     {
-      time: '09:00',
-      class: [
+      roomName: 'A',
+      resetvation: [
         {
           time: '09:00',
-          lessonTime: '90분',
+          lesseonTime: 90,
           className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-          instructor: '조성훈'
+          teacher: '김솔지',
+          studentNum: 5,
+          limit: 10
         },
         {
-          time: '09:00',
-          lessonTime: '90분',
+          time: '09:30',
+          lesseonTime: 90,
           className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-          instructor: '조성훈'
+          teacher: '김솔지',
+          studentNum: 5,
+          limit: 10
         },
         {
-          time: '09:00',
-          lessonTime: '90분',
-          className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-          instructor: '조성훈'
+          time: '10:00',
+          lesseonTime: 90,
+          className: '반야사 요가',
+          teacher: '윤태식',
+          studentNum: 5,
+          limit: 10
         },
         {
+          time: '10:30',
+          lesseonTime: 90,
+          className: '바른 자세 찾기',
+          teacher: '엄세리',
+          studentNum: 5,
+          limit: 10
+        },
+        {
+          time: '',
+          lesseonTime: undefined,
+          className: '',
+          teacher: '',
+          studentNum: undefined,
+          limit: undefined
+        },
+        {
+          time: '11:30',
+          lesseonTime: 90,
+          className: '필라테스',
+          teacher: '조성훈',
+          studentNum: 5,
+          limit: 10
+        },
+        {
+          time: '',
+          lesseonTime: undefined,
+          className: '',
+          teacher: '',
+          studentNum: undefined,
+          limit: undefined
+        }
+      ]
+    },
+    {
+      roomName: 'A',
+      resetvation: [
+        {
           time: '09:00',
-          lessonTime: '90분',
+          lesseonTime: 90,
           className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-          instructor: '조성훈'
+          teacher: '김솔지',
+          studentNum: 5,
+          limit: 10
+        },
+        {
+          time: '09:30',
+          lesseonTime: 90,
+          className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
+          teacher: '김솔지',
+          studentNum: 5,
+          limit: 10
+        },
+        {
+          time: '10:00',
+          lesseonTime: 90,
+          className: '반야사 요가',
+          teacher: '윤태식',
+          studentNum: 5,
+          limit: 10
+        },
+        {
+          time: '10:30',
+          lesseonTime: 90,
+          className: '바른 자세 찾기',
+          teacher: '엄세리',
+          studentNum: 5,
+          limit: 10
+        },
+        {
+          time: '',
+          lesseonTime: undefined,
+          className: '',
+          teacher: '',
+          studentNum: undefined,
+          limit: undefined
+        },
+        {
+          time: '11:30',
+          lesseonTime: 90,
+          className: '필라테스',
+          teacher: '조성훈',
+          studentNum: 5,
+          limit: 10
+        },
+        {
+          time: '',
+          lesseonTime: undefined,
+          className: '',
+          teacher: '',
+          studentNum: undefined,
+          limit: undefined
+        }
+      ]
+    },
+    {
+      roomName: 'A',
+      resetvation: [
+        {
+          time: '',
+          lesseonTime: 90,
+          className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
+          teacher: '김솔지',
+          studentNum: 5,
+          limit: 10
+        },
+        {
+          time: '09:30',
+          lesseonTime: 90,
+          className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
+          teacher: '김솔지',
+          studentNum: 5,
+          limit: 10
+        },
+        {
+          time: '10:00',
+          lesseonTime: 90,
+          className: '반야사 요가',
+          teacher: '윤태식',
+          studentNum: 5,
+          limit: 10
+        },
+        {
+          time: '10:30',
+          lesseonTime: 90,
+          className: '바른 자세 찾기',
+          teacher: '엄세리',
+          studentNum: 5,
+          limit: 10
+        },
+        {
+          time: '11:00',
+          lesseonTime: 60,
+          className: '바른 자세 찾기',
+          teacher: '조성훈',
+          studentNum: 3,
+          limit: 5
+        },
+        {
+          time: '11:30',
+          lesseonTime: 90,
+          className: '필라테스',
+          teacher: '조성훈',
+          studentNum: 5,
+          limit: 10
+        },
+        {
+          time: '12:00',
+          lesseonTime: 90,
+          className: '반야사 요가',
+          teacher: '윤태식',
+          studentNum: 7,
+          limit: 15
+        }
+      ]
+    },
+    {
+      roomName: 'A',
+      resetvation: [
+        {
+          time: '09:00',
+          lesseonTime: 90,
+          className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
+          teacher: '김솔지',
+          studentNum: 5,
+          limit: 10
+        },
+        {
+          time: '09:30',
+          lesseonTime: 90,
+          className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
+          teacher: '김솔지',
+          studentNum: 5,
+          limit: 10
+        },
+        {
+          time: '10:00',
+          lesseonTime: 90,
+          className: '반야사 요가',
+          teacher: '윤태식',
+          studentNum: 5,
+          limit: 10
+        },
+        {
+          time: '10:30',
+          lesseonTime: 90,
+          className: '바른 자세 찾기',
+          teacher: '엄세리',
+          studentNum: 5,
+          limit: 10
+        },
+        {
+          time: '',
+          lesseonTime: undefined,
+          className: '',
+          teacher: '',
+          studentNum: undefined,
+          limit: undefined
+        },
+        {
+          time: '11:30',
+          lesseonTime: 90,
+          className: '필라테스',
+          teacher: '조성훈',
+          studentNum: 5,
+          limit: 10
+        },
+        {
+          time: '',
+          lesseonTime: undefined,
+          className: '',
+          teacher: '',
+          studentNum: undefined,
+          limit: undefined
         }
       ]
     }
@@ -126,21 +355,34 @@ export default function Room() {
       })
     }
   }
+
+  const onChangeDateDataFromChild = (data: dateDataType) => {
+    setDateData({
+      ...dateData,
+      year: data.year,
+      month: data.month,
+      date: data.date
+    })
+    setIsClickedDatePicker(false)
+  }
+  console.log(dateData)
   return (
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-[60px]">
       <div className="flex w-full pt-12 mb-[30px] justify-between">
         <div className=" h-[30px]">
           <div className="w-full black-bold text-3xl font-['Pretendard']">강의실 관리</div>
         </div>
-        <div className="w-[241px] h-[41px] flex rounded-lg bg-primary-600">
+        <div className="w-[300px] h-[41px] flex rounded-lg bg-primary-600">
           <Link
-            href={''}
-            className="flex w-full px-5 py-2.5 border border-r rounded-r-none border-r-primary-700 btn-purple text-sm"
+            href={'/room/schedule'}
+            className="flex gap-2 w-full px-5 py-2.5 border border-r rounded-r-none border-r-primary-700 btn-purple"
           >
-            강의실 찾기
+            <Image src={calendar} width={20} height={20} alt="calendar" />
+            <div className="text-white text-sm font-semibold">일정 찾기</div>
           </Link>
-          <Link href={''} className="flex w-full justify-center px-5 py-2.5 btn-purple text-sm">
-            추가·편집
+          <Link href={'/room/addRoom'} className="flex items-center w-full gap-2 px-5 py-2.5 btn-purple">
+            <Image src={ImgPlusCircle} width={20} height={20} alt="plusCircle" />
+            <div className="text-white text-sm font-semibold">강의실 추가</div>
           </Link>
         </div>
       </div>
@@ -170,6 +412,12 @@ export default function Room() {
           <Image src={chevronRight} width={24} height={24} alt=" " />
         </div>
       </div>
+      {isClickedDatePicker && (
+        <div className="absolute w-[283px] z-10 right-0 left-0 mx-auto top-[180px]">
+          <DayDatePicker changeParentsDateData={onChangeDateDataFromChild} parentsDateData={dateData} />
+        </div>
+      )}
+
       {/* 룸 리스트 */}
       <div className="relative w-full pl-[84px]">
         <span className="absolute w-6 h-6 left-[72px] top-7 bg-white flex items-center justify-center border border-1 border-gray-200 rounded-full ">
@@ -210,7 +458,73 @@ export default function Room() {
           </div>
         </div>
         {/* 룸 예약표 */}
-        <div className="w-full flex xl:gap-5 lg:gap-4 md:gap-[14px] gap-3.5">
+        <div className="w-full flex gap-6">
+          <div className="flex flex-col">
+            {timeData.map((data, i) => {
+              return (
+                <div key={i} className="w-[60px] h-[162px] text-right gray-800-semibold text-base">
+                  {data.time}
+                </div>
+              )
+            })}
+          </div>
+
+          <div className="w-full grid grid-cols-4">
+            {roomData.map((data, i) => {
+              return (
+                <div key={i} className="w-full flex flex-col">
+                  {data.resetvation.map((data, i) => {
+                    return (
+                      <div
+                        key={i}
+                        className="w-full h-[210px] p-1.5 border border-1 border-gray-200 flex items-center justify-center"
+                      >
+                        {data.time !== '' ? (
+                          <div className="w-full h-full p-1.5 bg-secondary-50 border rounded border-1 border-secondary-200">
+                            <div className="w-full h-full flex flex-col gap-1.5">
+                              <div className="w-full p-1.5 flex gap-1.5 bg-secondary-100 items-center">
+                                <div className="text-secondary-600 text-sm font-bold">{data.time}</div>
+                                <div className="text-secondary-400 text-xs font-semibold">{data.lesseonTime}분</div>
+                              </div>
+                              <div className="w-full h-full flex flex-col gap-2">
+                                <div className="w-full text-secondary-400 text-sm font-bold">{data.className}</div>
+                                <div className="w-full flex flex-col">
+                                  <div className="w-full text-left text-secondary-600 text-xs font-medium">
+                                    담당 강사 : {data.teacher}
+                                  </div>
+                                  <div className="w-full text-left text-secondary-600 text-xs font-medium">
+                                    회원 수 : {data.studentNum}/{data.limit}
+                                  </div>
+                                </div>
+                                <div className="w-full flex justify-end ">
+                                  <button
+                                    className="w-[85px] h-[37px] flex items-center px-3 py-2 border rounded-lg border-1 border-gray-200
+           gray-800-semibold text-sm"
+                                  >
+                                    예약하기
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <button
+                            className="w-[85px] h-[37px] flex items-center px-3 py-2 border rounded-lg border-1 border-gray-200
+           gray-800-semibold text-sm"
+                          >
+                            예약하기
+                          </button>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* <div className="w-full flex xl:gap-5 lg:gap-4 md:gap-[14px] gap-3.5">
           {roomData.map((data, i) => {
             return (
               <>
@@ -249,7 +563,7 @@ export default function Room() {
               </>
             )
           })}
-        </div>
+        </div> */}
       </div>
     </div>
   )
