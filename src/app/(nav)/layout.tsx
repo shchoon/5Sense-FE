@@ -1,9 +1,11 @@
 'use client'
 import Image from 'next/image'
+import { useRecoilState, useRecoilValue } from 'recoil'
 
 import AcademyInfo from '@/components/layout/AcademyInfo'
 import Navbar from '@/components/layout/Navbar'
 import TodaySchedule from '@/components/layout/TodaySchedule'
+import { modalState } from '@/lib/state/modal'
 
 import logout from 'public/assets/icons/logout.svg'
 import menu from 'public/assets/icons/menu.svg'
@@ -16,12 +18,13 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     { id: 2, name: '이용약관' },
     { id: 3, name: '팀소개' }
   ]
-
-  // const [Modal, setModal] = useRecoilState(modalState)
+  const modal = useRecoilValue(modalState)
 
   return (
-    <div className={`wrapper  min-w-[768px] max-w-[2560px]`}>
-      <div className="w-full h-full px-6 2md:px-12 box-border lg:pl-0 lg:pr-4 xl:pr-8 2xl:pr-12">
+    <div className={`wrapper min-w-[768px] max-w-[2560px]`}>
+      <div
+        className={`w-full h-full ${modal ? 'fixed' : ''} px-6 2md:px-12 box-border lg:pl-0 lg:pr-4 xl:pr-8 2xl:pr-12`}
+      >
         {/* 상위 relative가 없기때문에 body를 부모로 잡음 */}
         <div className="header w-full h-[124px] flex justify-between items-center lg:flex-none lg:h-[66px]">
           <div className="rightBox flex gap-5 lg:flex-none lg:relative lg:top-12 lg:left-6">
@@ -64,7 +67,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             </div>
           </div>
         </div>
-        InstructorRegisterModal
       </div>
       {/* <SideModal /> */}
       {/* static은 레이어 계층에 들어가지 않기때문에 purplebox에 인덱스값을 -로 설정함*/}
