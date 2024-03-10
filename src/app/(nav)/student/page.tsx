@@ -73,11 +73,12 @@ export default function StudentPage() {
   const getStudentListToScroll = async () => {
     if (inputValue !== '') {
       const searchBy = inputRef.current?.name
-      const res = await useGetData('students', postVar.page + 1, searchBy, inputValue)
+
+      const res = await useGetData('students', postVar.page + 1, 10, searchBy, inputValue)
       setStudentList((preStudentData: getDataType[]) => [...preStudentData, ...res.data])
       setPostVar((prePostVar: postVarType) => res.meta)
     } else {
-      const res = await useGetData('students', postVar.page + 1)
+      const res = await useGetData('students', postVar.page + 1, 10)
       setStudentList((preStudentData: getDataType[]) => [...preStudentData, ...res.data])
       setPostVar((prePostVar: postVarType) => res.meta)
     }
@@ -89,14 +90,14 @@ export default function StudentPage() {
 
   const handleClickSearch = async () => {
     const searchBy = inputRef.current?.name
-    const res = await useGetData('students', 1, searchBy, inputValue)
+    const res = await useGetData('students', 1, 10, searchBy, inputValue)
     setStudentList((preStudentData: getDataType[]) => [...res.data])
     setPostVar((prePostVar: postVarType) => res.meta)
   }
 
   const handleClickInputRefresh = async () => {
     setInputValue('')
-    const res = await useGetData('students', 1)
+    const res = await useGetData('students', 1, 10)
     setStudentList(res.data)
     setPostVar((prePostVar: postVarType) => res.meta)
   }
@@ -138,7 +139,7 @@ export default function StudentPage() {
   }
 
   useEffect(() => {
-    useGetData('students', 1).then(res => {
+    useGetData('students', 1, 10).then(res => {
       setStudentList((preInstructorData: getDataType[]) => [...res.data])
       setPostVar(res.meta)
       setIsRefresh(true)
@@ -173,7 +174,7 @@ export default function StudentPage() {
           <Image src={searchIconGray} width={16} height={16} alt=" " />
           <input
             ref={inputRef}
-            className="w-[245px] border-none ring-0 focus:ring-0"
+            className="w-[245px] focus:outline-none"
             placeholder="Search"
             name={checkInputType() ? 'name' : 'phone'}
             type={checkInputType() ? 'text' : 'number'}

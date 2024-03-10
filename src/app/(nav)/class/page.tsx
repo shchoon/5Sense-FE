@@ -23,6 +23,46 @@ export default function ClassPage() {
       title: '체형 교정 및 이완을 통한 삶의 균형 찾기',
       instructor: '김솔지',
       userCnt: 50
+    },
+    {
+      title: '체형 교정 및 이완을 통한 삶의 균형 찾기',
+      instructor: '김솔지',
+      userCnt: 50
+    },
+    {
+      title: '체형 교정 및 이완을 통한 삶의 균형 찾기',
+      instructor: '김솔지',
+      userCnt: 50
+    },
+    {
+      title: '체형 교정 및 이완을 통한 삶의 균형 찾기',
+      instructor: '김솔지',
+      userCnt: 50
+    },
+    {
+      title: '체형 교정 및 이완을 통한 삶의 균형 찾기',
+      instructor: '김솔지',
+      userCnt: 50
+    },
+    {
+      title: '체형 교정 및 이완을 통한 삶의 균형 찾기',
+      instructor: '김솔지',
+      userCnt: 50
+    },
+    {
+      title: '체형 교정 및 이완을 통한 삶의 균형 찾기',
+      instructor: '김솔지',
+      userCnt: 50
+    },
+    {
+      title: '체형 교정 및 이완을 통한 삶의 균형 찾기',
+      instructor: '김솔지',
+      userCnt: 50
+    },
+    {
+      title: '체형 교정 및 이완을 통한 삶의 균형 찾기',
+      instructor: '김솔지',
+      userCnt: 50
     }
   ]
 
