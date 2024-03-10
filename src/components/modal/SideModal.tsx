@@ -7,7 +7,6 @@ import { modalState } from '@/lib/state/modal'
 import close_Circle_bg from 'public/assets/icons/close_circle_bg_pri_600.svg'
 
 import DetailInstructor from './DetailInstructor'
-import InstructorRegisterModal from '../InstructorRegisterModal'
 
 export type SideProps = {
   id?: string
@@ -25,9 +24,6 @@ export default function SideModal({ id, type }: SideProps) {
   }
 
   const render = () => {
-    if (type === 'instructor') {
-      return <InstructorRegisterModal />
-    }
     if (type === 'student') {
       return <DetailStudent id={id} />
     }
@@ -37,12 +33,7 @@ export default function SideModal({ id, type }: SideProps) {
   }
   return (
     <div className="relative top-0 left-0 w-[480px] h-full bg-white rounded-tr-[32px] shadow p-6 flex flex-col items-end">
-      <Image
-        src={close_Circle_bg}
-        alt="버튼"
-        className="cursor-pointer"
-        onClick={handleModal}
-      />
+      <Image src={close_Circle_bg} alt="버튼" className="cursor-pointer" onClick={handleModal} />
       {render()}
     </div>
   )

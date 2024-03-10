@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import close_circle from 'public/assets/icons/closeCircle.svg'
 
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import React, { useState } from 'react'
 import instance from '@/lib/api/axios'
 import { AxiosResponse } from 'axios'
@@ -12,18 +12,17 @@ interface postDataType {
   phone: string
 }
 
-export default function RegisterModal() {
-  const [modal, setModal] = useRecoilState(modalState)
+interface IProps {
+  onClose: () => void
+}
 
+export default function RegisterModal({ onClose }: IProps) {
   const [postData, setPostData] = useState<postDataType>({
     name: '',
     phone: ''
   })
 
-  const onChangeHandler = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    valueName: string
-  ) => {
+  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>, valueName: string) => {
     if (valueName === 'name') {
       setPostData({
         ...postData,
@@ -69,24 +68,19 @@ export default function RegisterModal() {
           return
         }
         instance.post('/teachers', data).then((res: AxiosResponse) => {
-          setModal(prevModal => ({
-            ...prevModal,
-            active: false
-          }))
+          ;() => onClose()
         })
       }}
     >
-      <div className="absolute left-6 top-10 gray-900-bold text-[22px]">
-        강사 등록
-      </div>
-      {/* <Image
+      <div className="absolute left-6 top-10 gray-900-bold text-[22px]">강사 등록</div>
+      <Image
         className="absolute right-4 top-4 cursor-pointer"
         src={close_circle}
         width={35}
         height={35}
         alt=""
-        onClick={clickClose}
-      /> */}
+        onClick={() => onClose()}
+      />
       <div className="absolute top-[90px] w-[376px] flex flex-col gap-7">
         <div className="w-full flex flex-col gap-4">
           <input
@@ -98,9 +92,7 @@ export default function RegisterModal() {
               limitLength(e)
             }}
             maxLength={20}
-            className={`${
-              postData.name.length > 0 ? 'bg-gray-50' : 'bg-white'
-            } w-full h-[58px] onlyInput`}
+            className={`${postData.name.length > 0 ? 'bg-gray-50' : 'bg-white'} w-full h-[58px] input-line-gray`}
           />
           <input
             type="number"
@@ -110,15 +102,10 @@ export default function RegisterModal() {
               onChangeHandler(e, 'phone')
             }}
             onKeyDown={onKeyDownOnlyNum}
-            className={`${
-              postData.phone.length > 0 ? 'bg-gray-50' : 'bg-white'
-            } w-full h-[58px] onlyInput`}
+            className={`${postData.phone.length > 0 ? 'bg-gray-50' : 'bg-white'} w-full h-[58px] input-line-gray`}
           />
         </div>
-        <button
-          type="submit"
-          className="w-full h-[52px] btn-purple flex justify-center items-center"
-        >
+        <button type="submit" className="w-full h-[52px] btn-purple flex justify-center items-center">
           <div className="text-white text-base font-semibold">등록</div>
         </button>
       </div>
