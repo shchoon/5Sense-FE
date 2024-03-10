@@ -10,15 +10,15 @@ module.exports = {
     './src/**/*.{js,jsx,ts,tsx}'
   ],
   plugins: [
-    plugin(function ({ addUtilities }) {
-      addUtilities({
-        '.scrollbar-hide': {
-          '&::-webkit-scrollbar': {
-            display: 'none'
-          }
-        }
-      })
-    }),
+    // plugin(function ({ addUtilities }) {
+    //   addUtilities({
+    //     '.scrollbar-hide': {
+    //       '&::-webkit-scrollbar': {
+    //         display: 'none'
+    //       }
+    //     }
+    //   })
+    // }),
     plugin(function ({ addComponents }) {
       addComponents({
         '.btn-purple': {
