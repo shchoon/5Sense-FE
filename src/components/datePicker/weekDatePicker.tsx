@@ -16,8 +16,6 @@ export default function WeekDatePicker(props: any) {
   const [week, setWeek] = useState<number>(props.parentsWeekData)
   const [clickedDate, setClickedDate] = useState<string>(dateData.date.toString())
   const [isClickedDate, setIsClickedDate] = useState<boolean>(false)
-  console.log(dateData)
-  console.log(clickedDate)
 
   const getCalanderData = () => {
     const lastDateOfLastMonthData = new Date(dateData.year, dateData.month, 0)

@@ -18,7 +18,7 @@ import RegisterModal from '@/components/instructor/RegisterModal'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { modalState } from '@/lib/state/modal'
 
-interface instruct {
+interface instructorType {
   id: string
   name: string
   phone: string
