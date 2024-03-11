@@ -34,7 +34,7 @@ export default function StudentRegister() {
     phone: '',
     particulars: ''
   })
-  const [InputValue, handleChage] = useInputNum({
+  const [InputValue, handleChange] = useInputNum({
     name: 'phone',
     submitData: studentInfo,
     setSubmitData: setStudentInfo
@@ -89,7 +89,7 @@ export default function StudentRegister() {
                   type="text"
                   placeholder="전화번호를 입력해주세요 (-제외)"
                   value={InputValue}
-                  onChange={handleChage}
+                  onChange={handleChange}
                   maxLength={12}
                 />
               </div>

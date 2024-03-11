@@ -224,126 +224,134 @@ export default function RoomReservation() {
         </div>
       </div>
       {/* 일정 선택 문구 */}
-      {/* <div className="w-full h-[422px] border border-1 border-gray-200 rounded-lg flex items-center">
-          <div className="w-full text-center font-semibold text-base text-gray-400">
-            일정을 선택해주시면 예약가능 리스트를 볼 수 있습니다.
+      {dateValue === '날짜' ||
+        (lessonTime === '시간' && (
+          <div className="w-full h-[422px] border border-1 border-gray-200 rounded-lg flex items-center">
+            <div className="w-full text-center font-semibold text-base text-gray-400">
+              일정을 선택해주시면 예약가능 리스트를 볼 수 있습니다.
+            </div>
           </div>
-        </div> */}
+        ))}
+
       {/* 일정 선택 */}
-      <div className="w-full mb-[60px] p-6 flex flex-col gap-6 border border-1 border-gray-200 rounded-lg">
-        {/* 예약 설명 */}
-        <div className="w-full h-4 flex gap-5 justify-end">
-          <div className="flex gap-4">
-            <div className="flex gap-2">
-              <div className="w-4 h-full bg-white rounded border border-1 border-gray-200" />
-              <div className="h-full gray-600-normal text-[13px]">예약 가능</div>
-            </div>
-            <div className="flex gap-2">
-              <div className="w-4 h-full bg-gray-100 rounded border border-1 border-gray-200" />
-              <div className="h-full gray-600-normal text-[13px]">예약 불가</div>
-            </div>
-          </div>
-          <div className="w-px h-full bg-gray-300" />
-          <div className="flex gap-2">
-            <div className="w-4 h-full bg-primary-300 rounded" />
-            <div className="flex gap-1.5">
-              <div className="h-full gray-600-normal text-[13px]">내 예약</div>
-              <div className="h-full gray-600-normal text-[13px]">90 / 120(분)</div>
-            </div>
-          </div>
-        </div>
-        {/* 룸 선택*/}
-        <div className="w-full flex flex-col gap-10">
-          {roomData.map((data, i) => {
-            const roomId = data.id
-            const timeRange: number | undefined = typeof lessonTime === 'number' ? lessonTime / 30 : undefined
-            return (
-              <div key={i} className="relative flex flex-col gap-4">
-                <div className="flex justify-between">
-                  <div className="flex gap-2">
-                    <div className="gray-900-semibold text-xl flex items-center">{data.name}</div>
-                    <div className="flex gap-0.5">
-                      <Image src={user} width={16} height={16} alt="user" />
-                      <div className="gray-500-normal text-sm flex items-center">{data.personNum}인</div>
-                    </div>
-                  </div>
-                  <button className="w-[73px] h-[37px] border border-1 border-primary-600 rounded-lg flex items-center justify-center text-sm text-primary-600 font-normal">
-                    예약하기
-                  </button>
-                </div>
-                <button
-                  className="absolute z-10 -left-3 top-[60px] flex items-center justify-center w-6 h-6 border border-1 border-gray-200 bg-primary-50 rounded-full"
-                  onClick={() => {
-                    scrollLeft(i)
-                  }}
-                >
-                  <Image className="z-10" src={chevronLeft} width={16} height={16} alt="chevronLeft" />
-                </button>
-                <button
-                  className="absolute z-10 -right-3 top-[60px] flex items-center justify-center w-6 h-6 border border-1 border-gray-200 bg-primary-50 rounded-full"
-                  onClick={() => {
-                    scrollRight(i)
-                  }}
-                >
-                  <Image className="z-10" src={chevronRight} width={16} height={16} alt="chevronRight" />
-                </button>
-                <div
-                  ref={el => (refs.current[i] = el)}
-                  className="w-full grid grid-flow-col overflow-y-auto scrollbar-hide"
-                >
-                  <div className="w-full flex flex-col">
-                    <div className="w-full flex">
-                      {data.list.openTimeList.map((time, i) => {
-                        return (
-                          <div key={i} className={`w-[54px] flex flex-col`}>
-                            <div
-                              className={`relative w-full flex flex-col h-[42px] py-[11px] ${
-                                i === 0 ? 'border border-1' : 'border-y border-r'
-                              }  border-gray-200 flex items-center justify-center gray-800-medium text-[13px]`}
-                            >
-                              {time}
-                            </div>
-                          </div>
-                        )
-                      })}
-                    </div>
-                    <div className="w-full flex">
-                      {data.list.roomClickList.map((data, i) => {
-                        return (
-                          <button
-                            key={i}
-                            className={`w-[27px] ${
-                              clickedRoomData.roomId === roomId &&
-                              clickedRoomData.clickedTime !== undefined &&
-                              timeRange !== undefined &&
-                              clickedRoomData.clickedTime <= i &&
-                              i <= clickedRoomData.clickedTime + timeRange - 1 &&
-                              'bg-primary-300'
-                            }`}
-                            onClick={() => {
-                              if (timeRange === undefined) {
-                                return
-                              } else {
-                                setClickedRoomData(prev => ({
-                                  ...prev,
-                                  roomId: roomId,
-                                  clickedTime: i
-                                }))
-                              }
-                            }}
-                          >
-                            <div className={`w-full h-9 ${i === 0 && 'border-l'} border-r border-b  border-gray-200`} />
-                          </button>
-                        )
-                      })}
-                    </div>
-                  </div>
-                </div>
+      {dateValue !== '날짜' && lessonTime !== '시간' && (
+        <div className="w-full mb-[60px] p-6 flex flex-col gap-6 border border-1 border-gray-200 rounded-lg">
+          {/* 예약 설명 */}
+          <div className="w-full h-4 flex gap-5 justify-end">
+            <div className="flex gap-4">
+              <div className="flex gap-2">
+                <div className="w-4 h-full bg-white rounded border border-1 border-gray-200" />
+                <div className="h-full gray-600-normal text-[13px]">예약 가능</div>
               </div>
-            )
-          })}
+              <div className="flex gap-2">
+                <div className="w-4 h-full bg-gray-100 rounded border border-1 border-gray-200" />
+                <div className="h-full gray-600-normal text-[13px]">예약 불가</div>
+              </div>
+            </div>
+            <div className="w-px h-full bg-gray-300" />
+            <div className="flex gap-2">
+              <div className="w-4 h-full bg-primary-300 rounded" />
+              <div className="flex gap-1.5">
+                <div className="h-full gray-600-normal text-[13px]">내 예약</div>
+                <div className="h-full gray-600-normal text-[13px]">90 / 120(분)</div>
+              </div>
+            </div>
+          </div>
+          {/* 룸 선택*/}
+          <div className="w-full flex flex-col gap-10">
+            {roomData.map((data, i) => {
+              const roomId = data.id
+              const timeRange: number | undefined = typeof lessonTime === 'number' ? lessonTime / 30 : undefined
+              return (
+                <div key={i} className="relative flex flex-col gap-4">
+                  <div className="flex justify-between">
+                    <div className="flex gap-2">
+                      <div className="gray-900-semibold text-xl flex items-center">{data.name}</div>
+                      <div className="flex gap-0.5">
+                        <Image src={user} width={16} height={16} alt="user" />
+                        <div className="gray-500-normal text-sm flex items-center">{data.personNum}인</div>
+                      </div>
+                    </div>
+                    <button className="w-[73px] h-[37px] border border-1 border-primary-600 rounded-lg flex items-center justify-center text-sm text-primary-600 font-normal">
+                      예약하기
+                    </button>
+                  </div>
+                  <button
+                    className="absolute z-10 -left-3 top-[60px] flex items-center justify-center w-6 h-6 border border-1 border-gray-200 bg-primary-50 rounded-full"
+                    onClick={() => {
+                      scrollLeft(i)
+                    }}
+                  >
+                    <Image className="z-10" src={chevronLeft} width={16} height={16} alt="chevronLeft" />
+                  </button>
+                  <button
+                    className="absolute z-10 -right-3 top-[60px] flex items-center justify-center w-6 h-6 border border-1 border-gray-200 bg-primary-50 rounded-full"
+                    onClick={() => {
+                      scrollRight(i)
+                    }}
+                  >
+                    <Image className="z-10" src={chevronRight} width={16} height={16} alt="chevronRight" />
+                  </button>
+                  <div
+                    ref={el => (refs.current[i] = el)}
+                    className="w-full grid grid-flow-col overflow-y-auto scrollbar-hide"
+                  >
+                    <div className="w-full flex flex-col">
+                      <div className="w-full flex">
+                        {data.list.openTimeList.map((time, i) => {
+                          return (
+                            <div key={i} className={`w-[54px] flex flex-col`}>
+                              <div
+                                className={`relative w-full flex flex-col h-[42px] py-[11px] ${
+                                  i === 0 ? 'border border-1' : 'border-y border-r'
+                                }  border-gray-200 flex items-center justify-center gray-800-medium text-[13px]`}
+                              >
+                                {time}
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                      <div className="w-full flex">
+                        {data.list.roomClickList.map((data, i) => {
+                          return (
+                            <button
+                              key={i}
+                              className={`w-[27px] ${
+                                clickedRoomData.roomId === roomId &&
+                                clickedRoomData.clickedTime !== undefined &&
+                                timeRange !== undefined &&
+                                clickedRoomData.clickedTime <= i &&
+                                i <= clickedRoomData.clickedTime + timeRange - 1 &&
+                                'bg-primary-300'
+                              }`}
+                              onClick={() => {
+                                if (timeRange === undefined) {
+                                  return
+                                } else {
+                                  setClickedRoomData(prev => ({
+                                    ...prev,
+                                    roomId: roomId,
+                                    clickedTime: i
+                                  }))
+                                }
+                              }}
+                            >
+                              <div
+                                className={`w-full h-9 ${i === 0 && 'border-l'} border-r border-b  border-gray-200`}
+                              />
+                            </button>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
         </div>
-      </div>
+      )}
     </>
   )
 }

@@ -1,33 +1,44 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useState, useRef } from 'react'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRouter } from 'next/navigation'
 
-import { useState } from 'react'
 import { useWindowSize } from '@/hooks/useWindowSize'
 import DayDatePicker from '@/components/datePicker/dayDatePicker'
+import CalendarIcon from '../../../../public/assets/icons/calendar'
+import { dateDataType } from '@/components/datePicker/dayDatePicker'
+import { useOnClickOutside } from '@/hooks/useOnclickOutside'
+import { modalState } from '@/lib/state/modal'
+import DeleteModal from '@/components/modal/DeleteModal'
 
 import chevronLeft from 'public/assets/icons/chevron/chevron-left.svg'
 import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
-import calender from 'public/assets/icons/calendar.svg'
 import user from 'public/assets/icons/user_icon.svg'
 import ImgPlusCircle from 'public/assets/icons/plus-circle.svg'
 import calendar from 'public/assets/icons/calendar-white.svg'
-import { dateDataType } from '@/components/datePicker/dayDatePicker'
+import dots from 'public/assets/icons/dotsVertical.svg'
+import modify from 'public/assets/icons/modify.svg'
+import deleteIcon from 'public/assets/icons/delete.svg'
+import Modal from '@/components/common/modal'
 
 export default function Room() {
   const { width, height } = useWindowSize()
+  const router = useRouter()
+  const optionRef = useRef<HTMLButtonElement>(null)
   const roomList = [
     {
-      room: 'Room A'
+      room: 'A'
     },
     {
-      room: 'Room B'
+      room: 'B'
     },
     {
-      room: 'Room C'
+      room: 'C'
     },
     {
-      room: 'Room D'
+      room: 'D'
     }
   ]
 
@@ -286,6 +297,9 @@ export default function Room() {
       ]
     }
   ]
+  const modal = useRecoilValue(modalState) // 상태의 값을 가져옴
+  const setModal = useSetRecoilState(modalState)
+
   const currentDate = new Date()
   const [dateData, setDateData] = useState({
     year: currentDate.getFullYear(),
@@ -294,10 +308,27 @@ export default function Room() {
   })
 
   const [isClickedDatePicker, setIsClickedDatePicker] = useState<boolean>(false)
+  const [isClickOption, setIsClickOption] = useState<{ isClicked: boolean; id: undefined | number }>({
+    isClicked: false,
+    id: undefined
+  })
 
   const lastDateOfCurrnetMonthData = new Date(dateData.year, dateData.month + 1, 0)
   const lastDateOfLastMonthData = new Date(dateData.year, dateData.month, 0)
 
+  /*   const onClickOutsideOfOption = (e: any) => {
+    console.log(e)
+    if (isClickOption.isClicked && !optionRef.current?.contains(e.target)) {
+      setIsClickOption(prev => ({
+        ...prev,
+        isClicked: false,
+        id: undefined
+      }))
+    }
+  }
+
+  useOnClickOutside(optionRef, onClickOutsideOfOption)
+ */
   const onClickDatePickerHandler = () => {
     setIsClickedDatePicker(prev => !prev)
   }
@@ -365,7 +396,10 @@ export default function Room() {
     })
     setIsClickedDatePicker(false)
   }
-  console.log(dateData)
+
+  //  console.log(isClickOptios)
+  console.log(modal)
+
   return (
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-[60px]">
       <div className="flex w-full pt-12 mb-[30px] justify-between">
@@ -402,7 +436,7 @@ export default function Room() {
           className="w-full px-3 py-2 flex justify-center gap-2 items-center gray-900-semibold text-base font-['Pretendard'] hover:text-primary-600 cursor-pointer"
           onClick={onClickDatePickerHandler}
         >
-          <Image src={calender} width={18} height={18} alt=" " className="hover:fill-primary-600" />
+          <CalendarIcon width="18" height="18" color="#6B7280" />
           {dateData.year}년 {dateData.month + 1}월 {dateData.date}일
         </div>
         <div
@@ -420,10 +454,10 @@ export default function Room() {
 
       {/* 룸 리스트 */}
       <div className="relative w-full pl-[84px]">
-        <span className="absolute w-6 h-6 left-[72px] top-7 bg-white flex items-center justify-center border border-1 border-gray-200 rounded-full ">
+        <span className="absolute z-10 w-6 h-6 left-[72px] top-7 bg-white flex items-center justify-center border border-1 border-gray-200 rounded-full ">
           <Image src={chevronLeft} width={16} height={16} alt="chevronLeft" />
         </span>
-        <span className="absolute w-6 h-6 -right-3 top-7 bg-white flex items-center justify-center border border-1 border-gray-200 rounded-full ">
+        <span className="absolute z-10 w-6 h-6 -right-3 top-7 bg-white flex items-center justify-center border border-1 border-gray-200 rounded-full ">
           <Image src={chevronRight} width={16} height={16} alt="chevronRight" />
         </span>
         <div className="w-full grid grid-cols-4 gap-2">
@@ -431,13 +465,54 @@ export default function Room() {
             return (
               <div
                 key={i}
-                className="w-full flex flex-col gap-1.5 justify-center text-center h-[80px] border rounded-lg border-gray-300 py-2 px-3"
+                className="relative w-full flex flex-col gap-1.5 justify-center text-center h-[80px] border rounded-lg border-gray-300 py-2 px-3"
               >
-                <div className="w-full gray-900-semibold">{data.room}</div>
+                <div className="w-full gray-900-semibold">{data.room} Room</div>
                 <div className="flex gap-1/2 h-4 justify-center">
                   <Image src={user} width={16} height={16} alt="user" />
                   <span className="gray-500-medium flex items-center">15인</span>
                 </div>
+                <button
+                  ref={optionRef}
+                  className="absolute right-3 top-3 w-8 h-8 p-1 rounded-full hover:bg-gray-100 focus:bg-gray-100"
+                  onClick={() => {
+                    if (isClickOption.isClicked && isClickOption.id === i) {
+                      setIsClickOption(prev => ({
+                        ...prev,
+                        isClicked: false,
+                        id: undefined
+                      }))
+                    } else {
+                      setIsClickOption(prev => ({
+                        ...prev,
+                        isClicked: true,
+                        id: i
+                      }))
+                    }
+                  }}
+                >
+                  <Image src={dots} width={24} height={24} alt="dots" />
+                </button>
+                {isClickOption.isClicked && isClickOption.id === i && (
+                  <div className="absolute right-2 bg-white top-[45px] w-[140px] p-1 flex flex-col gap-1/2 border border-1 border-primary-600 rounded-md shadow-[0_2px_5px_0_rgba(0, 0, 0, 0.12)]">
+                    <button
+                      type="button"
+                      className="w-full flex items-center justify-between px-2 py-1"
+                      onClick={() => router.push('/room/modifyRoom/' + `${data.room}`)}
+                    >
+                      <div className="w-[98px] gray-500-medium text-sm">수정하기</div>
+                      <Image src={modify} width={16} height={16} alt="modify" />
+                    </button>
+                    <button
+                      type="button"
+                      className="w-full flex items-center justify-between px-2 py-1"
+                      onClick={() => setModal(true)}
+                    >
+                      <div className="w-[98px] gray-500-medium text-sm">삭제하기</div>
+                      <Image src={deleteIcon} width={16} height={16} alt="modify" />
+                    </button>
+                  </div>
+                )}
               </div>
             )
           })}
@@ -499,7 +574,7 @@ export default function Room() {
                                 <div className="w-full flex justify-end ">
                                   <button
                                     className="w-[85px] h-[37px] flex items-center px-3 py-2 border rounded-lg border-1 border-gray-200
-           gray-800-semibold text-sm"
+                                    gray-800-semibold text-sm"
                                   >
                                     예약하기
                                   </button>
@@ -510,7 +585,7 @@ export default function Room() {
                         ) : (
                           <button
                             className="w-[85px] h-[37px] flex items-center px-3 py-2 border rounded-lg border-1 border-gray-200
-           gray-800-semibold text-sm"
+                             gray-800-semibold text-sm"
                           >
                             예약하기
                           </button>
@@ -565,6 +640,11 @@ export default function Room() {
           })}
         </div> */}
       </div>
+      {modal && (
+        <Modal small>
+          <DeleteModal onClose={() => setModal(false)} />
+        </Modal>
+      )}
     </div>
   )
 }

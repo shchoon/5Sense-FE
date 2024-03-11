@@ -5,18 +5,18 @@ import { useEffect, useRef, useState } from 'react'
 
 //내장
 import NoneResult from '@/components/common/NoneResult'
-
-//이미지
-
-import Card from '@/components/instructor/Card'
-import { getInstructorData } from '@/lib/api/instructor'
-import PlusCircle from 'public/assets/icons/plus-circle.svg'
-import SearchInput from '@/components/common/SearchInput'
-import Modal from '@/components/common/modal'
-import CloseIcon from 'public/assets/icons/close_circle_bg_pri_600.svg'
 import RegisterModal from '@/components/instructor/RegisterModal'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { modalState } from '@/lib/state/modal'
+import Card from '@/components/instructor/Card'
+import { getInstructorData } from '@/lib/api/instructor'
+import SearchInput from '@/components/common/SearchInput'
+import Modal from '@/components/common/modal'
+
+//이미지
+
+import PlusCircle from 'public/assets/icons/plus-circle.svg'
+import CloseIcon from 'public/assets/icons/close_circle_bg_pri_600.svg'
 
 interface instructorType {
   id: string
@@ -31,7 +31,7 @@ export default function InstructorPage() {
 
   const [serchBy, setSerchBy] = useState<string>('none')
 
-  const [instructorList, setInstructorList] = useState<instruct[]>([])
+  const [instructorList, setInstructorList] = useState<instructorType[]>([])
   const [meta, setMeta] = useState({
     page: 1,
     hasNextPage: true

@@ -14,7 +14,7 @@ export default function Schedule() {
   const dropDownProps = {
     title: '클래스를 선택해주세요',
     list: ['반야사 요가', '필라테스', '체형 관리'],
-    type: 'withdrawl'
+    type: 'dropdwown'
   }
   return (
     <>

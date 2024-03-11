@@ -16,6 +16,7 @@ export default function InputForm({ name, title, placeholder, maxLength, submitD
     submitData,
     setSubmitData
   })
+  console.log(inputValue)
   const valueLength = inputValue.length
 
   return (

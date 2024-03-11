@@ -4,10 +4,16 @@ import Image from 'next/image'
 import DropDown from '@/components/common/DropDown'
 
 export default function WithDrawal() {
-  const [postData, setPostData] = useState('')
+  const [postData, setPostData] = useState({
+    reason: '',
+    detail: ''
+  })
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setPostData(e.target.value)
+    setPostData(prev => ({
+      ...prev,
+      detail: e.target.value
+    }))
   }
 
   const dropDownList = ['기능의 버그가 많아서', '필요한 기능들이 부족해서', '속도가 느려서', '그냥']
@@ -17,10 +23,14 @@ export default function WithDrawal() {
     list: dropDownList
   }
 
-  const handleChangeReasonFromChild = (data: { reason: string }) => {
-    setPostData(data.reason)
+  const handleChangeReasonFromChild = (data: string) => {
+    console.log(data)
+    setPostData(prev => ({
+      ...prev,
+      reason: data
+    }))
   }
-
+  console.log(postData)
   return (
     <form
       className="w-[640px] px-6 py-8 flex flex-col gap-10 border rounded-xl border-gray-200"
@@ -47,11 +57,11 @@ export default function WithDrawal() {
         <div className="w-full flex flex-col gap-2">
           <div className="w-[592px] gray-800-semibold text-base font-['Pretendard']">탈퇴 사유 및 개선점(선택)</div>
           {/* <DropDown {...dropDownProps} /> */}
-          <DropDown {...dropDownProps} handleChangeParentsReasonData={handleChangeReasonFromChild} type="withdrawl" />
+          <DropDown {...dropDownProps} handleChangeParentsDropdownData={handleChangeReasonFromChild} type="dropdown" />
         </div>
         <textarea
           placeholder="탈퇴 사유 및 개선점을 적어주세요"
-          value={postData}
+          value={postData.detail}
           onChange={onChangeHandler}
           className="w-full h-[144px] p-x-4 py-3.5 border rounded-lg border-gray-200 focus:ring-0 focus:border-primary-700 focus:bg-gray-50 resize-none overflow-hidden"
         />

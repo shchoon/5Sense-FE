@@ -17,7 +17,7 @@ interface IProps {
   list: any[]
   handleChangeParentsOpenTimeData?: (data: { time: string }) => void
   handleChangeParentsCloseTimeData?: (data: { time: string }) => void
-  handleChangeParentsReasonData?: (data: { reason: string }) => void
+  handleChangeParentsDropdownData?: (data: string) => void
   handleChangeParentsCategoryData?: (data: any, type: string) => void
   type: string
 }
@@ -33,10 +33,8 @@ export default function DropDown(props: IProps) {
       props.handleChangeParentsCloseTimeData({
         time: item
       })
-    } else if (props.type === 'withdrawl' && props.handleChangeParentsReasonData) {
-      props.handleChangeParentsReasonData({
-        reason: item
-      })
+    } else if (props.type === 'dropdown' && props.handleChangeParentsDropdownData) {
+      props.handleChangeParentsDropdownData(item)
     } else if (props.type === 'category' && props.title === '대분류 선택' && props.handleChangeParentsCategoryData) {
       console.log('classify')
       props.handleChangeParentsCategoryData(
@@ -57,11 +55,10 @@ export default function DropDown(props: IProps) {
       )
     }
   }
-
   const [isClickDropDown, setIsClickDropDown] = useState(false)
   const [clickedItemTitle, setClickedItemTitle] = useState<string>(props.title)
   const [clickedItem, setClickedItem] = useState<any>(props.title)
-
+  console.log(clickedItemTitle)
   const handleClickDropDown = () => {
     setIsClickDropDown(prev => !prev)
   }

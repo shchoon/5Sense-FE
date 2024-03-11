@@ -1,15 +1,38 @@
 'use client'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useState } from 'react'
+import { usePathname } from 'next/navigation'
+
+import InputForm, { InputFormProps } from '@/components/common/InputForm'
+import useInputNum from '@/hooks/useInputNum'
+import { InputNumProps } from '@/app/(nav)/student/register/page'
 
 import ImgArrowBack from 'public/assets/icons/allowBack.svg'
 import ImgEllipsis from 'public/assets/icons/ellipsis75.svg'
 import Minus from 'public/assets/icons/minus_vector.svg'
 import Plus from 'public/assets/icons/plus_vector.svg'
-import { useState } from 'react'
 
 export default function ModifyRoom() {
+  const pathName = usePathname()
+  const roomName = pathName.split('/')[3]
+
   const [permissonNum, setPermissonNum] = useState<number>(1)
+  const [inputValue, setInputValue] = useState<string>(roomName)
+
+  const [InputValue, handleChange] = useInputNum({
+    name: 'room',
+    submitData: inputValue,
+    setSubmitData: setInputValue
+  })
+  const roomNameProps: InputFormProps = {
+    title: '강의실 이름',
+    placeholder: '강의실 이름을 입력해주세요',
+    name: 'room',
+    maxLength: 20,
+    submitData: inputValue,
+    setSubmitData: setInputValue
+  }
 
   return (
     <>
@@ -26,7 +49,13 @@ export default function ModifyRoom() {
           <div className="w-full flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               <div className="w-full text-left gray-800-semibold text-base">강의실 이름</div>
-              <input className="input-line-gray" placeholder="강의실 이름을 입력해주세요" />
+              <input
+                className="input-line-gray"
+                value={inputValue}
+                onChange={e => {
+                  setInputValue(e.target.value)
+                }}
+              />
               <div className="w-full text-right gray-500-normal text-sm font-['Inter']">0/20</div>
             </div>
             <div className="w-full flex flex-col gap-2">

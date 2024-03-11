@@ -32,9 +32,19 @@ export default function AddRoom() {
             <div className="w-full flex flex-col gap-2">
               <div className="w-full gray-800-semibold text-base">권장 허용 인원</div>
               <div className="w-full flex justify-between h-[64px] p-3 border border-1 border-gray-300 rounded-full">
-                <div className="w-10 h-full flex items-center justify-center rounded-full bg-gray-200">
+                <button
+                  type="button"
+                  className={`w-10 h-full flex items-center justify-center rounded-full ${
+                    permissonNum === 1 ? 'bg-gray-200' : 'bg-primary-600'
+                  }`}
+                  onClick={() => {
+                    if (permissonNum !== 1) {
+                      setPermissonNum(prev => prev - 1)
+                    }
+                  }}
+                >
                   <Image src={Minus} width={12} height={10} alt="Minus" />
-                </div>
+                </button>
                 <div className="w-[472px] h-full flex items-center justify-center text-lg gray-800-semibold">
                   {permissonNum}명
                 </div>
