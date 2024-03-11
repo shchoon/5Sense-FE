@@ -21,10 +21,10 @@ export default function AddClassModal() {
   }
 
   return (
-    <div className="absolute left-10 top-10 w-[768px] border border-1 border-gray-200 rounded-xl bg-white">
+    <div className="absolute left-10 top-10 w-[640px] border border-1 border-gray-200 rounded-xl bg-white">
       <div className="relative w-full h-[90px]">
         <div className="absolute left-6 top-10 text-2xl gray-900-bold">클래스 추가</div>
-        <Image className="absolute left-[717px] top-4" src={closeCircle} width={35} height={35} alt="closeCircle" />
+        <Image className="absolute right-4 top-4" src={closeCircle} width={35} height={35} alt="closeCircle" />
       </div>
       <div className="w-full px-6 pb-6 flex flex-col gap-10">
         {/* 회차/기간반 버튼 */}

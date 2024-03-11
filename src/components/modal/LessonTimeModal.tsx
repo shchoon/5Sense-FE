@@ -28,7 +28,7 @@ export default function LessonTimeModal(props: IProps) {
   }
 
   return (
-    <div className="relative left-[340px] top-0 w-[282px] p-4 flex flex-col gap-6 rounded-lg border border-1 border-primary-600">
+    <div className="w-[282px] p-4 bg-white flex flex-col gap-6 rounded-lg border border-1 border-primary-600">
       <div className="w-full flex flex-col gap-6">
         <div className="w-full h-6 text-left gray-900-semibold text-base">소요 시간</div>
         <div className="w-full flex items-center justify-between h-10">

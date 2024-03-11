@@ -4,10 +4,10 @@ import { useRef, useState } from 'react'
 
 import LessonTimeModal from '../modal/LessonTimeModal'
 import DayDatePicker from '../datePicker/dayDatePicker'
+import ClockIcon from '../../../public/assets/icons/clock'
+import CalendarIcon from '../../../public/assets/icons/calendar'
 
-import calendar from 'public/assets/icons/calendar.svg'
 import searchIconWhite from 'public/assets/icons/search_white.svg'
-import clock from 'public/assets/icons/clock.svg'
 import user from 'public/assets/icons/user.svg'
 import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
 import chevronLeft from 'public/assets/icons/chevron/chevron-left.svg'
@@ -179,13 +179,13 @@ export default function RoomReservation() {
           <button
             className={`${
               isClickedTab.date
-                ? 'w-[325.5px] py-1.5 px-[18px] h-14 border border-1 border-primary-600 rounded-full'
-                : 'w-[282.5px] h-full'
+                ? 'w-[254.5px] py-1.5 px-[18px] h-14 border border-1 border-primary-600 rounded-full'
+                : 'w-[218.5px] h-full'
             }  flex gap-2 bg-white`}
             onClick={() => handleClickTab('date')}
           >
             <div className="w-[18px] mt-1/2 flex items-start">
-              <Image src={calendar} width={18} height={18} alt="calender" />
+              <CalendarIcon width="18" height="18" color={isClickedTab.date ? '#7354E8' : '#6B7280'} />
             </div>
             <div className="w-full h-full flex flex-col">
               <div className="w-full h-full text-left text-gray-700 font-medium text-sm">날짜</div>
@@ -197,13 +197,13 @@ export default function RoomReservation() {
           <button
             className={`${
               isClickedTab.time
-                ? 'w-[318.5px] py-1.5 px-[18px] h-14 border border-1 border-primary-600 rounded-full bg-white'
-                : 'w-[282.5px] h-full'
+                ? 'w-[254.5px] py-1.5 px-[18px] h-14 border border-1 border-primary-600 rounded-full bg-white'
+                : 'w-[218.5px] h-full'
             } flex gap-2 `}
             onClick={() => handleClickTab('time')}
           >
             <div className="w-[18px] mt-1/2 flex items-start">
-              <Image src={clock} width={18} height={18} alt="clock" />
+              <ClockIcon width="18" height="18" color={isClickedTab.time ? '#7354E8' : '#6B7280'} />
             </div>
             <div className="w-full h-full flex flex-col">
               <div className="w-full h-full text-left text-gray-700 font-medium text-sm">소요시간</div>
@@ -214,12 +214,14 @@ export default function RoomReservation() {
             <Image src={searchIconWhite} width={20} height={20} alt="search" />
           </div>
         </div>
-        <div>
+        <div className="absolute z-10 left-3 top-[120px]">
           {isClickedTab.date && (
             <DayDatePicker parentsDateData={dateData} changeParentsDateData={setDateDataFromChild} />
           )}
         </div>
-        {isClickedTab.time && <LessonTimeModal handleChangeLessonTimeFromChild={handleChangeLessonTimeFromChild} />}
+        <div className="absolute z-10 right-14 top-[120px]">
+          {isClickedTab.time && <LessonTimeModal handleChangeLessonTimeFromChild={handleChangeLessonTimeFromChild} />}
+        </div>
       </div>
       {/* 일정 선택 문구 */}
       {/* <div className="w-full h-[422px] border border-1 border-gray-200 rounded-lg flex items-center">
