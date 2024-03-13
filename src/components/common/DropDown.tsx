@@ -36,7 +36,6 @@ export default function DropDown(props: IProps) {
     } else if (props.type === 'dropdown' && props.handleChangeParentsDropdownData) {
       props.handleChangeParentsDropdownData(item)
     } else if (props.type === 'category' && props.title === '대분류 선택' && props.handleChangeParentsCategoryData) {
-      console.log('classify')
       props.handleChangeParentsCategoryData(
         {
           title: item.name,
@@ -45,7 +44,6 @@ export default function DropDown(props: IProps) {
         'classify'
       )
     } else if (props.type === 'category' && props.title === '소분류 선택' && props.handleChangeParentsCategoryData) {
-      console.log('subclass')
       props.handleChangeParentsCategoryData(
         {
           title: item.name,
@@ -58,7 +56,7 @@ export default function DropDown(props: IProps) {
   const [isClickDropDown, setIsClickDropDown] = useState(false)
   const [clickedItemTitle, setClickedItemTitle] = useState<string>(props.title)
   const [clickedItem, setClickedItem] = useState<any>(props.title)
-  console.log(clickedItemTitle)
+
   const handleClickDropDown = () => {
     setIsClickDropDown(prev => !prev)
   }

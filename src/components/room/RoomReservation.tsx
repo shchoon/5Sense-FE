@@ -1,17 +1,21 @@
 'use client'
 import Image from 'next/image'
 import { useRef, useState } from 'react'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import LessonTimeModal from '../modal/LessonTimeModal'
 import DayDatePicker from '../datePicker/dayDatePicker'
 import ClockIcon from '../../../public/assets/icons/clock'
 import CalendarIcon from '../../../public/assets/icons/calendar'
+import RoomReservationCheck from './RoomReservationCheck'
+import Modal from '../common/modal'
 
 import searchIconWhite from 'public/assets/icons/search_white.svg'
 import user from 'public/assets/icons/user.svg'
 import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
 import chevronLeft from 'public/assets/icons/chevron/chevron-left.svg'
 import { dateDataType } from '../datePicker/dayDatePicker'
+import { modalState } from '@/lib/state/modal'
 
 interface RoomDataType {
   id: number
@@ -23,7 +27,15 @@ interface RoomDataType {
   }
 }
 
-export default function RoomReservation() {
+interface IProps {
+  class: string
+  studentName: string
+}
+
+export default function RoomReservation(props: IProps) {
+  console.log(props.class, props.studentName)
+  const modal = useRecoilValue(modalState)
+  const setModal = useSetRecoilState(modalState)
   const currentDate = new Date()
   const [dateData, setDateData] = useState<dateDataType>({
     year: currentDate.getFullYear(),
@@ -31,6 +43,27 @@ export default function RoomReservation() {
     date: currentDate.getDate()
   })
   const [dateValue, setDateValue] = useState<string>('날짜')
+  const [lessonTime, setLessonTime] = useState<string | number>('시간')
+  const [isClickedTab, setIsClickedTab] = useState<{ date: boolean; time: boolean }>({
+    date: false,
+    time: false
+  })
+  const [clickedRoomData, setClickedRoomData] = useState<{
+    roomId: undefined | number
+    clickedTime: undefined | number
+    room: string
+  }>({
+    roomId: undefined,
+    clickedTime: undefined,
+    room: ''
+  })
+  const [reservationData, setReservationData] = useState({
+    className: '',
+    studentName: '',
+    date: '',
+    lessonTime: '',
+    room: ''
+  })
 
   const setDateDataFromChild = (data: dateDataType) => {
     console.log(data)
@@ -48,8 +81,6 @@ export default function RoomReservation() {
     }))
   }
 
-  const [lessonTime, setLessonTime] = useState<string | number>('시간')
-
   const handleChangeLessonTimeFromChild = (time: number) => {
     setLessonTime(time)
     setIsClickedTab(prev => ({
@@ -57,11 +88,6 @@ export default function RoomReservation() {
       time: false
     }))
   }
-
-  const [isClickedTab, setIsClickedTab] = useState<{ date: boolean; time: boolean }>({
-    date: false,
-    time: false
-  })
 
   const handleClickTab = (type: string) => {
     if (type === 'date') {
@@ -78,14 +104,6 @@ export default function RoomReservation() {
       }))
     }
   }
-
-  const [clickedRoomData, setClickedRoomData] = useState<{
-    roomId: undefined | number
-    clickedTime: undefined | number
-  }>({
-    roomId: undefined,
-    clickedTime: undefined
-  })
 
   const refs = useRef<(HTMLDivElement | null)[]>([])
   const openTimeList: string[] = [
@@ -163,6 +181,18 @@ export default function RoomReservation() {
     }
   }
 
+  const calculateTime = (min: number) => {
+    if (min === 0.5) {
+      return '30'
+    } else {
+      return '00'
+    }
+  }
+  const calculateDay = (day: number) => {
+    const dayList = ['일', '월', '화', '수', '목', '금', '토']
+    return dayList[day]
+  }
+
   return (
     <>
       <div className="relative w-full flex flex-col gap-4">
@@ -224,14 +254,13 @@ export default function RoomReservation() {
         </div>
       </div>
       {/* 일정 선택 문구 */}
-      {dateValue === '날짜' ||
-        (lessonTime === '시간' && (
-          <div className="w-full h-[422px] border border-1 border-gray-200 rounded-lg flex items-center">
-            <div className="w-full text-center font-semibold text-base text-gray-400">
-              일정을 선택해주시면 예약가능 리스트를 볼 수 있습니다.
-            </div>
+      {(dateValue === '날짜' || lessonTime === '시간') && (
+        <div className="w-full h-[422px] border border-1 border-gray-200 rounded-lg flex items-center">
+          <div className="w-full text-center font-semibold text-base text-gray-400">
+            일정을 선택해주시면 예약가능 리스트를 볼 수 있습니다.
           </div>
-        ))}
+        </div>
+      )}
 
       {/* 일정 선택 */}
       {dateValue !== '날짜' && lessonTime !== '시간' && (
@@ -261,6 +290,7 @@ export default function RoomReservation() {
           <div className="w-full flex flex-col gap-10">
             {roomData.map((data, i) => {
               const roomId = data.id
+              const room = data.name
               const timeRange: number | undefined = typeof lessonTime === 'number' ? lessonTime / 30 : undefined
               return (
                 <div key={i} className="relative flex flex-col gap-4">
@@ -272,7 +302,28 @@ export default function RoomReservation() {
                         <div className="gray-500-normal text-sm flex items-center">{data.personNum}인</div>
                       </div>
                     </div>
-                    <button className="w-[73px] h-[37px] border border-1 border-primary-600 rounded-lg flex items-center justify-center text-sm text-primary-600 font-normal">
+                    <button
+                      className="w-[73px] h-[37px] border border-1 border-primary-600 rounded-lg flex items-center justify-center text-sm text-primary-600 font-normal"
+                      onClick={() => {
+                        if (room !== clickedRoomData.room) {
+                          return
+                        }
+                        setModal(true)
+                        const start = 8 + (Number(clickedRoomData.clickedTime) * 30) / 60
+                        const end = start + Number(lessonTime) / 60
+                        const startTime = String(Math.floor(start)) + ':' + calculateTime(start - Math.floor(start))
+                        const endTime = String(Math.floor(end)) + ':' + calculateTime(end - Math.floor(end))
+                        const day = calculateDay(new Date(dateData.year, dateData.month, dateData.date).getDay())
+                        setReservationData(prev => ({
+                          ...prev,
+                          className: props.class,
+                          studentName: props.studentName,
+                          date: `${dateData.year}.${dateData.month + 1}.${dateData.date}(${day})`,
+                          lessonTime: startTime + '-' + endTime,
+                          room: clickedRoomData.room
+                        }))
+                      }}
+                    >
                       예약하기
                     </button>
                   </div>
@@ -332,7 +383,8 @@ export default function RoomReservation() {
                                   setClickedRoomData(prev => ({
                                     ...prev,
                                     roomId: roomId,
-                                    clickedTime: i
+                                    clickedTime: i,
+                                    room: room
                                   }))
                                 }
                               }}
@@ -351,6 +403,11 @@ export default function RoomReservation() {
             })}
           </div>
         </div>
+      )}
+      {modal && (
+        <Modal small>
+          <RoomReservationCheck reservationData={reservationData} onClose={() => setModal(false)} />
+        </Modal>
       )}
     </>
   )

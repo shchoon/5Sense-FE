@@ -12,11 +12,11 @@ import Card from '@/components/instructor/Card'
 import { getInstructorData } from '@/lib/api/instructor'
 import SearchInput from '@/components/common/SearchInput'
 import Modal from '@/components/common/modal'
+import PlusCircleIcon from '../../../../public/assets/icons/plus-circle'
 
 //이미지
 
 import PlusCircle from 'public/assets/icons/plus-circle.svg'
-import CloseIcon from 'public/assets/icons/close_circle_bg_pri_600.svg'
 
 interface instructorType {
   id: string
@@ -25,6 +25,11 @@ interface instructorType {
 }
 
 export default function InstructorPage() {
+  const whitePlusCircleProps = {
+    width: '20',
+    height: '20',
+    color: '#FFF'
+  }
   const target = useRef<HTMLDivElement>(null)
 
   const numberCheckList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -166,9 +171,9 @@ export default function InstructorPage() {
         <div className=" h-[30px]">
           <div className="w-full black-bold text-3xl font-['Pretendard']">강사 관리</div>
         </div>
-        <button className="flex px-5 py-2.5 btn-purple text-sm" onClick={() => setModal(true)}>
-          <Image src={PlusCircle} alt="plus" width={20} height={20} className="mr-2" />
-          강사 등록
+        <button className="flex w-[150px] gap-2 px-5 py-2.5 btn-purple" onClick={() => setModal(true)}>
+          <PlusCircleIcon {...whitePlusCircleProps} />
+          <span className="text-sm">강사 등록</span>
         </button>
       </div>
       {/* 검색창 */}

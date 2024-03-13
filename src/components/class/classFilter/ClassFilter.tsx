@@ -2,14 +2,11 @@ import Image from 'next/image'
 import { useState, useRef, useEffect } from 'react'
 
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
-import { useGetData } from '@/hooks/useGetData'
 import DropDown from '@/components/common/DropDown'
+import FilterSearchName from '@/components/common/FilterSearchName'
 
 import chevronDownBlue from 'public/assets/icons/chevron/chevron-down-blue.svg'
 import chevronUpBlue from 'public/assets/icons/chevron/chevron-up-blue.svg'
-import searchIcon from 'public/assets/icons/search.svg'
-import chevronDownGray from 'public/assets/icons/chevron/chevron_down_gray.svg'
-import chevronUpGray from 'public/assets/icons/chevron/chevron_up_gray.svg'
 import instance from '@/lib/api/axios'
 
 export interface instructorDataType {
@@ -34,9 +31,7 @@ export default function ClassFilter() {
   })
 
   const [classType, setClassType] = useState<string>('')
-  const [searchTeacher, setSearchTeacher] = useState<string>('')
-  const [checkedTeacherNameList, setCheckedTeacherNameList] = useState<string[]>([])
-  const [instructorList, setInstructorList] = useState<instructorDataType[]>([])
+  const [checkedNameList, setCheckedNameList] = useState<string[]>([])
   const [classifyList, setClassifyList] = useState<classifyListType[]>([])
   const [categoryData, setCategoryData] = useState({
     title: '카테고리',
@@ -49,10 +44,17 @@ export default function ClassFilter() {
     list: ['없음'],
     type: 'category'
   })
-  const props1 = {
+  const searchNameProps = {
+    title: '강사 이름',
+    type: 'teachers'
+  }
+  const categoryProps = {
     title: '대분류 선택',
     list: classifyList,
     type: 'category'
+  }
+  const handleChangeNameListFromChild = (data: any) => {
+    setCheckedNameList(data)
   }
   const handleChangeParentsCategoryData = (data: any, type: string) => {
     if (type === 'classify') {
@@ -74,10 +76,6 @@ export default function ClassFilter() {
     }
   }
 
-  function SearchTeacherName(event: React.ChangeEvent<HTMLInputElement>) {
-    setSearchTeacher(event.target.value)
-  }
-
   const radioHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setClassType(event.target.value)
     setIsClickedfilter(prev => ({
@@ -87,12 +85,12 @@ export default function ClassFilter() {
   }
 
   function getCheckedName() {
-    if (checkedTeacherNameList.length === 1) {
-      return `${checkedTeacherNameList[0]}`
-    } else if (checkedTeacherNameList.length == 2) {
-      return `${checkedTeacherNameList[0]},${checkedTeacherNameList[1]}`
+    if (checkedNameList.length === 1) {
+      return `${checkedNameList[0]}`
+    } else if (checkedNameList.length == 2) {
+      return `${checkedNameList[0]},${checkedNameList[1]}`
     } else {
-      return `${checkedTeacherNameList[0]},${checkedTeacherNameList[1]},${checkedTeacherNameList[2][0]}..`
+      return `${checkedNameList[0]},${checkedNameList[1]},${checkedNameList[2][0]}..`
     }
   }
 
@@ -157,28 +155,7 @@ export default function ClassFilter() {
   /* 강사명 필터링 영역 밖 클릭 */
   useOnClickOutside(teacherNameTypeRef, handleClickTeacherOutside)
 
-  function filterName() {
-    if (searchTeacher !== '') {
-      let ifIncludeSearchName = instructorList.filter(info => info.name.includes(searchTeacher))
-      let sortBySearchName = ifIncludeSearchName.sort((a, b) => {
-        return a.name.indexOf(searchTeacher) - b.name.indexOf(searchTeacher)
-      })
-      let result = []
-      for (var i = 0; i < sortBySearchName.length; i++) {
-        result.push(sortBySearchName[i].name)
-      }
-      return result
-    } else {
-      return []
-    }
-  }
-  let sortFilterName = filterName()
-
   useEffect(() => {
-    useGetData('teachers', 1, 100).then(res => {
-      setInstructorList(res.data)
-    })
-
     instance.get('/categories').then(res => {
       const data: { id: string; name: string; parentId: string }[] = res.data.data
       let classification: classifyListType[] = []
@@ -229,7 +206,7 @@ export default function ClassFilter() {
           }}
         >
           <span className="max-w-[110px] h-[21px] text-[11.5px] font-semibold font-['Pretendard'] leading-[21px] text-indigo-500 group-hover:text-white group-focus:text-white">
-            {checkedTeacherNameList.length === 0 ? '강사명' : getCheckedName()}
+            {checkedNameList.length === 0 ? '강사명' : getCheckedName()}
           </span>
           {isClickedfilter.isClickedTeacherFilter ? (
             <Image src={chevronUpBlue} width={16} height={16} alt=" " />
@@ -291,140 +268,7 @@ export default function ClassFilter() {
             ref={teacherNameTypeRefClick}
             className="absolute left-[120px] flex gap-[5px] w-[195px] py-4 pl-4 pr-2 border rounded-lg border-gray-300 bg-white shadow-[0_1px_2px_0_rgba(0,0,0,0.08)]"
           >
-            <div className="w-full flex flex-col gap-3">
-              <div className="w-full h-[42px] p-3 border rounded-lg border-gray-200 bg-gray-50 flex gap-2 focus:border-none focus-within:ring-1 focus-within:ring-[#7354E8]">
-                <Image src={searchIcon} width={18} height={18} alt=" " />
-                <input
-                  type="text"
-                  placeholder="강사이름"
-                  value={searchTeacher}
-                  className="w-full h-full focus:outline-none text-gray-500 text-sm font-normal font-['Pretendard'] leading-[17.50px]"
-                  onChange={event => {
-                    SearchTeacherName(event)
-                  }}
-                />
-              </div>
-              <div className="overflow-hidden">
-                <div className="max-h-[150px]  flex flex-col items-center gap-3 overflow-auto ">
-                  {instructorList.map((data, i) => {
-                    return (
-                      <div key={i} className="w-full h-4 flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          id={data.id}
-                          checked={checkedTeacherNameList.includes(data.name) ? true : false}
-                          className="hover:cursor-pointer focus:ring-transparent ring-0 focus:outline-0 rounded"
-                          onChange={e => {
-                            if (e.target.checked) {
-                              setCheckedTeacherNameList(checkedTeacherNameList => [
-                                ...checkedTeacherNameList,
-                                data.name
-                              ])
-                            } else {
-                              setCheckedTeacherNameList(checkedTeacherNameList.filter(name => name !== data.name))
-                            }
-                          }}
-                        />
-
-                        <label className="hover:cursor-pointer" htmlFor={data.id}>
-                          {data.name}
-                        </label>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-              {/* 강사이름 자동완성 */}
-              {searchTeacher !== '' && sortFilterName.length !== 0 ? (
-                <div className="absolute top-[62px] w-[162px] h-auto flex flex-col gap-3 p-4 border border-gray-200 bg-white rounded-lg shadow-[0_1px_2px_0_rgba(0,0,0,0.08)]">
-                  {sortFilterName.map((teacherName, i) => {
-                    return (
-                      <div key={i} className="w-full flex items-center gap-2">
-                        <Image src={searchIcon} width={14} height={14} alt=" " />
-                        <span
-                          className="text-gray-500 text-sm font-normal font-['Pretendard'] leading-[21px] hover:cursor-pointer"
-                          id={teacherName}
-                          onClick={e => {
-                            let teacherName = e.currentTarget.id
-                            if (checkedTeacherNameList.includes(teacherName)) {
-                              setSearchTeacher('')
-                            } else {
-                              setCheckedTeacherNameList([...checkedTeacherNameList, e.currentTarget.id])
-                              setSearchTeacher('')
-                            }
-                          }}
-                        >
-                          {/* 1글자만 입력시 */}
-                          {searchTeacher.length === 1 && (
-                            <>
-                              {teacherName.split('').map((nameSplit: string, i) => {
-                                if (nameSplit === searchTeacher) {
-                                  return (
-                                    <span
-                                      key={i}
-                                      className="text-[#7354E8] text-sm font-normal font-['Pretendard'] leading-[21px]"
-                                    >
-                                      {searchTeacher}
-                                    </span>
-                                  )
-                                } else {
-                                  return (
-                                    <span
-                                      key={i}
-                                      className="text-gray-500 text-sm font-normal font-['Pretendard'] leading-[21px]"
-                                    >
-                                      {nameSplit}
-                                    </span>
-                                  )
-                                }
-                              })}
-                            </>
-                          )}
-                          {/* 1글자 이상 입력 & 입력 글자 === 찾고자하는 강사 이름 */}
-                          {searchTeacher.length > 1 && teacherName === searchTeacher && (
-                            <>
-                              <span
-                                key={i}
-                                className="text-[#7354E8] text-sm font-normal font-['Pretendard'] leading-[21px]"
-                              >
-                                {searchTeacher}
-                              </span>
-                            </>
-                          )}
-                          {/* 1글자 이상 입력 && 입력 글자 !== 찾고자 하는 강사 이름 */}
-                          {searchTeacher.length > 1 && teacherName !== searchTeacher && (
-                            <>
-                              {teacherName.split(searchTeacher).map((nameSplit: string, i) => {
-                                if (nameSplit === '') {
-                                  return (
-                                    <span
-                                      key={i}
-                                      className="text-[#7354E8] text-sm font-normal font-['Pretendard'] leading-[21px]"
-                                    >
-                                      {searchTeacher}
-                                    </span>
-                                  )
-                                } else {
-                                  return (
-                                    <span
-                                      key={i}
-                                      className="text-gray-500 text-sm font-normal font-['Pretendard'] leading-[21px]"
-                                    >
-                                      {nameSplit}
-                                    </span>
-                                  )
-                                }
-                              })}
-                            </>
-                          )}
-                        </span>
-                        {/* 앞 순서부터만 색 변경 가능 이슈 고치기 */}
-                      </div>
-                    )
-                  })}
-                </div>
-              ) : null}
-            </div>
+            <FilterSearchName {...searchNameProps} handleChangeNameListFromChild={handleChangeNameListFromChild} />
           </div>
         ) : null}
         {/* 카테고리명 대분류/소분류 필터링 */}
@@ -434,7 +278,7 @@ export default function ClassFilter() {
             className="absolute left-[212.5px] flex flex-col w-[195px] h-auto p-4 gap-3 border rounded-lg border-gray-300 bg-white shadow-[0_1px_2px_0_rgba(0,0,0,0.08)]"
           >
             <div className="relative">
-              <DropDown {...props1} handleChangeParentsCategoryData={handleChangeParentsCategoryData} />
+              <DropDown {...categoryProps} handleChangeParentsCategoryData={handleChangeParentsCategoryData} />
               {/* 대분류 필터링 */}
             </div>
             <div className="relative">

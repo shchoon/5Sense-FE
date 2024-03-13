@@ -5,10 +5,10 @@ import { useEffect, useRef, useState } from 'react'
 
 import NoneResult from '@/components/common/NoneResult'
 import { useGetData } from '@/hooks/useGetData'
+import PlusCircleIcon from '../../../../public/assets/icons/plus-circle'
 
 import searchIconWhite from 'public/assets/icons/search_white.svg'
 import closeIcon from 'public/assets/icons/close.svg'
-import plusCircle from 'public/assets/icons/plus-circle.svg'
 import searchIconGray from 'public/assets/icons/search.svg'
 
 interface studentType {
@@ -31,6 +31,11 @@ export interface getDataType {
 }
 
 export default function StudentPage() {
+  const whitePlusCircleProps = {
+    width: '20',
+    height: '20',
+    color: '#FFF'
+  }
   const inputRef = useRef<HTMLInputElement>(null)
   const target: HTMLElement | null = document.getElementById('test')
   const numberCheckList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -163,9 +168,9 @@ export default function StudentPage() {
         <div className=" h-[30px]">
           <div className="w-full black-bold text-3xl font-['Pretendard']">수강생 관리</div>
         </div>
-        <Link href={'student/register'} className="flex px-5 py-2.5 btn-purple text-sm">
-          <Image src={plusCircle} alt="plus" width={20} height={20} className="mr-2" />
-          수강생 등록
+        <Link href={'student/register'} className="flex w-[150px] gap-2 px-5 py-2.5 btn-purple">
+          <PlusCircleIcon {...whitePlusCircleProps} />
+          <span className=" text-sm">수강생 등록</span>
         </Link>
       </div>
       {/* 검색창 */}

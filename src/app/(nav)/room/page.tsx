@@ -12,21 +12,31 @@ import { dateDataType } from '@/components/datePicker/dayDatePicker'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
 import { modalState } from '@/lib/state/modal'
 import DeleteModal from '@/components/modal/DeleteModal'
+import PlusCircleIcon from '../../../../public/assets/icons/plus-circle'
+import Modal from '@/components/common/modal'
 
 import chevronLeft from 'public/assets/icons/chevron/chevron-left.svg'
 import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
 import user from 'public/assets/icons/user_icon.svg'
-import ImgPlusCircle from 'public/assets/icons/plus-circle.svg'
 import calendar from 'public/assets/icons/calendar-white.svg'
 import dots from 'public/assets/icons/dotsVertical.svg'
 import modify from 'public/assets/icons/modify.svg'
 import deleteIcon from 'public/assets/icons/delete.svg'
-import Modal from '@/components/common/modal'
 
 export default function Room() {
   const { width, height } = useWindowSize()
   const router = useRouter()
   const optionRef = useRef<HTMLButtonElement>(null)
+  const whitePlusCircleProps = {
+    width: '20',
+    height: '20',
+    color: '#FFF'
+  }
+  const grayPlusCircleProps = {
+    width: '24',
+    height: '24',
+    color: '#9CA3AF'
+  }
   const roomList = [
     {
       room: 'A'
@@ -38,7 +48,7 @@ export default function Room() {
       room: 'C'
     },
     {
-      room: 'D'
+      room: undefined
     }
   ]
 
@@ -114,7 +124,7 @@ export default function Room() {
       ]
     },
     {
-      roomName: 'A',
+      roomName: 'B',
       resetvation: [
         {
           time: '09:00',
@@ -175,7 +185,7 @@ export default function Room() {
       ]
     },
     {
-      roomName: 'A',
+      roomName: 'C',
       resetvation: [
         {
           time: '',
@@ -234,8 +244,8 @@ export default function Room() {
           limit: 15
         }
       ]
-    },
-    {
+    }
+    /* {
       roomName: 'A',
       resetvation: [
         {
@@ -295,7 +305,7 @@ export default function Room() {
           limit: undefined
         }
       ]
-    }
+    } */
   ]
   const modal = useRecoilValue(modalState) // 상태의 값을 가져옴
   const setModal = useSetRecoilState(modalState)
@@ -409,13 +419,13 @@ export default function Room() {
         <div className="w-[300px] h-[41px] flex rounded-lg bg-primary-600">
           <Link
             href={'/room/schedule'}
-            className="flex gap-2 w-full px-5 py-2.5 border border-r rounded-r-none border-r-primary-700 btn-purple"
+            className="flex items-center gap-2 w-full px-5 py-2.5 border border-r rounded-r-none border-r-primary-700 btn-purple"
           >
             <Image src={calendar} width={20} height={20} alt="calendar" />
             <div className="text-white text-sm font-semibold">일정 찾기</div>
           </Link>
           <Link href={'/room/addRoom'} className="flex items-center w-full gap-2 px-5 py-2.5 btn-purple">
-            <Image src={ImgPlusCircle} width={20} height={20} alt="plusCircle" />
+            <PlusCircleIcon {...whitePlusCircleProps} />
             <div className="text-white text-sm font-semibold">강의실 추가</div>
           </Link>
         </div>
@@ -465,34 +475,48 @@ export default function Room() {
             return (
               <div
                 key={i}
-                className="relative w-full flex flex-col gap-1.5 justify-center text-center h-[80px] border rounded-lg border-gray-300 py-2 px-3"
+                className={`relative w-full flex flex-col gap-1.5 justify-center text-center h-[80px] border rounded-lg ${
+                  data.room !== undefined ? 'border-gray-300' : 'border-gray-100 bg-primary-50'
+                }  py-2 px-3`}
               >
-                <div className="w-full gray-900-semibold">{data.room} Room</div>
-                <div className="flex gap-1/2 h-4 justify-center">
-                  <Image src={user} width={16} height={16} alt="user" />
-                  <span className="gray-500-medium flex items-center">15인</span>
-                </div>
-                <button
-                  ref={optionRef}
-                  className="absolute right-3 top-3 w-8 h-8 p-1 rounded-full hover:bg-gray-100 focus:bg-gray-100"
-                  onClick={() => {
-                    if (isClickOption.isClicked && isClickOption.id === i) {
-                      setIsClickOption(prev => ({
-                        ...prev,
-                        isClicked: false,
-                        id: undefined
-                      }))
-                    } else {
-                      setIsClickOption(prev => ({
-                        ...prev,
-                        isClicked: true,
-                        id: i
-                      }))
-                    }
-                  }}
-                >
-                  <Image src={dots} width={24} height={24} alt="dots" />
-                </button>
+                {data.room !== undefined ? (
+                  <>
+                    <div className="w-full gray-900-semibold">{data.room} Room</div>
+                    <div className="flex gap-1/2 h-4 justify-center">
+                      <Image src={user} width={16} height={16} alt="user" />
+                      <span className="gray-500-medium flex items-center">15인</span>
+                    </div>
+                    <button
+                      ref={optionRef}
+                      className="absolute right-3 top-3 w-8 h-8 p-1 rounded-full hover:bg-gray-100 focus:bg-gray-100"
+                      onClick={() => {
+                        if (isClickOption.isClicked && isClickOption.id === i) {
+                          setIsClickOption(prev => ({
+                            ...prev,
+                            isClicked: false,
+                            id: undefined
+                          }))
+                        } else {
+                          setIsClickOption(prev => ({
+                            ...prev,
+                            isClicked: true,
+                            id: i
+                          }))
+                        }
+                      }}
+                    >
+                      <Image src={dots} width={24} height={24} alt="dots" />
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    className="w-full h-full flex justify-center items-center"
+                    onClick={() => router.push('/room/addRoom')}
+                  >
+                    <PlusCircleIcon {...grayPlusCircleProps} />
+                  </button>
+                )}
+                {/* 룸 옵션 모달 */}
                 {isClickOption.isClicked && isClickOption.id === i && (
                   <div className="absolute right-2 bg-white top-[45px] w-[140px] p-1 flex flex-col gap-1/2 border border-1 border-primary-600 rounded-md shadow-[0_2px_5px_0_rgba(0, 0, 0, 0.12)]">
                     <button
@@ -537,7 +561,7 @@ export default function Room() {
           <div className="flex flex-col">
             {timeData.map((data, i) => {
               return (
-                <div key={i} className="w-[60px] h-[162px] text-right gray-800-semibold text-base">
+                <div key={i} className="w-[60px] h-[210px] text-right gray-800-semibold text-base">
                   {data.time}
                 </div>
               )
@@ -575,6 +599,7 @@ export default function Room() {
                                   <button
                                     className="w-[85px] h-[37px] flex items-center px-3 py-2 border rounded-lg border-1 border-gray-200
                                     gray-800-semibold text-sm"
+                                    onClick={() => router.push('/room/reservation')}
                                   >
                                     예약하기
                                   </button>
@@ -586,6 +611,7 @@ export default function Room() {
                           <button
                             className="w-[85px] h-[37px] flex items-center px-3 py-2 border rounded-lg border-1 border-gray-200
                              gray-800-semibold text-sm"
+                            onClick={() => router.push('/room/reservation')}
                           >
                             예약하기
                           </button>
