@@ -7,10 +7,11 @@ import { useState } from 'react'
 
 interface IProps {
   handleChangeLessonTimeFromChild: (time: number) => void
+  lessonTime: number | string
 }
 
 export default function LessonTimeModal(props: IProps) {
-  const [lessonTime, setLessonTime] = useState<number>(30)
+  const [lessonTime, setLessonTime] = useState<number>(props.lessonTime === '시간' ? 30 : Number(props.lessonTime))
   const handleChangeLessonTime = (type: string) => {
     if (type === 'plus') {
       setLessonTime(prev => (prev += 30))
@@ -33,8 +34,10 @@ export default function LessonTimeModal(props: IProps) {
         <div className="w-full h-6 text-left gray-900-semibold text-base">소요 시간</div>
         <div className="w-full flex items-center justify-between h-10">
           <button
-            className="w-10 h-full flex justify-center items-center rounded-full bg-primary-600"
-            onClick={() => [handleChangeLessonTime('minus')]}
+            className={`w-10 h-full flex justify-center items-center rounded-full ${
+              lessonTime === 0 ? 'bg-gray-200' : 'bg-primary-600'
+            }`}
+            onClick={() => handleChangeLessonTime('minus')}
           >
             <Image src={Minus} width={12} height={9.6} alt="minus" />
           </button>

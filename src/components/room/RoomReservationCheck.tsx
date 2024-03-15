@@ -44,7 +44,7 @@ export default function RoomReservationCheck(props: IProps) {
               <div className="w-full flex gap-2">
                 <div className="w-[70px] h-5 flex gap-1 items-center">
                   <span className="bg-gray-500 w-1 h-1 rounded-full"></span>
-                  <span className="w-full gray-500-medium text-sm">닐찌</span>
+                  <span className="w-full gray-500-medium text-sm">닐짜</span>
                 </div>
                 <div className="w-full text-gray-800 text-sm font-normal">{props.reservationData.date}</div>
               </div>

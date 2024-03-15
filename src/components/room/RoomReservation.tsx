@@ -66,7 +66,6 @@ export default function RoomReservation(props: IProps) {
   })
 
   const setDateDataFromChild = (data: dateDataType) => {
-    console.log(data)
     setDateData({
       ...dateData,
       year: data.year,
@@ -250,7 +249,12 @@ export default function RoomReservation(props: IProps) {
           )}
         </div>
         <div className="absolute z-10 right-14 top-[120px]">
-          {isClickedTab.time && <LessonTimeModal handleChangeLessonTimeFromChild={handleChangeLessonTimeFromChild} />}
+          {isClickedTab.time && (
+            <LessonTimeModal
+              lessonTime={lessonTime}
+              handleChangeLessonTimeFromChild={handleChangeLessonTimeFromChild}
+            />
+          )}
         </div>
       </div>
       {/* 일정 선택 문구 */}
@@ -312,7 +316,13 @@ export default function RoomReservation(props: IProps) {
                         const start = 8 + (Number(clickedRoomData.clickedTime) * 30) / 60
                         const end = start + Number(lessonTime) / 60
                         const startTime = String(Math.floor(start)) + ':' + calculateTime(start - Math.floor(start))
-                        const endTime = String(Math.floor(end)) + ':' + calculateTime(end - Math.floor(end))
+                        let endTime: string
+                        if (end > 22) {
+                          endTime = '22:00'
+                        } else {
+                          endTime = String(Math.floor(end)) + ':' + calculateTime(end - Math.floor(end))
+                        }
+
                         const day = calculateDay(new Date(dateData.year, dateData.month, dateData.date).getDay())
                         setReservationData(prev => ({
                           ...prev,

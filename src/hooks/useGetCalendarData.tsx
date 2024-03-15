@@ -13,9 +13,12 @@ export function useGetCalendarData(dateData: dateDataType) {
   if (firstDateOfCurrentMonthData.getDay() !== 0) {
     for (var i = lastDateOfLastMonthData.getDay(); i >= 0; i--) {
       list.push({
-        date: lastDateOfLastMonthData.getDate() - i,
-        textColor: 'font-semibold text-gray-500',
+        date: undefined,
+        textColor: '',
         clickable: false
+        /* date: lastDateOfLastMonthData.getDate() - i,
+        textColor: 'font-semibold text-gray-500',
+        clickable: false */
       })
     }
   }
@@ -51,8 +54,8 @@ export function useGetCalendarData(dateData: dateDataType) {
   if (lastDateOfCurrnetMonthData.getDay() !== 6) {
     for (var i = 1; i <= 7 - firstDateOfNextMonthData.getDay(); i++) {
       list.push({
-        date: i,
-        textColor: 'font-semibold text-gray-500',
+        date: undefined,
+        textColor: '',
         clickable: false
       })
     }

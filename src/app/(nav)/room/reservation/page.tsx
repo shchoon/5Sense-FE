@@ -33,7 +33,7 @@ export default function Reservatoin() {
         </Link>
         <div className="absolute left-[92px] top-[60px] black-bold text-3xl font-['Pretendard']">예약하기</div>
       </div>
-      <div className="w-[720px] pt-[120px] pb-[50px] flex flex-col gap-10 mx-auto ">
+      <div className="w-[640px] pt-[120px] pb-[50px] flex flex-col gap-10 mx-auto ">
         <div className="w-full px-6 py-8 flex flex-col gap-10 border rounded-xl border-1 border-gray-200">
           <div className="gray-900-bold text-xl">클래스 정보</div>
           <div className="w-full flex flex-col gap-6">

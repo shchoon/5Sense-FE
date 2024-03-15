@@ -4,5 +4,5 @@ import DeleteModal from '@/components/modal/DeleteModal'
 import RoomReservationCheck from '@/components/room/RoomReservationCheck'
 
 export default function Main() {
-  return <AddClassModal />
+  return
 }

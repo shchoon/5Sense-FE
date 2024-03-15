@@ -111,9 +111,9 @@ export default function DayDatePicker(props: any) {
                 return (
                   <div
                     key={i}
-                    id={dateData.date.toString()}
+                    id={dateData.date !== undefined && dateData.date.toString()}
                     className={`px-1 py-2 cursor-pointer ${
-                      clickedDate === dateData.date.toString() && dateData.clickable
+                      dateData.date !== undefined && clickedDate === dateData.date.toString() && dateData.clickable
                         ? 'bg-primary-700 border rounded-lg'
                         : ''
                     }`}
@@ -123,7 +123,7 @@ export default function DayDatePicker(props: any) {
                   >
                     <div
                       className={`text-xs text-center ${
-                        clickedDate === dateData.date.toString() && dateData.clickable
+                        dateData.date !== undefined && clickedDate === dateData.date.toString() && dateData.clickable
                           ? 'text-white font-bold'
                           : `${dateData.textColor}`
                       } font-['Pretendard']`}
