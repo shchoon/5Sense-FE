@@ -17,9 +17,10 @@ interface getClassDataType {
 }
 
 export default function DaySchedule({ dateData }: IProps) {
-  console.log(dateData)
   const date = new Date()
   const currentHour = date.getHours()
+
+  const [lessonData, setLessonData] = useState<any>([])
 
   const checkCurrentDate = (startTime: string) => {
     if (
@@ -34,7 +35,6 @@ export default function DaySchedule({ dateData }: IProps) {
     }
   }
 
-  const [lessonData, setLessonData] = useState<any>([])
   useEffect(() => {
     instance(`/lessons/${dateData.year}/${dateData.month + 1}`).then(res => {
       const data = res.data.data
@@ -75,6 +75,8 @@ export default function DaySchedule({ dateData }: IProps) {
       setLessonData(returnData)
     })
   }, [dateData.month])
+
+  console.log(lessonData, dateData.date)
 
   /* useEffect(() => {
     if (lessonData.length !== 0) {

@@ -63,11 +63,14 @@ export default function DayDatePicker(props: any) {
   }
 
   const onClickCheckHandler = () => {
-    props.changeParentsDateData({
-      year: dateData.year,
-      month: dateData.month,
-      date: Number(clickedDate)
-    })
+    props.changeParentsDateData(
+      {
+        year: dateData.year,
+        month: dateData.month,
+        date: Number(clickedDate)
+      },
+      'round'
+    )
   }
 
   return (

@@ -67,6 +67,7 @@ export default function WeekSchedule({ dateData, week }: IProps) {
             startTime: string
             type: string
             teacher: string
+            studentNum: string
           }[]
         }[]
       }[][] = []
@@ -83,6 +84,7 @@ export default function WeekSchedule({ dateData, week }: IProps) {
               startTime: string
               type: string
               teacher: string
+              studentNum: '5'
             }[]
           }[]
         }[] = []
@@ -100,7 +102,8 @@ export default function WeekSchedule({ dateData, week }: IProps) {
                 name: result[k][i][j].name,
                 startTime: result[k][i][j].startTime,
                 type: result[k][i][j].type,
-                teacher: result[k][i][j].teacher
+                teacher: result[k][i][j].teacher,
+                studentNum: '5'
               })
             } else {
               list[timeIndex].classData.push({
@@ -112,7 +115,8 @@ export default function WeekSchedule({ dateData, week }: IProps) {
                     name: result[k][i][j].name,
                     startTime: result[k][i][j].startTime,
                     type: result[k][i][j].type,
-                    teacher: result[k][i][j].teacher
+                    teacher: result[k][i][j].teacher,
+                    studentNum: '5'
                   }
                 ]
               })
@@ -231,6 +235,13 @@ export default function WeekSchedule({ dateData, week }: IProps) {
                                           } text-xs font-bold font-['Pretendard']`}
                                         >
                                           {data.teacher}
+                                        </span>
+                                        <span
+                                          className={`w-full ${
+                                            data.type === 'duration' ? 'text-primary-600' : 'text-orange-500'
+                                          } text-xs font-bold font-['Pretendard']`}
+                                        >
+                                          {data.studentNum}명
                                         </span>
                                       </div>
                                     </div>

@@ -3,12 +3,14 @@ import Image from 'next/image'
 import { useRef, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import LessonTimeModal from '../modal/LessonTimeModal'
+import LessonTimeModal from '../modal/RoundLessonTimeModal'
 import DayDatePicker from '../datePicker/dayDatePicker'
+import PeriodDatePicker from '../datePicker/periodDatePicker'
 import ClockIcon from '../../../public/assets/icons/clock'
 import CalendarIcon from '../../../public/assets/icons/calendar'
 import RoomReservationCheck from './RoomReservationCheck'
 import Modal from '../common/modal'
+import PeriodLessonTimeModal from '../modal/PeriodLessonTimeModal'
 
 import searchIconWhite from 'public/assets/icons/search_white.svg'
 import user from 'public/assets/icons/user.svg'
@@ -30,10 +32,11 @@ interface RoomDataType {
 interface IProps {
   class: string
   studentName: string
+  classType: string
 }
 
 export default function RoomReservation(props: IProps) {
-  console.log(props.class, props.studentName)
+  const refs = useRef<(HTMLDivElement | null)[]>([])
   const modal = useRecoilValue(modalState)
   const setModal = useSetRecoilState(modalState)
   const currentDate = new Date()
@@ -43,7 +46,7 @@ export default function RoomReservation(props: IProps) {
     date: currentDate.getDate()
   })
   const [dateValue, setDateValue] = useState<string>('날짜')
-  const [lessonTime, setLessonTime] = useState<string | number>('시간')
+  const [lessonTime, setLessonTime] = useState<string>('시간')
   const [isClickedTab, setIsClickedTab] = useState<{ date: boolean; time: boolean }>({
     date: false,
     time: false
@@ -65,14 +68,33 @@ export default function RoomReservation(props: IProps) {
     room: ''
   })
 
-  const setDateDataFromChild = (data: dateDataType) => {
-    setDateData({
-      ...dateData,
-      year: data.year,
-      month: data.month,
-      date: data.date
-    })
-    setDateValue(`${data.year}.${data.month + 1}.${data.date}`)
+  const handleChangeDateDataFromChild = (data: any, type: string) => {
+    if (type === 'round') {
+      setDateData({
+        ...dateData,
+        year: data.year,
+        month: data.month,
+        date: data.date
+      })
+      setDateValue(`${data.year}.${data.month + 1}.${data.date}`)
+    }
+
+    if (type === 'period') {
+      console.log(data)
+      if (data.length === 1) {
+        setDateValue(
+          `${data[0].year}.${data[0].month + 1}.${data[0].date[0]}~${data[0].year}.${data[0].month + 1}.${
+            data[0].date[1]
+          }`
+        )
+      } else {
+        setDateValue(
+          `${data[0].year}.${data[0].month + 1}.${data[0].date[0]}~${data[1].year}.${data[1].month + 1}.${
+            data[1].date[0]
+          }`
+        )
+      }
+    }
 
     setIsClickedTab(prev => ({
       ...prev,
@@ -80,8 +102,14 @@ export default function RoomReservation(props: IProps) {
     }))
   }
 
-  const handleChangeLessonTimeFromChild = (time: number) => {
-    setLessonTime(time)
+  const handleChangeLessonTimeFromChild = (time: string, type: string) => {
+    if (type === 'round') {
+      setLessonTime(time)
+    }
+    if (type === 'period') {
+      setLessonTime(time)
+    }
+
     setIsClickedTab(prev => ({
       ...prev,
       time: false
@@ -104,7 +132,6 @@ export default function RoomReservation(props: IProps) {
     }
   }
 
-  const refs = useRef<(HTMLDivElement | null)[]>([])
   const openTimeList: string[] = [
     '8',
     '9',
@@ -192,6 +219,24 @@ export default function RoomReservation(props: IProps) {
     return dayList[day]
   }
 
+  const calculatePeriodClassLessonTime = () => {
+    const start = lessonTime.slice(0, 5)
+    const end = lessonTime.slice(6, 11)
+    const time =
+      (Number(end.split(':')[0]) - Number(start.split(':')[0])) * 2 +
+      (Number(end.split(':')[1]) - Number(start.split(':')[1])) / 30
+
+    return time
+  }
+  console.log(clickedRoomData)
+  if (lessonTime !== '시간') {
+    const start = lessonTime.slice(0, 5)
+    const end = lessonTime.slice(6, 11)
+    const time =
+      (Number(end.split(':')[0]) - Number(start.split(':')[0])) * 2 +
+      (Number(end.split(':')[1]) - Number(start.split(':')[1])) / 30
+    console.log(start, end, time)
+  }
   return (
     <>
       <div className="relative w-full flex flex-col gap-4">
@@ -243,17 +288,23 @@ export default function RoomReservation(props: IProps) {
             <Image src={searchIconWhite} width={20} height={20} alt="search" />
           </div>
         </div>
-        <div className="absolute z-10 left-3 top-[120px]">
-          {isClickedTab.date && (
-            <DayDatePicker parentsDateData={dateData} changeParentsDateData={setDateDataFromChild} />
+        <div className="absolute z-10 left-0 top-[120px]">
+          {props.classType === 'round' && isClickedTab.date && (
+            <DayDatePicker parentsDateData={dateData} changeParentsDateData={handleChangeDateDataFromChild} />
+          )}
+          {props.classType === 'period' && isClickedTab.date && (
+            <PeriodDatePicker changeParentDateData={handleChangeDateDataFromChild} />
           )}
         </div>
-        <div className="absolute z-10 right-14 top-[120px]">
-          {isClickedTab.time && (
+        <div className="absolute z-10 right-10 top-[120px]">
+          {props.classType === 'round' && isClickedTab.time && (
             <LessonTimeModal
               lessonTime={lessonTime}
               handleChangeLessonTimeFromChild={handleChangeLessonTimeFromChild}
             />
+          )}
+          {props.classType === 'period' && isClickedTab.time && (
+            <PeriodLessonTimeModal handleChangeLessonTimeFromChild={handleChangeLessonTimeFromChild} />
           )}
         </div>
       </div>
@@ -295,7 +346,12 @@ export default function RoomReservation(props: IProps) {
             {roomData.map((data, i) => {
               const roomId = data.id
               const room = data.name
-              const timeRange: number | undefined = typeof lessonTime === 'number' ? lessonTime / 30 : undefined
+              const timeRange: number | undefined =
+                lessonTime === '시간'
+                  ? undefined
+                  : lessonTime.length <= 3
+                    ? Number(lessonTime) / 30
+                    : calculatePeriodClassLessonTime()
               return (
                 <div key={i} className="relative flex flex-col gap-4">
                   <div className="flex justify-between">
@@ -328,7 +384,7 @@ export default function RoomReservation(props: IProps) {
                           ...prev,
                           className: props.class,
                           studentName: props.studentName,
-                          date: `${dateData.year}.${dateData.month + 1}.${dateData.date}(${day})`,
+                          date: dateValue,
                           lessonTime: startTime + '-' + endTime,
                           room: clickedRoomData.room
                         }))
@@ -388,6 +444,7 @@ export default function RoomReservation(props: IProps) {
                               }`}
                               onClick={() => {
                                 if (timeRange === undefined) {
+                                  console.log(2)
                                   return
                                 } else {
                                   setClickedRoomData(prev => ({

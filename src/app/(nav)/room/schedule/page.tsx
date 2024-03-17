@@ -19,7 +19,8 @@ export default function Schedule() {
     type: 'dropdown'
   }
 
-  const [selectedClass, setSelectedClass] = useState('')
+  const [selectedClass, setSelectedClass] = useState<string>('')
+  const [studentName, setStudentName] = useState<string>('')
 
   const handleChangeParentsDropdownData = (data: string) => {
     setSelectedClass(data)
@@ -54,7 +55,14 @@ export default function Schedule() {
               <div className="w-full text-left gray-800-semibold text-base">수강생 찾기</div>
               <div className="w-full h-[52px] flex px-3 py-2.5 gap-2 border border-1 border-gray-200 rounded-lg focus-within:border-[#5539C0]">
                 <Image src={Search} width={18} height={18} alt="Search" />
-                <input placeholder="수강생 이름" className=" w-full focus:outline-none" />
+                <input
+                  placeholder="수강생 이름"
+                  value={studentName}
+                  onChange={e => {
+                    setStudentName(e.target.value)
+                  }}
+                  className=" w-full focus:outline-none"
+                />
               </div>
             </div>
           </div>
@@ -65,7 +73,7 @@ export default function Schedule() {
         >
           클래스를 선택해주시면 예약가능 리스트를 볼 수 있습니다.
         </div> */}
-        {selectedClass !== '' && <RoomReservation />}
+        {selectedClass !== '' && <RoomReservation class={selectedClass} studentName={studentName} classType="round" />}
       </div>
     </>
   )

@@ -6,11 +6,11 @@ import Plus from 'public/assets/icons/plus_vector.svg'
 import { useState } from 'react'
 
 interface IProps {
-  handleChangeLessonTimeFromChild: (time: number) => void
+  handleChangeLessonTimeFromChild: (time: string, type: string) => void
   lessonTime: number | string
 }
 
-export default function LessonTimeModal(props: IProps) {
+export default function RoundLessonTimeModal(props: IProps) {
   const [lessonTime, setLessonTime] = useState<number>(props.lessonTime === '시간' ? 30 : Number(props.lessonTime))
   const handleChangeLessonTime = (type: string) => {
     if (type === 'plus') {
@@ -25,7 +25,7 @@ export default function LessonTimeModal(props: IProps) {
   }
 
   const handleChangeParentsLessonTime = () => {
-    props.handleChangeLessonTimeFromChild(lessonTime)
+    props.handleChangeLessonTimeFromChild(String(lessonTime), 'round')
   }
 
   return (

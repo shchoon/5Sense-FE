@@ -167,7 +167,7 @@ export default function MyCenter() {
     return list
   }
 
-  const handleChangeDropwdownFromChild = (data: { time: string }) => {
+  const handleChangeStartTimeFromChild = (data: { time: string }) => {
     setPostData(prevPostData => ({
       ...prevPostData,
       openTime: data.time
@@ -354,7 +354,7 @@ export default function MyCenter() {
           <div className="w-full flex gap-2">
             <DropDown
               {...DropDownProps1}
-              handleChangeParentsOpenTimeData={handleChangeDropwdownFromChild}
+              handleChangeParentsOpenTimeData={handleChangeStartTimeFromChild}
               type="open"
             />
             <div className="flex items-center gray-800-semibold text-base font-['Pretendard']">-</div>

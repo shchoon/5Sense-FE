@@ -1,14 +1,16 @@
 'use client'
-import WeekSchedule from '@/components/main/WeekSchedule'
 import Image from 'next/image'
-import { useWindowSize } from '@/hooks/useWindowSize'
-import chevronLeft from 'public/assets/icons/chevron/chevron-left.svg'
-import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
-import calender from 'public/assets/icons/calendar.svg'
 import { useState, useEffect } from 'react'
+
+import WeekSchedule from '@/components/main/WeekSchedule'
+import { useWindowSize } from '@/hooks/useWindowSize'
+import CalendarIcon from '../../../../../public/assets/icons/calendar'
 import DateSlideTab from '@/components/main/DateSlideTab'
 import WeekDatePicker from '@/components/datePicker/weekDatePicker'
 import { dateDataType } from '@/components/datePicker/dayDatePicker'
+
+import chevronLeft from 'public/assets/icons/chevron/chevron-left.svg'
+import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
 
 export default function MainPageWeek() {
   const [dayData, setDayData] = useState<any>([])
@@ -211,7 +213,7 @@ export default function MainPageWeek() {
               className="w-full px-3 py-2 flex justify-center gap-2 items-center gray-900-semibold text-base font-['Pretendard'] cursor-pointer hover:text-primary-600"
               onClick={onClickDatePickerHandler}
             >
-              <Image src={calender} width={18} height={18} alt=" " />
+              <CalendarIcon width="18" height="18" color={isClickedDatePicker ? '#7354E8' : '#6B7280'} />
               {dateData.year}년 {dateData.month + 1}월 {weekData}주차
             </div>
             <div

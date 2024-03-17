@@ -14,7 +14,14 @@ interface clickedDateType {
   date: undefined | number
 }
 
-export default function PeriodDatePicker() {
+interface IProps {
+  changeParentDateData: (
+    data: { year: number | undefined; month: number | undefined; date: number[] }[],
+    type: string
+  ) => void
+}
+
+export default function PeriodDatePicker(props: IProps) {
   const currentDate = new Date()
   const dateName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const [firstDateData, setFirstDateData] = useState<dateDataType>({
@@ -141,13 +148,14 @@ export default function PeriodDatePicker() {
   }
 
   const onClickCheckHandler = () => {
-    /* props.changeParentsDateData({
-      year: dateData.year,
-      month: dateData.month,
-      date: Number(clickedDate)
-    }) */
-    console.log(firstClickedData.year, firstClickedData.month, firstClickedData.date[0])
-    console.log(secondClickedData.year, secondClickedData.month, secondClickedData.date[0])
+    if (firstClickedData.date.length === 2) {
+      props.changeParentDateData([firstClickedData], 'period')
+    }
+    if (firstClickedData.date.length === 1 && secondClickedData.date.length === 1) {
+      props.changeParentDateData([firstClickedData, secondClickedData], 'period')
+    }
+    // console.log(firstClickedData.year, firstClickedData.month, firstClickedData.date[0])
+    // console.log(secondClickedData.year, secondClickedData.month, secondClickedData.date[0])
   }
 
   const calculateRange = (data: number[], date: number) => {
@@ -161,21 +169,23 @@ export default function PeriodDatePicker() {
   console.log('firstClickedData', firstClickedData)
   console.log('secondClickedData', secondClickedData)
   return (
-    <div className="w-[592px] p-4 flex gap-6">
+    <div className="w-[592px] bg-white p-4 flex gap-6 rounded-lg border border-1 border-primary-600 shadow">
       {/* 첫 번째 달력 */}
-      <div className="flex flex-col bg-white gap-2 w-[283px] p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
+      <div className="flex flex-col bg-white gap-2 w-full rounded-lg">
         <div className="w-full flex justify-between">
-          <Image
-            src={allowLeft}
-            width={20}
-            height={20}
-            alt="allowLeft"
-            className="cursor-pointer"
-            onClick={() => {
-              onClickMonthBackHandler(firstDateData, 'first')
-              onClickMonthBackHandler(secondDateData, 'second')
-            }}
-          />
+          {firstDateData.year === currentDate.getFullYear() && firstDateData.month === currentDate.getMonth() ? null : (
+            <Image
+              src={allowLeft}
+              width={20}
+              height={20}
+              alt="allowLeft"
+              className="cursor-pointer"
+              onClick={() => {
+                onClickMonthBackHandler(firstDateData, 'first')
+                onClickMonthBackHandler(secondDateData, 'second')
+              }}
+            />
+          )}
           <div className="w-full text-center gray-900-bold text-xs font-['Pretendard']">
             {firstDateData.year}년 {firstDateData.month + 1}월
           </div>
@@ -397,7 +407,7 @@ export default function PeriodDatePicker() {
         </div>
       </div>
       {/* 두번째 달력 */}
-      <div className="flex flex-col bg-white gap-2 w-[283px] p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
+      <div className="flex flex-col bg-white gap-2 w-full">
         <div className="w-full flex justify-between">
           {/* <Image
             src={allowLeft}
