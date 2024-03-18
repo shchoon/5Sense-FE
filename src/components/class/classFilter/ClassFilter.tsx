@@ -156,7 +156,7 @@ export default function ClassFilter() {
   useOnClickOutside(teacherNameTypeRef, handleClickTeacherOutside)
 
   useEffect(() => {
-    instance.get('/categories').then(res => {
+    instance.get('/lesson-categories').then(res => {
       const data: { id: string; name: string; parentId: string }[] = res.data.data
       let classification: classifyListType[] = []
       for (var i = 0; i < data.length; i++) {
@@ -178,6 +178,8 @@ export default function ClassFilter() {
       setClassifyList(classification)
     })
   }, [])
+
+  console.log(classType)
 
   return (
     <div className="absolute top-[120px] flex flex-col gap-2 h-[50px]">
@@ -232,9 +234,8 @@ export default function ClassFilter() {
         </button>
       </div>
       <div className="relative">
-        {' '}
         {/* 필터링 UI 기준점 */}
-        {/* 기반반/회차반 필터링 */}
+        {/* 기간반/회차반 필터링 */}
         {isClickedfilter.isClickedClassFilter ? (
           <div
             ref={classTypeRefClick}
@@ -242,7 +243,14 @@ export default function ClassFilter() {
           >
             <div id="classTypeFilter" className="w-[130px] h-[54] flex flex-col gap-3 ">
               <p className="flex gap-2 items-center">
-                <input type="radio" id="timeClass" name="classType" value="회차반" onChange={radioHandler} />
+                <input
+                  type="radio"
+                  id="timeClass"
+                  name="classType"
+                  value="회차반"
+                  checked={classType === '회차반' && true}
+                  onChange={radioHandler}
+                />
                 <label
                   htmlFor="timeClass"
                   className="text-gray-900 text-sm font-semibold font-['Pretendard'] leading-[21px]"
@@ -251,7 +259,14 @@ export default function ClassFilter() {
                 </label>
               </p>
               <p className="flex gap-2 items-center">
-                <input type="radio" id="preiodClass" name="classType" value="기간반" onChange={radioHandler} />
+                <input
+                  type="radio"
+                  id="preiodClass"
+                  name="classType"
+                  value="기간반"
+                  checked={classType === '기간반' && true}
+                  onChange={radioHandler}
+                />
                 <label
                   htmlFor="preiodClass"
                   className="text-gray-900 text-sm font-semibold font-['Pretendard'] leading-[21px]"

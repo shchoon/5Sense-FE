@@ -379,7 +379,6 @@ export default function RoomReservation(props: IProps) {
                           endTime = String(Math.floor(end)) + ':' + calculateTime(end - Math.floor(end))
                         }
 
-                        const day = calculateDay(new Date(dateData.year, dateData.month, dateData.date).getDay())
                         setReservationData(prev => ({
                           ...prev,
                           className: props.class,
