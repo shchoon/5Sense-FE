@@ -71,7 +71,9 @@ export default function Reservatoin() {
         >
           클래스를 선택해주시면 예약가능 리스트를 볼 수 있습니다.
         </div> */}
-        {selectedClass !== '' && <RoomReservation class={selectedClass} studentName={studentName} classType="round" />}
+        {selectedClass !== '' && (
+          <RoomReservation class={selectedClass} studentName={studentName} classType="round" viewType="page" />
+        )}
       </div>
     </>
   )

@@ -94,7 +94,9 @@ export default function StudentAddClassModal() {
         )}
 
         {/* 강의실 예약 */}
-        {classType === 'round' && <RoomReservation class={selectedClass} studentName={studentName} classType="round" />}
+        {classType === 'round' && (
+          <RoomReservation class={selectedClass} studentName={studentName} classType="round" viewType="modal" />
+        )}
       </div>
     </div>
   )

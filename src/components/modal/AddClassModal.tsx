@@ -12,7 +12,7 @@ export default function AddClassModal() {
         <Image className="absolute right-4 top-4" src={closeCircle} width={35} height={35} alt="closeCircle" />
       </div>
       <div className="w-full px-6 pb-6 flex flex-col gap-10">
-        <RoomReservation class="" studentName="" classType="period" />
+        <RoomReservation class="" studentName="" classType="period" viewType="modal" />
       </div>
     </div>
   )

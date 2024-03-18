@@ -4,8 +4,8 @@ import CloseCircle from 'public/assets/icons/closeCircle.svg'
 interface IProps {
   onClose: () => void
   reservationData: {
-    className: string
-    studentName: string
+    className?: string
+    studentName?: string
     date: string
     lessonTime: string
     room: string
@@ -14,7 +14,7 @@ interface IProps {
 
 export default function RoomReservationCheck(props: IProps) {
   return (
-    <div className="w-[768px] bg-white border border-1 border-gray-900 rounded-xl">
+    <div className="w-[640px] bg-white border border-1 border-gray-900 rounded-xl">
       <div className="relative w-full h-[90px]">
         <div className="absolute left-6 top-10 w-[100px] gray-900-bold text-[22px]">예약하기</div>
         <Image

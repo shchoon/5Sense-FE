@@ -31,8 +31,9 @@ interface RoomDataType {
 
 interface IProps {
   class: string
-  studentName: string
+  studentName?: string
   classType: string
+  viewType: string
 }
 
 export default function RoomReservation(props: IProps) {
@@ -60,7 +61,13 @@ export default function RoomReservation(props: IProps) {
     clickedTime: undefined,
     room: ''
   })
-  const [reservationData, setReservationData] = useState({
+  const [reservationData, setReservationData] = useState<{
+    className: string
+    studentName?: string
+    date: string
+    lessonTime: string
+    room: string
+  }>({
     className: '',
     studentName: '',
     date: '',
@@ -228,14 +235,16 @@ export default function RoomReservation(props: IProps) {
 
     return time
   }
-  console.log(clickedRoomData)
   if (lessonTime !== '시간') {
     const start = lessonTime.slice(0, 5)
     const end = lessonTime.slice(6, 11)
     const time =
       (Number(end.split(':')[0]) - Number(start.split(':')[0])) * 2 +
       (Number(end.split(':')[1]) - Number(start.split(':')[1])) / 30
-    console.log(start, end, time)
+  }
+
+  const test = () => {
+    console.log(reservationData)
   }
   return (
     <>
@@ -365,28 +374,55 @@ export default function RoomReservation(props: IProps) {
                     <button
                       className="w-[73px] h-[37px] border border-1 border-primary-600 rounded-lg flex items-center justify-center text-sm text-primary-600 font-normal"
                       onClick={() => {
+                        console.log(dateValue, dateData)
                         if (room !== clickedRoomData.room) {
                           return
                         }
-                        setModal(true)
-                        const start = 8 + (Number(clickedRoomData.clickedTime) * 30) / 60
-                        const end = start + Number(lessonTime) / 60
-                        const startTime = String(Math.floor(start)) + ':' + calculateTime(start - Math.floor(start))
-                        let endTime: string
-                        if (end > 22) {
-                          endTime = '22:00'
-                        } else {
-                          endTime = String(Math.floor(end)) + ':' + calculateTime(end - Math.floor(end))
-                        }
+                        if (props.classType === 'round') {
+                          const start = 8 + (Number(clickedRoomData.clickedTime) * 30) / 60
+                          const end = start + Number(lessonTime) / 60
+                          const startTime = String(Math.floor(start)) + ':' + calculateTime(start - Math.floor(start))
+                          let endTime: string
+                          if (end > 22) {
+                            endTime = '22:00'
+                          } else {
+                            endTime = String(Math.floor(end)) + ':' + calculateTime(end - Math.floor(end))
+                          }
+                          if (props.studentName) {
+                          }
+                          const day = calculateDay(new Date(dateData.year, dateData.month, dateData.date).getDay())
 
-                        setReservationData(prev => ({
-                          ...prev,
-                          className: props.class,
-                          studentName: props.studentName,
-                          date: dateValue,
-                          lessonTime: startTime + '-' + endTime,
-                          room: clickedRoomData.room
-                        }))
+                          setReservationData(prev => ({
+                            ...prev,
+                            className: props.class,
+                            studentName: props.studentName,
+                            date: dateValue + `(${day})`,
+                            lessonTime: startTime + '-' + endTime,
+                            room: clickedRoomData.room
+                          }))
+
+                          /* 예약 확인 모달 보여주기 위함 */
+                          if (props.viewType === 'page') {
+                            setModal(true)
+                          } else if (props.viewType === 'modal') {
+                            /* 예약 정보 전송 */
+                            console.log(dateValue, lessonTime)
+                            const data = {
+                              date: ''
+                            }
+                          }
+                        } else if (props.classType === 'period') {
+                          console.log(dateValue, lessonTime)
+                          const time = lessonTime.split(',')[0]
+                          const day = lessonTime.slice(12, lessonTime.length)
+                          const data = {
+                            date: dateValue,
+                            lessonTime: time,
+                            day: day,
+                            room: clickedRoomData.room
+                          }
+                          console.log(data)
+                        }
                       }}
                     >
                       예약하기
@@ -470,7 +506,7 @@ export default function RoomReservation(props: IProps) {
           </div>
         </div>
       )}
-      {modal && (
+      {props.viewType === 'page' && modal && (
         <Modal small>
           <RoomReservationCheck reservationData={reservationData} onClose={() => setModal(false)} />
         </Modal>
