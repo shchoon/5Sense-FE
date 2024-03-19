@@ -11,12 +11,23 @@ export interface dateDataType {
   date: number
 }
 
-export default function DayDatePicker(props: any) {
+interface IProps {
+  parentsDateData: dateDataType
+  changeParentsDateData: (data: dateDataType, type?: string) => void
+  type?: string
+}
+
+export default function DayDatePicker(props: IProps) {
   const dateName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const [dateData, setDateData] = useState<dateDataType>(props.parentsDateData)
   const [clickedDate, setClickedDate] = useState<string>(`${dateData.date}`)
 
-  const dateList = useGetCalendarData(dateData)
+  let dateList
+  if (props.type === 'addClass') {
+    dateList = useGetCalendarData(dateData, props.type)
+  } else {
+    dateList = useGetCalendarData(dateData)
+  }
 
   const onClickDateHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     setClickedDate(e.currentTarget.id)

@@ -11,13 +11,13 @@ import CalendarIcon from '../../../public/assets/icons/calendar'
 import RoomReservationCheck from './RoomReservationCheck'
 import Modal from '../common/modal'
 import PeriodLessonTimeModal from '../modal/PeriodLessonTimeModal'
+import { dateDataType } from '../datePicker/dayDatePicker'
+import { modalState } from '@/lib/state/modal'
 
 import searchIconWhite from 'public/assets/icons/search_white.svg'
 import user from 'public/assets/icons/user.svg'
 import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
 import chevronLeft from 'public/assets/icons/chevron/chevron-left.svg'
-import { dateDataType } from '../datePicker/dayDatePicker'
-import { modalState } from '@/lib/state/modal'
 
 interface RoomDataType {
   id: number
@@ -75,7 +75,7 @@ export default function RoomReservation(props: IProps) {
     room: ''
   })
 
-  const handleChangeDateDataFromChild = (data: any, type: string) => {
+  const handleChangeDateDataFromChild = (data: dateDataType | any, type?: string) => {
     if (type === 'round') {
       setDateData({
         ...dateData,
@@ -299,7 +299,11 @@ export default function RoomReservation(props: IProps) {
         </div>
         <div className="absolute z-10 left-0 top-[120px]">
           {props.classType === 'round' && isClickedTab.date && (
-            <DayDatePicker parentsDateData={dateData} changeParentsDateData={handleChangeDateDataFromChild} />
+            <DayDatePicker
+              parentsDateData={dateData}
+              changeParentsDateData={handleChangeDateDataFromChild}
+              type="addClass"
+            />
           )}
           {props.classType === 'period' && isClickedTab.date && (
             <PeriodDatePicker changeParentDateData={handleChangeDateDataFromChild} />

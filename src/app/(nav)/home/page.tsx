@@ -1,15 +1,16 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
-import instance from '@/lib/api/axios'
-import DaySchedule from '@/components/main/DaySchedule'
+import { useState } from 'react'
 import Image from 'next/image'
+
+import DaySchedule from '@/components/main/DaySchedule'
 import { useWindowSize } from '@/hooks/useWindowSize'
-import chevronLeft from 'public/assets/icons/chevron/chevron-left.svg'
-import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
 import CalendarIcon from '../../../../public/assets/icons/calendar'
 import DateSlideTab from '@/components/main/DateSlideTab'
 import { dateDataType } from '@/components/datePicker/dayDatePicker'
 import DayDatePicker from '@/components/datePicker/dayDatePicker'
+
+import chevronLeft from 'public/assets/icons/chevron/chevron-left.svg'
+import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
 
 export default function MainPageDay() {
   const { width, height } = useWindowSize()
