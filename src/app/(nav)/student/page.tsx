@@ -165,9 +165,7 @@ export default function StudentPage() {
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-[60px]">
       {/* 수강생 관리 + 수강생 등록 버튼 */}
       <div className="flex w-full pt-12 mb-[30px] justify-between">
-        <div className=" h-[30px]">
-          <div className="w-full black-bold text-3xl font-['Pretendard']">수강생 관리</div>
-        </div>
+        <div className=" h-[30px] black-bold text-3xl">수강생 관리</div>
         <Link href={'student/register'} className="flex w-[150px] gap-2 px-5 py-2.5 btn-purple">
           <PlusCircleIcon {...whitePlusCircleProps} />
           <span className=" text-sm">수강생 등록</span>

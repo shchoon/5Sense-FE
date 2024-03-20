@@ -110,9 +110,9 @@
   /* ... */
 }
 
-@layer base {
+/* @layer base {
   body {
     min-width: 100vw;
-    font-family: 'Pretendard';
+    font-family: Pretendard;
   }
-}
+} */
