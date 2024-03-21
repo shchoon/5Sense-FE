@@ -56,8 +56,6 @@ export default function TodaySchedule() {
       setTodayLessonData(result)
     })
   }, [])
-  console.log(todayLessonData)
-  console.log(pageData)
   return (
     <div className="flex flex-col w-full lg:w-[248px] gap-3">
       <div className="today flex w-fit h-[29px] items-center box-border px-2 py-1 gap-[6px] bg-primary-50 rounded">
