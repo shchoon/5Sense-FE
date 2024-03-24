@@ -14,9 +14,10 @@ interface postDataType {
 
 interface IProps {
   onClose: () => void
+  onCloseState?: () => void
 }
 
-export default function RegisterModal({ onClose }: IProps) {
+export default function RegisterModal(props: IProps) {
   const [postData, setPostData] = useState<postDataType>({
     name: '',
     phone: ''
@@ -64,11 +65,14 @@ export default function RegisterModal({ onClose }: IProps) {
         e.preventDefault()
         const data = postData
         if (postData.name === '' && postData.phone === '') {
-          alert('강사정보를 올바르게 입려해주세요.')
+          alert('강사정보를 올바르게 입력해주세요.')
           return
         }
         instance.post('/teachers', data).then((res: AxiosResponse) => {
-          ;() => onClose()
+          props.onClose()
+          if (props.onCloseState) {
+            props.onCloseState()
+          }
         })
       }}
     >
@@ -79,7 +83,12 @@ export default function RegisterModal({ onClose }: IProps) {
         width={35}
         height={35}
         alt=""
-        onClick={() => onClose()}
+        onClick={() => {
+          props.onClose()
+          if (props.onCloseState) {
+            props.onCloseState()
+          }
+        }}
       />
       <div className="absolute top-[90px] w-[376px] flex flex-col gap-7">
         <div className="w-full flex flex-col gap-4">
@@ -105,7 +114,7 @@ export default function RegisterModal({ onClose }: IProps) {
             className={`${postData.phone.length > 0 ? 'bg-gray-50' : 'bg-white'} w-full h-[58px] input-line-gray`}
           />
         </div>
-        <button type="submit" className="w-full h-[52px] btn-purple flex justify-center items-center">
+        <button type="submit" className="w-full h-[52px] btn-purple-sm">
           <div className="text-white text-base font-semibold">등록</div>
         </button>
       </div>

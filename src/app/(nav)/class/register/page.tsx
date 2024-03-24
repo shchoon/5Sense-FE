@@ -62,7 +62,7 @@ export default function RegisterPage() {
               memo: 'Test',
               lessonTime: 120,
               tuitionFee: 2000,
-              category: { id: 10, name: '아크릴화', parentId: 1 },
+              category: { id: 10, name: '아크릴화' },
               teacherId: 2,
               schedules: [
                 {
