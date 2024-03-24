@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 
-import { instructorDataType } from '../class/classFilter/ClassFilter'
+import { instructorDataType } from '../class/classFilter'
 import { useGetData } from '@/hooks/useGetData'
 
 import searchIcon from 'public/assets/icons/search.svg'

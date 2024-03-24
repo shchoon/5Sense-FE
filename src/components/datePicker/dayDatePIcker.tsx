@@ -152,18 +152,15 @@ export default function DayDatePicker(props: IProps) {
         })}
       </div>
       <div className="w-full flex h-[37px] justify-between">
-        <div
+        <button
           className="w-[121px] h-full px-3 py-2 flex justify-center btn-white text-sm gray-800-semibold"
           onClick={onClickCancelHandler}
         >
           취소
-        </div>
-        <div
-          className="w-[121px] h-full px-3 py-2 flex justify-center text-sm font-semibold btn-purple"
-          onClick={onClickCheckHandler}
-        >
+        </button>
+        <button className="w-[121px] h-full btn-purpl-md" onClick={onClickCheckHandler}>
           확인
-        </div>
+        </button>
       </div>
     </div>
   )

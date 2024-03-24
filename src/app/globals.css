@@ -27,9 +27,9 @@
     @apply mt-[130px] w-[296px] max-w-[504px] h-full box-border lg:px-4 xl:px-6 3xl:px-0 3xl:flex-grow flex-shrink-0 flex flex-col items-center gap-16;
   }
 
-  .m-placeholder {
+  /* .m-placeholder {
     @apply text-gray-300 text-2xl font-semibold;
-  }
+  } */
 
   .class-box {
     @apply w-full flex flex-col gap-[40px] px-6 py-8 bg-white rounded-xl border border-gray-200;
@@ -76,11 +76,11 @@
   }
 
   .gray-800-medium {
-    @apply text-gray-800 font-medium
+    @apply text-gray-800 font-medium;
   }
 
   .gray-700-medium {
-    @apply text-gray-700 font-medium
+    @apply text-gray-700 font-medium;
   }
 
   .gray-600-normal {
@@ -110,9 +110,9 @@
   /* ... */
 }
 
-/* @layer base {
+@layer base {
   body {
     min-width: 100vw;
-    font-family: Pretendard;
+    /* font-family: Pretendard; */
   }
-} */
+}

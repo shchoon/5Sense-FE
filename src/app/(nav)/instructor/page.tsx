@@ -12,11 +12,7 @@ import Card from '@/components/instructor/Card'
 import { getInstructorData } from '@/lib/api/instructor'
 import SearchInput from '@/components/common/SearchInput'
 import Modal from '@/components/common/modal'
-import PlusCircleIcon from '../../../../public/assets/icons/plus-circle'
-
-//이미지
-
-import PlusCircle from 'public/assets/icons/plus-circle.svg'
+import ContentHeader from '@/components/common/contentHeader'
 
 interface instructorType {
   id: string
@@ -25,11 +21,6 @@ interface instructorType {
 }
 
 export default function InstructorPage() {
-  const whitePlusCircleProps = {
-    width: '20',
-    height: '20',
-    color: '#FFF'
-  }
   const target = useRef<HTMLDivElement>(null)
 
   const numberCheckList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -165,17 +156,9 @@ export default function InstructorPage() {
   //  기본 데이터 구분하고 싶었음 -> 다시 불러와야하는게 별로임 뭔가 요청이 넘 많아
 
   return (
-    <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-16">
+    <div className="w-full pt-[60px] 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6">
       {/* 수강생 관리 + 수강생 등록 버튼 */}
-      <div className="flex w-full pt-12 mb-[30px] justify-between">
-        <div className=" h-[30px]">
-          <div className="w-full black-bold text-3xl font-['Pretendard']">강사 관리</div>
-        </div>
-        <button className="flex w-[150px] gap-2 px-5 py-2.5 btn-purple" onClick={() => setModal(true)}>
-          <PlusCircleIcon {...whitePlusCircleProps} />
-          <span className="text-sm">강사 등록</span>
-        </button>
-      </div>
+      <ContentHeader title="강사 관리" btnName="강사 등록" onClick={() => setModal(true)} />
       {/* 검색창 */}
       <SearchInput />
       {/* 강사 목록 시작 */}

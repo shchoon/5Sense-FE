@@ -21,7 +21,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   const modal = useRecoilValue(modalState)
 
   return (
-    <div className={`wrapper min-w-[768px] max-w-[2560px]`}>
+    <div className={`min-w-[768px] max-w-[2560px]`}>
       <div
         className={`w-full h-full ${modal ? 'fixed' : ''} px-6 2md:px-12 box-border lg:pl-0 lg:pr-4 xl:pr-8 2xl:pr-12`}
       >

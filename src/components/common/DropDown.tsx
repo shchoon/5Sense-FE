@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 import { useState, useRef } from 'react'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
-import { classifyListType } from '../class/classFilter/ClassFilter'
+import { classifyListType } from '../class/classFilter'
 
 import chevron_gray_down from 'public/assets/icons/chevron/chevron_down_gray.svg'
 import chevron_gray_up from 'public/assets/icons/chevron/chevron_up_gray.svg'

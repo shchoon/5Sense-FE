@@ -182,7 +182,7 @@ export default function ClassFilter() {
   console.log(classType)
 
   return (
-    <div className="absolute top-[120px] flex flex-col gap-2 h-[50px]">
+    <div className="flex flex-col gap-2 h-[50px]">
       <div className=" max-w-[375px] h-[37px] items-start gap-2 flex">
         <button
           ref={classTypeRef}

@@ -660,10 +660,7 @@ export default function PeriodDatePicker(props: IProps) {
           })}
         </div>
         <div className="w-full h-[37px]">
-          <div
-            className="w-full h-full px-3 py-2 flex justify-center text-sm font-semibold btn-purple"
-            onClick={onClickCheckHandler}
-          >
+          <div className="w-full h-full btn-purple-sm" onClick={onClickCheckHandler}>
             확인
           </div>
         </div>

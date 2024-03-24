@@ -1,6 +1,8 @@
 'use client'
 
-import ClassFilter from '@/components/class/classFilter/ClassFilter'
+import { useRouter } from 'next/navigation'
+import ClassFilter from '@/components/class/classFilter'
+import ContentHeader from '@/components/common/contentHeader'
 
 export default function ClassPage() {
   const classList = [
@@ -66,18 +68,13 @@ export default function ClassPage() {
     }
   ]
 
+  const router = useRouter()
+
   return (
     <div>
-      <div className="w-full flex justify-between">
-        <h1 className="black-bold text-3xl">클래스 관리</h1>
-        {/* <Link href={'class/register'} className="Button flex flex-row px-5 py-2.5 btn-purple text-sm">
-          <Image src={'/public/assets/icons/plus-circle.svg'} alt="plus" width={20} height={20} className="mr-2" />
-          클래스 등록
-        </Link> */}
-      </div>
+      <ContentHeader title="클래스 관리" btnName="클래스 등록" onClick={() => router.push('class/register')} />
       <ClassFilter />
-
-      <div className="container w-full max-w-[1872px] grid grid-cols-2 2xl:grid-cols-3 gap-[20px] mt-[87px]">
+      <div className="container w-full max-w-[1872px] grid grid-cols-2 2xl:grid-cols-3 gap-[20px] mt-5">
         {classList.map((it, idx) => (
           <div
             key={idx}

@@ -9,6 +9,7 @@ export interface InputFormProps {
   submitData: any
   setSubmitData: React.Dispatch<SetStateAction<any>>
 }
+
 export default function InputForm({ name, title, placeholder, maxLength, submitData, setSubmitData }: InputFormProps) {
   const [inputValue, handleChange] = useInput({
     name,

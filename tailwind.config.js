@@ -21,20 +21,62 @@ module.exports = {
     // }),
     plugin(function ({ addComponents }) {
       addComponents({
-        '.btn-purple': {
-          boxSizing: 'border-box',
+        '.btn-purple-sm': {
+          // boxSizing: 'border-box',
           background: '#7354E8',
           borderRadius: 8,
           textAlign: 'center',
           color: 'white',
           fontWeight: '600',
+          fontSize: '14px',
           cursor: 'pointer',
-          border: '3px solid transparent',
+          padding: '8px 12px',
+          margin: '3px',
           '&:hover': {
             backgroundColor: '#563AC0'
           },
           '&:active': {
-            border: '3px solid #D3C4F9'
+            border: '3px solid #D3C4F9',
+            margin: 'unset'
+          }
+        },
+        '.btn-purpl-md': {
+          // boxSizing: 'border-box',
+          background: '#7354E8',
+          borderRadius: 8,
+          textAlign: 'center',
+          color: 'white',
+          fontWeight: '600',
+          fontSize: '14px',
+          cursor: 'pointer',
+          padding: '10px 20px',
+          margin: '3px',
+          '&:hover': {
+            backgroundColor: '#563AC0'
+          },
+          '&:active': {
+            border: '3px solid #D3C4F9',
+            margin: 'unset'
+          }
+        },
+        '.btn-purpl-lg': {
+          // boxSizing: 'border-box',
+          background: '#7354E8',
+          borderRadius: 8,
+          textAlign: 'center',
+          color: 'white',
+          fontWeight: '600',
+          fontSize: '16px',
+          cursor: 'pointer',
+          padding: '14px 24px',
+          lineHeight: '24px',
+          margin: '3px',
+          '&:hover': {
+            backgroundColor: '#563AC0'
+          },
+          '&:active': {
+            border: '3px solid #D3C4F9',
+            margin: 'unset'
           }
         },
         '.btn-white': {
