@@ -6,7 +6,7 @@ interface DurationScheduleType {
   startTime: string
   endTime: string
   repeatDate: string
-  LessonRoomId: number
+  roomId: number
 }
 
 export const durationScheduleState = atom<DurationScheduleType>({
@@ -17,6 +17,6 @@ export const durationScheduleState = atom<DurationScheduleType>({
     startTime: '',
     endTime: '',
     repeatDate: '',
-    LessonRoomId: 0
+    roomId: 1
   }
 })
