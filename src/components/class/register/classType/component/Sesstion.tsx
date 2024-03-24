@@ -1,8 +1,35 @@
+'use client'
+
+import { useState } from 'react'
+import Image from 'next/image'
+
+import Minus from 'public/assets/icons/minus_vector.svg'
+import Plus from 'public/assets/icons/plus_vector.svg'
+
 export default function Sesstion() {
+  const [lessonTime, setLessonTime] = useState<number>(0)
+  const [studentCnt, setStudentCnt] = useState<number>(1)
+
+  const handleLessonTime = (type: string) => {
+    if (type === 'plus') {
+      setLessonTime(prev => (prev += 30))
+    } else {
+      setLessonTime(prev => (prev -= 30))
+    }
+  }
+
+  const handleStudentCnt = (type: string) => {
+    if (type === 'plus') {
+      setStudentCnt(prev => (prev += 1))
+    } else {
+      setStudentCnt(prev => (prev -= 1))
+    }
+  }
   return (
     <div className="w-full flex flex-col">
+      {/* 수강료 */}
       <div className="payBox w-full flex flex-col gap-2">
-        <p className="gray-800-semibold">수강료</p>
+        <p className="gray-800-semibold text-base">수강료</p>
         <div className="flex flex-col gap-2.5">
           <div className="w-full px-5 py-4 bg-white rounded-lg border border-gray-200 flex flex-col justify-between gap-4">
             <div className="flex w-full">
@@ -38,15 +65,63 @@ export default function Sesstion() {
           </div>
         </div>
       </div>
+      {/* 상세 내역 */}
       <div className="detailInfo w-full flex flex-col gap-3 mt-6">
-        <p className="gray-800-semibold">상세 내역</p>
+        <p className="gray-800-semibold text-base">상세 내역</p>
         <div className="w-full flex">
           <div className="w-[3px] h-[21px] bg-indigo-500 rounded-sm" />
           <div className="text-gray-600 text-sm font-normal ml-3.5">1회 금액 * 총 회차</div>
           <div className="flex-grow text-right text-gray-600 text-sm font-normal">hihi</div>
         </div>
       </div>
-      <div className="time"></div>
+      {/* 소요 시간*/}
+      <div className="time w-full flex flex-col gap-2 mt-10">
+        <div className="gray-800-semibold text-base">소요 시간</div>
+        <div className="w-full flex justify-between h-16 p-3 border border-1 border-gray-300 rounded-full">
+          <button
+            disabled={lessonTime === 0}
+            className={`w-10 h-full flex justify-center items-center rounded-full bg-primary-600 cursor-pointer disabled:bg-gray-200`}
+            onClick={() => handleLessonTime('minus')}
+          >
+            <Image src={Minus} width={12} height={9.6} alt="minus" />
+          </button>
+          <div className="w-[186px] h-[27px] flex justify-center items-center gray-800-semibold text-lg">
+            {lessonTime}분
+          </div>
+          <button
+            className="w-10 h-full flex justify-center items-center rounded-full bg-primary-600 cursor-pointer"
+            onClick={() => {
+              handleLessonTime('plus')
+            }}
+          >
+            <Image src={Plus} width={14} height={14} alt="plus" />
+          </button>
+        </div>
+      </div>
+      {/* 최대 수업 정원*/}
+      <div className="w-full flex flex-col gap-2 mt-8">
+        <div className="text-base gray-800-semibold">최대 수업 정원</div>
+        <div className="w-full flex justify-between h-16 p-3 border border-1 border-gray-300 rounded-full">
+          <button
+            disabled={studentCnt === 1}
+            className="w-10 h-full flex items-center justify-center rounded-full bg-primary-600 cursor-pointer disabled:bg-gray-200"
+            onClick={() => {
+              handleStudentCnt('minus')
+            }}
+          >
+            <Image src={Minus} width={12} height={10} alt="Minus" />
+          </button>
+          <div className="flex items-center justify-center text-lg gray-800-semibold">{studentCnt}명</div>
+          <button
+            className="w-10 h-full flex items-center justify-center rounded-full bg-primary-600 cursor-pointer"
+            onClick={() => {
+              handleStudentCnt('plus')
+            }}
+          >
+            <Image src={Plus} width={14} height={14} alt="Plus" />
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

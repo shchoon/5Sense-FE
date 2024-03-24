@@ -13,6 +13,9 @@ export default function RegisterPage() {
       parentId: ''
     }
   })
+
+  //기간반 회차반
+
   return (
     <div className="w-[640px] flex flex-col gap-5">
       <ClassInfo />
