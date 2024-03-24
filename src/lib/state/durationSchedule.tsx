@@ -17,6 +17,6 @@ export const durationScheduleState = atom<DurationScheduleType>({
     startTime: '',
     endTime: '',
     repeatDate: '',
-    roomId: 1
+    roomId: 2
   }
 })

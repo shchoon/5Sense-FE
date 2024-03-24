@@ -336,7 +336,7 @@ export default function RoomReservation(props: IProps) {
       {dateValue !== '날짜' && lessonTime !== '시간' && (
         <div className="w-full mb-[60px] p-6 flex flex-col gap-6 border border-1 border-gray-200 rounded-lg max-h-[600px] overflow-y-scroll">
           {/* 예약 설명 */}
-          <div className="w-full h-4 flex gap-5 justify-end">
+          {/* <div className="w-full h-4 flex gap-5 justify-end">
             <div className="flex gap-4">
               <div className="flex gap-2">
                 <div className="w-4 h-full bg-white rounded border border-1 border-gray-200" />
@@ -355,7 +355,7 @@ export default function RoomReservation(props: IProps) {
                 <div className="h-full gray-600-normal text-[13px]">90 / 120(분)</div>
               </div>
             </div>
-          </div>
+          </div> */}
           {/* 룸 선택*/}
           <div className="w-full flex flex-col gap-10">
             {roomData.map((data, i) => {
@@ -435,8 +435,12 @@ export default function RoomReservation(props: IProps) {
                               Number(startDateData[0]),
                               Number(startDateData[1]),
                               Number(startDateData[2])
-                            ),
-                            endDate: new Date(Number(endDateData[0]), Number(endDateData[1]), Number(endDateData[2])),
+                            ).toISOString(),
+                            endDate: new Date(
+                              Number(endDateData[0]),
+                              Number(endDateData[1]),
+                              Number(endDateData[2])
+                            ).toISOString(),
                             startTime: lessonTime.slice(0, 5),
                             endTime: lessonTime.slice(6, 11),
                             repeatDate: lessonTime.slice(12, lessonTime.length).split(' ')[0],
