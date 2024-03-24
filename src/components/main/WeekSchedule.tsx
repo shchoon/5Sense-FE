@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useLayoutEffect } from 'react'
 import { dateDataType } from '../datePicker/dayDatePicker'
 import instance from '@/lib/api/axios'
 
@@ -39,6 +39,7 @@ export default function WeekSchedule({ dateData, week }: IProps) {
   useEffect(() => {
     instance(`/lessons/${dateData.year}/${dateData.month + 1}`).then(res => {
       const data = res.data.data
+      console.log(data)
       let returnData = []
       for (var i = 0; i < data.length; i++) {
         data[i].sort((a: any, b: any) => a.startTime.split(':')[0] - b.startTime.split(':')[0])
@@ -145,13 +146,9 @@ export default function WeekSchedule({ dateData, week }: IProps) {
 
       setLessonData(resultList)
     })
-    return () => {
-      setLessonData([])
-    }
   }, [dateData.month])
 
   console.log(week)
-  console.log(lessonData)
 
   return (
     <>
@@ -172,6 +169,7 @@ export default function WeekSchedule({ dateData, week }: IProps) {
         {/* 시간표 */}
         <div className="flex flex-col w-full">
           {lessonData.length !== 0 &&
+            lessonData[week - 1] &&
             lessonData[week - 1].map((data1: any, pI: number) => {
               return (
                 <div key={pI} className="w-full flex xl:gap-5 lg:gap-4 md:gap-[14px] gap-3.5">
