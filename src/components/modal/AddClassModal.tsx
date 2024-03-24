@@ -4,7 +4,11 @@ import RoomReservation from '../room/RoomReservation'
 
 import closeCircle from 'public/assets/icons/closeCircle.svg'
 
-export default function AddClassModal() {
+interface IProps {
+  onClick: () => void
+}
+
+export default function AddClassModal({ onClick }: IProps) {
   return (
     <div className="w-[640px] border border-1 border-gray-200 rounded-xl bg-white">
       <div className="relative w-full h-[90px]">
@@ -12,7 +16,7 @@ export default function AddClassModal() {
         <Image className="absolute right-4 top-4" src={closeCircle} width={35} height={35} alt="closeCircle" />
       </div>
       <div className="w-full px-6 pb-6 flex flex-col gap-10">
-        <RoomReservation class="" studentName="" classType="period" viewType="modal" />
+        <RoomReservation class="" studentName="" classType="period" viewType="modal" onClick={onClick} />
       </div>
     </div>
   )

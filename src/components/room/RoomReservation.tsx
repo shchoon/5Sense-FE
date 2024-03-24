@@ -36,6 +36,7 @@ interface IProps {
   studentName?: string
   classType: string
   viewType: string
+  onClick: () => void
 }
 
 export default function RoomReservation(props: IProps) {
@@ -439,9 +440,10 @@ export default function RoomReservation(props: IProps) {
                             startTime: lessonTime.slice(0, 5),
                             endTime: lessonTime.slice(6, 11),
                             repeatDate: lessonTime.slice(12, lessonTime.length).split(' ')[0],
-                            LessonRoomId: 1
+                            roomId: 1
                           }))
                         }
+                        props.onClick()
                       }}
                     >
                       예약하기

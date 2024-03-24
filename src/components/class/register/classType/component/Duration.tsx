@@ -68,7 +68,12 @@ export default function Duration() {
       )}
       {scheduleModal && (
         <Modal small>
-          <AddClassModal />
+          <AddClassModal
+            onClick={() => {
+              setModal(false)
+              setScheduleModal(false)
+            }}
+          />
         </Modal>
       )}
     </div>

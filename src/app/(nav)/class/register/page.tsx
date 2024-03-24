@@ -1,13 +1,16 @@
 'use client'
 import ClassType from '@/components/class/register/classType'
 import ClassInfo from '@/components/class/register/classInfo'
-import TeacherInfo from '@/app/teacherInfo/page'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { durationScheduleState } from '../../../../lib/state/durationSchedule'
+import { useRecoilValue } from 'recoil'
+import { postClassData } from '@/lib/api/class'
 
 export default function RegisterPage() {
   const [commonInfo, setCommonInfo] = useState({
     name: '',
     memo: '',
+    type: '',
     category: {
       id: '',
       name: '',
@@ -23,12 +26,11 @@ export default function RegisterPage() {
     }))
   }
   //기간반 회차반
-  console.log(commonInfo)
+
   return (
     <div className="w-[640px] flex flex-col gap-5">
       <ClassInfo />
       <ClassType />
-      <TeacherInfo handleChangeTeacherId={handleChangeTeacherId} />
       <div className="Button w-full btn-purpl-lg">등록하기</div>
     </div>
   )
