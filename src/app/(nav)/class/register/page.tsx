@@ -1,6 +1,7 @@
 'use client'
 import ClassType from '@/components/class/register/classType'
 import ClassInfo from '@/components/class/register/classInfo'
+import TeacherInfo from '@/app/teacherInfo/page'
 import { useState } from 'react'
 
 export default function RegisterPage() {
@@ -11,15 +12,23 @@ export default function RegisterPage() {
       id: '',
       name: '',
       parentId: ''
-    }
+    },
+    teacherId: ''
   })
 
+  const handleChangeTeacherId = (id: string) => {
+    setCommonInfo(prev => ({
+      ...prev,
+      teacherId: id
+    }))
+  }
   //기간반 회차반
-
+  console.log(commonInfo)
   return (
     <div className="w-[640px] flex flex-col gap-5">
       <ClassInfo />
       <ClassType />
+      <TeacherInfo handleChangeTeacherId={handleChangeTeacherId} />
       <div className="Button w-full btn-purpl-lg">등록하기</div>
     </div>
   )
