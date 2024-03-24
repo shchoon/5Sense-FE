@@ -131,33 +131,6 @@ export default function ClassType() {
     )
   }
 
-  // function ScheduleItem(item: scheduleItem) {
-  //   return (
-  //     <>
-  //       <div className="flex gap-2">
-  //         <button
-  //           key={item.id}
-  //           className="flex justify-between items-center w-[560px] h-[52px] px-4 py-3.5 bg-white rounded-lg border border-gray-300"
-  //           onClick={() =>
-  //             setComponents(
-  //               components.map((schdule: scheduleItem) =>
-  //                 item.id === schdule.id ? { ...schdule, modal: !schdule.modal } : schdule
-  //               )
-  //             )
-  //           }
-  //         >
-  //           <div className="flex gap-[2px]">
-  //             <Image src={calendaricon} alt="icon" />
-  //             <span className="text-gray-500 text-base font-normal">{item.content}</span>
-  //           </div>
-  //         </button>
-  //         <Image className="cursor-pointer" src={minus} alt="minus" onClick={() => deleteSchedule(item.id)} />
-  //       </div>
-  //       {item.modal && <Calendar />}
-  //     </>
-  //   )
-  // }
-
   return (
     <div className="class-box">
       <div className="Title gray-900-bold text-xl">클래스 유형</div>
