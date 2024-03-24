@@ -1,5 +1,10 @@
 'use client'
 import Image from 'next/image'
+import { useEffect, useState, useRef } from 'react'
+
+import { useOnClickOutside } from '@/hooks/useOnclickOutside'
+import instance from '@/lib/api/axios'
+
 import searchIcon from 'public/assets/icons/search.svg'
 import close_bg_gray from 'public/assets/icons/close_bg_gray.svg'
 import vecterIcon from 'public/assets/icons/vector.svg'
@@ -7,9 +12,6 @@ import plusIcon from 'public/assets/icons/plus.svg'
 import close_Circle_bg from 'public/assets/icons/close_circle_bg_pri_600.svg'
 import close_Circle from 'public/assets/icons/closeCircle.svg'
 import userCircle from 'public/assets/icons/user_circle.svg'
-import { useEffect, useState, useRef } from 'react'
-import { useOnClickOutside } from '@/hooks/useOnclickOutside'
-import instance from '@/lib/api/axios'
 
 interface IPops {
   handleChangeTeacherId: (id: string) => void
@@ -23,12 +25,10 @@ export default function TeacherInfo(props: IPops) {
     if (openTeacherList && !autoCompleteTeacherNameRef.current?.contains(e.target)) {
       setOpenTeacherList(false)
     }
-    console.log('outside')
   }
 
   const handleClickInsideOfInput = () => {
     setOpenTeacherList(prev => !prev)
-    console.log('inside')
   }
 
   useOnClickOutside(inputClickRef, handleClickOutsideOfInput)
@@ -41,23 +41,16 @@ export default function TeacherInfo(props: IPops) {
   let [openTeacherList, setOpenTeacherList] = useState<boolean>(false)
   let [nameValue, setNameValue] = useState<string>('')
 
-  /* function clickInput() {
-        setOpenTeacherList(prev => !prev);
-    } */
-
-  function emptyInput() {
+  const emptyInput = () => {
     setTeacherName('')
   }
 
   const [teacherList, setTeacherList] = useState<{ id: string; name: string; phone: string }[]>([])
   useEffect(() => {
     instance('/teachers?searchBy=none&take=100').then(res => {
-      console.log(res)
       setTeacherList(res.data.data.teachers)
     })
   }, [])
-
-  console.log(teacherList)
 
   return (
     <>

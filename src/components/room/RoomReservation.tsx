@@ -14,6 +14,7 @@ import PeriodLessonTimeModal from '../modal/PeriodLessonTimeModal'
 import { dateDataType } from '../datePicker/dayDatePicker'
 import { modalState } from '@/lib/state/modal'
 import { durationScheduleState } from '@/lib/state/durationSchedule'
+import { lessonTimeState } from '@/lib/state/lessonTime'
 
 import searchIconWhite from 'public/assets/icons/search_white.svg'
 import user from 'public/assets/icons/user.svg'
@@ -43,8 +44,8 @@ export default function RoomReservation(props: IProps) {
   const refs = useRef<(HTMLDivElement | null)[]>([])
   const modal = useRecoilValue(modalState)
   const setModal = useSetRecoilState(modalState)
-  const test = useRecoilValue(durationScheduleState)
   const setDurationSchedule = useSetRecoilState(durationScheduleState)
+  const setLessonTimeState = useSetRecoilState(lessonTimeState)
   const currentDate = new Date()
   const [dateData, setDateData] = useState<dateDataType>({
     year: currentDate.getFullYear(),
@@ -239,13 +240,6 @@ export default function RoomReservation(props: IProps) {
       (Number(end.split(':')[1]) - Number(start.split(':')[1])) / 30
 
     return time
-  }
-  if (lessonTime !== '시간') {
-    const start = lessonTime.slice(0, 5)
-    const end = lessonTime.slice(6, 11)
-    const time =
-      (Number(end.split(':')[0]) - Number(start.split(':')[0])) * 2 +
-      (Number(end.split(':')[1]) - Number(start.split(':')[1])) / 30
   }
 
   return (
@@ -446,6 +440,10 @@ export default function RoomReservation(props: IProps) {
                             repeatDate: lessonTime.slice(12, lessonTime.length).split(' ')[0],
                             roomId: 1
                           }))
+                          if (timeRange !== undefined) {
+                            console.log(timeRange)
+                            setLessonTimeState(timeRange * 30)
+                          }
                         }
                         props.onClick()
                       }}

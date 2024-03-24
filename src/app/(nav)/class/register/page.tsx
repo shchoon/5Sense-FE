@@ -6,6 +6,7 @@ import { durationScheduleState } from '../../../../lib/state/durationSchedule'
 import { useRecoilValue } from 'recoil'
 import { postClassData } from '@/lib/api/class'
 import TeacherInfo from '@/app/teacherInfo/page'
+import { lessonTimeState } from '@/lib/state/lessonTime'
 
 export default function RegisterPage() {
   const [commonInfo, setCommonInfo] = useState({
@@ -20,6 +21,7 @@ export default function RegisterPage() {
     teacherId: ''
   })
 
+  const test = useRecoilValue(lessonTimeState)
   //기간반 회차반
 
   // const handleRegisterClass = () => {
@@ -39,6 +41,7 @@ export default function RegisterPage() {
   const DurationScheduleState = useRecoilValue(durationScheduleState)
 
   console.log(DurationScheduleState)
+  console.log(test)
 
   useEffect(() => {
     console.log('여기', DurationScheduleState)
@@ -70,7 +73,7 @@ export default function RegisterPage() {
           }).then(res => console.log(res))
         }}
       >
-        등록하기 T
+        등록하기
       </div>
     </div>
   )
