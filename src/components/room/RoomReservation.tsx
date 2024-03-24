@@ -13,11 +13,13 @@ import Modal from '../common/modal'
 import PeriodLessonTimeModal from '../modal/PeriodLessonTimeModal'
 import { dateDataType } from '../datePicker/dayDatePicker'
 import { modalState } from '@/lib/state/modal'
+import { durationScheduleState } from '@/lib/state/durationSchedule'
 
 import searchIconWhite from 'public/assets/icons/search_white.svg'
 import user from 'public/assets/icons/user.svg'
 import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
 import chevronLeft from 'public/assets/icons/chevron/chevron-left.svg'
+import { split } from 'postcss/lib/list'
 
 interface RoomDataType {
   id: number
@@ -40,6 +42,8 @@ export default function RoomReservation(props: IProps) {
   const refs = useRef<(HTMLDivElement | null)[]>([])
   const modal = useRecoilValue(modalState)
   const setModal = useSetRecoilState(modalState)
+  const test = useRecoilValue(durationScheduleState)
+  const setDurationSchedule = useSetRecoilState(durationScheduleState)
   const currentDate = new Date()
   const [dateData, setDateData] = useState<dateDataType>({
     year: currentDate.getFullYear(),
@@ -243,9 +247,6 @@ export default function RoomReservation(props: IProps) {
       (Number(end.split(':')[1]) - Number(start.split(':')[1])) / 30
   }
 
-  const test = () => {
-    console.log(reservationData)
-  }
   return (
     <>
       <div className="relative w-full flex flex-col gap-4">
@@ -332,7 +333,7 @@ export default function RoomReservation(props: IProps) {
 
       {/* 일정 선택 */}
       {dateValue !== '날짜' && lessonTime !== '시간' && (
-        <div className="w-full mb-[60px] p-6 flex flex-col gap-6 border border-1 border-gray-200 rounded-lg">
+        <div className="w-full mb-[60px] p-6 flex flex-col gap-6 border border-1 border-gray-200 rounded-lg max-h-[600px] overflow-y-scroll">
           {/* 예약 설명 */}
           <div className="w-full h-4 flex gap-5 justify-end">
             <div className="flex gap-4">
@@ -425,7 +426,21 @@ export default function RoomReservation(props: IProps) {
                             day: day,
                             room: clickedRoomData.room
                           }
-                          console.log(data)
+                          const startDateData = dateValue.split('~')[0].split('.')
+                          const endDateData = dateValue.split('~')[1].split('.')
+                          setDurationSchedule(prev => ({
+                            ...prev,
+                            startDate: new Date(
+                              Number(startDateData[0]),
+                              Number(startDateData[1]),
+                              Number(startDateData[2])
+                            ),
+                            endDate: new Date(Number(endDateData[0]), Number(endDateData[1]), Number(endDateData[2])),
+                            startTime: lessonTime.slice(0, 5),
+                            endTime: lessonTime.slice(6, 11),
+                            repeatDate: lessonTime.slice(12, lessonTime.length).split(' ')[0],
+                            LessonRoomId: 1
+                          }))
                         }
                       }}
                     >
