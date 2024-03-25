@@ -414,12 +414,12 @@ export default function RoomReservation(props: IProps) {
                             ...prev,
                             startDate: new Date(
                               Number(startDateData[0]),
-                              Number(startDateData[1]),
+                              Number(startDateData[1]) - 1,
                               Number(startDateData[2])
                             ).toISOString(),
                             endDate: new Date(
                               Number(endDateData[0]),
-                              Number(endDateData[1]),
+                              Number(endDateData[1]) - 1,
                               Number(endDateData[2])
                             ).toISOString(),
                             startTime: lessonTime.slice(0, 5),

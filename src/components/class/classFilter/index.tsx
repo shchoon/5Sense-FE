@@ -1,9 +1,12 @@
 import Image from 'next/image'
 import { useState, useRef, useEffect } from 'react'
+import { useSetRecoilState } from 'recoil'
 
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
 import DropDown from '@/components/common/DropDown'
 import FilterSearchName from '@/components/common/FilterSearchName'
+import { classTypeState } from '@/lib/filter/classTypeState'
+import { filterState } from '@/lib/filter/filterState'
 
 import chevronDownBlue from 'public/assets/icons/chevron/chevron-down-blue.svg'
 import chevronUpBlue from 'public/assets/icons/chevron/chevron-up-blue.svg'
@@ -16,14 +19,18 @@ export interface instructorDataType {
 }
 
 export interface classifyListType {
-  id: string
+  id: number
   name: string
-  parentId: string
-  subClass?: { id: string; name: string; parentId: string }[]
 }
-;[]
+
+interface categoryType {
+  mainCategory: { id: number; name: string }[]
+  subCategory: { id: number; name: string }[]
+}
 
 export default function ClassFilter() {
+  const setClassTypeState = useSetRecoilState(classTypeState)
+  const setFilterState = useSetRecoilState(filterState)
   const [isClickedfilter, setIsClickedfilter] = useState({
     isClickedCategoryFilter: false,
     isClickedClassFilter: false,
@@ -32,7 +39,7 @@ export default function ClassFilter() {
 
   const [classType, setClassType] = useState<string>('')
   const [checkedNameList, setCheckedNameList] = useState<string[]>([])
-  const [classifyList, setClassifyList] = useState<classifyListType[]>([])
+  const [mainCategoryList, setMainCategoryList] = useState<classifyListType[]>([])
   const [categoryData, setCategoryData] = useState({
     title: '카테고리',
     id: '',
@@ -48,26 +55,26 @@ export default function ClassFilter() {
     title: '강사 이름',
     type: 'teachers'
   }
-  const categoryProps = {
+  const mainCategoryProps = {
     title: '대분류 선택',
-    list: classifyList,
+    list: mainCategoryList,
     type: 'category'
   }
   const handleChangeNameListFromChild = (data: any) => {
     setCheckedNameList(data)
   }
   const handleChangeParentsCategoryData = (data: any, type: string) => {
-    if (type === 'classify') {
+    if (type === 'main') {
       setCategoryData(prev => ({
         ...prev,
         title: data.title,
         id: data.id
       }))
-      setSubClassProps(prev => ({
+      /* setSubClassProps(prev => ({
         ...prev,
-        list: classifyList[Number(data.id) - 1].subClass
-      }))
-    } else if (type === 'subClass') {
+        list: mainCategoryList[Number(data.id) - 1].subClass
+      })) */
+    } else if (type === 'sub') {
       setCategoryData(prev => ({
         ...prev,
         subClass: data.title,
@@ -77,7 +84,21 @@ export default function ClassFilter() {
   }
 
   const radioHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setClassType(event.target.value)
+    if (event.target.value === '기간반') {
+      setClassType('기간반')
+      setFilterState(prev => ({
+        ...prev,
+        classType: 'duration'
+      }))
+    } else if (event.target.value === '회차반') {
+      setClassType('회차반')
+      setFilterState(prev => ({
+        ...prev,
+        classType: 'session'
+      }))
+    }
+    setClassTypeState(event.target.value)
+
     setIsClickedfilter(prev => ({
       ...prev,
       isClickedClassFilter: false
@@ -155,10 +176,20 @@ export default function ClassFilter() {
   /* 강사명 필터링 영역 밖 클릭 */
   useOnClickOutside(teacherNameTypeRef, handleClickTeacherOutside)
 
+  const sortedMainCategory = (data: any) => {
+    if (data.name === '기타') {
+      return 1
+    } else {
+      return -1
+    }
+  }
+
   useEffect(() => {
     instance.get('/lesson-categories').then(res => {
-      const data: { id: string; name: string; parentId: string }[] = res.data.data
-      let classification: classifyListType[] = []
+      const data: categoryType = res.data.data
+      const mainCategory = data.mainCategory.toSorted((a, b) => sortedMainCategory(a))
+      setMainCategoryList(mainCategory)
+      /* let classification: classifyListType[] = []
       for (var i = 0; i < data.length; i++) {
         if (data[i].parentId === null) {
           const getParentId = data[i].parentId !== null ? data[i].parentId : '0'
@@ -175,7 +206,7 @@ export default function ClassFilter() {
         const subClassList = data.filter(list => list.parentId === String(i + 1))
         classification[i].subClass = subClassList
       }
-      setClassifyList(classification)
+      setClassifyList(classification) */
     })
   }, [])
 
@@ -244,6 +275,7 @@ export default function ClassFilter() {
             <div id="classTypeFilter" className="w-[130px] h-[54] flex flex-col gap-3 ">
               <p className="flex gap-2 items-center">
                 <input
+                  className="cursor-pointer"
                   type="radio"
                   id="timeClass"
                   name="classType"
@@ -251,15 +283,13 @@ export default function ClassFilter() {
                   checked={classType === '회차반' && true}
                   onChange={radioHandler}
                 />
-                <label
-                  htmlFor="timeClass"
-                  className="text-gray-900 text-sm font-semibold font-['Pretendard'] leading-[21px]"
-                >
+                <label htmlFor="timeClass" className="text-gray-900 text-sm font-semibold cursor-pointer">
                   회차반
                 </label>
               </p>
-              <p className="flex gap-2 items-center">
+              <p className="flex gap-2 items-center cursor-pointer">
                 <input
+                  className="cursor-pointer"
                   type="radio"
                   id="preiodClass"
                   name="classType"
@@ -267,10 +297,7 @@ export default function ClassFilter() {
                   checked={classType === '기간반' && true}
                   onChange={radioHandler}
                 />
-                <label
-                  htmlFor="preiodClass"
-                  className="text-gray-900 text-sm font-semibold font-['Pretendard'] leading-[21px]"
-                >
+                <label htmlFor="preiodClass" className="text-gray-900 text-sm font-semibold cursor-pointer">
                   기간반
                 </label>
               </p>
@@ -293,7 +320,7 @@ export default function ClassFilter() {
             className="absolute left-[212.5px] flex flex-col w-[195px] h-auto p-4 gap-3 border rounded-lg border-gray-300 bg-white shadow-[0_1px_2px_0_rgba(0,0,0,0.08)]"
           >
             <div className="relative">
-              <DropDown {...categoryProps} handleChangeParentsCategoryData={handleChangeParentsCategoryData} />
+              <DropDown {...mainCategoryProps} handleChangeParentsCategoryData={handleChangeParentsCategoryData} />
               {/* 대분류 필터링 */}
             </div>
             <div className="relative">

@@ -43,7 +43,7 @@ export default function DropDown(props: IProps) {
           title: item.name,
           id: item.id
         },
-        'classify'
+        'main'
       )
     } else if (props.type === 'category' && props.title === '소분류 선택' && props.handleChangeParentsCategoryData) {
       props.handleChangeParentsCategoryData(
@@ -51,7 +51,7 @@ export default function DropDown(props: IProps) {
           title: item.name,
           id: item.id
         },
-        'subClass'
+        'sub'
       )
     } /* else if (props.type === 'repeat' && props.handleChangeParentsDropdownDataRepeat) {
       console.log(repeatClickedItemTitle)

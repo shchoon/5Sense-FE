@@ -58,12 +58,12 @@ export default function RegisterPage() {
           postClassData({
             type: 'duration',
             durationLesson: {
-              name: 'Test',
-              memo: 'Test',
-              lessonTime: 120,
-              tuitionFee: 2000,
-              category: { id: 10, name: '아크릴화' },
-              teacherId: 2,
+              name: 'K-POP 인재 양성 태국반',
+              memo: '강사 블랙핑크 리사',
+              lessonTime: 90,
+              tuitionFee: 1000000,
+              category: { id: 19, name: '방송댄스' },
+              teacherId: 7,
               schedules: [
                 {
                   ...DurationScheduleState
