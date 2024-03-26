@@ -37,11 +37,7 @@ export default function RegisterPage() {
     }))
   }
 
-  console.log(commonInfo)
   const DurationScheduleState = useRecoilValue(durationScheduleState)
-
-  console.log(DurationScheduleState)
-  console.log(test)
 
   useEffect(() => {
     console.log('여기', DurationScheduleState)
@@ -62,7 +58,7 @@ export default function RegisterPage() {
               memo: '강사 블랙핑크 리사',
               lessonTime: 90,
               tuitionFee: 1000000,
-              category: { id: 19, name: '방송댄스' },
+              category: { id: 20, name: '발레' },
               teacherId: 7,
               schedules: [
                 {

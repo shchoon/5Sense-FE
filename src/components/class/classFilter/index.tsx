@@ -1,11 +1,10 @@
 import Image from 'next/image'
 import { useState, useRef, useEffect } from 'react'
-import { useSetRecoilState } from 'recoil'
+import { useSetRecoilState, useRecoilValue } from 'recoil'
 
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
 import DropDown from '@/components/common/DropDown'
 import FilterSearchName from '@/components/common/FilterSearchName'
-import { classTypeState } from '@/lib/filter/classTypeState'
 import { filterState } from '@/lib/filter/filterState'
 
 import chevronDownBlue from 'public/assets/icons/chevron/chevron-down-blue.svg'
@@ -25,12 +24,12 @@ export interface classifyListType {
 
 interface categoryType {
   mainCategory: { id: number; name: string }[]
-  subCategory: { id: number; name: string }[]
+  subCategory: { id: number; name: string; parentId: number }[]
 }
 
 export default function ClassFilter() {
-  const setClassTypeState = useSetRecoilState(classTypeState)
   const setFilterState = useSetRecoilState(filterState)
+  const filterValue = useRecoilValue(filterState)
   const [isClickedfilter, setIsClickedfilter] = useState({
     isClickedCategoryFilter: false,
     isClickedClassFilter: false,
@@ -39,46 +38,49 @@ export default function ClassFilter() {
 
   const [classType, setClassType] = useState<string>('')
   const [checkedNameList, setCheckedNameList] = useState<string[]>([])
-  const [mainCategoryList, setMainCategoryList] = useState<classifyListType[]>([])
+  const [categoryList, setCategoryList] = useState<categoryType>({
+    mainCategory: [],
+    subCategory: []
+  })
   const [categoryData, setCategoryData] = useState({
-    title: '카테고리',
-    id: '',
+    mainClass: '카테고리',
+    mainClassId: '',
     subClass: '',
     subClassId: ''
   })
   const [subClassProps, setSubClassProps] = useState<{ title: string; list: any; type: string }>({
     title: '소분류 선택',
-    list: ['없음'],
+    list: [{ name: '없음' }],
     type: 'category'
   })
-  const searchNameProps = {
-    title: '강사 이름',
-    type: 'teachers'
+
+  const categoryProps = {
+    main: {
+      title: '대분류 선택',
+      list: categoryList.mainCategory,
+      type: 'category'
+    },
+    sub: {
+      title: '소분류 선택'
+    }
   }
-  const mainCategoryProps = {
-    title: '대분류 선택',
-    list: mainCategoryList,
-    type: 'category'
-  }
-  const handleChangeNameListFromChild = (data: any) => {
-    setCheckedNameList(data)
-  }
+
   const handleChangeParentsCategoryData = (data: any, type: string) => {
     if (type === 'main') {
       setCategoryData(prev => ({
         ...prev,
-        title: data.title,
-        id: data.id
+        mainClass: data.title,
+        mainClassId: data.id
       }))
-      /* setSubClassProps(prev => ({
-        ...prev,
-        list: mainCategoryList[Number(data.id) - 1].subClass
-      })) */
     } else if (type === 'sub') {
       setCategoryData(prev => ({
         ...prev,
         subClass: data.title,
         subClassId: data.id
+      }))
+      setIsClickedfilter(prev => ({
+        ...prev,
+        isClickedCategoryFilter: false
       }))
     }
   }
@@ -97,7 +99,6 @@ export default function ClassFilter() {
         classType: 'session'
       }))
     }
-    setClassTypeState(event.target.value)
 
     setIsClickedfilter(prev => ({
       ...prev,
@@ -106,12 +107,12 @@ export default function ClassFilter() {
   }
 
   function getCheckedName() {
-    if (checkedNameList.length === 1) {
-      return `${checkedNameList[0]}`
-    } else if (checkedNameList.length == 2) {
-      return `${checkedNameList[0]},${checkedNameList[1]}`
+    if (filterValue.teacherName.length === 1) {
+      return `${filterValue.teacherName[0]}`
+    } else if (filterValue.teacherName.length == 2) {
+      return `${filterValue.teacherName[0]},${filterValue.teacherName[1]}`
     } else {
-      return `${checkedNameList[0]},${checkedNameList[1]},${checkedNameList[2][0]}..`
+      return `${filterValue.teacherName[0]},${filterValue.teacherName[1]},${filterValue.teacherName[2]}..`
     }
   }
 
@@ -147,7 +148,7 @@ export default function ClassFilter() {
     }
   }
 
-  const handleCLickClassInside = () => {
+  const handleClickClassInside = () => {
     setIsClickedfilter(prev => ({
       ...prev,
       isClickedClassFilter: !prev.isClickedClassFilter
@@ -188,41 +189,38 @@ export default function ClassFilter() {
     instance.get('/lesson-categories').then(res => {
       const data: categoryType = res.data.data
       const mainCategory = data.mainCategory.toSorted((a, b) => sortedMainCategory(a))
-      setMainCategoryList(mainCategory)
-      /* let classification: classifyListType[] = []
-      for (var i = 0; i < data.length; i++) {
-        if (data[i].parentId === null) {
-          const getParentId = data[i].parentId !== null ? data[i].parentId : '0'
-          classification.push({
-            id: data[i].id,
-            name: data[i].name,
-            parentId: getParentId
-          })
-        } else {
-          break
-        }
-      }
-      for (var i = 0; i < classification.length; i++) {
-        const subClassList = data.filter(list => list.parentId === String(i + 1))
-        classification[i].subClass = subClassList
-      }
-      setClassifyList(classification) */
+      setCategoryList(prev => ({
+        ...prev,
+        mainCategory: mainCategory,
+        subCategory: data.subCategory
+      }))
     })
   }, [])
 
-  console.log(classType)
+  useEffect(() => {
+    setSubClassProps(prev => ({
+      ...prev,
+      list: categoryList.subCategory.filter(data => data.parentId === Number(categoryData.mainClassId))
+    }))
+    setFilterState(prev => ({
+      ...prev,
+      mainCategoryId: categoryData.mainClassId,
+      subCategoryId: categoryData.subClassId !== '' ? categoryData.subClassId : ''
+    }))
+    console.log(categoryData.subClassId)
+  }, [categoryData])
 
   return (
     <div className="flex flex-col gap-2 h-[50px]">
-      <div className=" max-w-[375px] h-[37px] items-start gap-2 flex">
+      <div className=" max-w-[480px] h-[37px] items-start gap-2 flex">
         <button
           ref={classTypeRef}
-          className="group flex items-center gap-2 w-[112px] h-full border px-3 py-2 rounded-lg border-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9]"
+          className="group flex items-center gap-2 w-[120px] h-full border px-3 py-2 rounded-lg border-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9]"
           onClick={e => {
-            handleCLickClassInside()
+            handleClickClassInside()
           }}
         >
-          <span className="w-16 h-[21px] text-[11.5px] font-semibold font-['Pretendard'] leading-[21px] text-indigo-500 group-hover:text-white group-focus:text-white">
+          <span className="w-20 text-sm indigo-500-semibold group-hover:text-white group-focus:text-white">
             {classType === '' ? '클래스 유형' : classType}
           </span>
           {isClickedfilter.isClickedClassFilter ? (
@@ -233,13 +231,13 @@ export default function ClassFilter() {
         </button>
         <button
           ref={teacherNameTypeRef}
-          className="group flex items-center gap-2 max-w-[150px] h-full px-3 py-2 border rounded-lg border-indigo-500  hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9] focus-within:text-white"
+          className="group flex items-center gap-2 max-w-[170px] h-full px-3 py-2 border rounded-lg border-indigo-500  hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9] focus-within:text-white"
           onClick={() => {
             handleClickTeacherInside()
           }}
         >
-          <span className="max-w-[110px] h-[21px] text-[11.5px] font-semibold font-['Pretendard'] leading-[21px] text-indigo-500 group-hover:text-white group-focus:text-white">
-            {checkedNameList.length === 0 ? '강사명' : getCheckedName()}
+          <span className="max-w-[130px] text-sm indigo-500-semibold group-hover:text-white group-focus:text-white">
+            {filterValue.teacherName.length === 0 ? '강사명' : getCheckedName()}
           </span>
           {isClickedfilter.isClickedTeacherFilter ? (
             <Image src={chevronUpBlue} width={16} height={16} alt=" " />
@@ -249,13 +247,13 @@ export default function ClassFilter() {
         </button>
         <button
           ref={categoryTypeRef}
-          className="group flex items-center gap-2 w-[97px] h-full px-3 py-2 border rounded-lg border-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9]"
+          className="group flex items-center gap-2 max-w-[170px] h-full px-3 py-2 border rounded-lg border-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9]"
           onClick={() => {
             handleClickCategoryInside()
           }}
         >
-          <span className="w-[49px] h-[21px] text-[11.5px] font-semibold font-['Pretendard'] leading-[21px] text-indigo-500 group-hover:text-white group-focus:text-white">
-            {categoryData.title}
+          <span className="max-w-[130px] text-sm indigo-500-semibold group-hover:text-white group-focus:text-white">
+            {categoryData.mainClass} {categoryData.subClass !== '' && `/ ${categoryData.subClass}`}
           </span>
           {isClickedfilter.isClickedCategoryFilter ? (
             <Image src={chevronUpBlue} width={16} height={16} alt=" " />
@@ -283,7 +281,7 @@ export default function ClassFilter() {
                   checked={classType === '회차반' && true}
                   onChange={radioHandler}
                 />
-                <label htmlFor="timeClass" className="text-gray-900 text-sm font-semibold cursor-pointer">
+                <label htmlFor="timeClass" className="gray-900-semibold text-sm cursor-pointer">
                   회차반
                 </label>
               </p>
@@ -297,7 +295,7 @@ export default function ClassFilter() {
                   checked={classType === '기간반' && true}
                   onChange={radioHandler}
                 />
-                <label htmlFor="preiodClass" className="text-gray-900 text-sm font-semibold cursor-pointer">
+                <label htmlFor="preiodClass" className="gray-900-semibold text-sm cursor-pointer">
                   기간반
                 </label>
               </p>
@@ -310,7 +308,7 @@ export default function ClassFilter() {
             ref={teacherNameTypeRefClick}
             className="absolute left-[120px] flex gap-[5px] w-[195px] py-4 pl-4 pr-2 border rounded-lg border-gray-300 bg-white shadow-[0_1px_2px_0_rgba(0,0,0,0.08)]"
           >
-            <FilterSearchName {...searchNameProps} handleChangeNameListFromChild={handleChangeNameListFromChild} />
+            <FilterSearchName />
           </div>
         ) : null}
         {/* 카테고리명 대분류/소분류 필터링 */}
@@ -320,7 +318,7 @@ export default function ClassFilter() {
             className="absolute left-[212.5px] flex flex-col w-[195px] h-auto p-4 gap-3 border rounded-lg border-gray-300 bg-white shadow-[0_1px_2px_0_rgba(0,0,0,0.08)]"
           >
             <div className="relative">
-              <DropDown {...mainCategoryProps} handleChangeParentsCategoryData={handleChangeParentsCategoryData} />
+              <DropDown {...categoryProps.main} handleChangeParentsCategoryData={handleChangeParentsCategoryData} />
               {/* 대분류 필터링 */}
             </div>
             <div className="relative">

@@ -2,17 +2,19 @@ import { atom } from 'recoil'
 
 export interface filterStateType {
   classType: string
-  teachers: string[]
-  mainCategory: string
-  subCategory: string
+  teacherId: string[]
+  mainCategoryId: string
+  subCategoryId: string
+  teacherName: string[]
 }
 
 export const filterState = atom<filterStateType>({
   key: 'filterState',
   default: {
     classType: '',
-    teachers: [],
-    mainCategory: '',
-    subCategory: ''
+    teacherId: [],
+    mainCategoryId: '',
+    subCategoryId: '',
+    teacherName: []
   }
 })

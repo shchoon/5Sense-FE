@@ -12,6 +12,12 @@ interface HandleChangeTimeFromChildType {
   (data: { open?: string; close?: string }): void
 }
 
+interface categoryProps {
+  id: number
+  name: string
+  parentId?: number
+}
+
 interface IProps {
   title: string
   list: any[]
@@ -53,10 +59,7 @@ export default function DropDown(props: IProps) {
         },
         'sub'
       )
-    } /* else if (props.type === 'repeat' && props.handleChangeParentsDropdownDataRepeat) {
-      console.log(repeatClickedItemTitle)
-      props.handleChangeParentsDropdownDataRepeat(test, 'repeat')
-    } */
+    }
   }
   const [isClickDropDown, setIsClickDropDown] = useState(false)
   const [clickedItemTitle, setClickedItemTitle] = useState<string>(props.title)
@@ -147,7 +150,7 @@ export default function DropDown(props: IProps) {
               )
             })}
           {props.type === 'category' &&
-            props.list.map((item: classifyListType, i: number) => {
+            props.list.map((item: categoryProps, i: number) => {
               return (
                 <div
                   key={i}

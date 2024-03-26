@@ -7,7 +7,6 @@ import { useRecoilValue, useRecoilState } from 'recoil'
 import ClassFilter from '@/components/class/classFilter'
 import ContentHeader from '@/components/common/contentHeader'
 import instance from '@/lib/api/axios'
-import { classTypeState } from '@/lib/filter/classTypeState'
 import { filterState } from '@/lib/filter/filterState'
 import { filterStateType } from '@/lib/filter/filterState'
 
@@ -27,12 +26,6 @@ export default function ClassPage() {
   const [classList, setClassList] = useState<classType[]>([])
   const filter = useRecoilState(filterState)
   const filterValue = useRecoilValue(filterState)
-  const [filterItems, setFilterItems] = useState({
-    lessonType: filter,
-    teacherId: [],
-    mainCategoryId: '',
-    subCategoryId: ''
-  })
 
   const checkLessonUrl = (data: filterStateType) => {
     let baseUrl = ['lessons/filters?']
@@ -41,9 +34,13 @@ export default function ClassPage() {
     } else {
       baseUrl.push('type=all')
     }
-    if (data.teachers.length !== 0) {
+    if (data.teacherId.length !== 0) {
       baseUrl.push('&teachers=')
-      baseUrl.push(data.teachers.join())
+      baseUrl.push(data.teacherId.join())
+    }
+    if (data.subCategoryId !== '') {
+      baseUrl.push('&categories=')
+      baseUrl.push(data.subCategoryId)
     }
     return baseUrl.join('')
   }
