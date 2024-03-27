@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 //내장
 import NoneResult from '@/components/common/NoneResult'
 import RegisterModal from '@/components/instructor/RegisterModal'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { modalState } from '@/lib/state/modal'
 import Card from '@/components/instructor/Card'
 import { getInstructorData } from '@/lib/api/instructor'

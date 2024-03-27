@@ -16,7 +16,7 @@ export default function ContentHeader({ title, btnName, onClick }: IProps) {
   return (
     <div className="flex w-full justify-between items-center mb-[30px]">
       <div className="black-bold text-3xl">{title}</div>
-      <button className="flex gap-2 btn-purpl-sm lg:btn-purpl-md" onClick={() => onClick()}>
+      <button className="flex gap-2 btn-purple-sm lg:btn-purple-md" onClick={() => onClick()}>
         <PlusCircleIcon {...whitePlusCircleProps} />
         {btnName}
       </button>

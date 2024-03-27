@@ -40,7 +40,7 @@ module.exports = {
             margin: 'unset'
           }
         },
-        '.btn-purpl-md': {
+        '.btn-purple-md': {
           // boxSizing: 'border-box',
           background: '#7354E8',
           borderRadius: 8,
@@ -59,7 +59,7 @@ module.exports = {
             margin: 'unset'
           }
         },
-        '.btn-purpl-lg': {
+        '.btn-purple-lg': {
           // boxSizing: 'border-box',
           background: '#7354E8',
           borderRadius: 8,

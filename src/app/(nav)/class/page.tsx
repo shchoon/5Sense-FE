@@ -2,13 +2,16 @@
 
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { useRecoilValue, useRecoilState } from 'recoil'
+import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil'
 
 import ClassFilter from '@/components/class/classFilter'
 import ContentHeader from '@/components/common/contentHeader'
 import instance from '@/lib/api/axios'
 import { filterState } from '@/lib/filter/filterState'
 import { filterStateType } from '@/lib/filter/filterState'
+import Modal from '@/components/common/modal'
+import { modalState } from '@/lib/state/modal'
+import DetailClassModal from '@/components/modal/DetailClassModal'
 
 interface classType {
   category: string
@@ -24,8 +27,10 @@ export default function ClassPage() {
   const router = useRouter()
 
   const [classList, setClassList] = useState<classType[]>([])
-  const filter = useRecoilState(filterState)
   const filterValue = useRecoilValue(filterState)
+
+  const modal = useRecoilValue(modalState)
+  const setModal = useSetRecoilState(modalState)
 
   const checkLessonUrl = (data: filterStateType) => {
     let baseUrl = ['lessons/filters?']
@@ -48,12 +53,9 @@ export default function ClassPage() {
   useEffect(() => {
     instance(checkLessonUrl(filterValue)).then(res => {
       const lessonData = res.data.data.lessons
-      console.log(res.data.data.lessons)
       setClassList(lessonData)
     })
   }, [filterValue])
-
-  console.log(filter)
 
   return (
     <div>
@@ -62,9 +64,12 @@ export default function ClassPage() {
       <div className="container w-full max-w-[1872px] grid grid-cols-2 2xl:grid-cols-3 gap-[20px] mt-5">
         {classList.length !== 0 &&
           classList.map((data, idx) => (
-            <div
+            <button
               key={idx}
               className="h-56 px-4 py-8 flex flex-col justify-between box-border bg-white rounded-lg shadow border border-gray-200"
+              onClick={() => {
+                setModal(true)
+              }}
             >
               <div
                 className={`categor w-fit h-fit px-2.5 py-2 box-border rounded justify-center items-center ${
@@ -78,9 +83,14 @@ export default function ClassPage() {
                 <div className="gray-500-medium text-base">담당 강사 : {data.teacher}</div>
                 <div className="gray-500-normal text-sm">회원 수 : {data.numberOfStudnets}</div>
               </div>
-            </div>
+            </button>
           ))}
       </div>
+      {modal && (
+        <Modal>
+          <DetailClassModal onClose={() => setModal(false)} />
+        </Modal>
+      )}
     </div>
   )
 }
