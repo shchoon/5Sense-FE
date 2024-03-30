@@ -32,19 +32,19 @@ export default function Category() {
     {
       id: '2',
       name: '연기',
-      imgUrl: '/assets/icons/category/arts.svg',
+      imgUrl: '/assets/icons/category/show.svg',
       options: []
     },
     {
       id: '3',
       name: '공연',
-      imgUrl: '/assets/icons/category/arts.svg',
+      imgUrl: '/assets/icons/category/performance.svg',
       options: []
     },
     {
       id: '4',
       name: '체육',
-      imgUrl: '/assets/icons/category/arts.svg',
+      imgUrl: '/assets/icons/category/sports.svg',
       options: [
         { id: '1', name: '클라이밍' },
         { id: '2', name: '실내다이빙' },
@@ -59,7 +59,7 @@ export default function Category() {
     {
       id: '5',
       name: '댄스',
-      imgUrl: '/assets/icons/category/arts.svg',
+      imgUrl: '/assets/icons/category/dance.svg',
       options: [
         { id: '1', name: '방송댄스' },
         { id: '2', name: '발레' },
@@ -71,7 +71,7 @@ export default function Category() {
     {
       id: '6',
       name: '보컬',
-      imgUrl: '/assets/icons/category/arts.svg',
+      imgUrl: '/assets/icons/category/vocal.svg',
       options: [
         { id: '1', name: '재즈' },
         { id: '2', name: '실용음악' },
@@ -82,7 +82,7 @@ export default function Category() {
     {
       id: '7',
       name: '프로듀싱',
-      imgUrl: '/public/assets/icons/category/arts.svg',
+      imgUrl: '/assets/icons/category/produce.svg',
       options: [
         { id: '1', name: '프로듀싱' },
         { id: '2', name: '작곡·작사' },
@@ -92,7 +92,7 @@ export default function Category() {
     {
       id: '8',
       name: '연주',
-      imgUrl: '/public/assets/icons/category/arts.svg',
+      imgUrl: '/assets/icons/category/play.svg',
       options: [
         { id: '1', name: '피아노' },
         { id: '2', name: '현악기' },
@@ -105,7 +105,7 @@ export default function Category() {
     {
       id: '9',
       name: '기타',
-      imgUrl: '/assets/icons/category/arts.svg',
+      imgUrl: '/assets/icons/category/etc.svg',
       options: []
     }
   ]

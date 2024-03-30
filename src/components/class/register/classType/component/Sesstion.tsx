@@ -1,12 +1,29 @@
 'use client'
 
-import { useState } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import Image from 'next/image'
 
 import Minus from 'public/assets/icons/minus_vector.svg'
 import Plus from 'public/assets/icons/plus_vector.svg'
+import { ICommonInfo } from '@/app/(nav)/class/register/page'
 
-export default function Sesstion() {
+interface IProps {
+  commonInfo: ICommonInfo
+  setCommonInfo: Dispatch<SetStateAction<ICommonInfo>>
+}
+
+export default function Sesstion({ commonInfo, setCommonInfo }: IProps) {
+  const [first, setFirst] = useState<string>('')
+
+  const changeEnteredNum = (e: ChangeEvent<HTMLInputElement>) => {
+    const value: string = e.target.value
+    if (!Number(value)) {
+      return setFirst('')
+    }
+    const removedCommaValue = value.replaceAll(',', '')
+    setFirst(Number(removedCommaValue.slice(0, 9)).toLocaleString())
+  }
+
   const [lessonTime, setLessonTime] = useState<number>(0)
   const [studentCnt, setStudentCnt] = useState<number>(1)
 
@@ -35,11 +52,11 @@ export default function Sesstion() {
             <div className="flex w-full">
               <span className="text-[#4B5563] text-base font-medium">1회 금액</span>
               <input
-                type="number"
+                type="text"
                 className="flex-grow text-right placeholder:text-gray-400 text-base font-normal outline-none"
                 placeholder="0"
-                //   value={addComma(one)}
-                //   onChange={onChangeHandler}
+                value={first}
+                onChange={changeEnteredNum}
               />
               <span className="text-gray-400 text-base font-normal">원</span>
             </div>

@@ -1,5 +1,6 @@
+import { ICommonInfo } from '@/app/(nav)/class/register/page'
 import { useInput } from '@/hooks/useInput'
-import { SetStateAction } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 
 export interface InputFormProps {
   title: string

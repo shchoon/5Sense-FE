@@ -1,4 +1,4 @@
-import PlusCircleIcon from '../../../../public/assets/icons/plus-circle'
+import PlusIcon from 'public/assets/icons/circle/plus.svg'
 
 interface IProps {
   title: string
@@ -6,18 +6,12 @@ interface IProps {
   onClick: () => void
 }
 
-const whitePlusCircleProps = {
-  width: '20',
-  height: '20',
-  color: '#FFF'
-}
-
 export default function ContentHeader({ title, btnName, onClick }: IProps) {
   return (
     <div className="flex w-full justify-between items-center mb-[30px]">
       <div className="black-bold text-3xl">{title}</div>
-      <button className="flex gap-2 btn-purpl-sm lg:btn-purpl-md" onClick={() => onClick()}>
-        <PlusCircleIcon {...whitePlusCircleProps} />
+      <button className="flex gap-2 btn-purple-sm lg:btn-purple-md" onClick={() => onClick()}>
+        <PlusIcon />
         {btnName}
       </button>
     </div>

@@ -6,15 +6,24 @@ import { durationScheduleState } from '../../../../lib/state/durationSchedule'
 import { useRecoilValue } from 'recoil'
 import { postClassData } from '@/lib/api/class'
 
+export interface ICommonInfo {
+  name: string
+  memo: string
+  type: string
+  category: {
+    id: string
+    name: string
+  }
+}
+
 export default function RegisterPage() {
   const [commonInfo, setCommonInfo] = useState({
-    name: 'test',
-    memo: 'test',
+    name: '',
+    memo: '',
     type: '',
     category: {
       id: '',
-      name: '',
-      parentId: ''
+      name: ''
     }
   })
 
@@ -36,8 +45,8 @@ export default function RegisterPage() {
 
   return (
     <div className="w-[640px] flex flex-col gap-5">
-      <ClassInfo />
-      <ClassType />
+      <ClassInfo commonInfo={commonInfo} setCommonInfo={setCommonInfo} />
+      <ClassType commonInfo={commonInfo} setCommonInfo={setCommonInfo} />
 
       <div
         className="Button w-full btn-purpl-lg"

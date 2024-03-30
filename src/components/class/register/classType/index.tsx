@@ -1,7 +1,8 @@
 'use client'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import Duration from './component/Duration'
 import Sesstion from './component/Sesstion'
+import { ICommonInfo } from '@/app/(nav)/class/register/page'
 
 export type scheduleItem = {
   id: number
@@ -9,7 +10,12 @@ export type scheduleItem = {
   modal: boolean
 }
 
-export default function ClassType() {
+interface IProps {
+  commonInfo: ICommonInfo
+  setCommonInfo: Dispatch<SetStateAction<ICommonInfo>>
+}
+
+export default function ClassType(props: IProps) {
   const [number, setNumber] = useState(1)
   const [one, setOne] = useState<string>('')
   const [count, setCount] = useState<string>('')
@@ -138,7 +144,7 @@ export default function ClassType() {
         {activeTab('기간반', tab)}
         {activeTab('회차반', !tab)}
       </div>
-      {tab ? <Duration /> : <Sesstion />}
+      {tab ? <Duration /> : <Sesstion {...props} />}
     </div>
   )
 }
