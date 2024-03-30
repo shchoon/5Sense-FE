@@ -1,21 +1,19 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import { useSetRecoilState, useRecoilValue } from 'recoil'
 
 import { instructorDataType } from '../class/classFilter'
-import { useGetData } from '@/hooks/useGetData'
+import instance from '@/lib/api/axios'
+import { filterState } from '@/lib/filter/filterState'
 
 import searchIcon from 'public/assets/icons/search.svg'
 
-interface IProps {
-  title: string
-  type: string
-  handleChangeNameListFromChild: (data: string[]) => void
-}
+export default function FilterSearchName() {
+  const setFilterState = useSetRecoilState(filterState)
+  const filterValue = useRecoilValue(filterState)
 
-export default function FilterSearchName(props: IProps) {
-  console.log(props)
-  const [getData, setGetData] = useState<instructorDataType[]>([])
+  const [teacherData, setTeacherData] = useState<instructorDataType[]>([])
   const [searchName, setSearchName] = useState<string>('')
   const [checkedNameList, setCheckedNameList] = useState<string[]>([])
 
@@ -23,32 +21,29 @@ export default function FilterSearchName(props: IProps) {
     setSearchName(event.target.value)
   }
 
-  function filterName() {
+  const filterName = () => {
     if (searchName !== '') {
-      let ifIncludeSearchName = getData.filter(info => info.name.includes(searchName))
+      let ifIncludeSearchName = teacherData.filter(info => info.name.includes(searchName))
       let sortBySearchName = ifIncludeSearchName.sort((a, b) => {
         return a.name.indexOf(searchName) - b.name.indexOf(searchName)
       })
       let result = []
       for (var i = 0; i < sortBySearchName.length; i++) {
-        result.push(sortBySearchName[i].name)
+        result.push(sortBySearchName[i])
       }
       return result
     } else {
       return []
     }
   }
+
   let sortFilterName = filterName()
 
   useEffect(() => {
-    useGetData(`${props.type}`, 1, 100).then(res => {
-      setGetData(res.data)
+    instance('/teachers?searchBy=none&page=1&take=100').then(res => {
+      setTeacherData(res.data.data.teachers)
     })
   }, [])
-
-  useEffect(() => {
-    props.handleChangeNameListFromChild(checkedNameList)
-  }, [checkedNameList])
 
   return (
     <div className="w-full flex flex-col gap-3">
@@ -56,9 +51,9 @@ export default function FilterSearchName(props: IProps) {
         <Image src={searchIcon} width={18} height={18} alt=" " />
         <input
           type="text"
-          placeholder={props.title}
+          placeholder="강사 이름"
           value={searchName}
-          className="w-full h-full focus:outline-none text-gray-500 text-sm font-normal font-['Pretendard'] leading-[17.50px]"
+          className="w-full h-full bg-gray-50 focus:outline-none text-gray-500 text-sm font-normal font-['Pretendard'] leading-[17.50px]"
           onChange={event => {
             SearchName(event)
           }}
@@ -66,19 +61,27 @@ export default function FilterSearchName(props: IProps) {
       </div>
       <div className="overflow-hidden">
         <div className="max-h-[150px]  flex flex-col items-center gap-3 overflow-auto ">
-          {getData.map((data, i) => {
+          {teacherData.map((data, i) => {
             return (
               <div key={i} className="w-full h-4 flex items-center gap-2">
                 <input
                   type="checkbox"
                   id={data.id}
-                  checked={checkedNameList.includes(data.name) ? true : false}
-                  className="hover:cursor-pointer focus:ring-transparent ring-0 focus:outline-0 rounded"
+                  checked={filterValue.teacherName.includes(data.name) ? true : false}
+                  className="bg-gray-50 hover:cursor-pointer focus:ring-transparent ring-0 focus:outline-0 rounded"
                   onChange={e => {
                     if (e.target.checked) {
-                      setCheckedNameList(checkedTeacherNameList => [...checkedTeacherNameList, data.name])
+                      setFilterState(prev => ({
+                        ...prev,
+                        teacherId: [...prev.teacherId, data.id],
+                        teacherName: [...prev.teacherName, data.name]
+                      }))
                     } else {
-                      setCheckedNameList(checkedNameList.filter(name => name !== data.name))
+                      setFilterState(prev => ({
+                        ...prev,
+                        teacherId: prev.teacherId.filter(id => id !== data.id),
+                        teacherName: prev.teacherName.filter(name => name !== data.name)
+                      }))
                     }
                   }}
                 />
@@ -94,19 +97,23 @@ export default function FilterSearchName(props: IProps) {
       {/* 강사이름 자동완성 */}
       {searchName !== '' && sortFilterName.length !== 0 ? (
         <div className="absolute top-[62px] w-[162px] h-auto flex flex-col gap-3 p-4 border border-gray-200 bg-white rounded-lg shadow-[0_1px_2px_0_rgba(0,0,0,0.08)]">
-          {sortFilterName.map((teacherName, i) => {
+          {sortFilterName.map((data, i) => {
             return (
               <div key={i} className="w-full flex items-center gap-2">
                 <Image src={searchIcon} width={14} height={14} alt=" " />
                 <span
-                  className="text-gray-500 text-sm font-normal font-['Pretendard'] leading-[21px] hover:cursor-pointer"
-                  id={teacherName}
+                  className="gray-500-normal text-sm hover:cursor-pointer"
+                  id={data.name}
                   onClick={e => {
                     let teacherName = e.currentTarget.id
                     if (checkedNameList.includes(teacherName)) {
                       setSearchName('')
                     } else {
-                      setCheckedNameList([...checkedNameList, e.currentTarget.id])
+                      setFilterState(prev => ({
+                        ...prev,
+                        teacherId: [...prev.teacherId, data.id],
+                        teacherName: [...prev.teacherName, data.name]
+                      }))
                       setSearchName('')
                     }
                   }}
@@ -114,22 +121,16 @@ export default function FilterSearchName(props: IProps) {
                   {/* 1글자만 입력시 */}
                   {searchName.length === 1 && (
                     <>
-                      {teacherName.split('').map((nameSplit: string, i) => {
+                      {data.name.split('').map((nameSplit: string, i) => {
                         if (nameSplit === searchName) {
                           return (
-                            <span
-                              key={i}
-                              className="text-[#7354E8] text-sm font-normal font-['Pretendard'] leading-[21px]"
-                            >
+                            <span key={i} className="text-[#7354E8] text-sm font-normal">
                               {searchName}
                             </span>
                           )
                         } else {
                           return (
-                            <span
-                              key={i}
-                              className="text-gray-500 text-sm font-normal font-['Pretendard'] leading-[21px]"
-                            >
+                            <span key={i} className="gray-500-normal text-sm">
                               {nameSplit}
                             </span>
                           )
@@ -138,32 +139,26 @@ export default function FilterSearchName(props: IProps) {
                     </>
                   )}
                   {/* 1글자 이상 입력 & 입력 글자 === 찾고자하는 강사 이름 */}
-                  {searchName.length > 1 && teacherName === searchName && (
+                  {searchName.length > 1 && data.name === searchName && (
                     <>
-                      <span key={i} className="text-[#7354E8] text-sm font-normal font-['Pretendard'] leading-[21px]">
+                      <span key={i} className="text-[#7354E8] text-sm font-normal">
                         {searchName}
                       </span>
                     </>
                   )}
                   {/* 1글자 이상 입력 && 입력 글자 !== 찾고자 하는 강사 이름 */}
-                  {searchName.length > 1 && teacherName !== searchName && (
+                  {searchName.length > 1 && data.name !== searchName && (
                     <>
-                      {teacherName.split(searchName).map((nameSplit: string, i: number) => {
+                      {data.name.split(searchName).map((nameSplit: string, i: number) => {
                         if (nameSplit === '') {
                           return (
-                            <span
-                              key={i}
-                              className="text-[#7354E8] text-sm font-normal font-['Pretendard'] leading-[21px]"
-                            >
+                            <span key={i} className="text-primary-600 text-sm font-normal">
                               {searchName}
                             </span>
                           )
                         } else {
                           return (
-                            <span
-                              key={i}
-                              className="text-gray-500 text-sm font-normal font-['Pretendard'] leading-[21px]"
-                            >
+                            <span key={i} className="gray-500-normal text-sm">
                               {nameSplit}
                             </span>
                           )

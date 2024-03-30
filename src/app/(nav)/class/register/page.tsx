@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react'
 import { durationScheduleState } from '../../../../lib/state/durationSchedule'
 import { useRecoilValue } from 'recoil'
 import { postClassData } from '@/lib/api/class'
+import TeacherInfo from '@/app/teacherInfo/page'
+import { lessonTimeState } from '@/lib/state/lessonTime'
 
 export interface ICommonInfo {
   name: string
@@ -14,6 +16,7 @@ export interface ICommonInfo {
     id: string
     name: string
   }
+  teacherId: string
 }
 
 export default function RegisterPage() {
@@ -23,10 +26,13 @@ export default function RegisterPage() {
     type: '',
     category: {
       id: '',
-      name: ''
-    }
+      name: '',
+      parentId: ''
+    },
+    teacherId: ''
   })
 
+  const test = useRecoilValue(lessonTimeState)
   //기간반 회차반
 
   // const handleRegisterClass = () => {
@@ -35,9 +41,14 @@ export default function RegisterPage() {
   //   }
   // }
 
-  const DurationScheduleState = useRecoilValue(durationScheduleState)
+  const handleChangeTeacherId = (id: string) => {
+    setCommonInfo(prev => ({
+      ...prev,
+      teacherId: id
+    }))
+  }
 
-  console.log(DurationScheduleState)
+  const DurationScheduleState = useRecoilValue(durationScheduleState)
 
   useEffect(() => {
     console.log('여기', DurationScheduleState)
@@ -45,24 +56,26 @@ export default function RegisterPage() {
 
   return (
     <div className="w-[640px] flex flex-col gap-5">
-      <ClassInfo commonInfo={commonInfo} setCommonInfo={setCommonInfo} />
-      <ClassType commonInfo={commonInfo} setCommonInfo={setCommonInfo} />
-
+      <ClassInfo />
+      <ClassType />
+      <TeacherInfo handleChangeTeacherId={handleChangeTeacherId} />
       <div
         className="Button w-full btn-purpl-lg"
         onClick={() => {
           postClassData({
             type: 'duration',
             durationLesson: {
-              name: 'Test',
-              memo: 'Test',
-              lessonTime: 120,
-              tuitionFee: 2000,
-              category: { id: 10, name: '아크릴화', parentId: 1 },
-              teacherId: 1,
-              schedules: {
-                ...DurationScheduleState
-              }
+              name: 'K-POP 인재 양성 태국반',
+              memo: '강사 블랙핑크 리사',
+              lessonTime: 90,
+              tuitionFee: 1000000,
+              category: { id: 20, name: '발레' },
+              teacherId: 7,
+              schedules: [
+                {
+                  ...DurationScheduleState
+                }
+              ]
             }
           }).then(res => console.log(res))
         }}

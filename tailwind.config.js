@@ -170,6 +170,7 @@ module.exports = {
         white: '#ffffff',
         primary: {
           50: '#F8FAFD',
+          100: '#F0EFFF',
           200: '#D3C4F9',
           300: '#B6A3EF',
           400: '#907AE5',

@@ -14,6 +14,7 @@ import PeriodLessonTimeModal from '../modal/PeriodLessonTimeModal'
 import { dateDataType } from '../datePicker/dayDatePicker'
 import { modalState } from '@/lib/state/modal'
 import { durationScheduleState } from '@/lib/state/durationSchedule'
+import { lessonTimeState } from '@/lib/state/lessonTime'
 
 import searchIconWhite from 'public/assets/icons/search_white.svg'
 import user from 'public/assets/icons/user.svg'
@@ -43,8 +44,8 @@ export default function RoomReservation(props: IProps) {
   const refs = useRef<(HTMLDivElement | null)[]>([])
   const modal = useRecoilValue(modalState)
   const setModal = useSetRecoilState(modalState)
-  const test = useRecoilValue(durationScheduleState)
   const setDurationSchedule = useSetRecoilState(durationScheduleState)
+  const setLessonTimeState = useSetRecoilState(lessonTimeState)
   const currentDate = new Date()
   const [dateData, setDateData] = useState<dateDataType>({
     year: currentDate.getFullYear(),
@@ -240,13 +241,6 @@ export default function RoomReservation(props: IProps) {
 
     return time
   }
-  if (lessonTime !== '시간') {
-    const start = lessonTime.slice(0, 5)
-    const end = lessonTime.slice(6, 11)
-    const time =
-      (Number(end.split(':')[0]) - Number(start.split(':')[0])) * 2 +
-      (Number(end.split(':')[1]) - Number(start.split(':')[1])) / 30
-  }
 
   return (
     <>
@@ -335,27 +329,6 @@ export default function RoomReservation(props: IProps) {
       {/* 일정 선택 */}
       {dateValue !== '날짜' && lessonTime !== '시간' && (
         <div className="w-full mb-[60px] p-6 flex flex-col gap-6 border border-1 border-gray-200 rounded-lg max-h-[600px] overflow-y-scroll">
-          {/* 예약 설명 */}
-          <div className="w-full h-4 flex gap-5 justify-end">
-            <div className="flex gap-4">
-              <div className="flex gap-2">
-                <div className="w-4 h-full bg-white rounded border border-1 border-gray-200" />
-                <div className="h-full gray-600-normal text-[13px]">예약 가능</div>
-              </div>
-              <div className="flex gap-2">
-                <div className="w-4 h-full bg-gray-100 rounded border border-1 border-gray-200" />
-                <div className="h-full gray-600-normal text-[13px]">예약 불가</div>
-              </div>
-            </div>
-            <div className="w-px h-full bg-gray-300" />
-            <div className="flex gap-2">
-              <div className="w-4 h-full bg-primary-300 rounded" />
-              <div className="flex gap-1.5">
-                <div className="h-full gray-600-normal text-[13px]">내 예약</div>
-                <div className="h-full gray-600-normal text-[13px]">90 / 120(분)</div>
-              </div>
-            </div>
-          </div>
           {/* 룸 선택*/}
           <div className="w-full flex flex-col gap-10">
             {roomData.map((data, i) => {
@@ -428,20 +401,35 @@ export default function RoomReservation(props: IProps) {
                             room: clickedRoomData.room
                           }
                           const startDateData = dateValue.split('~')[0].split('.')
+                          console.log(
+                            'test',
+                            new Date(
+                              Number(startDateData[0]),
+                              Number(startDateData[1]),
+                              Number(startDateData[2])
+                            ).toISOString()
+                          )
                           const endDateData = dateValue.split('~')[1].split('.')
                           setDurationSchedule(prev => ({
                             ...prev,
                             startDate: new Date(
                               Number(startDateData[0]),
-                              Number(startDateData[1]),
+                              Number(startDateData[1]) - 1,
                               Number(startDateData[2])
-                            ),
-                            endDate: new Date(Number(endDateData[0]), Number(endDateData[1]), Number(endDateData[2])),
+                            ).toISOString(),
+                            endDate: new Date(
+                              Number(endDateData[0]),
+                              Number(endDateData[1]) - 1,
+                              Number(endDateData[2])
+                            ).toISOString(),
                             startTime: lessonTime.slice(0, 5),
                             endTime: lessonTime.slice(6, 11),
                             repeatDate: lessonTime.slice(12, lessonTime.length).split(' ')[0],
                             roomId: 1
                           }))
+                          if (timeRange !== undefined) {
+                            setLessonTimeState(timeRange * 30)
+                          }
                         }
                         props.onClick()
                       }}
@@ -500,7 +488,6 @@ export default function RoomReservation(props: IProps) {
                               }`}
                               onClick={() => {
                                 if (timeRange === undefined) {
-                                  console.log(2)
                                   return
                                 } else {
                                   setClickedRoomData(prev => ({

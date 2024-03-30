@@ -1,5 +1,14 @@
 'use client'
 import Image from 'next/image'
+import { useEffect, useState, useRef } from 'react'
+
+import { useOnClickOutside } from '@/hooks/useOnclickOutside'
+import instance from '@/lib/api/axios'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { modalState } from '@/lib/state/modal'
+import Modal from '@/components/common/modal'
+import RegisterModal from '@/components/instructor/RegisterModal'
+
 import searchIcon from 'public/assets/icons/search.svg'
 import close_bg_gray from 'public/assets/icons/close_bg_gray.svg'
 import vecterIcon from 'public/assets/icons/vector.svg'
@@ -7,9 +16,6 @@ import plusIcon from 'public/assets/icons/plus.svg'
 import close_Circle_bg from 'public/assets/icons/close_circle_bg_pri_600.svg'
 import close_Circle from 'public/assets/icons/closeCircle.svg'
 import userCircle from 'public/assets/icons/user_circle.svg'
-import { useEffect, useState, useRef } from 'react'
-import { useOnClickOutside } from '@/hooks/useOnclickOutside'
-import instance from '@/lib/api/axios'
 
 interface IPops {
   handleChangeTeacherId: (id: string) => void
@@ -19,45 +25,39 @@ export default function TeacherInfo(props: IPops) {
   const inputClickRef = useRef<HTMLInputElement>(null)
   const autoCompleteTeacherNameRef = useRef<HTMLDivElement>(null)
 
+  const modal = useRecoilValue(modalState)
+  const setModal = useSetRecoilState(modalState)
+
   const handleClickOutsideOfInput = (e: any) => {
     if (openTeacherList && !autoCompleteTeacherNameRef.current?.contains(e.target)) {
       setOpenTeacherList(false)
     }
-    console.log('outside')
   }
 
   const handleClickInsideOfInput = () => {
     setOpenTeacherList(prev => !prev)
-    console.log('inside')
   }
 
   useOnClickOutside(inputClickRef, handleClickOutsideOfInput)
 
   let [teacherName, setTeacherName] = useState<string>('')
   let [checkInclude, setCheckInclude] = useState<boolean>(false)
-  let [addTeacher, setAddTeacher] = useState<boolean>(false)
+  let [isClickedAddTeacher, setIsClickedAddTeacher] = useState<boolean>(false)
   let [newTeacherName, setNewTeacherName] = useState<string>('')
   let [newTeacherPhoneNum, setNewTeacherPhoneNum] = useState<string>('')
   let [openTeacherList, setOpenTeacherList] = useState<boolean>(false)
   let [nameValue, setNameValue] = useState<string>('')
 
-  /* function clickInput() {
-        setOpenTeacherList(prev => !prev);
-    } */
-
-  function emptyInput() {
+  const emptyInput = () => {
     setTeacherName('')
   }
 
   const [teacherList, setTeacherList] = useState<{ id: string; name: string; phone: string }[]>([])
   useEffect(() => {
     instance('/teachers?searchBy=none&take=100').then(res => {
-      console.log(res)
       setTeacherList(res.data.data.teachers)
     })
-  }, [])
-
-  console.log(teacherList)
+  }, [isClickedAddTeacher])
 
   return (
     <>
@@ -145,7 +145,8 @@ export default function TeacherInfo(props: IPops) {
               <div
                 className="text-[14px] text-primary-600 font-semibold cursor-pointer"
                 onClick={() => {
-                  setAddTeacher(prev => !prev)
+                  setIsClickedAddTeacher(true)
+                  setModal(true)
                 }}
               >
                 강사 추가
@@ -154,59 +155,10 @@ export default function TeacherInfo(props: IPops) {
           </div>
         ) : null}
       </div>
-      {addTeacher && (
-        <div className="absolute flex flex-col items-center top-[500px] w-[424px] rounded-xl h-[326px] border border-[#111928] bg-[#FFF]">
-          <div className="relative flex flex-col w-[100%] h-[100px]">
-            <Image
-              className="absolute top-2 right-2 cursor-pointer hover:opacity-70"
-              src={close_Circle}
-              width={35}
-              height={35}
-              alt=""
-              onClick={() => {
-                setAddTeacher(prev => !prev)
-              }}
-            />
-            <div className="absolute left-4 top-[40px] gray-900-bold text-[22px] cursor-pointer">강사 등록</div>
-          </div>
-          <div className="flex flex-col items-center w-[376px] h-[212px] gap-7 ">
-            <div className="flex flex-col w-[100%] h-[132px] gap-4">
-              <div className="w-[100%] h-[58px] border rounded-lg border-[#E5E7EB] bg-[#FFF] focus-within:border-[#7354E8]">
-                <input
-                  type="text"
-                  className="w-[100%] h-[100%] outline-none px-3 py-5 rounded-lg"
-                  placeholder="이름"
-                  value={newTeacherName}
-                  onChange={e => {
-                    setNewTeacherName(e.target.value)
-                  }}
-                />
-              </div>
-              <div className="w-[100%] h-[58px] border rounded-lg border-[#E5E7EB] bg-[#FFF] focus-within:border-[#7354E8]">
-                <input
-                  type="text"
-                  className="w-[100%] h-[100%] outline-none px-3 py-5 rounded-lg"
-                  placeholder="전화 번호"
-                  value={newTeacherPhoneNum}
-                  onChange={e => {
-                    setNewTeacherPhoneNum(e.target.value)
-                  }}
-                />
-              </div>
-            </div>
-            <button
-              className="w-[100%] h-[52px] rounded-lg text-[#FFF] text-[16px] btn-purple"
-              onClick={() => {
-                setNewTeacherName('')
-                setNewTeacherPhoneNum('')
-                setAddTeacher(prev => !prev)
-                console.log(newTeacherName, newTeacherPhoneNum)
-              }}
-            >
-              등록
-            </button>
-          </div>
-        </div>
+      {isClickedAddTeacher && (
+        <Modal small>
+          <RegisterModal onClose={() => setModal(false)} onCloseState={() => setIsClickedAddTeacher(false)} />
+        </Modal>
       )}
     </>
   )

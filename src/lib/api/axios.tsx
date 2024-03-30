@@ -44,7 +44,6 @@ instance.interceptors.request.use(
       }
       config.headers.Authorization = `Bearer ${accessToken}`
     }
-    console.log(config)
     return config
   },
   error => {
@@ -77,7 +76,6 @@ instance.interceptors.response.use(
         console.log(error)
       }
     }
-    console.log(response)
     // 2xx 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
     // 응답 데이터가 있는 작업 수행
     return response
