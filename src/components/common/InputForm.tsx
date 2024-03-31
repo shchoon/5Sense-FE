@@ -1,6 +1,5 @@
-import { ICommonInfo } from '@/app/(nav)/class/register/page'
 import { useInput } from '@/hooks/useInput'
-import { Dispatch, SetStateAction } from 'react'
+import { SetStateAction } from 'react'
 
 export interface InputFormProps {
   title: string
@@ -18,7 +17,6 @@ export default function InputForm({ name, title, placeholder, maxLength, submitD
     submitData,
     setSubmitData
   })
-  console.log(inputValue)
   const valueLength = inputValue.length
 
   return (

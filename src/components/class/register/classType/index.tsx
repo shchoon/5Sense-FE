@@ -24,12 +24,10 @@ export default function ClassType({ session, setSession, duration, setDuration, 
   const onTabHandler = (date: string) => {
     if (date === '기간반') {
       onChange('type', 'duration')
-      setTab(true)
-      return
+      return setTab(true)
     } else {
       onChange('type', 'session')
-      setTab(false)
-      return
+      return setTab(false)
     }
   }
 

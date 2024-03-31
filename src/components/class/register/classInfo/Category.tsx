@@ -27,12 +27,12 @@ export default function Category({ commonInfo, setCommonInfo }: IProps) {
       name: '미술',
       imgUrl: '/assets/icons/category/arts.svg',
       options: [
-        { id: '1', name: '아크릴화' },
-        { id: '2', name: '수채화' },
-        { id: '3', name: '유화' },
-        { id: '4', name: '디지털 드로잉' },
-        { id: '5', name: '이색 드로잉' },
-        { id: '6', name: '캘리그라피' }
+        { id: '10', name: '아크릴화' },
+        { id: '11', name: '수채화' },
+        { id: '12', name: '유화' },
+        { id: '13', name: '디지털 드로잉' },
+        { id: '14', name: '이색 드로잉' },
+        { id: '15', name: '캘리그라피' }
       ]
     },
     {
@@ -52,14 +52,14 @@ export default function Category({ commonInfo, setCommonInfo }: IProps) {
       name: '체육',
       imgUrl: '/assets/icons/category/sports.svg',
       options: [
-        { id: '1', name: '클라이밍' },
-        { id: '2', name: '실내다이빙' },
-        { id: '3', name: '라켓스포츠' },
-        { id: '4', name: '구기스포츠' },
-        { id: '5', name: '무도' },
-        { id: '6', name: '수영' },
-        { id: '7', name: '겨울스포츠' },
-        { id: '8', name: '이색스포츠' }
+        { id: '30', name: '클라이밍' },
+        { id: '31', name: '실내다이빙' },
+        { id: '32', name: '라켓스포츠' },
+        { id: '33', name: '구기스포츠' },
+        { id: '34', name: '무도' },
+        { id: '35', name: '수영' },
+        { id: '36', name: '겨울스포츠' },
+        { id: '37', name: '이색스포츠' }
       ]
     },
     {

@@ -13,12 +13,23 @@ interface IProps {
 }
 
 export default function Session({ session, setSession }: IProps) {
-  const [allCount, setAllCount] = useState('')
   const changeTuitionFee = (e: ChangeEvent<HTMLInputElement>) => {
     const value: string = e.target.value
     const removedCommaValue = value.replaceAll(',', '')
 
+    if (isNaN(Number(removedCommaValue))) {
+      return setSession(prev => ({ ...prev, tuitionFee: '' }))
+    }
     setSession(prev => ({ ...prev, tuitionFee: Number(removedCommaValue.slice(0, 9)).toLocaleString() }))
+  }
+
+  const handleCnt = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+
+    if (isNaN(Number(value))) {
+      return setSession(prev => ({ ...prev, totalSessions: '' }))
+    }
+    setSession(prev => ({ ...prev, totalSessions: value }))
   }
 
   const sumTuitionFee = (tutionFee: string, cnt: string) => {
@@ -68,8 +79,8 @@ export default function Session({ session, setSession }: IProps) {
                 type="number"
                 className="flex-grow text-right placeholder:text-gray-400 text-base font-normal outline-none"
                 placeholder="0"
-                value={allCount}
-                onChange={e => setAllCount(e.target.value)}
+                value={session.totalSessions}
+                onChange={e => handleCnt(e)}
               />
               <span className="text-gray-400 text-base font-normal">회</span>
             </div>
@@ -78,7 +89,7 @@ export default function Session({ session, setSession }: IProps) {
             <div className="flex w-full">
               <span className="gray-900-semibold text-base">총 금액</span>
               <span className="flex-grow text-right text-indigo-500 text-[22px] font-bold">
-                {sumTuitionFee(session.tuitionFee, allCount)}원
+                {sumTuitionFee(session.tuitionFee, session.totalSessions)}원
               </span>
             </div>
             <p className="text-right text-gray-500 text-xs font-medium">만원</p>
@@ -92,7 +103,7 @@ export default function Session({ session, setSession }: IProps) {
           <div className="w-[3px] h-[21px] bg-indigo-500 rounded-sm" />
           <div className="text-gray-600 text-sm font-normal ml-3.5">1회 금액 * 총 회차</div>
           <div className="flex-grow text-right text-gray-600 text-sm font-normal">
-            {session.tuitionFee}*{allCount}회
+            {session.tuitionFee}*{session.totalSessions}회
           </div>
         </div>
       </div>

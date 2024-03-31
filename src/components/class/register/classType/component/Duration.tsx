@@ -3,10 +3,11 @@ import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import Modal from '@/components/common/modal'
 import AddClassModal from '@/components/modal/AddClassModal'
 import { modalState } from '@/lib/state/modal'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { IDuration } from '@/app/(nav)/class/register/page'
 
 import PlusIcon from 'public/assets/icons/circle/plus.svg'
+import { durationScheduleState } from '@/lib/state/durationSchedule'
 
 interface IProps {
   duration: IDuration
@@ -24,7 +25,6 @@ export default function Duration({ duration, setDuration }: IProps) {
     const digits = ['영', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구']
 
     const numStr = value.replaceAll(',', '')
-    console.log(numStr)
     let result = ''
 
     for (let i = numStr.length - 1, j = 0; i >= 0; i--, j++) {

@@ -23,7 +23,7 @@ export interface ISession {
   lessonTime: number
   tuitionFee: string
   capacity: number
-  totalSessions: number
+  totalSessions: string
 }
 
 export interface IDuration {
@@ -34,7 +34,7 @@ export default function RegisterPage() {
   const [commonInfo, setCommonInfo] = useState({
     name: '',
     memo: '',
-    type: '',
+    type: 'duration',
     category: {
       id: '',
       name: ''
@@ -46,24 +46,59 @@ export default function RegisterPage() {
     lessonTime: 0,
     tuitionFee: '',
     capacity: 1,
-    totalSessions: 0
+    totalSessions: ''
   })
 
   const [duration, setDuration] = useState<IDuration>({
     tuitionFee: ''
   })
 
-  const DurationScheduleState = useRecoilValue(durationScheduleState)
+  const durationSchedule = useRecoilValue(durationScheduleState)
 
   //기간반 회차반
 
-  // const handleRegisterClass = () => {
-  //   if(type === 'duration'){
+  const handleRegisterClass = () => {
+    let data
+    if (commonInfo.type === 'duration') {
+      const tuition = duration.tuitionFee.replaceAll(',', '')
+      data = {
+        type: commonInfo.type,
+        durationLesson: {
+          name: commonInfo.name,
+          memo: commonInfo.memo,
+          lessonTime: durationSchedule.lessonTime,
+          tuitionFee: Number(tuition),
+          category: { id: Number(commonInfo.category.id), name: commonInfo.category.name },
+          teacherId: Number(commonInfo.teacherId),
+          schedules: [
+            {
+              ...durationSchedule.schedules
+            }
+          ]
+        }
+      }
+    } else {
+      const tuition = session.tuitionFee.replaceAll(',', '')
+      data = {
+        type: commonInfo.type,
+        sessionLesson: {
+          name: commonInfo.name,
+          memo: commonInfo.memo,
+          lessonTime: session.lessonTime,
+          tuitionFee: Number(tuition),
+          capacity: session.capacity,
+          totalSessions: Number(session.totalSessions),
+          category: { id: Number(commonInfo.category.id), name: commonInfo.category.name },
+          teacherId: Number(commonInfo.teacherId)
+        }
+      }
+    }
 
-  //   }
-  // }
+    console.log(data)
+    postClassData(data).then(res => console.log(res))
+  }
 
-  const handleChangeName = (name: string, value: string) => {
+  const changeValue = (name: string, value: string) => {
     setCommonInfo(prev => ({
       ...prev,
       [name]: value
@@ -71,9 +106,9 @@ export default function RegisterPage() {
   }
 
   useEffect(() => {
-    console.log('여기', DurationScheduleState)
+    console.log('여기', durationSchedule)
     console.log(commonInfo)
-  }, [DurationScheduleState, commonInfo])
+  }, [durationSchedule])
 
   return (
     <div className="w-[640px] flex flex-col gap-5">
@@ -83,30 +118,10 @@ export default function RegisterPage() {
         setSession={setSession}
         duration={duration}
         setDuration={setDuration}
-        onChange={handleChangeName}
+        onChange={changeValue}
       />
-      <TeacherInfo onChange={handleChangeName} />
-      <div
-        className="Button w-full btn-purpl-lg"
-        onClick={() => {
-          postClassData({
-            type: 'duration',
-            durationLesson: {
-              name: 'K-POP 인재 양성 태국반',
-              memo: '강사 블랙핑크 리사',
-              lessonTime: 90,
-              tuitionFee: 1000000,
-              category: { id: 20, name: '발레' },
-              teacherId: 7,
-              schedules: [
-                {
-                  ...DurationScheduleState
-                }
-              ]
-            }
-          }).then(res => console.log(res))
-        }}
-      >
+      <TeacherInfo onChange={changeValue} />
+      <div className="Button w-full btn-purpl-lg" onClick={() => handleRegisterClass()}>
         등록하기
       </div>
     </div>
