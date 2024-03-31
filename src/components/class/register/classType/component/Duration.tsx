@@ -1,25 +1,54 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 
 import Modal from '@/components/common/modal'
 import AddClassModal from '@/components/modal/AddClassModal'
 import { modalState } from '@/lib/state/modal'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { IDuration } from '@/app/(nav)/class/register/page'
 
-export default function Duration() {
+import PlusIcon from 'public/assets/icons/circle/plus.svg'
+import { durationScheduleState } from '@/lib/state/durationSchedule'
+
+interface IProps {
+  duration: IDuration
+  setDuration: Dispatch<SetStateAction<IDuration>>
+}
+
+export default function Duration({ duration, setDuration }: IProps) {
   const setModal = useSetRecoilState(modalState)
   const [noticeModal, setNoticeModal] = useState(false)
   const [scheduleModal, setScheduleModal] = useState(false)
 
-  const [tuitionFee, setTuitionFee] = useState('')
+  const changeKoreanNumber = (value: string) => {
+    const unit1 = ['', '십', '백', '천']
+    const unit2 = ['', '만', '억', '조', '경']
+    const digits = ['영', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구']
 
-  const changeEnteredNum = (e: ChangeEvent<HTMLInputElement>) => {
+    const numStr = value.replaceAll(',', '')
+    let result = ''
+
+    for (let i = numStr.length - 1, j = 0; i >= 0; i--, j++) {
+      const num = Number(numStr[i])
+      if (num !== 0) {
+        result = digits[num] + unit1[j % 4] + result
+      }
+      if (j % 4 === 0 && j !== 0) {
+        result = unit2[j / 4] + result
+      }
+    }
+
+    return result
+  }
+
+  const changeTuitionFee = (e: ChangeEvent<HTMLInputElement>) => {
     const value: string = e.target.value
-    if (value.length > 11) {
+    const removedCommaValue = value.replaceAll(',', '')
+    if (removedCommaValue.length > 9) {
       setModal(true)
       setNoticeModal(true)
     }
-    const removedCommaValue = value.replaceAll(',', '')
-    setTuitionFee(Number(removedCommaValue.slice(0, 9)).toLocaleString())
+
+    setDuration(prev => ({ ...prev, tuitionFee: Number(removedCommaValue.slice(0, 9)).toLocaleString() }))
   }
 
   return (
@@ -29,21 +58,22 @@ export default function Duration() {
         <input
           type="text"
           className="w-full h-[60px] py-3 box-border border-b-2 flex-row-reverse items-center justify-end border-gray-700 text-gray-900 text-2xl font-semibold focus:outline-none placeholder:text-gray-300"
-          onChange={changeEnteredNum}
-          value={tuitionFee}
+          onChange={changeTuitionFee}
+          value={duration.tuitionFee}
           placeholder="0 원"
         />
-        <p className="text-gray-500 text-sm font-normal font-['Inter']">원</p>
+        <p className="text-gray-500 text-sm font-normal font-['Inter']">{changeKoreanNumber(duration.tuitionFee)}원</p>
       </div>
       <div className="w-full flex flex-col gap-2">
         <p className="gray-800-semibold">일정</p>
         <button
-          className="w-full px-6 py-3.5 btn-line-purple"
+          className="w-full px-6 py-3.5 btn-line-purple flex items-center justify-center gap-2"
           onClick={() => {
             setModal(true)
             setScheduleModal(true)
           }}
         >
+          <PlusIcon width={24} height={24} />
           일정 추가
         </button>
       </div>

@@ -1,74 +1,127 @@
 'use client'
+import { useEffect, useState } from 'react'
+import { useRecoilValue } from 'recoil'
+
 import ClassType from '@/components/class/register/classType'
 import ClassInfo from '@/components/class/register/classInfo'
-import { useEffect, useState } from 'react'
 import { durationScheduleState } from '../../../../lib/state/durationSchedule'
-import { useRecoilValue } from 'recoil'
 import { postClassData } from '@/lib/api/class'
-import TeacherInfo from '@/app/teacherInfo/page'
-import { lessonTimeState } from '@/lib/state/lessonTime'
+import TeacherInfo from '@/components/class/register/teacherInfo'
+
+export interface ICommonInfo {
+  name: string
+  memo: string
+  type: string
+  category: {
+    id: string
+    name: string
+  }
+  teacherId: string
+}
+
+export interface ISession {
+  lessonTime: number
+  tuitionFee: string
+  capacity: number
+  totalSessions: string
+}
+
+export interface IDuration {
+  tuitionFee: string
+}
 
 export default function RegisterPage() {
   const [commonInfo, setCommonInfo] = useState({
-    name: 'test',
-    memo: 'test',
-    type: '',
+    name: '',
+    memo: '',
+    type: 'duration',
     category: {
       id: '',
-      name: '',
-      parentId: ''
+      name: ''
     },
     teacherId: ''
   })
 
-  const test = useRecoilValue(lessonTimeState)
+  const [session, setSession] = useState<ISession>({
+    lessonTime: 0,
+    tuitionFee: '',
+    capacity: 1,
+    totalSessions: ''
+  })
+
+  const [duration, setDuration] = useState<IDuration>({
+    tuitionFee: ''
+  })
+
+  const durationSchedule = useRecoilValue(durationScheduleState)
+
   //기간반 회차반
 
-  // const handleRegisterClass = () => {
-  //   if(type === 'duration'){
+  const handleRegisterClass = () => {
+    let data
+    if (commonInfo.type === 'duration') {
+      const tuition = duration.tuitionFee.replaceAll(',', '')
+      data = {
+        type: commonInfo.type,
+        durationLesson: {
+          name: commonInfo.name,
+          memo: commonInfo.memo,
+          lessonTime: durationSchedule.lessonTime,
+          tuitionFee: Number(tuition),
+          category: { id: Number(commonInfo.category.id), name: commonInfo.category.name },
+          teacherId: Number(commonInfo.teacherId),
+          schedules: [
+            {
+              ...durationSchedule.schedules
+            }
+          ]
+        }
+      }
+    } else {
+      const tuition = session.tuitionFee.replaceAll(',', '')
+      data = {
+        type: commonInfo.type,
+        sessionLesson: {
+          name: commonInfo.name,
+          memo: commonInfo.memo,
+          lessonTime: session.lessonTime,
+          tuitionFee: Number(tuition),
+          capacity: session.capacity,
+          totalSessions: Number(session.totalSessions),
+          category: { id: Number(commonInfo.category.id), name: commonInfo.category.name },
+          teacherId: Number(commonInfo.teacherId)
+        }
+      }
+    }
 
-  //   }
-  // }
+    console.log(data)
+    postClassData(data).then(res => console.log(res))
+  }
 
-  const handleChangeTeacherId = (id: string) => {
+  const changeValue = (name: string, value: string) => {
     setCommonInfo(prev => ({
       ...prev,
-      teacherId: id
+      [name]: value
     }))
   }
 
-  const DurationScheduleState = useRecoilValue(durationScheduleState)
-
   useEffect(() => {
-    console.log('여기', DurationScheduleState)
-  }, [DurationScheduleState])
+    console.log('여기', durationSchedule)
+    console.log(commonInfo)
+  }, [durationSchedule])
 
   return (
     <div className="w-[640px] flex flex-col gap-5">
-      <ClassInfo />
-      <ClassType />
-      <TeacherInfo handleChangeTeacherId={handleChangeTeacherId} />
-      <div
-        className="Button w-full btn-purple-lg"
-        onClick={() => {
-          postClassData({
-            type: 'duration',
-            durationLesson: {
-              name: 'K-POP 인재 양성 태국반',
-              memo: '강사 블랙핑크 리사',
-              lessonTime: 90,
-              tuitionFee: 1000000,
-              category: { id: 20, name: '발레' },
-              teacherId: 7,
-              schedules: [
-                {
-                  ...DurationScheduleState
-                }
-              ]
-            }
-          }).then(res => console.log(res))
-        }}
-      >
+      <ClassInfo commonInfo={commonInfo} setCommonInfo={setCommonInfo} />
+      <ClassType
+        session={session}
+        setSession={setSession}
+        duration={duration}
+        setDuration={setDuration}
+        onChange={changeValue}
+      />
+      <TeacherInfo onChange={changeValue} />
+      <div className="Button w-full btn-purple-lg" onClick={() => handleRegisterClass()}>
         등록하기
       </div>
     </div>

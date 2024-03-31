@@ -32,6 +32,8 @@ module.exports = {
           cursor: 'pointer',
           padding: '8px 12px',
           margin: '3px',
+          display: 'flex',
+          alignItems: 'center',
           '&:hover': {
             backgroundColor: '#563AC0'
           },
@@ -51,6 +53,8 @@ module.exports = {
           cursor: 'pointer',
           padding: '10px 20px',
           margin: '3px',
+          display: 'flex',
+          alignItems: 'center',
           '&:hover': {
             backgroundColor: '#563AC0'
           },

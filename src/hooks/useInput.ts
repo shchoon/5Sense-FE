@@ -1,10 +1,4 @@
-import {
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState
-} from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 interface IProps {
   name: string
@@ -15,14 +9,8 @@ interface IProps {
 
 type UseInputReturn = [string, (e: ChangeEvent<HTMLInputElement>) => void]
 
-export function useInput({
-  name,
-  maxLength,
-  submitData,
-  setSubmitData
-}: IProps): UseInputReturn {
+export function useInput({ name, maxLength, submitData, setSubmitData }: IProps): UseInputReturn {
   const [inputValue, setInputValue] = useState<string>('')
-  console.log(submitData.name)
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length <= maxLength) {

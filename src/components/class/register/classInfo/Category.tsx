@@ -1,6 +1,7 @@
-import InputForm, { InputFormProps } from '@/components/common/InputForm'
+import { ICommonInfo } from '@/app/(nav)/class/register/page'
+import { InputFormProps } from '@/components/common/InputForm'
 import Image from 'next/image'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 
 export type category = {
   id: string
@@ -14,52 +15,57 @@ type subCategory = {
   name: string
 }
 
-export default function Category() {
+interface IProps {
+  commonInfo: ICommonInfo
+  setCommonInfo: Dispatch<SetStateAction<ICommonInfo>>
+}
+
+export default function Category({ commonInfo, setCommonInfo }: IProps) {
   const categorydata: category[] = [
     {
       id: '1',
       name: '미술',
       imgUrl: '/assets/icons/category/arts.svg',
       options: [
-        { id: '1', name: '아크릴화' },
-        { id: '2', name: '수채화' },
-        { id: '3', name: '유화' },
-        { id: '4', name: '디지털 드로잉' },
-        { id: '5', name: '이색 드로잉' },
-        { id: '6', name: '캘리그라피' }
+        { id: '10', name: '아크릴화' },
+        { id: '11', name: '수채화' },
+        { id: '12', name: '유화' },
+        { id: '13', name: '디지털 드로잉' },
+        { id: '14', name: '이색 드로잉' },
+        { id: '15', name: '캘리그라피' }
       ]
     },
     {
       id: '2',
       name: '연기',
-      imgUrl: '/assets/icons/category/arts.svg',
+      imgUrl: '/assets/icons/category/show.svg',
       options: []
     },
     {
       id: '3',
       name: '공연',
-      imgUrl: '/assets/icons/category/arts.svg',
+      imgUrl: '/assets/icons/category/performance.svg',
       options: []
     },
     {
       id: '4',
       name: '체육',
-      imgUrl: '/assets/icons/category/arts.svg',
+      imgUrl: '/assets/icons/category/sports.svg',
       options: [
-        { id: '1', name: '클라이밍' },
-        { id: '2', name: '실내다이빙' },
-        { id: '3', name: '라켓스포츠' },
-        { id: '4', name: '구기스포츠' },
-        { id: '5', name: '무도' },
-        { id: '6', name: '수영' },
-        { id: '7', name: '겨울스포츠' },
-        { id: '8', name: '이색스포츠' }
+        { id: '30', name: '클라이밍' },
+        { id: '31', name: '실내다이빙' },
+        { id: '32', name: '라켓스포츠' },
+        { id: '33', name: '구기스포츠' },
+        { id: '34', name: '무도' },
+        { id: '35', name: '수영' },
+        { id: '36', name: '겨울스포츠' },
+        { id: '37', name: '이색스포츠' }
       ]
     },
     {
       id: '5',
       name: '댄스',
-      imgUrl: '/assets/icons/category/arts.svg',
+      imgUrl: '/assets/icons/category/dance.svg',
       options: [
         { id: '1', name: '방송댄스' },
         { id: '2', name: '발레' },
@@ -71,7 +77,7 @@ export default function Category() {
     {
       id: '6',
       name: '보컬',
-      imgUrl: '/assets/icons/category/arts.svg',
+      imgUrl: '/assets/icons/category/vocal.svg',
       options: [
         { id: '1', name: '재즈' },
         { id: '2', name: '실용음악' },
@@ -82,7 +88,7 @@ export default function Category() {
     {
       id: '7',
       name: '프로듀싱',
-      imgUrl: '/public/assets/icons/category/arts.svg',
+      imgUrl: '/assets/icons/category/produce.svg',
       options: [
         { id: '1', name: '프로듀싱' },
         { id: '2', name: '작곡·작사' },
@@ -92,7 +98,7 @@ export default function Category() {
     {
       id: '8',
       name: '연주',
-      imgUrl: '/public/assets/icons/category/arts.svg',
+      imgUrl: '/assets/icons/category/play.svg',
       options: [
         { id: '1', name: '피아노' },
         { id: '2', name: '현악기' },
@@ -105,7 +111,7 @@ export default function Category() {
     {
       id: '9',
       name: '기타',
-      imgUrl: '/assets/icons/category/arts.svg',
+      imgUrl: '/assets/icons/category/etc.svg',
       options: []
     }
   ]
@@ -118,13 +124,16 @@ export default function Category() {
     setSelectedOption(0)
     setSelectedOptionList(optionList)
   }
-  const handleOptionChange = (optionId: any) => {
-    console.log('optionId', optionId)
-    setSelectedOption(Number(optionId))
-    console.log('hi')
+  const handleOptionChange = (id: string, name: string) => {
+    setCommonInfo(prev => ({
+      ...prev,
+      category: {
+        id: id,
+        name: name
+      }
+    }))
+    setSelectedOption(Number(id))
   }
-
-  console.log(selectedGroup)
 
   const renderOptionsList = () => {
     const optionProps = {
@@ -145,7 +154,7 @@ export default function Category() {
                 className={`flex justify-center items-center w-[142px] h-[45px] p-3 rounded-md border border-indigo-400 ${
                   selectedOption === Number(option.id) ? 'bg-[#F0EFFF]' : 'bg-white cursor-pointer'
                 }`}
-                onClick={() => handleOptionChange(Number(option.id))}
+                onClick={() => handleOptionChange(option.id, option.name)}
               >
                 <>
                   <input type="radio" id={option.name} value={option.name} className="hidden" />
