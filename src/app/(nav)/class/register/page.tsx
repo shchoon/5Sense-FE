@@ -1,12 +1,13 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
 
-import ClassType from '@/components/class/register/classType'
 import ClassInfo from '@/components/class/register/classInfo'
-import { durationScheduleState } from '../../../../lib/state/durationSchedule'
-import { postClassData } from '@/lib/api/class'
+import ClassType from '@/components/class/register/classType'
 import TeacherInfo from '@/components/class/register/teacherInfo'
+import { postClassData } from '@/lib/api/class'
+import { durationScheduleState } from '../../../../lib/state/durationSchedule'
+import { useRouter } from 'next/navigation'
 
 export interface ICommonInfo {
   name: string
@@ -31,6 +32,7 @@ export interface IDuration {
 }
 
 export default function RegisterPage() {
+  const router = useRouter()
   const [commonInfo, setCommonInfo] = useState({
     name: '',
     memo: '',
@@ -93,9 +95,11 @@ export default function RegisterPage() {
         }
       }
     }
-
-    console.log(data)
-    postClassData(data).then(res => console.log(res))
+    postClassData(data).then(res => {
+      if (res.status === 201) {
+        router.push('/class')
+      }
+    })
   }
 
   const changeValue = (name: string, value: string) => {
@@ -104,11 +108,6 @@ export default function RegisterPage() {
       [name]: value
     }))
   }
-
-  useEffect(() => {
-    console.log('여기', durationSchedule)
-    console.log(commonInfo)
-  }, [durationSchedule])
 
   return (
     <div className="w-[640px] flex flex-col gap-5">

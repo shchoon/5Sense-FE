@@ -1,13 +1,12 @@
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 
+import { IDuration } from '@/app/(nav)/class/register/page'
 import Modal from '@/components/common/modal'
 import AddClassModal from '@/components/modal/AddClassModal'
 import { modalState } from '@/lib/state/modal'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { IDuration } from '@/app/(nav)/class/register/page'
+import { useSetRecoilState } from 'recoil'
 
 import PlusIcon from 'public/assets/icons/circle/plus.svg'
-import { durationScheduleState } from '@/lib/state/durationSchedule'
 
 interface IProps {
   duration: IDuration
@@ -43,6 +42,10 @@ export default function Duration({ duration, setDuration }: IProps) {
   const changeTuitionFee = (e: ChangeEvent<HTMLInputElement>) => {
     const value: string = e.target.value
     const removedCommaValue = value.replaceAll(',', '')
+    if (isNaN(Number(removedCommaValue))) {
+      return setDuration(prev => ({ ...prev, tuitionFee: '' }))
+    }
+
     if (removedCommaValue.length > 9) {
       setModal(true)
       setNoticeModal(true)
@@ -76,6 +79,7 @@ export default function Duration({ duration, setDuration }: IProps) {
           <PlusIcon width={24} height={24} />
           일정 추가
         </button>
+        {/**여기 일정 UI 들어가면 됩니다. */}
       </div>
       {noticeModal && (
         <Modal small>
