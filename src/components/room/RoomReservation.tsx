@@ -428,7 +428,7 @@ export default function RoomReservation(props: IProps) {
                             roomId: 1
                           }))
                           if (timeRange !== undefined) {
-                            setLessonTimeState(timeRange * 30)
+                            setDurationSchedule(prev => ({ ...prev, lessonTime: timeRange * 30 }))
                           }
                         }
                         props.onClick()

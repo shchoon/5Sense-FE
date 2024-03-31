@@ -1,12 +1,12 @@
 'use client'
+import { useEffect, useState } from 'react'
+import { useRecoilValue } from 'recoil'
+
 import ClassType from '@/components/class/register/classType'
 import ClassInfo from '@/components/class/register/classInfo'
-import { useEffect, useState } from 'react'
 import { durationScheduleState } from '../../../../lib/state/durationSchedule'
-import { useRecoilValue } from 'recoil'
 import { postClassData } from '@/lib/api/class'
-import TeacherInfo from '@/app/teacherInfo/page'
-import { lessonTimeState } from '@/lib/state/lessonTime'
+import TeacherInfo from '@/components/class/register/teacherInfo'
 
 export interface ICommonInfo {
   name: string
@@ -19,6 +19,17 @@ export interface ICommonInfo {
   teacherId: string
 }
 
+export interface ISession {
+  lessonTime: number
+  tuitionFee: string
+  capacity: number
+  totalSessions: number
+}
+
+export interface IDuration {
+  tuitionFee: string
+}
+
 export default function RegisterPage() {
   const [commonInfo, setCommonInfo] = useState({
     name: '',
@@ -26,13 +37,24 @@ export default function RegisterPage() {
     type: '',
     category: {
       id: '',
-      name: '',
-      parentId: ''
+      name: ''
     },
     teacherId: ''
   })
 
-  const test = useRecoilValue(lessonTimeState)
+  const [session, setSession] = useState<ISession>({
+    lessonTime: 0,
+    tuitionFee: '',
+    capacity: 1,
+    totalSessions: 0
+  })
+
+  const [duration, setDuration] = useState<IDuration>({
+    tuitionFee: ''
+  })
+
+  const DurationScheduleState = useRecoilValue(durationScheduleState)
+
   //기간반 회차반
 
   // const handleRegisterClass = () => {
@@ -41,24 +63,29 @@ export default function RegisterPage() {
   //   }
   // }
 
-  const handleChangeTeacherId = (id: string) => {
+  const handleChangeName = (name: string, value: string) => {
     setCommonInfo(prev => ({
       ...prev,
-      teacherId: id
+      [name]: value
     }))
   }
 
-  const DurationScheduleState = useRecoilValue(durationScheduleState)
-
   useEffect(() => {
     console.log('여기', DurationScheduleState)
-  }, [DurationScheduleState])
+    console.log(commonInfo)
+  }, [DurationScheduleState, commonInfo])
 
   return (
     <div className="w-[640px] flex flex-col gap-5">
-      <ClassInfo />
-      <ClassType />
-      <TeacherInfo handleChangeTeacherId={handleChangeTeacherId} />
+      <ClassInfo commonInfo={commonInfo} setCommonInfo={setCommonInfo} />
+      <ClassType
+        session={session}
+        setSession={setSession}
+        duration={duration}
+        setDuration={setDuration}
+        onChange={handleChangeName}
+      />
+      <TeacherInfo onChange={handleChangeName} />
       <div
         className="Button w-full btn-purpl-lg"
         onClick={() => {

@@ -1,6 +1,7 @@
-import InputForm, { InputFormProps } from '@/components/common/InputForm'
+import { ICommonInfo } from '@/app/(nav)/class/register/page'
+import { InputFormProps } from '@/components/common/InputForm'
 import Image from 'next/image'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 
 export type category = {
   id: string
@@ -14,7 +15,12 @@ type subCategory = {
   name: string
 }
 
-export default function Category() {
+interface IProps {
+  commonInfo: ICommonInfo
+  setCommonInfo: Dispatch<SetStateAction<ICommonInfo>>
+}
+
+export default function Category({ commonInfo, setCommonInfo }: IProps) {
   const categorydata: category[] = [
     {
       id: '1',
@@ -118,13 +124,16 @@ export default function Category() {
     setSelectedOption(0)
     setSelectedOptionList(optionList)
   }
-  const handleOptionChange = (optionId: any) => {
-    console.log('optionId', optionId)
-    setSelectedOption(Number(optionId))
-    console.log('hi')
+  const handleOptionChange = (id: string, name: string) => {
+    setCommonInfo(prev => ({
+      ...prev,
+      category: {
+        id: id,
+        name: name
+      }
+    }))
+    setSelectedOption(Number(id))
   }
-
-  console.log(selectedGroup)
 
   const renderOptionsList = () => {
     const optionProps = {
@@ -145,7 +154,7 @@ export default function Category() {
                 className={`flex justify-center items-center w-[142px] h-[45px] p-3 rounded-md border border-indigo-400 ${
                   selectedOption === Number(option.id) ? 'bg-[#F0EFFF]' : 'bg-white cursor-pointer'
                 }`}
-                onClick={() => handleOptionChange(Number(option.id))}
+                onClick={() => handleOptionChange(option.id, option.name)}
               >
                 <>
                   <input type="radio" id={option.name} value={option.name} className="hidden" />

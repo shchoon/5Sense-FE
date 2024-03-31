@@ -1,27 +1,26 @@
 'use client'
 import Image from 'next/image'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-import { useOnClickOutside } from '@/hooks/useOnclickOutside'
-import instance from '@/lib/api/axios'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { modalState } from '@/lib/state/modal'
 import Modal from '@/components/common/modal'
 import RegisterModal from '@/components/instructor/RegisterModal'
+import { useOnClickOutside } from '@/hooks/useOnclickOutside'
+import instance from '@/lib/api/axios'
+import { modalState } from '@/lib/state/modal'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import searchIcon from 'public/assets/icons/search.svg'
-import close_bg_gray from 'public/assets/icons/close_bg_gray.svg'
-import vecterIcon from 'public/assets/icons/vector.svg'
-import plusIcon from 'public/assets/icons/plus.svg'
+import CloseIcon from 'public/assets/icons/circle/close.svg'
 import close_Circle_bg from 'public/assets/icons/close_circle_bg_pri_600.svg'
-import close_Circle from 'public/assets/icons/closeCircle.svg'
-import userCircle from 'public/assets/icons/user_circle.svg'
+import PlusIcon from 'public/assets/icons/plus.svg'
+import SearchIcon from 'public/assets/icons/search.svg'
+import UserCircle from 'public/assets/icons/user_circle.svg'
+import vecterIcon from 'public/assets/icons/vector.svg'
 
 interface IPops {
-  handleChangeTeacherId: (id: string) => void
+  onChange: (id: string, name: string) => void
 }
 
-export default function TeacherInfo(props: IPops) {
+export default function TeacherInfo({ onChange }: IPops) {
   const inputClickRef = useRef<HTMLInputElement>(null)
   const autoCompleteTeacherNameRef = useRef<HTMLDivElement>(null)
 
@@ -61,11 +60,11 @@ export default function TeacherInfo(props: IPops) {
 
   return (
     <>
-      <div className="flex flex-col items-start gap-10 w-[640px] py-8 px-6 border border-[#E5E7EB] rounded-xl bg-[#FFF] ">
+      <div className="flex flex-col items-start gap-10 w-[640px] py-8 px-6 border border-[#E5E7EB] rounded-xl bg-[#FFF]">
         <div className="gray-900-bold text-[20px]">강사 정보</div>
         <div className="flex flex-start flex-col w-[100%] h-[auto] px-4 py-[14px] justify-center border border-[#E5E7EB] bg-[#F9FAFB] rounded-lg focus-within:border-[#7354E8]">
           <div className="relative flex w-[100%] items-center gap-2">
-            <Image src={searchIcon} width={18} height={18} alt="search" />
+            <SearchIcon />
             <input
               ref={inputClickRef}
               className="w-[100%] text-[16px] bg-[#F9FAFB] text-[#111928] font-normal outline-none"
@@ -76,20 +75,11 @@ export default function TeacherInfo(props: IPops) {
                 handleClickInsideOfInput()
               }}
               onChange={e => {
-                setTeacherName(e.target.value)
+                onChange('teacherId', e.target.value)
               }}
             />
 
-            {teacherName !== '' && teacherName !== nameValue ? (
-              <Image
-                className="cursor-pointer"
-                src={close_bg_gray}
-                width={16}
-                height={16}
-                alt="X"
-                onClick={emptyInput}
-              />
-            ) : null}
+            {teacherName !== '' && teacherName !== nameValue ? <CloseIcon onClick={emptyInput} /> : null}
             {teacherName === nameValue && teacherName !== '' ? (
               <Image
                 className="absolute left-[80px] cursor-pointer"
@@ -119,18 +109,18 @@ export default function TeacherInfo(props: IPops) {
                       <div
                         data-teachername={data.name}
                         key={index}
-                        className="flex w-[100%] px-3 py-2 items-center rounded-lg gap-2 bg-[#F9FAFB] cursor-pointer hover:opacity-70"
+                        className="flex w-full px-3 py-2 items-center gap-2 rounded-lg bg-[#F9FAFB] cursor-pointer hover:opacity-70"
                         onClick={e => {
                           const name: any = e.currentTarget.getAttribute('data-teachername')
                           setTeacherName(name)
                           setCheckInclude(prev => !prev)
                           setNameValue(data.name)
                           setOpenTeacherList(prev => !prev)
-                          props.handleChangeTeacherId(data.id)
+                          onChange('teacherId', data.id)
                         }}
                       >
-                        <Image src={userCircle} width={14} height={15} alt="" />
-                        <div id="name" className="w-[100%] text-[14px] gray-500-normal">
+                        <UserCircle className="text-gray-400" />
+                        <div id="name" className="text-gray-500 text-sm font-normal">
                           {data.name}
                         </div>
                         <Image src={vecterIcon} width={14} height={15} alt="" />
@@ -140,17 +130,15 @@ export default function TeacherInfo(props: IPops) {
                 })}
               </div>
             </div>
-            <div className="flex w-[100%] h-[auto] pt-3 border-t border-t-[#E5E7EB] gap-3">
-              <Image src={plusIcon} width={14} height={15} alt="" />
-              <div
-                className="text-[14px] text-primary-600 font-semibold cursor-pointer"
-                onClick={() => {
-                  setIsClickedAddTeacher(true)
-                  setModal(true)
-                }}
-              >
-                강사 추가
-              </div>
+            <div
+              className="flex w-full pt-3 border-t border-t-[#E5E7EB] gap-1 text-[14px] text-primary-600 font-semibold items-center cursor-pointer"
+              onClick={() => {
+                setIsClickedAddTeacher(true)
+                setModal(true)
+              }}
+            >
+              <PlusIcon />
+              강사 추가
             </div>
           </div>
         ) : null}

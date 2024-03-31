@@ -5,22 +5,12 @@ import TextareaForm, { TextareaFormProps } from '@/components/common/TextareaFor
 import Category from './Category'
 import { ICommonInfo } from '@/app/(nav)/class/register/page'
 
-type ClassInfo = {
-  name: string
-  memo: String
-}
-
 interface IProps {
   commonInfo: ICommonInfo
   setCommonInfo: Dispatch<SetStateAction<ICommonInfo>>
 }
 
 export default function ClassInfo({ commonInfo, setCommonInfo }: IProps) {
-  const [classInfo, setClassInfo] = useState<ClassInfo>({
-    name: '',
-    memo: ''
-  })
-
   const classNameProps: InputFormProps = {
     title: '클래스 명',
     placeholder: '클래스명을 입력해 주세요',
@@ -29,14 +19,7 @@ export default function ClassInfo({ commonInfo, setCommonInfo }: IProps) {
     submitData: commonInfo,
     setSubmitData: setCommonInfo
   }
-  const optionProps: InputFormProps = {
-    title: '기타',
-    placeholder: '직접 입력',
-    name: 'options',
-    maxLength: 20,
-    submitData: commonInfo,
-    setSubmitData: setCommonInfo
-  }
+
   const classMemoProps: TextareaFormProps = {
     title: '클래스 메모',
     placeholder: '클래스관련 메모를 적어주세요',
@@ -52,7 +35,7 @@ export default function ClassInfo({ commonInfo, setCommonInfo }: IProps) {
       <div className="info-detail flex flex-col gap-2">
         <InputForm {...classNameProps} />
         <TextareaForm {...classMemoProps} />
-        <Category />
+        <Category commonInfo={commonInfo} setCommonInfo={setCommonInfo} />
       </div>
     </div>
   )
