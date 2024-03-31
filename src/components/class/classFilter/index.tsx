@@ -112,7 +112,7 @@ export default function ClassFilter() {
     } else if (filterValue.teacherName.length == 2) {
       return `${filterValue.teacherName[0]},${filterValue.teacherName[1]}`
     } else {
-      return `${filterValue.teacherName[0]},${filterValue.teacherName[1]},${filterValue.teacherName[2]}..`
+      return `${filterValue.teacherName[0]},${filterValue.teacherName[1]},${filterValue.teacherName[2][0]}..`
     }
   }
 
@@ -198,21 +198,22 @@ export default function ClassFilter() {
   }, [])
 
   useEffect(() => {
-    setSubClassProps(prev => ({
-      ...prev,
-      list: categoryList.subCategory.filter(data => data.parentId === Number(categoryData.mainClassId))
-    }))
-    setFilterState(prev => ({
-      ...prev,
-      mainCategoryId: categoryData.mainClassId,
-      subCategoryId: categoryData.subClassId !== '' ? categoryData.subClassId : ''
-    }))
-    console.log(categoryData.subClassId)
+    if (categoryData.mainClass !== '카테고리') {
+      setSubClassProps(prev => ({
+        ...prev,
+        list: categoryList.subCategory.filter(data => data.parentId === Number(categoryData.mainClassId))
+      }))
+      setFilterState(prev => ({
+        ...prev,
+        mainCategoryId: categoryData.mainClassId,
+        subCategoryId: categoryData.subClassId !== '' ? categoryData.subClassId : ''
+      }))
+    }
   }, [categoryData])
 
   return (
     <div className="flex flex-col gap-2 h-[50px]">
-      <div className=" max-w-[480px] h-[37px] items-start gap-2 flex">
+      <div className="w-full h-[37px] items-start gap-2 flex">
         <button
           ref={classTypeRef}
           className="group flex items-center gap-2 w-[120px] h-full border px-3 py-2 rounded-lg border-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9]"
@@ -231,12 +232,12 @@ export default function ClassFilter() {
         </button>
         <button
           ref={teacherNameTypeRef}
-          className="group flex items-center gap-2 max-w-[170px] h-full px-3 py-2 border rounded-lg border-indigo-500  hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9] focus-within:text-white"
+          className="group flex items-center gap-2 max-w-[160px] h-full px-3 py-2 border rounded-lg border-indigo-500  hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9] focus-within:text-white"
           onClick={() => {
             handleClickTeacherInside()
           }}
         >
-          <span className="max-w-[130px] text-sm indigo-500-semibold group-hover:text-white group-focus:text-white">
+          <span className="max-w-[120px] text-sm indigo-500-semibold group-hover:text-white group-focus:text-white">
             {filterValue.teacherName.length === 0 ? '강사명' : getCheckedName()}
           </span>
           {isClickedfilter.isClickedTeacherFilter ? (
@@ -247,12 +248,12 @@ export default function ClassFilter() {
         </button>
         <button
           ref={categoryTypeRef}
-          className="group flex items-center gap-2 max-w-[170px] h-full px-3 py-2 border rounded-lg border-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9]"
+          className="group flex items-center gap-2 max-w-[200px] h-full px-3 py-2 border rounded-lg border-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9]"
           onClick={() => {
             handleClickCategoryInside()
           }}
         >
-          <span className="max-w-[130px] text-sm indigo-500-semibold group-hover:text-white group-focus:text-white">
+          <span className="max-w-[150px] text-sm indigo-500-semibold group-hover:text-white group-focus:text-white">
             {categoryData.mainClass} {categoryData.subClass !== '' && `/ ${categoryData.subClass}`}
           </span>
           {isClickedfilter.isClickedCategoryFilter ? (

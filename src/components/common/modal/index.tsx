@@ -5,9 +5,13 @@ interface IProps {
   onClose?: () => void
   children: JSX.Element
   small?: boolean
+  props?: {
+    id: number
+    type: string
+  }
 }
 
-export default function Modal({ children, small }: IProps) {
+export default function Modal({ children, small, props }: IProps) {
   return ReactDOM.createPortal(
     <div className="absolute h-screen w-full bg-black bg-opacity-50 inset-y-0 inset-x-0 z-50">
       {small ? (

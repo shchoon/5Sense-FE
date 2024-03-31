@@ -49,7 +49,7 @@ export default function RegisterPage() {
       <ClassType />
       <TeacherInfo handleChangeTeacherId={handleChangeTeacherId} />
       <div
-        className="Button w-full btn-purpl-lg"
+        className="Button w-full btn-purple-lg"
         onClick={() => {
           postClassData({
             type: 'duration',

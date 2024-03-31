@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil'
 
 import ClassFilter from '@/components/class/classFilter'
@@ -20,19 +20,28 @@ interface classType {
   name: string
   teacher: string
   createdData: Date
-  numberOfStudnets: string
+  numberOfStudents: string
 }
 
 export default function ClassPage() {
   const router = useRouter()
-
+  const test = useRef<HTMLDivElement>(null)
   const [classList, setClassList] = useState<classType[]>([])
   const filterValue = useRecoilValue(filterState)
 
   const modal = useRecoilValue(modalState)
   const setModal = useSetRecoilState(modalState)
+  const [props, setProps] = useState<{ id: number; type: string }>({
+    id: 0,
+    type: ''
+  })
+  const [metaData, setMetaData] = useState<{ page: number; hasNextPage: boolean }>({
+    page: 1,
+    hasNextPage: false
+  })
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const checkLessonUrl = (data: filterStateType) => {
+  const checkLessonUrl = (data: filterStateType, page: number) => {
     let baseUrl = ['lessons/filters?']
     if (data.classType !== '') {
       baseUrl.push(`type=${data.classType}`)
@@ -47,15 +56,65 @@ export default function ClassPage() {
       baseUrl.push('&categories=')
       baseUrl.push(data.subCategoryId)
     }
+    baseUrl.push(`&page=${page}&take=10`)
     return baseUrl.join('')
   }
 
   useEffect(() => {
-    instance(checkLessonUrl(filterValue)).then(res => {
+    instance(checkLessonUrl(filterValue, 1)).then(res => {
       const lessonData = res.data.data.lessons
+      const meta = res.data.data.meta
       setClassList(lessonData)
+      setMetaData(prev => ({
+        ...prev,
+        page: meta.page,
+        hasNextPage: meta.hasNextPage
+      }))
     })
   }, [filterValue])
+
+  useEffect(() => {
+    if (metaData.hasNextPage) {
+      const options = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.5
+      }
+
+      const getData = () => {
+        instance(checkLessonUrl(filterValue, metaData.page + 1)).then(res => {
+          const lessonData = res.data.data.lessons
+          const meta = res.data.data.meta
+          setClassList(prev => [...prev, ...lessonData])
+          setMetaData(prev => ({
+            ...prev,
+            page: meta.page,
+            hasNextPage: meta.hasNextPage
+          }))
+          setIsLoading(false)
+        })
+      }
+
+      const callback = (entry: any) => {
+        if (entry[0].isIntersecting) {
+          setIsLoading(true)
+          setTimeout(() => {
+            getData()
+          }, 500)
+        }
+      }
+      const observer = new IntersectionObserver(callback, options)
+      if (test.current) {
+        observer.observe(test.current)
+      }
+
+      return () => {
+        if (observer && test.current) {
+          observer.unobserve(test.current)
+        }
+      }
+    }
+  }, [metaData])
 
   return (
     <div>
@@ -68,6 +127,11 @@ export default function ClassPage() {
               key={idx}
               className="h-56 px-4 py-8 flex flex-col justify-between box-border bg-white rounded-lg shadow border border-gray-200"
               onClick={() => {
+                setProps(prev => ({
+                  ...prev,
+                  id: data.id,
+                  type: data.type
+                }))
                 setModal(true)
               }}
             >
@@ -79,16 +143,29 @@ export default function ClassPage() {
                 {data.type === 'duration' ? '(기간)' : '(회차)'} {data.category}
               </div>
               <div className="mt-4 flex-1 gray-900-semibold text-xl">{data.name}</div>
-              <div className="flex justify-between items-end">
+              <div className="w-full flex justify-between">
                 <div className="gray-500-medium text-base">담당 강사 : {data.teacher}</div>
-                <div className="gray-500-normal text-sm">회원 수 : {data.numberOfStudnets}</div>
+                <div className="gray-500-normal text-sm">회원 수 : {data.numberOfStudents}</div>
               </div>
             </button>
           ))}
       </div>
+      {!isLoading && <div ref={test}></div>}
+      {isLoading && (
+        <div className="w-full h-[70px] pt-[50px] flex justify-center items-center">
+          <div
+            className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+            role="status"
+          >
+            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+              Loading...
+            </span>
+          </div>
+        </div>
+      )}
       {modal && (
         <Modal>
-          <DetailClassModal onClose={() => setModal(false)} />
+          <DetailClassModal props={props} onClose={() => setModal(false)} />
         </Modal>
       )}
     </div>
