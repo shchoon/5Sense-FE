@@ -1,7 +1,8 @@
-import { ICommonInfo } from '@/app/(nav)/class/register/page'
-import { InputFormProps } from '@/components/common/InputForm'
-import Image from 'next/image'
 import { Dispatch, SetStateAction, useState } from 'react'
+import Image from 'next/image'
+
+import { ICommonInfo } from '@/app/(nav)/class/register/page'
+import CheckIcon from 'public/assets/icons/circle/check.svg'
 
 export type category = {
   id: string
@@ -151,12 +152,14 @@ export default function Category({ commonInfo, setCommonInfo }: IProps) {
             {selectedOptionList.map((option: subCategory) => (
               <div
                 key={option.id}
-                className={`flex justify-center items-center w-[142px] h-[45px] p-3 rounded-md border border-indigo-400 ${
+                className={`relative flex justify-center items-center w-[142px] h-[45px] p-3 rounded-md border border-indigo-400 ${
                   selectedOption === Number(option.id) ? 'bg-[#F0EFFF]' : 'bg-white cursor-pointer'
                 }`}
                 onClick={() => handleOptionChange(option.id, option.name)}
               >
                 <>
+                  {selectedOption === Number(option.id) && <CheckIcon className="absolute top-1 right-1" />}
+
                   <input type="radio" id={option.name} value={option.name} className="hidden" />
                   <label
                     htmlFor={option.name}
@@ -181,11 +184,12 @@ export default function Category({ commonInfo, setCommonInfo }: IProps) {
           {categorydata.map((item: category) => (
             <div
               key={item.id}
-              className={`flex flex-col gap-[6px] justify-center items-center h-[110px] py-4 rounded-md border border-primary-500 ${
+              className={`relative flex flex-col gap-[6px] justify-center items-center h-[110px] py-4 rounded-md border border-primary-500 ${
                 selectedGroup === Number(item.id) ? 'bg-[#F0EFFF]' : 'bg-white cursor-pointer'
               }`}
               onClick={() => handleGroupChange(item.id, item.options)}
             >
+              {selectedGroup === Number(item.id) && <CheckIcon className="absolute top-1 right-1" />}
               <div
                 className={`w-12 h-12 rounded-[50px] flex justify-center items-center ${
                   selectedGroup === Number(item.id) ? 'bg-white' : 'bg-gray-100'

@@ -31,12 +31,18 @@ export default function Duration({ duration, setDuration }: IProps) {
 
     for (let i = numStr.length - 1, j = 0; i >= 0; i--, j++) {
       const num = Number(numStr[i])
+
+      console.log(i, j)
+
       if (num !== 0) {
         result = digits[num] + unit1[j % 4] + result
       }
+
       if (j % 4 === 0 && j !== 0) {
         result = unit2[j / 4] + result
       }
+
+      console.log(result)
     }
 
     return result
