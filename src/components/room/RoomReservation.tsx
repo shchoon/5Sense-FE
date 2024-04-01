@@ -115,6 +115,8 @@ export default function RoomReservation(props: IProps) {
     }))
   }
 
+  console.log(dateValue)
+
   const handleChangeLessonTimeFromChild = (time: string, type: string) => {
     if (type === 'round') {
       setLessonTime(time)
@@ -400,8 +402,8 @@ export default function RoomReservation(props: IProps) {
                             room: clickedRoomData.room
                           }
                           const startDateData = dateValue.split('~')[0].split('.')
-
                           const endDateData = dateValue.split('~')[1].split('.')
+
                           if (timeRange !== undefined) {
                             setDurationSchedule(prev => [
                               ...prev,

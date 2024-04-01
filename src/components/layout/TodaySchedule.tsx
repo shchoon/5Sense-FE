@@ -4,6 +4,18 @@ import { useState, useEffect } from 'react'
 import instance from '@/lib/api/axios'
 import { dateDataType } from '../datePicker/dayDatePicker'
 
+interface getLessonDataType {
+  id: number
+  type: string
+  name: string
+  lessonTime: number
+  memo: string
+  startTime: string
+  teacher: string
+  numberOfStudents: number
+  room: string
+}
+
 // 메인에서 스케줄 받아오고 저장해서 모달에서도 햄버거 버튼때도 사용해야함
 export default function TodaySchedule() {
   const currentDate = new Date()
@@ -22,12 +34,13 @@ export default function TodaySchedule() {
 
   useEffect(() => {
     instance(`/lessons/${currentDateData.year}/${currentDateData.month}`).then(res => {
-      const classData = res.data.data[currentDateData.date - 1]
+      const classData: getLessonDataType[] = res.data.data[currentDateData.date - 1]
       setPageData(prev => ({
         ...prev,
         wholePage: Math.ceil(classData.length / 5)
       }))
       let list = []
+      classData.sort((a, b) => Number(a.startTime.split(':')[0]) - Number(b.startTime.split(':')[0]))
       for (var i = 0; i < classData.length; i++) {
         let hour, min
         if (classData[i].lessonTime % 60 === 0) {
