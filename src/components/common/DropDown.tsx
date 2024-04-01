@@ -5,8 +5,8 @@ import { useState, useRef } from 'react'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
 import { classifyListType } from '../class/classFilter'
 
-import chevron_gray_down from 'public/assets/icons/chevron/chevron_down_gray.svg'
-import chevron_gray_up from 'public/assets/icons/chevron/chevron_up_gray.svg'
+import ChevronDownIcon from 'public/assets/icons/chevron/chevron_down_gray.svg'
+import ChevronUpIcon from 'public/assets/icons/chevron/chevron_up_gray.svg'
 
 interface HandleChangeTimeFromChildType {
   (data: { open?: string; close?: string }): void
@@ -68,15 +68,17 @@ export default function DropDown(props: IProps) {
   const [checked, setChecked] = useState<string[]>([])
 
   const returnCheckedDay: () => string = () => {
+    const dayList = ['월', '화', '수', '목', '금', '토', '일']
     if (checked.length === 0) {
       return ''
     }
     let result: string = ''
-    for (var i = 0; i < checked.length; i++) {
+    const sortedChecked = checked.sort((a, b) => dayList.indexOf(a) - dayList.indexOf(b))
+    for (var i = 0; i < sortedChecked.length; i++) {
       if (i !== 0) {
-        result += ',' + checked[i]
+        result += ',' + sortedChecked[i]
       } else {
-        result += checked[i]
+        result += sortedChecked[i]
       }
     }
     return result + '  반복'
@@ -117,13 +119,11 @@ export default function DropDown(props: IProps) {
             {props.type === 'checkbox' && (checked.length === 0 ? clickedItemTitle : returnCheckedDay())}
           </div>
         </button>
-        <Image
-          className="absolute right-4"
-          src={isClickDropDown ? chevron_gray_up : chevron_gray_down}
-          width={16}
-          height={16}
-          alt="cheveon_gray"
-        />
+        {isClickDropDown ? (
+          <ChevronUpIcon className="absolute right-4" width={16} height={16} />
+        ) : (
+          <ChevronDownIcon className="absolute right-4" width={16} height={16} />
+        )}
       </div>
       {isClickDropDown && (
         <div

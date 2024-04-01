@@ -16,10 +16,10 @@ import { modalState } from '@/lib/state/modal'
 import { durationScheduleState } from '@/lib/state/durationSchedule'
 import { lessonTimeState } from '@/lib/state/lessonTime'
 
-import searchIconWhite from 'public/assets/icons/search_white.svg'
-import user from 'public/assets/icons/user.svg'
-import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
-import chevronLeft from 'public/assets/icons/chevron/chevron-left.svg'
+import SearchIcon from 'public/assets/icons/search_white.svg'
+import UserIcon from 'public/assets/icons/user.svg'
+import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
+import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
 import { split } from 'postcss/lib/list'
 
 interface RoomDataType {
@@ -290,7 +290,7 @@ export default function RoomReservation(props: IProps) {
             </div>
           </button>
           <div className="w-12 h-12 rounded-full bg-primary-600 flex items-center justify-center">
-            <Image src={searchIconWhite} width={20} height={20} alt="search" />
+            <SearchIcon width={20} height={20} />
           </div>
         </div>
         <div className="absolute z-10 left-0 top-[120px]">
@@ -345,8 +345,8 @@ export default function RoomReservation(props: IProps) {
                   <div className="flex justify-between">
                     <div className="flex gap-2">
                       <div className="gray-900-semibold text-xl flex items-center">{data.name}</div>
-                      <div className="flex gap-0.5">
-                        <Image src={user} width={16} height={16} alt="user" />
+                      <div className="flex items-center gap-0.5">
+                        <UserIcon width={16} height={16} />
                         <div className="gray-500-normal text-sm flex items-center">{data.personNum}인</div>
                       </div>
                     </div>
@@ -391,7 +391,6 @@ export default function RoomReservation(props: IProps) {
                             }
                           }
                         } else if (props.classType === 'period') {
-                          console.log(dateValue, lessonTime)
                           const time = lessonTime.split(',')[0]
                           const day = lessonTime.slice(12, lessonTime.length)
                           const data = {
@@ -401,16 +400,33 @@ export default function RoomReservation(props: IProps) {
                             room: clickedRoomData.room
                           }
                           const startDateData = dateValue.split('~')[0].split('.')
-                          console.log(
-                            'test',
-                            new Date(
-                              Number(startDateData[0]),
-                              Number(startDateData[1]),
-                              Number(startDateData[2])
-                            ).toISOString()
-                          )
+
                           const endDateData = dateValue.split('~')[1].split('.')
-                          setDurationSchedule(prev => ({
+                          if (timeRange !== undefined) {
+                            setDurationSchedule(prev => [
+                              ...prev,
+                              {
+                                schedules: {
+                                  startDate: new Date(
+                                    Number(startDateData[0]),
+                                    Number(startDateData[1]) - 1,
+                                    Number(startDateData[2])
+                                  ).toISOString(),
+                                  endDate: new Date(
+                                    Number(endDateData[0]),
+                                    Number(endDateData[1]) - 1,
+                                    Number(endDateData[2])
+                                  ).toISOString(),
+                                  startTime: lessonTime.slice(0, 5),
+                                  endTime: lessonTime.slice(6, 11),
+                                  repeatDate: lessonTime.slice(12, lessonTime.length).split(' ')[0],
+                                  roomId: 1
+                                },
+                                lessonTime: timeRange * 30
+                              }
+                            ])
+                          }
+                          /* setDurationSchedule(prev => ({
                             ...prev,
                             schedules: {
                               startDate: new Date(
@@ -431,7 +447,7 @@ export default function RoomReservation(props: IProps) {
                           }))
                           if (timeRange !== undefined) {
                             setDurationSchedule(prev => ({ ...prev, lessonTime: timeRange * 30 }))
-                          }
+                          } */
                         }
                         props.onClick()
                       }}
@@ -445,7 +461,7 @@ export default function RoomReservation(props: IProps) {
                       scrollLeft(i)
                     }}
                   >
-                    <Image className="z-10" src={chevronLeft} width={16} height={16} alt="chevronLeft" />
+                    <ChevronLeftIcon className="z-10" width={16} height={16} />
                   </button>
                   <button
                     className="absolute z-10 -right-3 top-[60px] flex items-center justify-center w-6 h-6 border border-1 border-gray-200 bg-primary-50 rounded-full"
@@ -453,7 +469,7 @@ export default function RoomReservation(props: IProps) {
                       scrollRight(i)
                     }}
                   >
-                    <Image className="z-10" src={chevronRight} width={16} height={16} alt="chevronRight" />
+                    <ChevronRightIcon className="z-10" width={16} height={16} />
                   </button>
                   <div
                     ref={el => (refs.current[i] = el)}

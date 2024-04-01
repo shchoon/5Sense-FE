@@ -4,7 +4,9 @@ import { IDuration } from '@/app/(nav)/class/register/page'
 import Modal from '@/components/common/modal'
 import AddClassModal from '@/components/modal/AddClassModal'
 import { modalState } from '@/lib/state/modal'
-import { useSetRecoilState } from 'recoil'
+import { useSetRecoilState, useRecoilValue } from 'recoil'
+import { durationScheduleState } from '@/lib/state/durationSchedule'
+import DurationScheduleCheck from './DurationScheduleCheck'
 
 import PlusIcon from 'public/assets/icons/circle/plus.svg'
 
@@ -15,6 +17,7 @@ interface IProps {
 
 export default function Duration({ duration, setDuration }: IProps) {
   const setModal = useSetRecoilState(modalState)
+  const duarationSchedule = useRecoilValue(durationScheduleState)
   const [noticeModal, setNoticeModal] = useState(false)
   const [scheduleModal, setScheduleModal] = useState(false)
 
@@ -54,6 +57,8 @@ export default function Duration({ duration, setDuration }: IProps) {
     setDuration(prev => ({ ...prev, tuitionFee: Number(removedCommaValue.slice(0, 9)).toLocaleString() }))
   }
 
+  console.log(duarationSchedule)
+
   return (
     <div className="flex flex-col gap-10">
       <div className="w-full flex flex-col gap-2">
@@ -79,6 +84,7 @@ export default function Duration({ duration, setDuration }: IProps) {
           <PlusIcon width={24} height={24} />
           일정 추가
         </button>
+        <DurationScheduleCheck />
         {/**여기 일정 UI 들어가면 됩니다. */}
       </div>
       {noticeModal && (
@@ -89,7 +95,7 @@ export default function Duration({ duration, setDuration }: IProps) {
             </p>
             <p className="text-gray-900 text-2xl font-bold mb-[52px]">초과 했습니다.</p>
             <div
-              className="w-full btn-purpl-lg"
+              className="w-full btn-purple-lg"
               onClick={() => {
                 setModal(false)
                 setNoticeModal(false)

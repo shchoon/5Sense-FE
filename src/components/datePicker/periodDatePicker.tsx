@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react'
 import { dateDataType } from './dayDatePicker'
 import { useGetCalendarData } from '@/hooks/useGetCalendarData'
 
-import allowLeft from 'public/assets/icons/allow_left.svg'
-import allowRight from 'public/assets/icons/allow_right.svg'
+import AllowLeftIcon from 'public/assets/icons/allow_left.svg'
+import AllowRightIcon from 'public/assets/icons/allow_right.svg'
 
 interface clickedDateType {
   year: undefined | number
@@ -46,6 +46,7 @@ export default function PeriodDatePicker(props: IProps) {
   } else {
     firstDateList = useGetCalendarData(firstDateData)
   }
+  console.log(firstDateList)
   const secondDateList = useGetCalendarData(secondDateData)
   const [firstClickedData, setFirstClickedData] = useState<{
     year: number | undefined
@@ -162,8 +163,6 @@ export default function PeriodDatePicker(props: IProps) {
     if (firstClickedData.date.length === 1 && secondClickedData.date.length === 1) {
       props.changeParentDateData([firstClickedData, secondClickedData], 'period')
     }
-    // console.log(firstClickedData.year, firstClickedData.month, firstClickedData.date[0])
-    // console.log(secondClickedData.year, secondClickedData.month, secondClickedData.date[0])
   }
 
   const calculateRange = (data: number[], date: number) => {
@@ -174,19 +173,19 @@ export default function PeriodDatePicker(props: IProps) {
       return true
     }
   }
-  console.log('firstClickedData', firstClickedData)
-  console.log('secondClickedData', secondClickedData)
+
   return (
     <div className="w-[592px] bg-white p-4 flex gap-6 rounded-lg border border-1 border-primary-600 shadow">
       {/* 첫 번째 달력 */}
       <div className="flex flex-col bg-white gap-2 w-full rounded-lg">
         <div className="w-full flex justify-between">
+          <div className="w-full h-5 text-center gray-900-bold text-xs">
+            {firstDateData.year}년 {firstDateData.month + 1}월
+          </div>
           {firstDateData.year === currentDate.getFullYear() && firstDateData.month === currentDate.getMonth() ? null : (
-            <Image
-              src={allowLeft}
+            <AllowLeftIcon
               width={20}
               height={20}
-              alt="allowLeft"
               className="cursor-pointer"
               onClick={() => {
                 onClickMonthBackHandler(firstDateData, 'first')
@@ -194,9 +193,6 @@ export default function PeriodDatePicker(props: IProps) {
               }}
             />
           )}
-          <div className="w-full text-center gray-900-bold text-xs font-['Pretendard']">
-            {firstDateData.year}년 {firstDateData.month + 1}월
-          </div>
         </div>
         {/* 달력 */}
         <div className="w-[252px] h-[238px]">
@@ -427,14 +423,12 @@ export default function PeriodDatePicker(props: IProps) {
       {/* 두번째 달력 */}
       <div className="flex flex-col bg-white gap-2 w-full">
         <div className="w-full flex justify-between">
-          <div className="w-full text-center gray-900-bold text-xs font-['Pretendard']">
+          <div className="w-full h-5 text-center gray-900-bold text-xs">
             {secondDateData.year}년 {secondDateData.month + 1}월
           </div>
-          <Image
-            src={allowRight}
+          <AllowRightIcon
             width={20}
             height={20}
-            alt="allowRight"
             className="cursor-pointer"
             onClick={() => {
               onClickMonthForwardHandler(firstDateData, 'first')
@@ -660,7 +654,10 @@ export default function PeriodDatePicker(props: IProps) {
           })}
         </div>
         <div className="w-full h-[37px]">
-          <div className="w-full h-full btn-purple-sm" onClick={onClickCheckHandler}>
+          <div
+            className="w-full h-full  px-3 py-2 flex justify-center btn-white text-sm gray-800-semibold"
+            onClick={onClickCheckHandler}
+          >
             확인
           </div>
         </div>

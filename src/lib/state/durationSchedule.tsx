@@ -3,8 +3,8 @@ import Schedule from '../../app/(nav)/room/schedule/page'
 
 interface DurationScheduleType {
   schedules: {
-    startDate: string | Date
-    endDate: string | Date
+    startDate: string
+    endDate: string
     startTime: string
     endTime: string
     repeatDate: string
@@ -13,17 +13,7 @@ interface DurationScheduleType {
   lessonTime: number
 }
 
-export const durationScheduleState = atom<DurationScheduleType>({
+export const durationScheduleState = atom<DurationScheduleType[]>({
   key: 'durationScheduleState',
-  default: {
-    schedules: {
-      startDate: '',
-      endDate: '',
-      startTime: '',
-      endTime: '',
-      repeatDate: '',
-      roomId: 2
-    },
-    lessonTime: 0
-  }
+  default: []
 })

@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import ClassInfo from '@/components/class/register/classInfo'
 import ClassType from '@/components/class/register/classType'
@@ -33,6 +33,7 @@ export interface IDuration {
 
 export default function RegisterPage() {
   const router = useRouter()
+  const setDurationScheduleState = useSetRecoilState(durationScheduleState)
   const [commonInfo, setCommonInfo] = useState({
     name: '',
     memo: '',
@@ -68,13 +69,13 @@ export default function RegisterPage() {
         durationLesson: {
           name: commonInfo.name,
           memo: commonInfo.memo,
-          lessonTime: durationSchedule.lessonTime,
+          lessonTime: durationSchedule[durationSchedule.length - 1].lessonTime,
           tuitionFee: Number(tuition),
           category: { id: Number(commonInfo.category.id), name: commonInfo.category.name },
           teacherId: Number(commonInfo.teacherId),
           schedules: [
             {
-              ...durationSchedule.schedules
+              ...durationSchedule[durationSchedule.length - 1].schedules
             }
           ]
         }
@@ -99,6 +100,7 @@ export default function RegisterPage() {
       if (res.status === 201) {
         router.push('/class')
       }
+      setDurationScheduleState([])
     })
   }
 

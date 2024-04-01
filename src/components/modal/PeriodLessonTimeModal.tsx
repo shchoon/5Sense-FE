@@ -125,7 +125,7 @@ export default function PeriodLessonTimeModal(props: IProps) {
         </button>
         <button
           type="button"
-          className="w-full h-[41px] flex justify-center items-center gray-800-semibold text-sm text-white btn-purple"
+          className="w-full h-[41px] flex justify-center items-center gray-800-semibold text-sm text-white btn-purple-sm"
           onClick={() => handleClickCheck()}
         >
           확인

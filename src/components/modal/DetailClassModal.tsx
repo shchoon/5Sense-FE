@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 import instance from '@/lib/api/axios'
 
-import CloseCircle from 'public/assets/icons/closeCircle.svg'
+import CloseCircleIcon from 'public/assets/icons/closeCircle.svg'
 import { useEffect, useState } from 'react'
 
 interface IProps {
@@ -153,16 +153,12 @@ export default function DetailClassModal({ props, onClose }: IProps) {
     })
   }, [])
 
-  console.log(classDetail)
-
   return (
     <div className="relative w-[480px] h-screen rounded-tr-[32px] bg-white">
-      <Image
+      <CloseCircleIcon
         className="absolute right-6 top-6 cursor-pointer"
-        src={CloseCircle}
         width={35}
         height={35}
-        alt="CloseCircle"
         onClick={() => onClose()}
       />
       <div className="absolute top-[72px] w-full px-6 flex flex-col gap-6">

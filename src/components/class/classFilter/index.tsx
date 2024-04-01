@@ -7,8 +7,8 @@ import DropDown from '@/components/common/DropDown'
 import FilterSearchName from '@/components/common/FilterSearchName'
 import { filterState } from '@/lib/filter/filterState'
 
-import chevronDownBlue from 'public/assets/icons/chevron/chevron-down-blue.svg'
-import chevronUpBlue from 'public/assets/icons/chevron/chevron-up-blue.svg'
+import ChevronDownIcon from 'public/assets/icons/chevron/chevron-down-blue.svg'
+import ChevronUpIcon from 'public/assets/icons/chevron/chevron-up-blue.svg'
 import instance from '@/lib/api/axios'
 
 export interface instructorDataType {
@@ -225,9 +225,9 @@ export default function ClassFilter() {
             {classType === '' ? '클래스 유형' : classType}
           </span>
           {isClickedfilter.isClickedClassFilter ? (
-            <Image src={chevronUpBlue} width={16} height={16} alt=" " />
+            <ChevronUpIcon width={16} height={16} />
           ) : (
-            <Image src={chevronDownBlue} width={16} height={16} alt=" " />
+            <ChevronDownIcon width={16} height={16} />
           )}
         </button>
         <button
@@ -241,9 +241,9 @@ export default function ClassFilter() {
             {filterValue.teacherName.length === 0 ? '강사명' : getCheckedName()}
           </span>
           {isClickedfilter.isClickedTeacherFilter ? (
-            <Image src={chevronUpBlue} width={16} height={16} alt=" " />
+            <ChevronUpIcon width={16} height={16} />
           ) : (
-            <Image src={chevronDownBlue} width={16} height={16} alt=" " />
+            <ChevronDownIcon width={16} height={16} />
           )}
         </button>
         <button
@@ -257,9 +257,9 @@ export default function ClassFilter() {
             {categoryData.mainClass} {categoryData.subClass !== '' && `/ ${categoryData.subClass}`}
           </span>
           {isClickedfilter.isClickedCategoryFilter ? (
-            <Image src={chevronUpBlue} width={16} height={16} alt=" " />
+            <ChevronUpIcon width={16} height={16} />
           ) : (
-            <Image src={chevronDownBlue} width={16} height={16} alt=" " />
+            <ChevronDownIcon width={16} height={16} />
           )}
         </button>
       </div>

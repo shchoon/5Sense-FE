@@ -32,16 +32,21 @@ export function useGetCalendarData(dateData: dateDataType, type?: string) {
 
   /* 해당 월이 현재 월과 같을 때 */
   if (type === 'addClass' && dateData.year === currentdateData.year && dateData.month === currentdateData.month) {
-    for (var i = 1; i <= currentdateData.date - 1; i++) {
-      list.push({
-        date: i,
-        textColor: 'font-semibold text-gray-500',
-        clickable: false
-      })
+    let startDate: number
+
+    if (currentdateData.date === 1) {
+      startDate = 1
+    } else {
+      for (var i = 1; i <= currentdateData.date - 1; i++) {
+        list.push({
+          date: i,
+          textColor: 'font-semibold text-gray-500',
+          clickable: false
+        })
+      }
+      startDate = Number(list[list.length - 1].date) + 1
     }
-
-    const startDate = Number(list[list.length - 1].date) + 1
-
+    console.log(startDate)
     if (getHoliData[dateData.month + 1]) {
       const monthHoliData = getHoliData[dateData.month + 1].date
       for (var i = startDate; i <= lastDateOfCurrnetMonthData.getDate(); i++) {
@@ -142,6 +147,6 @@ export function useGetCalendarData(dateData: dateDataType, type?: string) {
   for (var i = 0; i < list.length; i += 7) {
     result.push(list.slice(i, i + 7))
   }
-
+  console.log(result)
   return result
 }
