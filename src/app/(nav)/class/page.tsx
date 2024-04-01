@@ -12,6 +12,7 @@ import { filterStateType } from '@/lib/filter/filterState'
 import Modal from '@/components/common/modal'
 import { modalState } from '@/lib/state/modal'
 import DetailClassModal from '@/components/modal/DetailClassModal'
+import NoneResult from '@/components/common/NoneResult'
 
 interface classType {
   category: string
@@ -168,6 +169,7 @@ export default function ClassPage() {
           <DetailClassModal props={props} onClose={() => setModal(false)} />
         </Modal>
       )}
+      {classList.length === 0 && <NoneResult />}
     </div>
   )
 }

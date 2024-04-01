@@ -7,7 +7,7 @@ import { instructorDataType } from '../class/classFilter'
 import instance from '@/lib/api/axios'
 import { filterState } from '@/lib/filter/filterState'
 
-import searchIcon from 'public/assets/icons/search.svg'
+import SearchIcon from 'public/assets/icons/search.svg'
 
 export default function FilterSearchName() {
   const setFilterState = useSetRecoilState(filterState)
@@ -48,7 +48,7 @@ export default function FilterSearchName() {
   return (
     <div className="w-full flex flex-col gap-3">
       <div className="w-full h-[42px] p-3 border rounded-lg border-gray-200 bg-gray-50 flex gap-2 focus:border-none focus-within:ring-1 focus-within:ring-[#7354E8]">
-        <Image src={searchIcon} width={18} height={18} alt=" " />
+        <SearchIcon width={18} height={18} />
         <input
           type="text"
           placeholder="강사 이름"
@@ -100,7 +100,7 @@ export default function FilterSearchName() {
           {sortFilterName.map((data, i) => {
             return (
               <div key={i} className="w-full flex items-center gap-2">
-                <Image src={searchIcon} width={14} height={14} alt=" " />
+                <SearchIcon width={14} height={14} />
                 <span
                   className="gray-500-normal text-sm hover:cursor-pointer"
                   id={data.name}

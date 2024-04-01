@@ -107,7 +107,7 @@ export default function RegisterPage() {
   const changeValue = (name: string, value: string) => {
     setCommonInfo(prev => ({
       ...prev,
-      [name]: value
+      name: value
     }))
   }
 
