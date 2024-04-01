@@ -2,7 +2,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { durationScheduleState } from '@/lib/state/durationSchedule'
 
-import TrashIcon from 'public/assets/icons/delete.svg'
+import TrashIcon from 'public/assets/icons/trash.svg'
 
 export default function DurationScheduleCheck() {
   const setDurationScheduleState = useSetRecoilState(durationScheduleState)
@@ -30,7 +30,7 @@ export default function DurationScheduleCheck() {
                 className="relative w-full flex flex-col px-4 py-3.5 border border-1 border-gray-200 rounded-lg bg-gray-50"
               >
                 <button className="absolute top-[15px] right-4 w-[105px] h-[37px] px-3 py-2 flex items-center gap-2 border border-1 border-gray-200 rounded-lg bg-white">
-                  <TrashIcon className="text-primary-600" width={16} height={16} />
+                  <TrashIcon className="text-primary-600" />
                   <div className="gray-800-semibold text-sm" onClick={() => deleteDurationSchedule(i)}>
                     삭제하기
                   </div>
