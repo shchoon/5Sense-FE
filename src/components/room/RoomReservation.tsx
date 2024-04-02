@@ -82,7 +82,7 @@ export default function RoomReservation(props: IProps) {
   })
 
   const handleChangeDateDataFromChild = (data: dateDataType | any, type?: string) => {
-    if (type === 'round') {
+    if (type === 'session') {
       setDateData({
         ...dateData,
         year: data.year,
@@ -92,7 +92,7 @@ export default function RoomReservation(props: IProps) {
       setDateValue(`${data.year}.${data.month + 1}.${data.date}`)
     }
 
-    if (type === 'period') {
+    if (type === 'duration') {
       console.log(data)
       if (data.length === 1) {
         setDateValue(
@@ -118,10 +118,10 @@ export default function RoomReservation(props: IProps) {
   console.log(dateValue)
 
   const handleChangeLessonTimeFromChild = (time: string, type: string) => {
-    if (type === 'round') {
+    if (type === 'session') {
       setLessonTime(time)
     }
-    if (type === 'period') {
+    if (type === 'duration') {
       setLessonTime(time)
     }
 
@@ -296,25 +296,25 @@ export default function RoomReservation(props: IProps) {
           </div>
         </div>
         <div className="absolute z-10 left-0 top-[120px]">
-          {props.classType === 'round' && isClickedTab.date && (
+          {props.classType === 'session' && isClickedTab.date && (
             <DayDatePicker
               parentsDateData={dateData}
               changeParentsDateData={handleChangeDateDataFromChild}
               type="addClass"
             />
           )}
-          {props.classType === 'period' && isClickedTab.date && (
+          {props.classType === 'duartion' && isClickedTab.date && (
             <PeriodDatePicker changeParentDateData={handleChangeDateDataFromChild} />
           )}
         </div>
         <div className="absolute z-10 right-10 top-[120px]">
-          {props.classType === 'round' && isClickedTab.time && (
+          {props.classType === 'session' && isClickedTab.time && (
             <LessonTimeModal
               lessonTime={lessonTime}
               handleChangeLessonTimeFromChild={handleChangeLessonTimeFromChild}
             />
           )}
-          {props.classType === 'period' && isClickedTab.time && (
+          {props.classType === 'duration' && isClickedTab.time && (
             <PeriodLessonTimeModal handleChangeLessonTimeFromChild={handleChangeLessonTimeFromChild} />
           )}
         </div>
@@ -359,7 +359,7 @@ export default function RoomReservation(props: IProps) {
                         if (room !== clickedRoomData.room) {
                           return
                         }
-                        if (props.classType === 'round') {
+                        if (props.classType === 'session') {
                           const start = 8 + (Number(clickedRoomData.clickedTime) * 30) / 60
                           const end = start + Number(lessonTime) / 60
                           const startTime = String(Math.floor(start)) + ':' + calculateTime(start - Math.floor(start))
@@ -392,7 +392,7 @@ export default function RoomReservation(props: IProps) {
                               date: ''
                             }
                           }
-                        } else if (props.classType === 'period') {
+                        } else if (props.classType === 'duration') {
                           const time = lessonTime.split(',')[0]
                           const day = lessonTime.slice(12, lessonTime.length)
                           const data = {

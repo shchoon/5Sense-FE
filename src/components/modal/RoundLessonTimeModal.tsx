@@ -1,8 +1,8 @@
 'use client'
 import Image from 'next/image'
 
-import Minus from 'public/assets/icons/minus_vector.svg'
-import Plus from 'public/assets/icons/plus_vector.svg'
+import MinusIcon from 'public/assets/icons/minus_vector.svg'
+import PlusIcon from 'public/assets/icons/plus_vector.svg'
 import { useState } from 'react'
 
 interface IProps {
@@ -39,9 +39,9 @@ export default function RoundLessonTimeModal(props: IProps) {
             }`}
             onClick={() => handleChangeLessonTime('minus')}
           >
-            <Image src={Minus} width={12} height={9.6} alt="minus" />
+            <MinusIcon width={12} height={5} />
           </button>
-          <div className="w-[186px] h-[27px] flex justify-center items-center gray-800-semibold text-lg">
+          <div className="w-[150px] h-[27px] flex justify-center items-center gray-800-semibold text-lg">
             {lessonTime}분
           </div>
           <button
@@ -50,7 +50,7 @@ export default function RoundLessonTimeModal(props: IProps) {
               handleChangeLessonTime('plus')
             }}
           >
-            <Image src={Plus} width={14} height={14} alt="plus" />
+            <PlusIcon width={16} height={16} />
           </button>
         </div>
       </div>

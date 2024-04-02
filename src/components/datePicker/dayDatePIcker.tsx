@@ -1,6 +1,6 @@
 'use client'
-import allowLeft from 'public/assets/icons/allow_left.svg'
-import allowRight from 'public/assets/icons/allow_right.svg'
+import AllowLeftIcon from 'public/assets/icons/allow_left.svg'
+import AllowRightIcon from 'public/assets/icons/allow_right.svg'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { useGetCalendarData } from '@/hooks/useGetCalendarData'
@@ -87,25 +87,11 @@ export default function DayDatePicker(props: IProps) {
   return (
     <div className="flex flex-col bg-white gap-2 w-[283px] p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
       <div className="w-full flex justify-between">
-        <Image
-          src={allowLeft}
-          width={20}
-          height={20}
-          alt="allowLeft"
-          className="cursor-pointer"
-          onClick={onClickMonthBackHandler}
-        />
+        <AllowLeftIcon width={20} height={20} className="cursor-pointer" onClick={onClickMonthBackHandler} />
         <div className="w-[126px] text-center gray-900-bold text-xs font-['Pretendard']">
           {dateData.year}년 {dateData.month + 1}월
         </div>
-        <Image
-          src={allowRight}
-          width={20}
-          height={20}
-          alt="allowRight"
-          className="cursor-pointer"
-          onClick={onClickMonthForwardHandler}
-        />
+        <AllowRightIcon width={20} height={20} className="cursor-pointer" onClick={onClickMonthForwardHandler} />
       </div>
       {/* 달력 */}
       <div className="w-[252px]">
@@ -158,7 +144,7 @@ export default function DayDatePicker(props: IProps) {
         >
           취소
         </button>
-        <button className="w-[121px] h-full btn-purpl-md" onClick={onClickCheckHandler}>
+        <button className="w-[121px] h-full px-3 py-2 text-sm btn-purple" onClick={onClickCheckHandler}>
           확인
         </button>
       </div>

@@ -83,6 +83,20 @@ module.exports = {
             margin: 'unset'
           }
         },
+        '.btn-purple': {
+          background: '#7354E8',
+          borderRadius: 8,
+          textAlign: 'center',
+          color: 'white',
+          fontWeight: '600',
+          cursor: 'pointer',
+          '&:hover': {
+            backgroundColor: '#563AC0'
+          },
+          '&:active': {
+            outline: '3px solid #D3C4F9'
+          }
+        },
         '.btn-white': {
           boxSizing: 'border-box',
           background: 'white',

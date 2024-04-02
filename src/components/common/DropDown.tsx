@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
 import { classifyListType } from '../class/classFilter'
 
@@ -102,6 +102,10 @@ export default function DropDown(props: IProps) {
 
   useOnClickOutside(dropdownRef, handleClickOutsideOfDropdown)
 
+  useEffect(() => {
+    setClickedItemTitle(props.title)
+  }, [props.list])
+
   return (
     <div ref={dropdownRef} className="w-full relative">
       <div className="relative w-full flex items-center">
@@ -113,7 +117,7 @@ export default function DropDown(props: IProps) {
           <div
             className={`h-[18px] ${
               props.list.includes(clickedItemTitle) ? 'gray-900-normal' : 'gray-500-normal'
-            } text-sm font-['Pretendard'] text-left`}
+            } text-sm text-left`}
           >
             {props.type !== 'checkbox' && clickedItemTitle}
             {props.type === 'checkbox' && (checked.length === 0 ? clickedItemTitle : returnCheckedDay())}
@@ -143,7 +147,7 @@ export default function DropDown(props: IProps) {
                     setIsClickDropDown(false)
                   }}
                 >
-                  <div id="box" className="w-full gray-900-normal text-base font-['Pretendard']">
+                  <div id="box" className="w-full gray-900-normal text-base">
                     {item}
                   </div>
                 </div>
@@ -163,7 +167,7 @@ export default function DropDown(props: IProps) {
                     setIsClickDropDown(false)
                   }}
                 >
-                  <div id="box" className="w-full gray-900-normal text-base font-['Pretendard']">
+                  <div id="box" className="w-full gray-900-normal text-base">
                     {item.name}
                   </div>
                 </div>

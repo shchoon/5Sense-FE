@@ -13,7 +13,7 @@ interface IProps {
 }
 
 export default function StudentAddClassModal({ onClose }: IProps) {
-  const [classType, setClassType] = useState<string>('period')
+  const [classType, setClassType] = useState<string>('duration')
   const [selectedClass, setSelectedClass] = useState('')
   const [isPaid, setIsPaid] = useState<boolean>(false)
   const [studentName, setStudentName] = useState('조성훈')
@@ -32,21 +32,27 @@ export default function StudentAddClassModal({ onClose }: IProps) {
   })
 
   useEffect(() => {
-    instance('/lessons/filters?type=duration&take=100').then(res => {
+    instance(`/lessons/filters?type=${classType}&take=100`).then(res => {
       const lessonData = res.data.data.lessons
+      console.log(lessonData)
       let classList: string[] = []
       lessonData.map((data: any, i: number) => {
         classList.push(`${data.name} / ${data.teacher}`)
       })
-      console.log(classList)
       setDropDownProps(prev => ({
         ...prev,
         list: classList
       }))
     })
-  }, [])
+    return () => {
+      setDropDownProps(prev => ({
+        ...prev,
+        title: '클래스를 선택해주세요',
+        list: []
+      }))
+    }
+  }, [classType])
 
-  console.log(dropDownProps)
   return (
     <div className="w-[640px] border border-1 border-gray-200 rounded-xl bg-white">
       <div className="relative w-full h-[90px]">
@@ -58,10 +64,10 @@ export default function StudentAddClassModal({ onClose }: IProps) {
         <div className="w-full flex items-center h-[52px] p-1.5 border border-1 border-gray-300 rounded-md">
           <button
             className={`w-1/2 h-10 py-2 rounded-md ${
-              classType === 'period' ? 'text-white font-semibold bg-primary-600' : 'text-gray-500'
+              classType === 'duration' ? 'text-white font-semibold bg-primary-600' : 'text-gray-500'
             } text-base`}
             onClick={() => {
-              setClassType('period')
+              setClassType('duration')
               setSelectedClass('')
             }}
           >
@@ -70,10 +76,10 @@ export default function StudentAddClassModal({ onClose }: IProps) {
 
           <button
             className={`w-1/2 h-10 py-2 rounded-md ${
-              classType === 'round' ? 'text-white font-semibold bg-primary-600' : 'text-gray-500'
+              classType === 'session' ? 'text-white font-semibold bg-primary-600' : 'text-gray-500'
             } text-base`}
             onClick={() => {
-              setClassType('round')
+              setClassType('session')
               setSelectedClass('')
             }}
           >
@@ -104,7 +110,7 @@ export default function StudentAddClassModal({ onClose }: IProps) {
             </div>
           )}
         </div>
-        {classType === 'period' && (
+        {classType === 'duration' && (
           <button
             type="button"
             className={`w-full h-[52px] mt-[300px] rounded-lg ${
@@ -116,11 +122,11 @@ export default function StudentAddClassModal({ onClose }: IProps) {
         )}
 
         {/* 강의실 예약 */}
-        {classType === 'round' && (
+        {classType === 'session' && (
           <RoomReservation
             class={selectedClass}
             studentName={studentName}
-            classType="round"
+            classType="session"
             viewType="modal"
             onClick={() => console.log('as')}
           />
