@@ -7,9 +7,9 @@ import Navbar from '@/components/layout/Navbar'
 import TodaySchedule from '@/components/layout/TodaySchedule'
 import { modalState } from '@/lib/state/modal'
 
-import logout from 'public/assets/icons/logout.svg'
-import menu from 'public/assets/icons/menu.svg'
-import noticeActive from 'public/assets/icons/notice-active.svg'
+import LogoutIcon from 'public/assets/icons/logout.svg'
+import MenuIcon from 'public/assets/icons/menu.svg'
+import NoticeActiveIcon from 'public/assets/icons/notice-active.svg'
 import mainLogo from 'public/assets/logo/mainLogo.png'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
@@ -28,15 +28,15 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         {/* 상위 relative가 없기때문에 body를 부모로 잡음 */}
         <div className="header w-full h-[124px] flex justify-between items-center lg:flex-none lg:h-[66px]">
           <div className="rightBox flex gap-5 lg:flex-none lg:relative lg:top-12 lg:left-6">
-            <Image className="menu lg:hidden cursor-pointer" src={menu} alt="메뉴" />
+            <MenuIcon className="menu lg:hidden cursor-pointer" />
             <div className="logoBox flex gap-[10px]">
               <Image src={mainLogo} alt="로고" />
               <span className=" text-slate-50 text-xl font-bold leading-[52px]">5Sense</span>
             </div>
           </div>
           <div className="iconBox lg:absolute lg:top-[37px] lg:right-6 flex items-center gap-[27px]">
-            <Image src={logout} alt="로그아웃" />
-            <Image src={noticeActive} alt="활성알림" />
+            <NoticeActiveIcon className="w-[30px] h-[30px] text-primary-200" />
+            <LogoutIcon className="w-7 h-7 text-primary-200" />
           </div>
         </div>
         <div className="content w-full h-full lg:flex">

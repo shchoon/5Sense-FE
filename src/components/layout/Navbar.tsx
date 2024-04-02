@@ -76,7 +76,7 @@ export default function Navbar() {
         return (
           <Link href={`${menu.slug}`} key={menu.id}>
             <div
-              className={`flex justify-center h-14  ${
+              className={`flex justify-center w-[135px] h-14  ${
                 pathname.includes(menu.slug) ? 'w-[170px] xl:w-[205px]' : 'w-[135px] xl:w-[168px] bg-primary-400'
               } xl:h-[70px] rounded-tl-xl rounded-tr-xl translate-y-[14px] xl:translate-y-[17px]`}
             >
