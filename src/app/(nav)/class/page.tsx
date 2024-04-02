@@ -141,7 +141,7 @@ export default function ClassPage() {
                   data.type === 'duration' ? 'text-primary-600 bg-primary-100' : 'text-secondary-600 bg-secondary-100'
                 } text-xs font-semibold`}
               >
-                {data.type === 'duration' ? '(기간)' : '(회차)'} {data.category}
+                {data.category}
               </div>
               <div className="mt-4 flex-1 gray-900-semibold text-xl">{data.name}</div>
               <div className="w-full flex justify-between">
