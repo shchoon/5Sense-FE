@@ -5,11 +5,11 @@ import { useEffect, useRef, useState } from 'react'
 
 import NoneResult from '@/components/common/NoneResult'
 import { useGetData } from '@/hooks/useGetData'
-import PlusCircleIcon from '../../../../public/assets/icons/plus-circle'
 
-import searchIconWhite from 'public/assets/icons/search_white.svg'
-import closeIcon from 'public/assets/icons/close.svg'
-import searchIconGray from 'public/assets/icons/search.svg'
+import PlusIcon from 'public/assets/icons/circle/plus.svg'
+import SearchIconWhite from 'public/assets/icons/search_white.svg'
+import CloseIcon from 'public/assets/icons/close.svg'
+import SearchIconGray from 'public/assets/icons/search.svg'
 
 interface studentType {
   id: string
@@ -166,15 +166,15 @@ export default function StudentPage() {
       {/* 수강생 관리 + 수강생 등록 버튼 */}
       <div className="flex w-full pt-12 mb-[30px] justify-between">
         <div className=" h-[30px] black-bold text-3xl">수강생 관리</div>
-        <Link href={'student/register'} className="flex w-[150px] gap-2 px-5 py-2.5 btn-purple">
-          <PlusCircleIcon {...whitePlusCircleProps} />
-          <span className=" text-sm">수강생 등록</span>
+        <Link href={'student/register'} className="flex w-[150px] gap-2 px-5 py-2.5 btn-purple-sm lg:btn-purple-md">
+          <PlusIcon />
+          <span className="text-sm">수강생 등록</span>
         </Link>
       </div>
       {/* 검색창 */}
       <div className="flex gap-2.5 lg:w-[377px] lg:h-[42px] w-[326px] h-[37px] mb-5">
-        <div className="lg:w-[325px] lg:gap-2.5 w-[280px] flex gap-2 px-4 lg:py-3 py-2 rounded-lg outline outline-1 outline-gray-300 focus-within:outline-[#563AC0]">
-          <Image src={searchIconGray} width={16} height={16} alt=" " />
+        <div className="lg:w-[325px] lg:gap-2.5 w-[280px] flex items-center gap-2 px-4 lg:py-3 py-2 rounded-lg outline outline-1 outline-gray-300 focus-within:outline-[#563AC0]">
+          <SearchIconGray width={16} height={16} alt=" " />
           <input
             ref={inputRef}
             className="w-[245px] focus:outline-none"
@@ -185,20 +185,13 @@ export default function StudentPage() {
             onChange={handleChangeInput}
             onKeyDown={checkInputType() ? preventInputDifferentType : allowOnlyNum}
           />
-          <Image
-            className="cursor-pointer"
-            src={closeIcon}
-            width={12}
-            height={12}
-            alt=" "
-            onClick={handleClickInputRefresh}
-          />
+          <CloseIcon className="cursor-pointer" width={12} height={12} onClick={handleClickInputRefresh} />
         </div>
         <div
           className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer"
           onClick={handleClickSearch}
         >
-          <Image src={searchIconWhite} width={20} height={20} alt="" />
+          <SearchIconWhite width={20} height={20} alt="" />
         </div>
       </div>
       {/* 수강생 목록 시작 */}

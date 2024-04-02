@@ -1,17 +1,18 @@
 'use client'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import DropDown from '../common/DropDown'
 import RoomReservation from '../room/RoomReservation'
+import instance from '@/lib/api/axios'
 
-import closeCircle from 'public/assets/icons/closeCircle.svg'
+import CloseIcon from 'public/assets/icons/closeCircle.svg'
 
-export default function StudentAddClassModal() {
-  const dropDownProps = {
-    title: '클래스를 선택해주세요',
-    list: ['반냐사 요가', '무적 필라테스', '스트레칭', 'PT']
-  }
+interface IProps {
+  onClose: () => void
+}
+
+export default function StudentAddClassModal({ onClose }: IProps) {
   const [classType, setClassType] = useState<string>('period')
   const [selectedClass, setSelectedClass] = useState('')
   const [isPaid, setIsPaid] = useState<boolean>(false)
@@ -25,11 +26,32 @@ export default function StudentAddClassModal() {
     setIsPaid(prev => !prev)
   }
 
+  const [dropDownProps, setDropDownProps] = useState<{ title: string; list: string[] }>({
+    title: '클래스를 선택해주세요',
+    list: []
+  })
+
+  useEffect(() => {
+    instance('/lessons/filters?type=duration&take=100').then(res => {
+      const lessonData = res.data.data.lessons
+      let classList: string[] = []
+      lessonData.map((data: any, i: number) => {
+        classList.push(`${data.name} / ${data.teacher}`)
+      })
+      console.log(classList)
+      setDropDownProps(prev => ({
+        ...prev,
+        list: classList
+      }))
+    })
+  }, [])
+
+  console.log(dropDownProps)
   return (
-    <div className="absolute left-10 top-10 w-[640px] border border-1 border-gray-200 rounded-xl bg-white">
+    <div className="w-[640px] border border-1 border-gray-200 rounded-xl bg-white">
       <div className="relative w-full h-[90px]">
         <div className="absolute left-6 top-10 text-2xl gray-900-bold">클래스 추가</div>
-        <Image className="absolute right-4 top-4" src={closeCircle} width={35} height={35} alt="closeCircle" />
+        <CloseIcon className="absolute right-4 top-4 cursor-pointer" width={35} height={35} onClick={() => onClose()} />
       </div>
       <div className="w-full px-6 pb-6 flex flex-col gap-10">
         {/* 회차/기간반 버튼 */}
@@ -95,7 +117,13 @@ export default function StudentAddClassModal() {
 
         {/* 강의실 예약 */}
         {classType === 'round' && (
-          <RoomReservation class={selectedClass} studentName={studentName} classType="round" viewType="modal" />
+          <RoomReservation
+            class={selectedClass}
+            studentName={studentName}
+            classType="round"
+            viewType="modal"
+            onClick={() => console.log('as')}
+          />
         )}
       </div>
     </div>
