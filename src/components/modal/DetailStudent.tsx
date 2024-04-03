@@ -1,67 +1,72 @@
-import instance from '@/lib/api/axios'
 import { useEffect, useState } from 'react'
-import { SideProps } from './SideModal'
 import { useRouter } from 'next/navigation'
-import { useRecoilState } from 'recoil'
-import { modalState } from '@/lib/state/modal'
 
-export default function DetailStudent({ id }: SideProps) {
+import instance from '@/lib/api/axios'
+import StudentsDuration from '../studentsDetail/studentsDuartion'
+import StudentsSession from '../studentsDetail/studentsSession'
+
+import CloseCircleIcon from 'public/assets/icons/closeCircle.svg'
+import PlusIcon from 'public/assets/icons/plus_circle_bg_pri_600.svg'
+
+interface IProps {
+  studentsId: string
+  onClose: () => void
+}
+
+export default function DetailStudent({ studentsId, onClose }: IProps) {
   const router = useRouter()
 
-  const [Modal, setModal] = useRecoilState(modalState)
-
-  const [student, setStudent] = useState({
-    name: '',
-    phone: '',
-    particulars: ''
-  })
-
-  const handleModal = () => {
-    setModal(prevModal => ({
-      ...prevModal,
-      active: false
-    }))
-  }
-
-  const getStudentInfo = () => {
-    instance.get(`/students/${id}`).then(res => {
-      setStudent({
-        ...student,
-        name: res.data.data.name,
-        phone: res.data.data.phone,
-        particulars: res.data.data.particulars
-      })
-    })
-  }
-
   useEffect(() => {
-    getStudentInfo()
+    instance(`/students/${studentsId}`).then(res => {
+      console.log(res)
+    })
   }, [])
 
   return (
-    <>
-      <div className="w-full mt-[13px]">
-        <div className="text-gray-900 text-[26px] font-bold mb-2">
-          {student.name}
-        </div>
-        <div className="text-gray-800 text-base font-medium mb-5">
-          {student.phone?.slice(0, 3)}-{student.phone?.slice(3, 7)}-
-          {student.phone?.slice(7, 11)}
-        </div>
-
-        <div className="text-gray-500 text-sm font-normal">
-          {student.particulars}
+    <div className="relative w-[480px]  h-screen rounded-tr-[32px] bg-white">
+      <CloseCircleIcon
+        className="absolute right-6 top-6 cursor-pointer"
+        width={35}
+        height={35}
+        onClick={() => onClose()}
+      />
+      <div className="absolute top-[72px] w-full px-6 flex flex-col gap-6">
+        {/* 수강생 이름, 번호, 메모 */}
+        <div className="w-full flex flex-col gap-5">
+          <div className="w-full flex items-center flex-col gap-2">
+            <div className="w-full gray-900-bold text-[26px]">엄세리</div>
+            <div className="w-full gray-800-medium text-base">010-1234-5678</div>
+          </div>
+          <div className="w-full gray-500-normal text-sm">
+            수강생 관련 간단메모가 300자까지 들어갑니다수강생 관련 간단메모가 300자까지 들어갑니다수강생 관련 간단메모가
+            300자까지 들어갑니다수강생 관련 간단메모가 300자까지 들어갑니다
+          </div>
+          {/* 클래스 목록 */}
+          <div className="w-full max-h-[760px] overflow-y-auto py-6 px-6 flex items-center flex-col gap-4 border border-1 border-gray-200 rounded-lg shadow">
+            <div className="w-full gray-800-bold text-base">클래스 목록</div>
+            <button
+              type="button"
+              className="flex justify-center gap-2 w-full px-6 py-3.5 border rounded-lg border-primary-600"
+              onClick={() => {}}
+            >
+              <PlusIcon width={24} height={24} />
+              <div className="text-base font-semibold text-primary-600 font-['Pretendard']">클래스 추가</div>
+            </button>
+            <div className="w-full flex flex-col gap-4">
+              <StudentsDuration />
+              <StudentsSession />
+              <StudentsSession />
+              <StudentsSession />
+              <StudentsDuration />
+            </div>
+          </div>
         </div>
       </div>
-      <button
-        className="absolute bottom-6 left-6 w-[431px] h-[52px] btn-purple"
-        onClick={() => {
-          router.push('/student/edit')
-          handleModal()
-        }}
-      >
-        수정하기
-      </button>
-    </>
+      <div className="absolute bottom-0 w-full px-6 pb-6">
+        <button type="button" className="w-full btn-purple-lg">
+          수정하기
+        </button>
+      </div>
+    </div>
   )
 }

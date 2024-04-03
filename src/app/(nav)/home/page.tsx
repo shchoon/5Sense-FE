@@ -9,8 +9,8 @@ import DateSlideTab from '@/components/main/DateSlideTab'
 import { dateDataType } from '@/components/datePicker/dayDatePicker'
 import DayDatePicker from '@/components/datePicker/dayDatePicker'
 
-import chevronLeft from 'public/assets/icons/chevron/chevron-left.svg'
-import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
+import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
+import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
 
 export default function MainPageDay() {
   const { width, height } = useWindowSize()
@@ -105,7 +105,7 @@ export default function MainPageDay() {
               className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
               onClick={moveBackDay}
             >
-              <Image src={chevronLeft} width={24} height={24} alt=" " />
+              <ChevronLeftIcon width={24} height={24} />
             </div>
             <div
               className={`w-full px-3 py-2 flex justify-center gap-2 items-center ${
@@ -120,7 +120,7 @@ export default function MainPageDay() {
               className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
               onClick={moveForwardDay}
             >
-              <Image src={chevronRight} width={24} height={24} alt=" " />
+              <ChevronRightIcon width={24} height={24} />
             </div>
           </div>
           <DateSlideTab />

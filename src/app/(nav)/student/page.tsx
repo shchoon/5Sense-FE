@@ -2,9 +2,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import NoneResult from '@/components/common/NoneResult'
 import { useGetData } from '@/hooks/useGetData'
+import Modal from '@/components/common/modal'
+import { modalState } from '@/lib/state/modal'
+import DetailStudent from '@/components/modal/DetailStudent'
 
 import PlusIcon from 'public/assets/icons/circle/plus.svg'
 import SearchIconWhite from 'public/assets/icons/search_white.svg'
@@ -31,14 +35,20 @@ export interface getDataType {
 }
 
 export default function StudentPage() {
+  const inputRef = useRef<HTMLInputElement>(null)
+  const target: HTMLElement | null = document.getElementById('test')
+  const numberCheckList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+
+  const modal = useRecoilValue(modalState)
+  const setModal = useSetRecoilState(modalState)
+  const [isClickedStudent, setIsClickedStudent] = useState<boolean>(false)
+  const [clickedStudentsId, setClickedStudentsId] = useState<string>('')
+
   const whitePlusCircleProps = {
     width: '20',
     height: '20',
     color: '#FFF'
   }
-  const inputRef = useRef<HTMLInputElement>(null)
-  const target: HTMLElement | null = document.getElementById('test')
-  const numberCheckList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
   const [studentList, setStudentList] = useState<studentType[]>([])
   const [postVar, setPostVar] = useState<postVarType>({
@@ -143,6 +153,11 @@ export default function StudentPage() {
     }
   }
 
+  const onClose = () => {
+    setModal(false)
+    setIsClickedStudent(false)
+  }
+
   useEffect(() => {
     useGetData('students', 1, 10).then(res => {
       setStudentList((preInstructorData: getDataType[]) => [...res.data])
@@ -215,7 +230,9 @@ export default function StudentPage() {
                 key={id}
                 className="w-full flex lg:gap-10 gap-8 lg:p-7 p-6 outline rounded-md outline-1 outline-gray-200 shadow-[0_5px_15px_0px_rgba(0,0,0,0.02)] hover:outline-primary-600"
                 onClick={() => {
-                  //handleModal(data.id)
+                  setModal(true)
+                  setIsClickedStudent(true)
+                  setClickedStudentsId(id)
                 }}
               >
                 <div className="flex lg:gap-6 gap-4 flex-1">
@@ -246,6 +263,11 @@ export default function StudentPage() {
             </span>
           </div>
         </div>
+      )}
+      {isClickedStudent && (
+        <Modal>
+          <DetailStudent studentsId={clickedStudentsId} onClose={onClose} />
+        </Modal>
       )}
     </div>
   )
