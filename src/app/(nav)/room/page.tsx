@@ -21,7 +21,7 @@ import user from 'public/assets/icons/user_icon.svg'
 import calendar from 'public/assets/icons/calendar-white.svg'
 import dots from 'public/assets/icons/dotsVertical.svg'
 import modify from 'public/assets/icons/modify.svg'
-import deleteIcon from 'public/assets/icons/delete.svg'
+import deleteIcon from 'public/assets/icons/trash.svg'
 
 export default function Room() {
   const { width, height } = useWindowSize()
