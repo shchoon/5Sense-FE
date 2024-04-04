@@ -9,6 +9,7 @@ import { useGetData } from '@/hooks/useGetData'
 import Modal from '@/components/common/modal'
 import { modalState } from '@/lib/state/modal'
 import DetailStudent from '@/components/modal/DetailStudent'
+import instance from '@/lib/api/axios'
 
 import PlusIcon from 'public/assets/icons/circle/plus.svg'
 import SearchIconWhite from 'public/assets/icons/search_white.svg'
@@ -35,8 +36,8 @@ export interface getDataType {
 }
 
 export default function StudentPage() {
+  const target = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-  const target: HTMLElement | null = document.getElementById('test')
   const numberCheckList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
   const modal = useRecoilValue(modalState)
@@ -44,77 +45,55 @@ export default function StudentPage() {
   const [isClickedStudent, setIsClickedStudent] = useState<boolean>(false)
   const [clickedStudentsId, setClickedStudentsId] = useState<string>('')
 
-  const whitePlusCircleProps = {
-    width: '20',
-    height: '20',
-    color: '#FFF'
-  }
-
   const [studentList, setStudentList] = useState<studentType[]>([])
+  const [metaData, setMetaData] = useState<{ page: number; hasNextPage: boolean }>({
+    page: 1,
+    hasNextPage: false
+  })
   const [postVar, setPostVar] = useState<postVarType>({
     page: 1,
     hasNextPage: false
   })
   const [isRefresh, setIsRefresh] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [scrollCount, setScrollCount] = useState(0)
   const [inputValue, setInputValue] = useState<string>('')
-
-  // const [Modal, setModal] = useRecoilState(modalState)
-  // const handleModal = (id: string) => {
-  //   setModal(prevModal => ({
-  //     ...prevModal,
-  //     active: true,
-  //     id: id,
-  //     type: 'student'
-  //   }))
-  // }
-
-  const options = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 1.0
-  }
-  const handleObserver = ([entry]: IntersectionObserverEntry[], observer: IntersectionObserver) => {
-    if (entry.isIntersecting) {
-      observer.unobserve(entry.target)
-      setScrollCount(prev => prev + 1)
-    }
-  }
-
-  const observer = new IntersectionObserver(handleObserver, options)
-  postVar.hasNextPage && target && observer.observe(target)
-
-  const getStudentListToScroll = async () => {
-    if (inputValue !== '') {
-      const searchBy = inputRef.current?.name
-
-      const res = await useGetData('students', postVar.page + 1, 10, searchBy, inputValue)
-      setStudentList((preStudentData: getDataType[]) => [...preStudentData, ...res.data])
-      setPostVar((prePostVar: postVarType) => res.meta)
-    } else {
-      const res = await useGetData('students', postVar.page + 1, 10)
-      setStudentList((preStudentData: getDataType[]) => [...preStudentData, ...res.data])
-      setPostVar((prePostVar: postVarType) => res.meta)
-    }
-  }
+  const [isClickedSearch, setIsClickedSearch] = useState<boolean>(false)
 
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value)
   }
 
-  const handleClickSearch = async () => {
-    const searchBy = inputRef.current?.name
-    const res = await useGetData('students', 1, 10, searchBy, inputValue)
-    setStudentList((preStudentData: getDataType[]) => [...res.data])
-    setPostVar((prePostVar: postVarType) => res.meta)
+  const handleClickSearch = () => {
+    let searchBy: string = ''
+    if (inputRef.current?.type === 'text') {
+      searchBy = 'name'
+    } else if (inputRef.current?.type === 'number') {
+      searchBy = 'phone'
+    }
+    instance(`/students?searchBy=${searchBy}&${searchBy}=${inputValue}`).then(res => {
+      const studentsData = res.data.data.students
+      const meta = res.data.data.meta
+      setStudentList(studentsData)
+      setMetaData(prev => ({
+        ...prev,
+        page: meta.page,
+        hasNextPage: meta.hasNextPage
+      }))
+    })
   }
 
   const handleClickInputRefresh = async () => {
     setInputValue('')
-    const res = await useGetData('students', 1, 10)
-    setStudentList(res.data)
-    setPostVar((prePostVar: postVarType) => res.meta)
+    instance('/students?searchBy=none').then(res => {
+      const studentsData = res.data.data.students
+      const meta = res.data.data.meta
+      setStudentList(studentsData)
+      setMetaData(prev => ({
+        ...prev,
+        page: meta.page,
+        hasNextPage: meta.hasNextPage
+      }))
+    })
   }
 
   const checkInputType = () => {
@@ -159,22 +138,83 @@ export default function StudentPage() {
   }
 
   useEffect(() => {
-    useGetData('students', 1, 10).then(res => {
-      setStudentList((preInstructorData: getDataType[]) => [...res.data])
-      setPostVar(res.meta)
+    /*  /students?searchBy=none&name=string&phone=string&page=number&take=number&cursor=number */
+    instance('/students?searchBy=none').then(res => {
+      const studentsData = res.data.data.students
+      const meta = res.data.data.meta
+      setStudentList(studentsData)
+      setMetaData(prev => ({
+        ...prev,
+        page: meta.page,
+        hasNextPage: meta.hasNextPage
+      }))
       setIsRefresh(true)
     })
   }, [])
 
+  console.log(studentList)
   useEffect(() => {
-    if (scrollCount !== 0 && postVar.hasNextPage) {
-      setIsLoading(true)
-      setTimeout(() => {
-        getStudentListToScroll()
-        setIsLoading(false)
-      }, 500)
+    if (metaData.hasNextPage) {
+      const options = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 1.0
+      }
+
+      const getData = () => {
+        if (inputValue === '') {
+          instance(`/students?searchBy=none&page=${metaData.page + 1}`).then(res => {
+            const studentsData = res.data.data.students
+            const meta = res.data.data.meta
+            setStudentList(prev => [...prev, ...studentsData])
+            setMetaData(prev => ({
+              ...prev,
+              page: meta.page,
+              hasNextPage: meta.hasNextPage
+            }))
+            setIsLoading(false)
+          })
+        } else {
+          let searchBy: string = ''
+          if (inputRef.current?.type === 'text') {
+            searchBy = 'name'
+          } else if (inputRef.current?.type === 'number') {
+            searchBy = 'phone'
+          }
+          instance(`/students?searchBy=${searchBy}&${searchBy}=${inputValue}&page=${metaData.page + 1}`).then(res => {
+            const studentsData = res.data.data.students
+            const meta = res.data.data.meta
+            setStudentList(prev => [...prev, ...studentsData])
+            setMetaData(prev => ({
+              ...prev,
+              page: meta.page,
+              hasNextPage: meta.hasNextPage
+            }))
+            setIsLoading(false)
+          })
+        }
+      }
+
+      const callback = (entry: any) => {
+        if (entry[0].isIntersecting) {
+          setIsLoading(true)
+          setTimeout(() => {
+            getData()
+          }, 500)
+        }
+      }
+      const observer = new IntersectionObserver(callback, options)
+      if (target.current) {
+        observer.observe(target.current)
+      }
+
+      return () => {
+        if (observer && target.current) {
+          observer.unobserve(target.current)
+        }
+      }
     }
-  }, [scrollCount])
+  }, [metaData, isClickedSearch])
 
   return (
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-[60px]">
@@ -188,23 +228,30 @@ export default function StudentPage() {
       </div>
       {/* 검색창 */}
       <div className="flex gap-2.5 lg:w-[377px] lg:h-[42px] w-[326px] h-[37px] mb-5">
-        <div className="lg:w-[325px] lg:gap-2.5 w-[280px] flex items-center gap-2 px-4 lg:py-3 py-2 rounded-lg outline outline-1 outline-gray-300 focus-within:outline-[#563AC0]">
+        <div className="relative lg:w-[325px] lg:gap-2.5 w-[280px] flex items-center gap-2 px-4 lg:py-3 py-2 rounded-lg outline outline-1 outline-gray-300 focus-within:outline-[#563AC0]">
           <SearchIconGray width={16} height={16} alt=" " />
           <input
             ref={inputRef}
-            className="w-[245px] focus:outline-none"
+            className="xl:w-[245px] w-[222px] focus:outline-none"
             placeholder="Search"
-            name={checkInputType() ? 'name' : 'phone'}
+            //name={checkInputType() ? 'name' : 'phone'}
             type={checkInputType() ? 'text' : 'number'}
             value={inputValue}
             onChange={handleChangeInput}
             onKeyDown={checkInputType() ? preventInputDifferentType : allowOnlyNum}
           />
-          <CloseIcon className="cursor-pointer" width={12} height={12} onClick={handleClickInputRefresh} />
+          <CloseIcon
+            className="absolute right-4 cursor-pointer"
+            width={12}
+            height={12}
+            onClick={() => handleClickInputRefresh()}
+          />
         </div>
         <div
           className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer"
-          onClick={handleClickSearch}
+          onClick={() => {
+            handleClickSearch()
+          }}
         >
           <SearchIconWhite width={20} height={20} alt="" />
         </div>
@@ -252,6 +299,7 @@ export default function StudentPage() {
           })}
         </div>
       </div>
+      {!isLoading && <div ref={target}></div>}
       {isLoading && (
         <div className="w-full h-14 flex justify-center items-center pt-[50px]">
           <div

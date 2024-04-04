@@ -26,7 +26,7 @@ interface classType {
 
 export default function ClassPage() {
   const router = useRouter()
-  const test = useRef<HTMLDivElement>(null)
+  const target = useRef<HTMLDivElement>(null)
   const [classList, setClassList] = useState<classType[]>([])
   const filterValue = useRecoilValue(filterState)
 
@@ -105,13 +105,13 @@ export default function ClassPage() {
         }
       }
       const observer = new IntersectionObserver(callback, options)
-      if (test.current) {
-        observer.observe(test.current)
+      if (target.current) {
+        observer.observe(target.current)
       }
 
       return () => {
-        if (observer && test.current) {
-          observer.unobserve(test.current)
+        if (observer && target.current) {
+          observer.unobserve(target.current)
         }
       }
     }
@@ -151,7 +151,7 @@ export default function ClassPage() {
             </button>
           ))}
       </div>
-      {!isLoading && <div ref={test}></div>}
+      {!isLoading && <div ref={target}></div>}
       {isLoading && (
         <div className="w-full h-[70px] pt-[50px] flex justify-center items-center">
           <div
