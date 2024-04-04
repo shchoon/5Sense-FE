@@ -24,7 +24,7 @@ interface studentType {
   particulars: string
 }
 
-export interface postVarType {
+export interface metaType {
   page: number
   hasNextPage: boolean
 }
@@ -50,14 +50,13 @@ export default function StudentPage() {
     page: 1,
     hasNextPage: false
   })
-  const [postVar, setPostVar] = useState<postVarType>({
+  const [postVar, setPostVar] = useState<metaType>({
     page: 1,
     hasNextPage: false
   })
   const [isRefresh, setIsRefresh] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(false)
   const [inputValue, setInputValue] = useState<string>('')
-  const [isClickedSearch, setIsClickedSearch] = useState<boolean>(false)
 
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value)
@@ -152,7 +151,6 @@ export default function StudentPage() {
     })
   }, [])
 
-  console.log(studentList)
   useEffect(() => {
     if (metaData.hasNextPage) {
       const options = {
@@ -214,7 +212,7 @@ export default function StudentPage() {
         }
       }
     }
-  }, [metaData, isClickedSearch])
+  }, [metaData])
 
   return (
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-[60px]">
