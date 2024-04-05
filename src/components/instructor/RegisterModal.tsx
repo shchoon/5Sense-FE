@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import close_circle from 'public/assets/icons/closeCircle.svg'
+import CloseIcon from 'public/assets/icons/closeCircle.svg'
 
 import { useRecoilState, useSetRecoilState } from 'recoil'
 import React, { useState } from 'react'
@@ -15,6 +15,7 @@ interface postDataType {
 interface IProps {
   onClose: () => void
   onCloseState?: () => void
+  rigister: () => void
 }
 
 export default function RegisterModal(props: IProps) {
@@ -73,16 +74,15 @@ export default function RegisterModal(props: IProps) {
           if (props.onCloseState) {
             props.onCloseState()
           }
+          props.rigister()
         })
       }}
     >
       <div className="absolute left-6 top-10 gray-900-bold text-[22px]">강사 등록</div>
-      <Image
+      <CloseIcon
         className="absolute right-4 top-4 cursor-pointer"
-        src={close_circle}
         width={35}
         height={35}
-        alt=""
         onClick={() => {
           props.onClose()
           if (props.onCloseState) {
@@ -114,7 +114,7 @@ export default function RegisterModal(props: IProps) {
             className={`${postData.phone.length > 0 ? 'bg-gray-50' : 'bg-white'} w-full h-[58px] input-line-gray`}
           />
         </div>
-        <button type="submit" className="w-full h-[52px] btn-purple-sm">
+        <button type="submit" className="w-full h-[52px] btn-purple">
           <div className="text-white text-base font-semibold">등록</div>
         </button>
       </div>

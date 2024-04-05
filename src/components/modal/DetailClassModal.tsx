@@ -15,93 +15,11 @@ interface IProps {
 }
 
 export default function DetailClassModal({ props, onClose }: IProps) {
-  console.log(props)
-  const classInfo = [
-    {
-      title: '담당 강사',
-      text: ['김솔지']
-    },
-    {
-      title: '클래스 유형',
-      text: ['기간반']
-    },
-    {
-      title: '기간 정보',
-      text: ['2024.03.17 - 2024.03.24']
-    },
-    {
-      title: '일정 정보',
-      text: ['9:00 - 12:00 / 월/ 수, 금 반복', '9:00 - 12:00 / 화,목 반복']
-    },
-    {
-      title: '클레스메모',
-      text: [
-        '여기는 클래스 메모 여기는 클래스 메모 여기는 클래스 메모 여기는 클래스 메모 여기는 클래스 메모 여기는 클래스 메모 여기는 클래스 메모'
-      ]
-    }
-  ]
-
-  const studentList = [
-    {
-      name: '조성훈',
-      phone: '010-1548-1786'
-    },
-    {
-      name: '윤태식',
-      phone: '010-1548-4897'
-    },
-    {
-      name: '엄세리',
-      phone: '010-7589-8874'
-    },
-    {
-      name: '조영은',
-      phone: '010-4564-4564'
-    },
-    {
-      name: '정은담',
-      phone: '010-4879-9388'
-    },
-    {
-      name: '유원석',
-      phone: '010-4669-7889'
-    },
-    {
-      name: '김동언',
-      phone: '010-4878-9325'
-    },
-    {
-      name: '권오성',
-      phone: '010-4856-9872'
-    },
-    {
-      name: '박준형',
-      phone: '010-4567-2319'
-    },
-    {
-      name: '안지민',
-      phone: '010-4566-7858'
-    },
-    {
-      name: '손병호',
-      phone: '010-7489-4562'
-    },
-    {
-      name: '장유훈',
-      phone: '010-4563-1235'
-    },
-    {
-      name: '유호승',
-      phone: '010-4897-1233'
-    }
-  ]
-
   const [classDetail, setClassDetail] = useState<null | any>(null)
 
   useEffect(() => {
     instance(`/lessons/${props.id}/details?type=${props.type}`).then(res => {
       const classData = res.data.data
-      console.log(classData)
       setClassDetail({
         type: classData.type,
         category: classData.subCategory,

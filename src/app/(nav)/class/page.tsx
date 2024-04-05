@@ -27,11 +27,11 @@ interface classType {
 export default function ClassPage() {
   const router = useRouter()
   const target = useRef<HTMLDivElement>(null)
-  const [classList, setClassList] = useState<classType[]>([])
   const filterValue = useRecoilValue(filterState)
-
   const modal = useRecoilValue(modalState)
   const setModal = useSetRecoilState(modalState)
+
+  const [classList, setClassList] = useState<classType[]>([])
   const [props, setProps] = useState<{ id: number; type: string }>({
     id: 0,
     type: ''
@@ -41,6 +41,7 @@ export default function ClassPage() {
     hasNextPage: false
   })
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isRefresh, setIsRefresh] = useState<boolean>(false)
 
   const checkLessonUrl = (data: filterStateType, page: number) => {
     let baseUrl = ['lessons/filters?']
@@ -71,6 +72,7 @@ export default function ClassPage() {
         page: meta.page,
         hasNextPage: meta.hasNextPage
       }))
+      setIsRefresh(true)
     })
   }, [filterValue])
 
@@ -169,7 +171,7 @@ export default function ClassPage() {
           <DetailClassModal props={props} onClose={() => setModal(false)} />
         </Modal>
       )}
-      {classList.length === 0 && <NoneResult />}
+      {isRefresh && classList.length === 0 && <NoneResult />}
     </div>
   )
 }

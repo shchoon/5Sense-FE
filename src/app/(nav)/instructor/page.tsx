@@ -12,6 +12,9 @@ import { useGetData } from '@/hooks/useGetData'
 import { modalState } from '@/lib/state/modal'
 import NoneResult from '@/components/common/NoneResult'
 import instance from '@/lib/api/axios'
+import RegisterModal from '@/components/instructor/RegisterModal'
+import Modal from '@/components/common/modal'
+import DetailInstructor from '@/components/modal/DetailInstructor'
 
 //이미지
 import ChevronRightIcon from 'public/assets/icons/chevron/chevron_right_pri_600.svg'
@@ -31,7 +34,9 @@ export default function InstructorPage() {
 
   // 모달 상태관리
   const modal = useRecoilValue(modalState)
+  const setModal = useSetRecoilState(modalState)
   const [isClickedRegister, setIsClickedRegister] = useState<boolean>(false)
+  const [isRegistered, setIsRegistered] = useState<boolean>(false)
   const [isClickedInstructor, setIsClickedInstructor] = useState<boolean>(false)
   /* 모달 기능 구현하기 */
 
@@ -125,6 +130,7 @@ export default function InstructorPage() {
     }
   }
 
+  /* 첫 로딩 실행 */
   useEffect(() => {
     instance('/teachers?searchBy=none').then(res => {
       const instructorsData = res.data.data.teachers
@@ -139,6 +145,24 @@ export default function InstructorPage() {
     })
   }, [])
 
+  /* 강사 등록하면 새로 강사 리스트 가져오기 */
+  useEffect(() => {
+    if (isRegistered) {
+      instance('/teachers?searchBy=none').then(res => {
+        const instructorsData = res.data.data.teachers
+        const meta = res.data.data.meta
+        setInstructorList(instructorsData)
+        setMetaData(prev => ({
+          ...prev,
+          page: meta.page,
+          hasNextPage: meta.hasNextPage
+        }))
+        setIsRegistered(false)
+      })
+    }
+  }, [isRegistered])
+
+  /* 무한스크롤 시행 */
   useEffect(() => {
     if (metaData.hasNextPage) {
       const options = {
@@ -207,7 +231,14 @@ export default function InstructorPage() {
       {/* 수강생 관리 + 수강생 등록 버튼 */}
       <div className="flex w-full pt-12 mb-[30px] justify-between">
         <div className=" h-[30px] black-bold text-3xl">강사 관리</div>
-        <button className="flex w-[130px] gap-2 px-5 py-2.5 btn-purple-sm lg:btn-purple-md">
+        <button
+          type="button"
+          className="flex w-[130px] gap-2 px-5 py-2.5 btn-purple-sm lg:btn-purple-md"
+          onClick={() => {
+            setIsClickedRegister(true)
+            setModal(true)
+          }}
+        >
           <PlusIcon />
           <span className="text-sm">강사 등록</span>
         </button>
@@ -261,6 +292,10 @@ export default function InstructorPage() {
               <button
                 type="button"
                 className="w-full px-5 py-2.5 flex gap-2 justify-center border border-primary-600 rounded-lg"
+                onClick={() => {
+                  setModal(true)
+                  setIsClickedInstructor(true)
+                }}
               >
                 <div className="indigo-500-semibold text-sm font-['Pretendard']">강사 정보</div>
                 <ChevronRightIcon className="text-primary-600" width={20} height={20} />
@@ -287,6 +322,20 @@ export default function InstructorPage() {
           <DetailStudent studentsId={clickedStudentsId} onClose={onClose} />
         </Modal>
       )} */}
+      {isClickedRegister && (
+        <Modal small>
+          <RegisterModal
+            onClose={() => setIsClickedRegister(false)}
+            onCloseState={() => setModal(false)}
+            rigister={() => setIsRegistered(true)}
+          />
+        </Modal>
+      )}
+      {isClickedInstructor && (
+        <Modal>
+          <DetailInstructor onClose={() => setIsClickedInstructor(false)} onCloseState={() => setModal(false)} />
+        </Modal>
+      )}
     </div>
   )
 }
