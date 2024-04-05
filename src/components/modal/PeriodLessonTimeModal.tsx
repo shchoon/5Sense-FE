@@ -52,6 +52,7 @@ export default function PeriodLessonTimeModal(props: IProps) {
     title: '요일 선택',
     list: ['월', '화', '수', '목', '금', '토', '일']
   }
+
   const handleChangeStartTimeFromChild = (data: { time: string }) => {
     setPostData(prevPostData => ({
       ...prevPostData,
@@ -76,10 +77,9 @@ export default function PeriodLessonTimeModal(props: IProps) {
   const handleClickCheck = () => {
     console.log(postData)
     if (postData.openTime !== '' && postData.closeTime !== '' && postData.date.length !== 0) {
-      props.handleChangeLessonTimeFromChild(`${postData.openTime}-${postData.closeTime},${postData.date}`, 'period')
+      props.handleChangeLessonTimeFromChild(`${postData.openTime}-${postData.closeTime},${postData.date}`, 'duration')
     }
   }
-  console.log(postData)
 
   return (
     <div className="w-[380px] bg-white p-4 flex flex-col gap-6 rounded-lg border border-1 border-primary-600 shadow">

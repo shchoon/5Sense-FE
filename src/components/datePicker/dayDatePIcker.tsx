@@ -80,7 +80,7 @@ export default function DayDatePicker(props: IProps) {
         month: dateData.month,
         date: Number(clickedDate)
       },
-      'round'
+      'session'
     )
   }
 

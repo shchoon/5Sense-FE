@@ -102,10 +102,6 @@ export default function DropDown(props: IProps) {
 
   useOnClickOutside(dropdownRef, handleClickOutsideOfDropdown)
 
-  useEffect(() => {
-    setClickedItemTitle(props.title)
-  }, [props.list])
-
   return (
     <div ref={dropdownRef} className="w-full relative">
       <div className="relative w-full flex items-center">

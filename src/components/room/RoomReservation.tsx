@@ -20,7 +20,6 @@ import SearchIcon from 'public/assets/icons/search_white.svg'
 import UserIcon from 'public/assets/icons/user.svg'
 import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
 import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
-import { split } from 'postcss/lib/list'
 
 interface RoomDataType {
   id: number
@@ -41,6 +40,7 @@ interface IProps {
 }
 
 export default function RoomReservation(props: IProps) {
+  console.log(props)
   const refs = useRef<(HTMLDivElement | null)[]>([])
   const modal = useRecoilValue(modalState)
   const setModal = useSetRecoilState(modalState)
@@ -122,6 +122,7 @@ export default function RoomReservation(props: IProps) {
       setLessonTime(time)
     }
     if (type === 'duration') {
+      console.log('duration')
       setLessonTime(time)
     }
 
@@ -288,7 +289,9 @@ export default function RoomReservation(props: IProps) {
             </div>
             <div className="w-full h-full flex flex-col">
               <div className="w-full h-full text-left text-gray-700 font-medium text-sm">소요시간</div>
-              <div className="w-full h-full text-left text-gray-400 font-medium text-[15px]">{lessonTime}</div>
+              <div className="w-full h-full text-left text-gray-400 font-medium text-[15px]">
+                {lessonTime === '시간' ? lessonTime : props.classType === 'session' ? lessonTime + '분' : lessonTime}
+              </div>
             </div>
           </button>
           <div className="w-12 h-12 rounded-full bg-primary-600 flex items-center justify-center">
@@ -303,7 +306,7 @@ export default function RoomReservation(props: IProps) {
               type="addClass"
             />
           )}
-          {props.classType === 'duartion' && isClickedTab.date && (
+          {props.classType === 'duration' && isClickedTab.date && (
             <PeriodDatePicker changeParentDateData={handleChangeDateDataFromChild} />
           )}
         </div>
@@ -330,7 +333,7 @@ export default function RoomReservation(props: IProps) {
 
       {/* 일정 선택 */}
       {dateValue !== '날짜' && lessonTime !== '시간' && (
-        <div className="w-full mb-[60px] p-6 flex flex-col gap-6 border border-1 border-gray-200 rounded-lg max-h-[600px] overflow-y-scroll">
+        <div className="w-full mb-[60px] p-6 flex flex-col gap-6 border border-1 border-gray-200 rounded-lg max-h-[500px] overflow-y-scroll">
           {/* 룸 선택*/}
           <div className="w-full flex flex-col gap-10">
             {roomData.map((data, i) => {
@@ -355,7 +358,6 @@ export default function RoomReservation(props: IProps) {
                     <button
                       className="w-[73px] h-[37px] border border-1 border-primary-600 rounded-lg flex items-center justify-center text-sm text-primary-600 font-normal"
                       onClick={() => {
-                        console.log(dateValue, dateData)
                         if (room !== clickedRoomData.room) {
                           return
                         }

@@ -1,22 +1,18 @@
 'use client'
-import Image from 'next/image'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import NoneResult from '@/components/common/NoneResult'
-import { useGetData } from '@/hooks/useGetData'
+import Loading from '@/components/common/Loading'
 import Modal from '@/components/common/modal'
 import { modalState } from '@/lib/state/modal'
 import DetailStudent from '@/components/modal/DetailStudent'
 import instance from '@/lib/api/axios'
+import ContentHeader from '@/components/common/contentHeader'
+import SearchInput from '@/components/common/SearchInput'
 
-import PlusIcon from 'public/assets/icons/circle/plus.svg'
-import SearchIconWhite from 'public/assets/icons/search_white.svg'
-import CloseIcon from 'public/assets/icons/close.svg'
-import SearchIconGray from 'public/assets/icons/search.svg'
-
-interface studentType {
+export interface studentType {
   id: string
   name: string
   phone: string
@@ -36,11 +32,9 @@ export interface getDataType {
 }
 
 export default function StudentPage() {
+  const router = useRouter()
   const target = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
-  const numberCheckList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
-  const modal = useRecoilValue(modalState)
   const setModal = useSetRecoilState(modalState)
   const [isClickedStudent, setIsClickedStudent] = useState<boolean>(false)
   const [clickedStudentsId, setClickedStudentsId] = useState<string>('')
@@ -50,94 +44,35 @@ export default function StudentPage() {
     page: 1,
     hasNextPage: false
   })
-  const [postVar, setPostVar] = useState<metaType>({
-    page: 1,
-    hasNextPage: false
-  })
+
   const [isRefresh, setIsRefresh] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [inputValue, setInputValue] = useState<string>('')
-
-  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value)
-  }
-
-  const handleClickSearch = () => {
-    let searchBy: string = ''
-    if (inputRef.current?.type === 'text') {
-      searchBy = 'name'
-    } else if (inputRef.current?.type === 'number') {
-      searchBy = 'phone'
-    }
-    instance(`/students?searchBy=${searchBy}&${searchBy}=${inputValue}`).then(res => {
-      const studentsData = res.data.data.students
-      const meta = res.data.data.meta
-      setStudentList(studentsData)
-      setMetaData(prev => ({
-        ...prev,
-        page: meta.page,
-        hasNextPage: meta.hasNextPage
-      }))
-    })
-  }
-
-  const handleClickInputRefresh = async () => {
-    setInputValue('')
-    instance('/students?searchBy=none').then(res => {
-      const studentsData = res.data.data.students
-      const meta = res.data.data.meta
-      setStudentList(studentsData)
-      setMetaData(prev => ({
-        ...prev,
-        page: meta.page,
-        hasNextPage: meta.hasNextPage
-      }))
-    })
-  }
-
-  const checkInputType = () => {
-    if (inputValue !== '' && numberCheckList.includes(inputValue[0])) {
-      return false
-    } else {
-      return true
-    }
-  }
-
-  const allowOnlyNum = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    let regex = /^[a-zA-Z]+$/
-    const forbiddenKeys = ['-', 'e', 'ArrowUp', 'ArrowDown']
-    if (
-      forbiddenKeys.includes(e.key) ||
-      e.currentTarget.value.length > 12 ||
-      (e.currentTarget.value.length === 12 && e.key !== 'Backspace')
-    ) {
-      e.preventDefault()
-    }
-    if (regex.test(e.key) && e.key !== 'Backspace' && e.key !== 'Enter') {
-      alert('이름과 전화번호를 동시에 검색할 수 없습니다. 각각 입력해주세요.')
-    }
-    if (e.key == 'Enter') {
-      handleClickSearch()
-    }
-  }
-
-  const preventInputDifferentType = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (inputValue !== '' && numberCheckList.includes(e.key)) {
-      e.preventDefault()
-      alert('이름과 전화번호를 동시에 검색할 수 없습니다. 각각 입력해주세요.')
-    }
-    if (e.key == 'Enter') {
-      handleClickSearch()
-    }
-  }
+  const [inputData, setInputData] = useState<{ value: string; searchBy: string }>({
+    value: '',
+    searchBy: ''
+  })
 
   const onClose = () => {
     setModal(false)
     setIsClickedStudent(false)
   }
 
+  const getInputDataFromChild = (data: { value: string; searchBy: string; list: studentType[]; meta: metaType }) => {
+    setInputData(prev => ({
+      ...prev,
+      value: data.value,
+      searchBy: data.searchBy
+    }))
+
+    setStudentList(data.list)
+    setMetaData(prev => ({
+      ...prev,
+      page: data.meta.page,
+      hasNextPage: data.meta.hasNextPage
+    }))
+  }
+  console.log(inputData)
   useEffect(() => {
-    /*  /students?searchBy=none&name=string&phone=string&page=number&take=number&cursor=number */
     instance('/students?searchBy=none').then(res => {
       const studentsData = res.data.data.students
       const meta = res.data.data.meta
@@ -160,7 +95,7 @@ export default function StudentPage() {
       }
 
       const getData = () => {
-        if (inputValue === '') {
+        if (inputData.value === '') {
           instance(`/students?searchBy=none&page=${metaData.page + 1}`).then(res => {
             const studentsData = res.data.data.students
             const meta = res.data.data.meta
@@ -173,13 +108,11 @@ export default function StudentPage() {
             setIsLoading(false)
           })
         } else {
-          let searchBy: string = ''
-          if (inputRef.current?.type === 'text') {
-            searchBy = 'name'
-          } else if (inputRef.current?.type === 'number') {
-            searchBy = 'phone'
-          }
-          instance(`/students?searchBy=${searchBy}&${searchBy}=${inputValue}&page=${metaData.page + 1}`).then(res => {
+          instance(
+            `/students?searchBy=${inputData.searchBy}&${inputData.searchBy}=${inputData.value}&page=${
+              metaData.page + 1
+            }`
+          ).then(res => {
             const studentsData = res.data.data.students
             const meta = res.data.data.meta
             setStudentList(prev => [...prev, ...studentsData])
@@ -215,45 +148,11 @@ export default function StudentPage() {
   }, [metaData])
 
   return (
-    <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-[60px]">
+    <div className="w-full h-full px-6 md:px-12 lg:px-6 xl:px-12 py-[60px] box-border">
       {/* 수강생 관리 + 수강생 등록 버튼 */}
-      <div className="flex w-full pt-12 mb-[30px] justify-between">
-        <div className=" h-[30px] black-bold text-3xl">수강생 관리</div>
-        <Link href={'student/register'} className="flex w-[150px] gap-2 px-5 py-2.5 btn-purple-sm lg:btn-purple-md">
-          <PlusIcon />
-          <span className="text-sm">수강생 등록</span>
-        </Link>
-      </div>
+      <ContentHeader title="수강생 관리" btnName="수강생 등록" onClick={() => router.push('student/register')} />
       {/* 검색창 */}
-      <div className="flex gap-2.5 lg:w-[377px] lg:h-[42px] w-[326px] h-[37px] mb-5">
-        <div className="relative lg:w-[325px] lg:gap-2.5 w-[280px] flex items-center gap-2 px-4 lg:py-3 py-2 rounded-lg outline outline-1 outline-gray-300 focus-within:outline-[#563AC0]">
-          <SearchIconGray width={16} height={16} alt=" " />
-          <input
-            ref={inputRef}
-            className="xl:w-[245px] w-[222px] focus:outline-none"
-            placeholder="Search"
-            //name={checkInputType() ? 'name' : 'phone'}
-            type={checkInputType() ? 'text' : 'number'}
-            value={inputValue}
-            onChange={handleChangeInput}
-            onKeyDown={checkInputType() ? preventInputDifferentType : allowOnlyNum}
-          />
-          <CloseIcon
-            className="absolute right-4 cursor-pointer"
-            width={12}
-            height={12}
-            onClick={() => handleClickInputRefresh()}
-          />
-        </div>
-        <div
-          className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer"
-          onClick={() => {
-            handleClickSearch()
-          }}
-        >
-          <SearchIconWhite width={20} height={20} alt="" />
-        </div>
-      </div>
+      <SearchInput type="students" passInputData={getInputDataFromChild} />
       {/* 수강생 목록 시작 */}
       <div className="w-full flex flex-col gap-3">
         {/* 수강생 목록 설명 */}
@@ -298,18 +197,7 @@ export default function StudentPage() {
         </div>
       </div>
       {!isLoading && <div ref={target}></div>}
-      {isLoading && (
-        <div className="w-full h-14 flex justify-center items-center pt-[50px]">
-          <div
-            className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-            role="status"
-          >
-            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-              Loading...
-            </span>
-          </div>
-        </div>
-      )}
+      {isLoading && <Loading />}
       {isClickedStudent && (
         <Modal>
           <DetailStudent studentsId={clickedStudentsId} onClose={onClose} />

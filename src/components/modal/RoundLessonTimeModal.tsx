@@ -25,7 +25,7 @@ export default function RoundLessonTimeModal(props: IProps) {
   }
 
   const handleChangeParentsLessonTime = () => {
-    props.handleChangeLessonTimeFromChild(String(lessonTime), 'round')
+    props.handleChangeLessonTimeFromChild(String(lessonTime), 'session')
   }
 
   return (
@@ -35,9 +35,15 @@ export default function RoundLessonTimeModal(props: IProps) {
         <div className="w-full flex items-center justify-between h-10">
           <button
             className={`w-10 h-full flex justify-center items-center rounded-full ${
-              lessonTime === 0 ? 'bg-gray-200' : 'bg-primary-600'
+              lessonTime === 30 ? 'bg-gray-200' : 'bg-primary-600'
             }`}
-            onClick={() => handleChangeLessonTime('minus')}
+            onClick={() => {
+              if (lessonTime === 30) {
+                return
+              } else {
+                handleChangeLessonTime('minus')
+              }
+            }}
           >
             <MinusIcon width={12} height={5} />
           </button>

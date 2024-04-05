@@ -158,10 +158,10 @@ export default function PeriodDatePicker(props: IProps) {
 
   const onClickCheckHandler = () => {
     if (firstClickedData.date.length === 2) {
-      props.changeParentDateData([firstClickedData], 'period')
+      props.changeParentDateData([firstClickedData], 'duration')
     }
     if (firstClickedData.date.length === 1 && secondClickedData.date.length === 1) {
-      props.changeParentDateData([firstClickedData, secondClickedData], 'period')
+      props.changeParentDateData([firstClickedData, secondClickedData], 'duration')
     }
   }
 
