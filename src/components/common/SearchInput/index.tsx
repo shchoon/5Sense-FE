@@ -49,7 +49,7 @@ export default function SearchInput(props: IProps) {
 
   return (
     <div className="flex gap-2.5 lg:w-[377px] lg:h-[42px] w-[326px] h-[37px] mb-5">
-      <div className="relative lg:w-[325px] lg:gap-2.5 w-[280px] flex items-center gap-2 px-4 lg:py-3 py-2 rounded-lg outline outline-1 outline-gray-300 focus-within:outline-[#563AC0]">
+      <div className="relative lg:w-[325px] lg:gap-2.5 w-[280px] flex items-center gap-2 xl:px-4 pl-3  lg:py-3 py-2 rounded-lg outline outline-1 outline-gray-300 focus-within:outline-[#563AC0]">
         <SearchIconGray width={16} height={16} alt=" " />
         <input
           className="xl:w-[245px] w-[222px] focus:outline-none"
@@ -59,7 +59,7 @@ export default function SearchInput(props: IProps) {
           onKeyDown={e => clickEnter(e)}
         />
         <CloseIcon
-          className="absolute right-4 cursor-pointer"
+          className="absolute xl:right-4 right-2 cursor-pointer"
           width={12}
           height={12}
           onClick={() => handleClickInputRefresh()}
