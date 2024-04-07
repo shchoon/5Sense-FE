@@ -100,7 +100,7 @@ export default function Navbar() {
                 navbarId !== undefined && menu.id >= navbarId && 'translate-x-[16px]'
               } translate-y-4 `}
             >
-              <div className="content w-full h-full flex justify-center gap-[10px]">
+              <div className="content w-full h-full flex justify-center gap-1.5">
                 <Icon className="xl:w-6 xl:h-6 w-5 h-5 text-primary-200" />
                 <span className={` text-primary-300 font-bold text-[13px] xl:text-base`}>{menu.title}</span>
               </div>

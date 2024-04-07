@@ -2,6 +2,7 @@
 import Image from 'next/image'
 import { useSetRecoilState, useRecoilValue } from 'recoil'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 import AcademyInfo from '@/components/layout/AcademyInfo'
 import Navbar from '@/components/layout/Navbar'
@@ -16,6 +17,7 @@ import NoticeActiveIcon from 'public/assets/icons/notice-active.svg'
 import mainLogo from 'public/assets/logo/mainLogo.png'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
+  const router = useRouter()
   const footer = [
     { id: 1, name: '개인정보처리방침' },
     { id: 2, name: '이용약관' },
@@ -52,7 +54,13 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           </div>
           <div className="iconBox lg:absolute lg:top-[37px] lg:right-6 flex items-center gap-[27px]">
             <NoticeActiveIcon className="w-[30px] h-[30px] text-primary-200" />
-            <LogoutIcon className="w-7 h-7 text-primary-200" />
+            <LogoutIcon
+              className="w-7 h-7 text-primary-200 cursor-pointer"
+              onClick={() => {
+                localStorage.clear()
+                router.push('/login')
+              }}
+            />
           </div>
         </div>
         <div className="content w-full h-full lg:flex">
