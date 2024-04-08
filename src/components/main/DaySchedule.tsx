@@ -76,8 +76,6 @@ export default function DaySchedule({ dateData }: IProps) {
     })
   }, [dateData.month])
 
-  console.log(lessonData, dateData.date)
-
   /* useEffect(() => {
     if (lessonData.length !== 0) {
       let currentTimeClassIndex = lessonData[dateData.date - 1].findIndex(

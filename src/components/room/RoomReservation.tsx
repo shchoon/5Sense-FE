@@ -8,12 +8,12 @@ import DayDatePicker from '../datePicker/dayDatePicker'
 import PeriodDatePicker from '../datePicker/periodDatePicker'
 import ClockIcon from '../../../public/assets/icons/clock'
 import CalendarIcon from '../../../public/assets/icons/calendar'
-import RoomReservationCheck from './RoomReservationCheck'
+import RoomReservationCheck from '../check/RoomReservationCheck'
 import Modal from '../common/modal'
 import PeriodLessonTimeModal from '../modal/PeriodLessonTimeModal'
 import { dateDataType } from '../datePicker/dayDatePicker'
 import { modalState } from '@/lib/state/modal'
-import { durationScheduleState } from '@/lib/state/durationSchedule'
+import { durationScheduleState } from '@/lib/state/classDurationSchedule'
 import { lessonTimeState } from '@/lib/state/lessonTime'
 
 import SearchIcon from 'public/assets/icons/search_white.svg'
@@ -40,12 +40,12 @@ interface IProps {
 }
 
 export default function RoomReservation(props: IProps) {
-  console.log(props)
   const refs = useRef<(HTMLDivElement | null)[]>([])
   const modal = useRecoilValue(modalState)
   const setModal = useSetRecoilState(modalState)
   const setDurationSchedule = useSetRecoilState(durationScheduleState)
   const setLessonTimeState = useSetRecoilState(lessonTimeState)
+
   const currentDate = new Date()
   const [dateData, setDateData] = useState<dateDataType>({
     year: currentDate.getFullYear(),
@@ -58,6 +58,7 @@ export default function RoomReservation(props: IProps) {
     date: false,
     time: false
   })
+  const [isClickedSearch, setIsClickedSearch] = useState<boolean>(false)
   const [clickedRoomData, setClickedRoomData] = useState<{
     roomId: undefined | number
     clickedTime: undefined | number
@@ -114,8 +115,6 @@ export default function RoomReservation(props: IProps) {
       date: false
     }))
   }
-
-  console.log(dateValue)
 
   const handleChangeLessonTimeFromChild = (time: string, type: string) => {
     if (type === 'session') {
@@ -294,7 +293,16 @@ export default function RoomReservation(props: IProps) {
               </div>
             </div>
           </button>
-          <div className="w-12 h-12 rounded-full bg-primary-600 flex items-center justify-center">
+          <div
+            className="w-12 h-12 rounded-full bg-primary-600 flex items-center justify-center cursor-pointer"
+            onClick={() => {
+              if (dateValue !== '날짜' && lessonTime !== '시간') {
+                setIsClickedSearch(true)
+              } else {
+                return
+              }
+            }}
+          >
             <SearchIcon width={20} height={20} />
           </div>
         </div>
@@ -323,7 +331,7 @@ export default function RoomReservation(props: IProps) {
         </div>
       </div>
       {/* 일정 선택 문구 */}
-      {(dateValue === '날짜' || lessonTime === '시간') && (
+      {!isClickedSearch && (
         <div className="w-full h-[422px] border border-1 border-gray-200 rounded-lg flex items-center">
           <div className="w-full text-center font-semibold text-base text-gray-400">
             일정을 선택해주시면 예약가능 리스트를 볼 수 있습니다.
@@ -332,8 +340,8 @@ export default function RoomReservation(props: IProps) {
       )}
 
       {/* 일정 선택 */}
-      {dateValue !== '날짜' && lessonTime !== '시간' && (
-        <div className="w-full mb-[60px] p-6 flex flex-col gap-6 border border-1 border-gray-200 rounded-lg max-h-[500px] overflow-y-scroll">
+      {dateValue !== '날짜' && lessonTime !== '시간' && isClickedSearch && (
+        <div className="w-full mb-[60px] p-6 flex flex-col gap-6 border border-1 border-gray-200 rounded-lg max-h-[450px] overflow-y-scroll">
           {/* 룸 선택*/}
           <div className="w-full flex flex-col gap-10">
             {roomData.map((data, i) => {
@@ -430,28 +438,6 @@ export default function RoomReservation(props: IProps) {
                               }
                             ])
                           }
-                          /* setDurationSchedule(prev => ({
-                            ...prev,
-                            schedules: {
-                              startDate: new Date(
-                                Number(startDateData[0]),
-                                Number(startDateData[1]) - 1,
-                                Number(startDateData[2])
-                              ).toISOString(),
-                              endDate: new Date(
-                                Number(endDateData[0]),
-                                Number(endDateData[1]) - 1,
-                                Number(endDateData[2])
-                              ).toISOString(),
-                              startTime: lessonTime.slice(0, 5),
-                              endTime: lessonTime.slice(6, 11),
-                              repeatDate: lessonTime.slice(12, lessonTime.length).split(' ')[0],
-                              roomId: 1
-                            }
-                          }))
-                          if (timeRange !== undefined) {
-                            setDurationSchedule(prev => ({ ...prev, lessonTime: timeRange * 30 }))
-                          } */
                         }
                         props.onClick()
                       }}

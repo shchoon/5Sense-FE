@@ -6,7 +6,7 @@ import ClassInfo from '@/components/class/register/classInfo'
 import ClassType from '@/components/class/register/classType'
 import TeacherInfo from '@/components/class/register/teacherInfo'
 import { postClassData } from '@/lib/api/class'
-import { durationScheduleState } from '../../../../lib/state/durationSchedule'
+import { durationScheduleState } from '../../../../lib/state/classDurationSchedule'
 import { useRouter } from 'next/navigation'
 
 export interface ICommonInfo {

@@ -5,8 +5,8 @@ import Modal from '@/components/common/modal'
 import AddClassModal from '@/components/modal/AddClassModal'
 import { modalState } from '@/lib/state/modal'
 import { useSetRecoilState, useRecoilValue } from 'recoil'
-import { durationScheduleState } from '@/lib/state/durationSchedule'
-import DurationScheduleCheck from './DurationScheduleCheck'
+import { durationScheduleState } from '@/lib/state/classDurationSchedule'
+import DurationScheduleCheck from '../../../../check/ClassDurationScheduleCheck'
 
 import PlusIcon from 'public/assets/icons/circle/plus.svg'
 

@@ -1,6 +1,6 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import { durationScheduleState } from '@/lib/state/durationSchedule'
+import { durationScheduleState } from '@/lib/state/classDurationSchedule'
 
 import TrashIcon from 'public/assets/icons/trash.svg'
 

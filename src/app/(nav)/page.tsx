@@ -1,4 +1,4 @@
-import DetailClassModal from '@/components/modal/DetailClassModal'
+import StudentsClasssReservationCheck from '@/components/check/StudentsClassReservationCheck'
 
 export default function Main() {
   return

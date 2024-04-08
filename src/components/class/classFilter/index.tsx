@@ -50,7 +50,7 @@ export default function ClassFilter() {
   })
   const [subClassProps, setSubClassProps] = useState<{ title: string; list: any; type: string }>({
     title: '소분류 선택',
-    list: [{ name: '없음' }],
+    list: [{ name: '전체' }],
     type: 'category'
   })
 
@@ -72,6 +72,12 @@ export default function ClassFilter() {
         mainClass: data.title,
         mainClassId: data.id
       }))
+      /* if (categoryData.subClass !== '') {
+        setFilterState(prev => ({
+          ...prev,
+          subCategoryId: ''
+        }))
+      } */
     } else if (type === 'sub') {
       setCategoryData(prev => ({
         ...prev,
@@ -201,12 +207,26 @@ export default function ClassFilter() {
     if (categoryData.mainClass !== '카테고리') {
       setSubClassProps(prev => ({
         ...prev,
-        list: categoryList.subCategory.filter(data => data.parentId === Number(categoryData.mainClassId))
+        list: [
+          { name: '전체' },
+          ...categoryList.subCategory.filter(data => data.parentId === Number(categoryData.mainClassId))
+        ]
       }))
+
+      let allSubClassId: string = ''
+      if (categoryData.subClass === '전체') {
+        for (var i = 1; i < subClassProps.list.length; i++) {
+          if (i === subClassProps.list.length - 1) {
+            allSubClassId += subClassProps.list[i].id
+          } else {
+            allSubClassId += subClassProps.list[i].id + ','
+          }
+        }
+      }
       setFilterState(prev => ({
         ...prev,
         mainCategoryId: categoryData.mainClassId,
-        subCategoryId: categoryData.subClassId !== '' ? categoryData.subClassId : ''
+        subCategoryId: categoryData.subClass === '전체' ? allSubClassId : categoryData.subClassId
       }))
     }
   }, [categoryData])

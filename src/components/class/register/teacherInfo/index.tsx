@@ -58,8 +58,6 @@ export default function TeacherInfo({ onChange }: IPops) {
     })
   }, [isClickedAddTeacher])
 
-  console.log(teacherName, nameValue)
-
   return (
     <>
       <div className="flex flex-col items-start gap-10 w-[640px] py-8 px-6 border border-[#E5E7EB] rounded-xl bg-[#FFF]">
@@ -87,7 +85,7 @@ export default function TeacherInfo({ onChange }: IPops) {
             ) : null}
             {teacherName === nameValue && teacherName !== '' ? (
               <Close_Circle_bg
-                className="absolute left-[80px] cursor-pointer"
+                className="absolute left-[100px] cursor-pointer"
                 width={20}
                 height={20}
                 onClick={() => {
