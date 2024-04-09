@@ -1,17 +1,17 @@
 'use client'
 import Image from 'next/image'
-import profile from 'public/assets/images/profile 1.png'
-import camera from 'public/assets/icons/camera.svg'
-import KakaoLogo from 'public/assets/logo/kakaoLogo.svg'
+import ProfileIcon from 'public/assets/images/defaultProfile.svg'
+import CameraIcon from 'public/assets/icons/camera.svg'
+import KakaoIcon from 'public/assets/logo/kakaoLogo.svg'
 import ToggleOn from 'public/assets/icons/toggle_on.svg'
 import ToggleOff from 'public/assets/icons/toggle_off.svg'
-import GoogleLogo from 'public/assets/logo/googleLogo.svg'
-import NaverLogo from 'public/assets/logo/naverLogo.svg'
+import GoogleIcon from 'public/assets/logo/googleLogo.svg'
+import NaverIcon from 'public/assets/logo/naverLogo.svg'
 import React, { useState } from 'react'
 import DropDown from '@/components/common/DropDown'
 import Script from 'next/script'
 
-interface toogleTargetType {
+interface snsLinkType {
   kakao: boolean
   naver: boolean
   google: boolean
@@ -25,7 +25,7 @@ export default function ManageMent() {
     openTime: '',
     closeTime: ''
   })
-  const [toggleTarget, setToggleTarget] = useState<toogleTargetType>({
+  const [snsLink, setSnsLink] = useState<snsLinkType>({
     kakao: true,
     naver: false,
     google: false
@@ -73,10 +73,10 @@ export default function ManageMent() {
 
   const onClickToggle = (e: React.MouseEvent<HTMLImageElement>) => {
     const title = e.currentTarget.title
-    setToggleTarget((prevToggleTarget: toogleTargetType) => ({
+    /* setToggleTarget((prevToggleTarget: snsLinkType) => ({
       ...prevToggleTarget,
-      [title]: !prevToggleTarget[title as keyof toogleTargetType]
-    }))
+      [title]: !prevToggleTarget[title as keyof snsLinkType]
+    })) */
   }
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,19 +107,19 @@ export default function ManageMent() {
         className="w-full px-6 py-8 flex flex-col rounded-xl border border-gray-200 justify-center gap-10"
         onSubmit={e => {
           e.preventDefault()
-          console.log(postData)
         }}
       >
         <div className="gray-900-bold text-xl font-['Pretendard']">센터 정보</div>
         <div className="w-full flex flex-col gap-10">
           <div className="relative w-[140px] mx-auto flex flex-col justify-center">
-            <Image className="" src={profile} width={140} height={140} alt="" />
+            <div className="w-[140px] h-[140px] rounded-full bg-primary-300">
+              <ProfileIcon className="" width={140} height={140} alt="" />
+            </div>
             <button className="absolute left-[35px] top-[124px] bg-white w-[70px] h-[34px] pl-2.5 pr-3 py-2 flex justify-center gap-1 rounded-lg border border-primary-600">
-              <Image src={camera} width={16} height={16} alt="" />
+              <CameraIcon width={16} height={16} alt="" />
               <div className="indigo-500-semibold text-xs font-['Pretendard']">수정</div>
             </button>
           </div>
-
           <div className="w-full flex flex-col gap-4">
             <input
               name="name"
@@ -173,64 +173,106 @@ export default function ManageMent() {
         <div className="gray-900-bold text-xl font-['Pretendard']">SNS 연결 설정</div>
         <div className="w-full flex flex-col gap-[14px]">
           <div className="relative w-full h-16 flex items-center bg-[#FFE812] rounded-md ">
-            <Image className="absolute left-2" src={KakaoLogo} width={48} height={48} alt="" />
+            <KakaoIcon className="absolute left-2" width={48} height={48} alt="" />
             <div className="absolute left-[68px] text-stone-800 text-base font-semibold font-['Pretendard']">
               카카오 계정 연결
             </div>
             <div className="absolute left-[200px] text-stone-800 text-sm font-medium font-['Pretendard']">
               2024.01.07
             </div>
-            <Image
-              title="kakao"
-              className="absolute right-6 cursor-pointer"
-              onClick={e => {
-                onClickToggle(e)
-              }}
-              src={toggleTarget.kakao ? ToggleOn : ToggleOff}
-              width={44}
-              height={24}
-              alt=""
-            />
+            {snsLink.kakao ? (
+              <ToggleOn
+                className="absolute right-6 cursor-pointer"
+                width={44}
+                hiught={24}
+                onClick={() => {
+                  setSnsLink(prev => ({
+                    ...prev,
+                    kakao: false
+                  }))
+                }}
+              />
+            ) : (
+              <ToggleOff
+                className="absolute right-6 cursor-pointer"
+                width={44}
+                hiught={24}
+                onClick={() => {
+                  setSnsLink(prev => ({
+                    ...prev,
+                    kakao: true
+                  }))
+                }}
+              />
+            )}
           </div>
           <div className="relative w-full h-16 flex items-center border border-[#2BB500] rounded-md ">
-            <Image className="absolute left-2" src={NaverLogo} width={48} height={48} alt="" />
+            <NaverIcon className="absolute left-2" width={48} height={48} alt="" />
             <div className="absolute left-[68px] text-[#2BB500] text-base font-semibold font-['Pretendard']">
               네이버 계정 연결
             </div>
             <div className="absolute left-[200px] text-stone-800 text-sm font-medium font-['Pretendard']">
               2024.01.07
             </div>
-            <Image
-              title="naver"
-              className="absolute right-6 cursor-pointer"
-              onClick={e => {
-                onClickToggle(e)
-              }}
-              src={toggleTarget.naver ? ToggleOn : ToggleOff}
-              width={44}
-              height={24}
-              alt=""
-            />
+            {snsLink.naver ? (
+              <ToggleOn
+                className="absolute right-6 cursor-pointer"
+                width={44}
+                heught={24}
+                onClick={() => {
+                  setSnsLink(prev => ({
+                    ...prev,
+                    naver: false
+                  }))
+                }}
+              />
+            ) : (
+              <ToggleOff
+                className="absolute right-6 cursor-pointer"
+                width={44}
+                heught={24}
+                onClick={() => {
+                  setSnsLink(prev => ({
+                    ...prev,
+                    naver: true
+                  }))
+                }}
+              />
+            )}
           </div>
           <div className="relative w-full h-16 flex items-center border border-gray-600 rounded-md ">
-            <Image className="absolute left-2 p-[15px]" src={GoogleLogo} width={48} height={48} alt="" />
+            <GoogleIcon className="absolute left-2 p-[15px]" width={48} height={48} alt="" />
             <div className="absolute left-[68px] text-stone-800 text-base font-semibold font-['Pretendard']">
               구글 계정 연결
             </div>
             <div className="absolute left-[200px] text-stone-800 text-sm font-medium font-['Pretendard']">
               2024.01.07
             </div>
-            <Image
-              title="google"
-              className="absolute right-6 cursor-pointer"
-              onClick={e => {
-                onClickToggle(e)
-              }}
-              src={toggleTarget.google ? ToggleOn : ToggleOff}
-              width={44}
-              height={24}
-              alt=""
-            />
+            {snsLink.google ? (
+              <ToggleOn
+                className="absolute right-6 cursor-pointer"
+                width={44}
+                height={24}
+                onClick={() => {
+                  setSnsLink(prev => ({
+                    ...prev,
+                    google: false
+                  }))
+                }}
+              />
+            ) : (
+              <ToggleOff
+                className="absolute right-6 cursor-pointer"
+                width={44}
+                height={24}
+                onClick={() => {
+                  setSnsLink(prev => ({
+                    ...prev,
+                    google: true
+                  }))
+                }}
+              />
+            )}
           </div>
         </div>
       </div>

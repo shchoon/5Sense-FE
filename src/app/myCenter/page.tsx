@@ -22,8 +22,8 @@ interface postDataType {
   name: string
   address: string
   mainPhone: string
-  openTime: string
-  closeTime: string
+  open: string
+  close: string
 }
 
 export default function MyCenter() {
@@ -36,8 +36,8 @@ export default function MyCenter() {
     name: '',
     address: '',
     mainPhone: '',
-    openTime: '',
-    closeTime: ''
+    open: '',
+    close: ''
   })
   const [onFocusInput, setOnFocusInput] = useState({
     nameInput: false,
@@ -170,14 +170,14 @@ export default function MyCenter() {
   const handleChangeStartTimeFromChild = (data: { time: string }) => {
     setPostData(prevPostData => ({
       ...prevPostData,
-      openTime: data.time
+      open: data.time
     }))
   }
 
   const handleChangeCloseTimeFromChild = (data: { time: string }) => {
     setPostData(prevPostData => ({
       ...prevPostData,
-      closeTime: data.time
+      close: data.time
     }))
   }
 
@@ -194,7 +194,7 @@ export default function MyCenter() {
   useOnClickOutside(addressNameInputRef, handelClickOutsideAddress)
   useOnClickOutside(phoneNumInputRef, handelClickOutsidePhone)
   useOnClickOutside(centerNameInputRef, handelClickOutsideCenter)
-
+  console.log(postData)
   return (
     <>
       <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></Script>
@@ -235,7 +235,9 @@ export default function MyCenter() {
               .post('/centers', {
                 name: postData.name,
                 address: postData.address,
-                mainPhone: postData.mainPhone
+                mainPhone: postData.mainPhone,
+                open: postData.open,
+                close: postData.close
               })
               .then(() => {
                 router.push('/home')
