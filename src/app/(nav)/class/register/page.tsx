@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import ClassInfo from '@/components/class/register/classInfo'
@@ -9,120 +9,155 @@ import { postClassData } from '@/lib/api/class'
 import { durationScheduleState } from '../../../../lib/state/classDurationSchedule'
 import { useRouter } from 'next/navigation'
 
-export interface ICommonInfo {
+export interface IClassInfo {
   name: string
   memo: string
-  type: string
-  category: {
-    id: string
-    name: string
-  }
-  teacherId: string
+  categoryId: string
+  categoryName: string
 }
 
-export interface ISession {
+export interface IInfoValid {
+  valid: boolean
+  name: boolean
+  category: boolean
+}
+
+export interface IClassType {
+  type: string
   lessonTime: number
   tuitionFee: string
-  capacity: number
   totalSessions: string
+  capacity: number
 }
 
-export interface IDuration {
-  tuitionFee: string
+export interface ITeacherInfo {
+  teacherId: string
 }
 
 export default function RegisterPage() {
   const router = useRouter()
-  const setDurationScheduleState = useSetRecoilState(durationScheduleState)
-  const [commonInfo, setCommonInfo] = useState({
+
+  const [classInfo, setClassInfo] = useState({
     name: '',
     memo: '',
+    categoryId: '',
+    categoryName: ''
+  })
+
+  const [classType, setClassType] = useState({
     type: 'duration',
-    category: {
-      id: '',
-      name: ''
-    },
-    teacherId: ''
-  })
-
-  const [session, setSession] = useState<ISession>({
-    lessonTime: 0,
+    lessonTime: 30,
     tuitionFee: '',
-    capacity: 1,
-    totalSessions: ''
+    totalSessions: '',
+    capacity: 1
   })
 
-  const [duration, setDuration] = useState<IDuration>({
-    tuitionFee: ''
+  const [teacherInfo, setTeacherInfo] = useState('')
+
+  const [durationSchedule, setDurationSchedule] = useRecoilValue(durationScheduleState)
+
+  const [infoValid, setInfoValid] = useState({
+    valid: true,
+    name: true,
+    category: true
   })
 
-  const durationSchedule = useRecoilValue(durationScheduleState)
+  const [typeValid, setTypeValid] = useState({
+    valid: true,
+    fee: true
+  })
 
-  //기간반 회차반
+  const [teacherValid, setTeacherValid] = useState({
+    valid: true
+  })
+
+  useEffect(() => {
+    console.log(classInfo)
+    console.log(classType)
+    console.log(teacherInfo)
+  }, [classInfo, classType, teacherInfo])
+
+  console.log(durationSchedule)
 
   const handleRegisterClass = () => {
+    Object.entries(classInfo).map(([key, value]) => {
+      if (key === 'name' && value.length === 0) {
+        console.log('뭐지')
+        return setInfoValid(prev => ({ ...prev, valid: false, name: false }))
+      }
+      if (key === 'categoryId' && value.length === 0) {
+        return setInfoValid(prev => ({ ...prev, valid: false, name: true, category: false }))
+      }
+    })
+
+    if (classType.tuitionFee.length === 0) {
+      setInfoValid(prev => ({ ...prev, valid: true, category: true }))
+      return setTypeValid(prev => ({ ...prev, valid: false, fee: false }))
+    }
+
+    if (classType.tuitionFee.length === 0) {
+      setInfoValid(prev => ({ ...prev, valid: true, category: true }))
+      return setTypeValid(prev => ({ ...prev, valid: false, fee: false }))
+    }
+
+    if (teacherInfo.length === 0) {
+      setInfoValid(prev => ({ ...prev, valid: true }))
+      setTypeValid(prev => ({ ...prev, valid: true }))
+      return setTeacherValid(prev => ({ ...prev, valid: false }))
+    }
+
     let data
-    if (commonInfo.type === 'duration') {
-      const tuition = duration.tuitionFee.replaceAll(',', '')
+    const tuition = classType.tuitionFee.replaceAll(',', '')
+    if (classType.type === 'duration') {
       data = {
-        type: commonInfo.type,
+        type: classType.type,
         durationLesson: {
-          name: commonInfo.name,
-          memo: commonInfo.memo,
-          lessonTime: durationSchedule[durationSchedule.length - 1].lessonTime,
+          name: classInfo.name,
+          memo: classInfo.memo,
           tuitionFee: Number(tuition),
-          category: { id: Number(commonInfo.category.id), name: commonInfo.category.name },
-          teacherId: Number(commonInfo.teacherId),
-          schedules: [
-            {
-              ...durationSchedule[durationSchedule.length - 1].schedules
-            }
-          ]
+          category: { id: Number(classInfo.categoryId), name: classInfo.categoryName },
+          teacherId: Number(teacherInfo),
+          schedules: [durationSchedule]
         }
       }
     } else {
-      const tuition = session.tuitionFee.replaceAll(',', '')
       data = {
-        type: commonInfo.type,
+        type: classType.type,
         sessionLesson: {
-          name: commonInfo.name,
-          memo: commonInfo.memo,
-          lessonTime: session.lessonTime,
+          name: classInfo.name,
+          memo: classInfo.memo,
+          lessonTime: Number(classType.lessonTime),
           tuitionFee: Number(tuition),
-          capacity: session.capacity,
-          totalSessions: Number(session.totalSessions),
-          category: { id: Number(commonInfo.category.id), name: commonInfo.category.name },
-          teacherId: Number(commonInfo.teacherId)
+          capacity: classType.capacity,
+          totalSessions: Number(classType.totalSessions),
+          category: { id: Number(classInfo.categoryId), name: classInfo.categoryName },
+          teacherId: Number(teacherInfo)
         }
       }
     }
+    console.log(data)
     postClassData(data).then(res => {
+      console.log(res.data)
       if (res.status === 201) {
         router.push('/class')
       }
-      setDurationScheduleState([])
     })
   }
 
-  const changeValue = (name: string, value: string) => {
-    setCommonInfo(prev => ({
-      ...prev,
-      name: value
-    }))
-  }
+  const duarationSchedule = useRecoilValue(durationScheduleState)
+
+  console.log('여기', duarationSchedule)
 
   return (
     <div className="w-[640px] flex flex-col gap-5">
-      <ClassInfo commonInfo={commonInfo} setCommonInfo={setCommonInfo} />
-      <ClassType
-        session={session}
-        setSession={setSession}
-        duration={duration}
-        setDuration={setDuration}
-        onChange={changeValue}
+      <ClassInfo
+        classInfo={classInfo}
+        vaild={infoValid}
+        onChange={(name: string, value: string) => setClassInfo(prev => ({ ...prev, [name]: value }))}
       />
-      <TeacherInfo onChange={changeValue} />
-      <div className="Button w-full btn-purple-lg" onClick={() => handleRegisterClass()}>
+      <ClassType classType={classType} setClassType={setClassType} />
+      <TeacherInfo onChange={(value: string) => setTeacherInfo(value)} />
+      <div className="Button w-full btn-purple-lg" onClick={handleRegisterClass}>
         등록하기
       </div>
     </div>

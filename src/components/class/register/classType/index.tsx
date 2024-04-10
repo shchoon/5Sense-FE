@@ -1,8 +1,8 @@
 'use client'
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
+import { IClassType } from '@/app/(nav)/class/register/page'
+import { Dispatch, SetStateAction, useState } from 'react'
 import Duration from './component/Duration'
 import Session from './component/Session'
-import { IDuration, ISession } from '@/app/(nav)/class/register/page'
 
 export type scheduleItem = {
   id: number
@@ -10,23 +10,34 @@ export type scheduleItem = {
   modal: boolean
 }
 
-interface IProps {
-  session: ISession
-  setSession: Dispatch<SetStateAction<ISession>>
-  duration: IDuration
-  setDuration: Dispatch<SetStateAction<IDuration>>
-  onChange: (name: string, value: string) => void
+export interface ITypeProps {
+  classType: IClassType
+  setClassType: Dispatch<SetStateAction<IClassType>>
 }
 
-export default function ClassType({ session, setSession, duration, setDuration, onChange }: IProps) {
+export default function ClassType({ classType, setClassType }: ITypeProps) {
   const [tab, setTab] = useState<boolean>(true)
 
   const onTabHandler = (date: string) => {
     if (date === '기간반') {
-      onChange('type', 'duration')
+      setClassType(prev => ({
+        ...prev,
+        type: 'duration',
+        lessonTime: 30,
+        tuitionFee: '',
+        totalSessions: '',
+        capacity: 1
+      }))
       return setTab(true)
     } else {
-      onChange('type', 'session')
+      setClassType(prev => ({
+        ...prev,
+        type: 'session',
+        lessonTime: 30,
+        tuitionFee: '',
+        totalSessions: '',
+        capacity: 1
+      }))
       return setTab(false)
     }
   }
@@ -52,9 +63,9 @@ export default function ClassType({ session, setSession, duration, setDuration, 
         {activeTab('회차반', !tab)}
       </div>
       {tab ? (
-        <Duration duration={duration} setDuration={setDuration} />
+        <Duration classType={classType} setClassType={setClassType} />
       ) : (
-        <Session session={session} setSession={setSession} />
+        <Session classType={classType} setClassType={setClassType} />
       )}
     </div>
   )

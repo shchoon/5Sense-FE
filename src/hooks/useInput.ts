@@ -1,16 +1,17 @@
+import { IClassInfo } from '@/app/(nav)/class/register/page'
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 interface IProps {
   name: string
   maxLength: number
-  submitData: { [key: string]: string }
-  setSubmitData: Dispatch<SetStateAction<{ [key: string]: string }>>
+  submitData: IClassInfo
+  onChange: (name: string, value: string) => void
 }
 
 type UseInputReturn = [string, (e: ChangeEvent<HTMLInputElement>) => void]
 
-export function useInput({ name, maxLength, submitData, setSubmitData }: IProps): UseInputReturn {
-  const [inputValue, setInputValue] = useState<string>('')
+export function useInput({ name, maxLength, submitData, onChange }: IProps): UseInputReturn {
+  const [inputValue, setInputValue] = useState(submitData?.name)
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length <= maxLength) {
@@ -18,12 +19,11 @@ export function useInput({ name, maxLength, submitData, setSubmitData }: IProps)
     } else if (e.target.value.length > maxLength) {
       setInputValue(e.target.value.slice(0, maxLength))
     }
-    setSubmitData({ ...submitData, [name]: e.target.value })
   }
 
   useEffect(() => {
-    setInputValue(submitData[name])
-  }, [submitData[name]])
+    onChange(name, inputValue)
+  }, [inputValue])
 
   return [inputValue, handleChange]
 }

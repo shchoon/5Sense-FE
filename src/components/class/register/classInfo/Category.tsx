@@ -1,7 +1,7 @@
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import Image from 'next/image'
 
-import { ICommonInfo } from '@/app/(nav)/class/register/page'
+import { IClassInfo } from '@/app/(nav)/class/register/page'
 import CheckIcon from 'public/assets/icons/circle/check.svg'
 
 export type category = {
@@ -17,11 +17,12 @@ type subCategory = {
 }
 
 interface IProps {
-  commonInfo: ICommonInfo
-  setCommonInfo: Dispatch<SetStateAction<ICommonInfo>>
+  classInfo: IClassInfo
+  valid: boolean
+  onChange: (name: string, value: string) => void
 }
 
-export default function Category({ commonInfo, setCommonInfo }: IProps) {
+export default function Category({ classInfo, onChange }: IProps) {
   const categorydata: category[] = [
     {
       id: '1',
@@ -126,13 +127,8 @@ export default function Category({ commonInfo, setCommonInfo }: IProps) {
     setSelectedOptionList(optionList)
   }
   const handleOptionChange = (id: string, name: string) => {
-    setCommonInfo(prev => ({
-      ...prev,
-      category: {
-        id: id,
-        name: name
-      }
-    }))
+    onChange('categoryId', id)
+    onChange('categoryName', name)
     setSelectedOption(Number(id))
   }
 

@@ -9,8 +9,8 @@ interface DurationScheduleType {
     endTime: string
     repeatDate: string
     roomId: number
+    lessonTime: number
   }
-  lessonTime: number
 }
 
 export const durationScheduleState = atom<DurationScheduleType[]>({

@@ -1,21 +1,16 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 
-import { IDuration } from '@/app/(nav)/class/register/page'
 import Modal from '@/components/common/modal'
 import AddClassModal from '@/components/modal/AddClassModal'
-import { modalState } from '@/lib/state/modal'
-import { useSetRecoilState, useRecoilValue } from 'recoil'
 import { durationScheduleState } from '@/lib/state/classDurationSchedule'
+import { modalState } from '@/lib/state/modal'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import DurationScheduleCheck from '../../../../check/ClassDurationScheduleCheck'
 
 import PlusIcon from 'public/assets/icons/circle/plus.svg'
+import { ITypeProps } from '..'
 
-interface IProps {
-  duration: IDuration
-  setDuration: Dispatch<SetStateAction<IDuration>>
-}
-
-export default function Duration({ duration, setDuration }: IProps) {
+export default function Duration({ classType, setClassType }: ITypeProps) {
   const setModal = useSetRecoilState(modalState)
   const duarationSchedule = useRecoilValue(durationScheduleState)
   const [noticeModal, setNoticeModal] = useState(false)
@@ -52,7 +47,7 @@ export default function Duration({ duration, setDuration }: IProps) {
     const value: string = e.target.value
     const removedCommaValue = value.replaceAll(',', '')
     if (isNaN(Number(removedCommaValue))) {
-      return setDuration(prev => ({ ...prev, tuitionFee: '' }))
+      return setClassType(prev => ({ ...prev, tuitionFee: '' }))
     }
 
     if (removedCommaValue.length > 9) {
@@ -60,7 +55,7 @@ export default function Duration({ duration, setDuration }: IProps) {
       setNoticeModal(true)
     }
 
-    setDuration(prev => ({ ...prev, tuitionFee: Number(removedCommaValue.slice(0, 9)).toLocaleString() }))
+    setClassType(prev => ({ ...prev, tuitionFee: Number(removedCommaValue.slice(0, 9)).toLocaleString() }))
   }
 
   console.log(duarationSchedule)
@@ -73,10 +68,10 @@ export default function Duration({ duration, setDuration }: IProps) {
           type="text"
           className="w-full h-[60px] py-3 box-border border-b-2 flex-row-reverse items-center justify-end border-gray-700 text-gray-900 text-2xl font-semibold focus:outline-none placeholder:text-gray-300"
           onChange={changeTuitionFee}
-          value={duration.tuitionFee}
+          value={classType.tuitionFee}
           placeholder="0 원"
         />
-        <p className="text-gray-500 text-sm font-normal font-['Inter']">{changeKoreanNumber(duration.tuitionFee)}원</p>
+        <p className="text-gray-500 text-sm font-normal font-['Inter']">{changeKoreanNumber(classType.tuitionFee)}원</p>
       </div>
       <div className="w-full flex flex-col gap-2">
         <p className="gray-800-semibold">일정</p>

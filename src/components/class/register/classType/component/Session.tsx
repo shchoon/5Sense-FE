@@ -1,35 +1,29 @@
 'use client'
 
-import Image from 'next/image'
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
+import { ChangeEvent } from 'react'
 
-import { ISession } from '@/app/(nav)/class/register/page'
 import MinusIcon from 'public/assets/icons/minus_vector.svg'
 import PlusIcon from 'public/assets/icons/plus_vector.svg'
+import { ITypeProps } from '..'
 
-interface IProps {
-  session: ISession
-  setSession: Dispatch<SetStateAction<ISession>>
-}
-
-export default function Session({ session, setSession }: IProps) {
+export default function Session({ classType, setClassType }: ITypeProps) {
   const changeTuitionFee = (e: ChangeEvent<HTMLInputElement>) => {
     const value: string = e.target.value
     const removedCommaValue = value.replaceAll(',', '')
 
     if (isNaN(Number(removedCommaValue))) {
-      return setSession(prev => ({ ...prev, tuitionFee: '' }))
+      return setClassType(prev => ({ ...prev, tuitionFee: '' }))
     }
-    setSession(prev => ({ ...prev, tuitionFee: Number(removedCommaValue.slice(0, 9)).toLocaleString() }))
+    setClassType(prev => ({ ...prev, tuitionFee: Number(removedCommaValue.slice(0, 9)).toLocaleString() }))
   }
 
   const handleCnt = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
 
     if (isNaN(Number(value))) {
-      return setSession(prev => ({ ...prev, totalSessions: '' }))
+      return setClassType(prev => ({ ...prev, totalSessions: '' }))
     }
-    setSession(prev => ({ ...prev, totalSessions: value }))
+    setClassType(prev => ({ ...prev, totalSessions: value }))
   }
 
   const sumTuitionFee = (tutionFee: string, cnt: string) => {
@@ -41,17 +35,17 @@ export default function Session({ session, setSession }: IProps) {
 
   const handleLessonTime = (type: string) => {
     if (type === 'plus') {
-      setSession(prev => ({ ...prev, lessonTime: prev.lessonTime + 30 }))
+      setClassType(prev => ({ ...prev, lessonTime: prev.lessonTime + 30 }))
     } else {
-      setSession(prev => ({ ...prev, lessonTime: prev.lessonTime - 30 }))
+      setClassType(prev => ({ ...prev, lessonTime: prev.lessonTime - 30 }))
     }
   }
 
   const handleStudentCnt = (type: string) => {
     if (type === 'plus') {
-      setSession(prev => ({ ...prev, capacity: prev.capacity + 1 }))
+      setClassType(prev => ({ ...prev, capacity: prev.capacity + 1 }))
     } else {
-      setSession(prev => ({ ...prev, capacity: prev.capacity - 1 }))
+      setClassType(prev => ({ ...prev, capacity: prev.capacity - 1 }))
     }
   }
   return (
@@ -67,7 +61,7 @@ export default function Session({ session, setSession }: IProps) {
                 type="text"
                 className="flex-grow text-right placeholder:text-gray-400 text-base font-normal outline-none"
                 placeholder="0"
-                value={session.tuitionFee}
+                value={classType.tuitionFee}
                 onChange={changeTuitionFee}
               />
               <span className="text-gray-400 text-base font-normal">원</span>
@@ -79,7 +73,7 @@ export default function Session({ session, setSession }: IProps) {
                 type="number"
                 className="flex-grow text-right placeholder:text-gray-400 text-base font-normal outline-none"
                 placeholder="0"
-                value={session.totalSessions}
+                value={classType.totalSessions}
                 onChange={e => handleCnt(e)}
               />
               <span className="text-gray-400 text-base font-normal">회</span>
@@ -89,7 +83,7 @@ export default function Session({ session, setSession }: IProps) {
             <div className="flex w-full">
               <span className="gray-900-semibold text-base">총 금액</span>
               <span className="flex-grow text-right text-indigo-500 text-[22px] font-bold">
-                {sumTuitionFee(session.tuitionFee, session.totalSessions)}원
+                {sumTuitionFee(classType.tuitionFee, classType.totalSessions)}원
               </span>
             </div>
             <p className="text-right text-gray-500 text-xs font-medium">만원</p>
@@ -103,7 +97,7 @@ export default function Session({ session, setSession }: IProps) {
           <div className="w-[3px] h-[21px] bg-indigo-500 rounded-sm" />
           <div className="text-gray-600 text-sm font-normal ml-3.5">1회 금액 * 총 회차</div>
           <div className="flex-grow text-right text-gray-600 text-sm font-normal">
-            {session.tuitionFee}*{session.totalSessions}회
+            {classType.tuitionFee}*{classType.totalSessions}회
           </div>
         </div>
       </div>
@@ -112,14 +106,14 @@ export default function Session({ session, setSession }: IProps) {
         <div className="gray-800-semibold text-base">소요 시간</div>
         <div className="w-full flex justify-between h-16 p-3 border border-1 border-gray-300 rounded-full">
           <button
-            disabled={session.lessonTime === 0}
+            disabled={classType.lessonTime === 30}
             className={`w-10 h-full flex justify-center items-center rounded-full bg-primary-600 cursor-pointer disabled:bg-gray-200`}
             onClick={() => handleLessonTime('minus')}
           >
             <MinusIcon />
           </button>
           <div className="w-[186px] h-[27px] flex justify-center items-center gray-800-semibold text-lg">
-            {session.lessonTime}분
+            {classType.lessonTime}분
           </div>
           <button
             className="w-10 h-full flex justify-center items-center rounded-full bg-primary-600 cursor-pointer"
@@ -136,7 +130,7 @@ export default function Session({ session, setSession }: IProps) {
         <div className="text-base gray-800-semibold">최대 수업 정원</div>
         <div className="w-full flex justify-between h-16 p-3 border border-1 border-gray-300 rounded-full">
           <button
-            disabled={session.capacity === 1}
+            disabled={classType.capacity === 1}
             className="w-10 h-full flex items-center justify-center rounded-full bg-primary-600 cursor-pointer disabled:bg-gray-200"
             onClick={() => {
               handleStudentCnt('minus')
@@ -144,7 +138,7 @@ export default function Session({ session, setSession }: IProps) {
           >
             <MinusIcon />
           </button>
-          <div className="flex items-center justify-center text-lg gray-800-semibold">{session.capacity}명</div>
+          <div className="flex items-center justify-center text-lg gray-800-semibold">{classType.capacity}명</div>
           <button
             className="w-10 h-full flex items-center justify-center rounded-full bg-primary-600 cursor-pointer"
             onClick={() => {
