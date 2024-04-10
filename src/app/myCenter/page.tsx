@@ -18,12 +18,13 @@ interface IAddr {
   zonecode: string
 }
 
-interface postDataType {
+export interface centerDataType {
   name: string
   address: string
   mainPhone: string
-  openTime: string
-  closeTime: string
+  open: string
+  close: string
+  profile?: string
 }
 
 export default function MyCenter() {
@@ -32,12 +33,12 @@ export default function MyCenter() {
   const addressNameInputRef = useRef<HTMLInputElement>(null)
   const phoneNumInputRef = useRef<HTMLInputElement>(null)
 
-  const [postData, setPostData] = useState<postDataType>({
+  const [postData, setPostData] = useState<centerDataType>({
     name: '',
     address: '',
     mainPhone: '',
-    openTime: '',
-    closeTime: ''
+    open: '',
+    close: ''
   })
   const [onFocusInput, setOnFocusInput] = useState({
     nameInput: false,
@@ -141,7 +142,7 @@ export default function MyCenter() {
     }
   }
 
-  const checkPostableData = (postData: postDataType) => {
+  const checkPostableData = (postData: centerDataType) => {
     if (postData.name !== '' && postData.address !== '' && postData.mainPhone.length >= 9) {
       return true
     } else {
@@ -170,14 +171,14 @@ export default function MyCenter() {
   const handleChangeStartTimeFromChild = (data: { time: string }) => {
     setPostData(prevPostData => ({
       ...prevPostData,
-      openTime: data.time
+      open: data.time
     }))
   }
 
   const handleChangeCloseTimeFromChild = (data: { time: string }) => {
     setPostData(prevPostData => ({
       ...prevPostData,
-      closeTime: data.time
+      close: data.time
     }))
   }
 
@@ -235,7 +236,9 @@ export default function MyCenter() {
               .post('/centers', {
                 name: postData.name,
                 address: postData.address,
-                mainPhone: postData.mainPhone
+                mainPhone: postData.mainPhone,
+                open: postData.open,
+                close: postData.close
               })
               .then(() => {
                 router.push('/home')

@@ -17,6 +17,7 @@ export default function NaverCallback() {
         state: state
       })
       .then(res => {
+        console.log(res)
         localStorage.setItem('accessToken', res.data.data.accessToken)
         localStorage.setItem('refreshToken', res.data.data.refreshToken)
         localStorage.setItem('accessTokenExp', res.data.data.accessTokenExp)
@@ -28,8 +29,9 @@ export default function NaverCallback() {
           router.push('/myCenter')
         }
       })
-      .catch(() => {
-        alert('err')
+      .catch(err => {
+        console.log(err)
+        //alert('err')
       })
   }
 

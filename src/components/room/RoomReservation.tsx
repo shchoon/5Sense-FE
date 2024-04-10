@@ -45,6 +45,8 @@ export default function RoomReservation(props: IProps) {
   const setDurationSchedule = useSetRecoilState(durationScheduleState)
   const setLessonTimeState = useSetRecoilState(lessonTimeState)
 
+  console.log(durationScheduleState)
+
   const currentDate = new Date()
   const [dateData, setDateData] = useState<dateDataType>({
     year: currentDate.getFullYear(),
@@ -417,23 +419,21 @@ export default function RoomReservation(props: IProps) {
                             setDurationSchedule(prev => [
                               ...prev,
                               {
-                                schedules: {
-                                  startDate: new Date(
-                                    Number(startDateData[0]),
-                                    Number(startDateData[1]) - 1,
-                                    Number(startDateData[2])
-                                  ).toISOString(),
-                                  endDate: new Date(
-                                    Number(endDateData[0]),
-                                    Number(endDateData[1]) - 1,
-                                    Number(endDateData[2])
-                                  ).toISOString(),
-                                  startTime: lessonTime.slice(0, 5),
-                                  endTime: lessonTime.slice(6, 11),
-                                  repeatDate: lessonTime.slice(12, lessonTime.length).split(' ')[0],
-                                  roomId: 1,
-                                  lessonTime: Number(timeRange * 30)
-                                }
+                                startDate: new Date(
+                                  Number(startDateData[0]),
+                                  Number(startDateData[1]) - 1,
+                                  Number(startDateData[2])
+                                ).toISOString(),
+                                endDate: new Date(
+                                  Number(endDateData[0]),
+                                  Number(endDateData[1]) - 1,
+                                  Number(endDateData[2])
+                                ).toISOString(),
+                                startTime: lessonTime.slice(0, 5),
+                                endTime: lessonTime.slice(6, 11),
+                                repeatDate: lessonTime.slice(12, lessonTime.length).split(' ')[0],
+                                roomId: 1,
+                                lessonTime: timeRange * 30
                               }
                             ])
                           }

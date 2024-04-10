@@ -1,4 +1,4 @@
-module.exports = {
+const nextConfig = {
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
@@ -6,5 +6,8 @@ module.exports = {
     })
 
     return config
-  }
+  },
+  reactStrictMode: false
 }
+
+module.exports = nextConfig

@@ -81,13 +81,13 @@ instance.interceptors.response.use(
     return response
   },
   error => {
-    if (error?.response.data.message === 'The token time has expired') {
+    /* if (error?.response.data.message === 'The token time has expired') {
       localStorage.clear()
       window.location.replace('/login')
-    }
+    } */
     if (error?.response) {
       console.log(error.response)
-      alert(error.response.data.message)
+      //alert(error.response.data.message)
     }
     return Promise.reject(error)
     // 2xx 외의 범위에 있는 상태 코드는 이 함수를 트리거 합니다.

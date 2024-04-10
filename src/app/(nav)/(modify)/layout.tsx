@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
-import ArrowBack from 'public/assets/icons/allowBack.svg'
-import Ellipsis from 'public/assets/icons/ellipsis75.svg'
+import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
+import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 
@@ -29,9 +29,9 @@ export default function ModifyPage({ children }: { children: React.ReactNode }) 
   return (
     <div className="w-full">
       <div className="relative">
-        <Link href={'/student'}>
-          <Image className="absolute left-[48px] top-[61px]" src={Ellipsis} width={28} height={28} alt="" />
-          <Image className="absolute left-[55px] top-[68px]" src={ArrowBack} width={14} height={14} alt="" />
+        <Link href={'/home'}>
+          <EllipsisIcon className="absolute left-[48px] top-[61px]" width={28} height={28} alt="" />
+          <ArrowBackIcon className="absolute left-[55px] top-[68px]" width={14} height={14} alt="" />
         </Link>
         <div className="absolute left-[92px] top-[60px] black-bold text-3xl font-['Pretendard']">내 프로필 관리</div>
       </div>
