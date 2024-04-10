@@ -7,6 +7,22 @@ import PlusIcon from 'public/assets/icons/plus_vector.svg'
 import { ITypeProps } from '..'
 
 export default function Session({ classType, setClassType }: ITypeProps) {
+  function geKoreanNumber(value: string) {
+    const koreanUnits = ['조', '억', '만', '']
+    const unit = 10000
+    let answer = ''
+
+    let number = Number(value.replaceAll(',', ''))
+
+    while (number > 0) {
+      const mod = number % unit
+      const modToString = mod.toString().replace(/(\d)(\d{3})/, '$1,$2')
+      number = Math.floor(number / unit)
+      answer = `${modToString}${koreanUnits.pop()}${answer}`
+    }
+    return answer
+  }
+
   const changeTuitionFee = (e: ChangeEvent<HTMLInputElement>) => {
     const value: string = e.target.value
     const removedCommaValue = value.replaceAll(',', '')
@@ -86,7 +102,9 @@ export default function Session({ classType, setClassType }: ITypeProps) {
                 {sumTuitionFee(classType.tuitionFee, classType.totalSessions)}원
               </span>
             </div>
-            <p className="text-right text-gray-500 text-xs font-medium">만원</p>
+            <p className="text-right text-gray-500 text-xs font-medium">
+              {geKoreanNumber(sumTuitionFee(classType.tuitionFee, classType.totalSessions))}원
+            </p>
           </div>
         </div>
       </div>

@@ -135,7 +135,6 @@ export default function RegisterPage() {
         }
       }
     }
-    console.log(data)
     postClassData(data).then(res => {
       console.log(res.data)
       if (res.status === 201) {
@@ -143,10 +142,6 @@ export default function RegisterPage() {
       }
     })
   }
-
-  const duarationSchedule = useRecoilValue(durationScheduleState)
-
-  console.log('여기', duarationSchedule)
 
   return (
     <div className="w-[640px] flex flex-col gap-5">

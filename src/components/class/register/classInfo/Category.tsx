@@ -3,6 +3,7 @@ import Image from 'next/image'
 
 import { IClassInfo } from '@/app/(nav)/class/register/page'
 import CheckIcon from 'public/assets/icons/circle/check.svg'
+import InputForm from '@/components/common/InputForm'
 
 export type category = {
   id: string
@@ -22,7 +23,7 @@ interface IProps {
   onChange: (name: string, value: string) => void
 }
 
-export default function Category({ classInfo, onChange }: IProps) {
+export default function Category({ classInfo, valid, onChange }: IProps) {
   const categorydata: category[] = [
     {
       id: '1',
@@ -137,12 +138,14 @@ export default function Category({ classInfo, onChange }: IProps) {
       title: '기타',
       placeholder: '직접 입력',
       name: 'options',
-      maxLength: 10
+      maxLength: 10,
+      submitData: classInfo,
+      onChange: onChange
     }
     return (
       <>
         {selectedGroup === 9 ? (
-          <input {...optionProps} />
+          <InputForm {...optionProps} />
         ) : (
           <div className="grid grid-cols-4 w-full gap-2">
             {selectedOptionList.map((option: subCategory) => (
