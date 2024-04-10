@@ -75,7 +75,7 @@ export default function RegisterPage() {
           teacherId: Number(commonInfo.teacherId),
           schedules: [
             {
-              ...durationSchedule[durationSchedule.length - 1].schedules
+              ...durationSchedule[durationSchedule.length - 1]
             }
           ]
         }

@@ -81,10 +81,10 @@ instance.interceptors.response.use(
     return response
   },
   error => {
-    if (error?.response.data.message === 'The token time has expired') {
+    /* if (error?.response.data.message === 'The token time has expired') {
       localStorage.clear()
       window.location.replace('/login')
-    }
+    } */
     if (error?.response) {
       console.log(error.response)
       //alert(error.response.data.message)

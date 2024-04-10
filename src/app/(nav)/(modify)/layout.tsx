@@ -29,7 +29,7 @@ export default function ModifyPage({ children }: { children: React.ReactNode }) 
   return (
     <div className="w-full">
       <div className="relative">
-        <Link href={'/student'}>
+        <Link href={'/home'}>
           <EllipsisIcon className="absolute left-[48px] top-[61px]" width={28} height={28} alt="" />
           <ArrowBackIcon className="absolute left-[55px] top-[68px]" width={14} height={14} alt="" />
         </Link>

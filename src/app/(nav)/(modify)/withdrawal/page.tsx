@@ -16,7 +16,13 @@ export default function WithDrawal() {
     }))
   }
 
-  const dropDownList = ['기능의 버그가 많아서', '필요한 기능들이 부족해서', '속도가 느려서', '그냥']
+  const dropDownList = [
+    '다른 서비스가 더 좋아서',
+    '사용 빈도가 낮아서',
+    '이용이 불편하고 버그가 많아서',
+    '개인정보 유출 우려',
+    '기타'
+  ]
 
   const dropDownProps = {
     title: '선택해주세요.',
@@ -59,12 +65,14 @@ export default function WithDrawal() {
           {/* <DropDown {...dropDownProps} /> */}
           <DropDown {...dropDownProps} handleChangeParentsDropdownData={handleChangeReasonFromChild} type="dropdown" />
         </div>
-        <textarea
-          placeholder="탈퇴 사유 및 개선점을 적어주세요"
-          value={postData.detail}
-          onChange={onChangeHandler}
-          className="w-full h-[144px] p-x-4 py-3.5 border rounded-lg border-gray-200 focus:ring-0 focus:border-primary-700 focus:bg-gray-50 resize-none overflow-hidden"
-        />
+        {postData.reason === '기타' && (
+          <textarea
+            placeholder="탈퇴 사유 및 개선점을 적어주세요"
+            value={postData.detail}
+            onChange={onChangeHandler}
+            className="w-full h-[144px] px-4 py-3.5 border rounded-lg border-gray-200 focus:ring-0 focus:border-primary-700 focus:bg-gray-50 resize-none overflow-hidden"
+          />
+        )}
       </div>
       <button
         type="submit"

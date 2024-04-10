@@ -18,12 +18,13 @@ interface IAddr {
   zonecode: string
 }
 
-interface postDataType {
+export interface centerDataType {
   name: string
   address: string
   mainPhone: string
   open: string
   close: string
+  profile?: string
 }
 
 export default function MyCenter() {
@@ -32,7 +33,7 @@ export default function MyCenter() {
   const addressNameInputRef = useRef<HTMLInputElement>(null)
   const phoneNumInputRef = useRef<HTMLInputElement>(null)
 
-  const [postData, setPostData] = useState<postDataType>({
+  const [postData, setPostData] = useState<centerDataType>({
     name: '',
     address: '',
     mainPhone: '',
@@ -141,7 +142,7 @@ export default function MyCenter() {
     }
   }
 
-  const checkPostableData = (postData: postDataType) => {
+  const checkPostableData = (postData: centerDataType) => {
     if (postData.name !== '' && postData.address !== '' && postData.mainPhone.length >= 9) {
       return true
     } else {
@@ -194,7 +195,7 @@ export default function MyCenter() {
   useOnClickOutside(addressNameInputRef, handelClickOutsideAddress)
   useOnClickOutside(phoneNumInputRef, handelClickOutsidePhone)
   useOnClickOutside(centerNameInputRef, handelClickOutsideCenter)
-  console.log(postData)
+
   return (
     <>
       <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></Script>

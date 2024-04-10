@@ -22,8 +22,8 @@ export default function DurationScheduleCheck() {
       {durationSchedules.length !== 0 && (
         <div className="w-full flex flex-col gap-4">
           {durationSchedules.map((data, i) => {
-            const startDate = new Date(data.schedules.startDate)
-            const endDate = new Date(data.schedules.endDate)
+            const startDate = new Date(data.startDate)
+            const endDate = new Date(data.endDate)
             return (
               <div
                 key={i}
@@ -52,12 +52,12 @@ export default function DurationScheduleCheck() {
                     <div className="w-full flex gap-2">
                       <div className="w-[70px] gray-500-medium text-sm">• 시간</div>
                       <div className="w-full gray-800-normal text-sm">
-                        {data.schedules.startTime} - {data.schedules.endTime}
+                        {data.startTime} - {data.endTime}
                       </div>
                     </div>
                     <div className="w-full flex gap-2">
                       <div className="w-[70px] gray-500-medium text-sm">• 요일</div>
-                      <div className="w-full gray-800-normal text-sm">{data.schedules.repeatDate} 반복</div>
+                      <div className="w-full gray-800-normal text-sm">{data.repeatDate} 반복</div>
                     </div>
                     <div className="w-full flex gap-2">
                       <div className="w-[70px] gray-500-medium text-sm">• 강의실</div>
