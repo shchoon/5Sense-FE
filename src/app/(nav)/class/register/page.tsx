@@ -55,6 +55,7 @@ export default function RegisterPage() {
   const [teacherInfo, setTeacherInfo] = useState('')
 
   const [durationSchedule, setDurationSchedule] = useRecoilValue(durationScheduleState)
+  const setDuration = useSetRecoilState(durationScheduleState)
 
   const [infoValid, setInfoValid] = useState({
     valid: true,
@@ -142,6 +143,14 @@ export default function RegisterPage() {
       }
     })
   }
+
+  useEffect(() => {
+    //setDuration([])
+
+    return () => {
+      setDuration([])
+    }
+  }, [])
 
   return (
     <div className="w-[640px] flex flex-col gap-5">
