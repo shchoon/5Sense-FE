@@ -1,8 +1,9 @@
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import Image from 'next/image'
 
-import { ICommonInfo } from '@/app/(nav)/class/register/page'
+import { IClassInfo } from '@/app/(nav)/class/register/page'
 import CheckIcon from 'public/assets/icons/circle/check.svg'
+import InputForm from '@/components/common/InputForm'
 
 export type category = {
   id: string
@@ -17,11 +18,12 @@ type subCategory = {
 }
 
 interface IProps {
-  commonInfo: ICommonInfo
-  setCommonInfo: Dispatch<SetStateAction<ICommonInfo>>
+  classInfo: IClassInfo
+  valid: boolean
+  onChange: (name: string, value: string) => void
 }
 
-export default function Category({ commonInfo, setCommonInfo }: IProps) {
+export default function Category({ classInfo, valid, onChange }: IProps) {
   const categorydata: category[] = [
     {
       id: '1',
@@ -126,13 +128,8 @@ export default function Category({ commonInfo, setCommonInfo }: IProps) {
     setSelectedOptionList(optionList)
   }
   const handleOptionChange = (id: string, name: string) => {
-    setCommonInfo(prev => ({
-      ...prev,
-      category: {
-        id: id,
-        name: name
-      }
-    }))
+    onChange('categoryId', id)
+    onChange('categoryName', name)
     setSelectedOption(Number(id))
   }
 
@@ -141,12 +138,14 @@ export default function Category({ commonInfo, setCommonInfo }: IProps) {
       title: '기타',
       placeholder: '직접 입력',
       name: 'options',
-      maxLength: 10
+      maxLength: 10,
+      submitData: classInfo,
+      onChange: onChange
     }
     return (
       <>
         {selectedGroup === 9 ? (
-          <input {...optionProps} />
+          <InputForm {...optionProps} />
         ) : (
           <div className="grid grid-cols-4 w-full gap-2">
             {selectedOptionList.map((option: subCategory) => (

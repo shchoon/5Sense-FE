@@ -7,17 +7,10 @@ export interface TextareaFormProps {
   maxLength: number
   height?: string
   submitData: any
-  setSubmitData: React.Dispatch<SetStateAction<any>>
+  onChange: (name: string, value: string) => void
 }
 
-export default function TextareaForm({
-  title,
-  placeholder,
-  name,
-  maxLength,
-  submitData,
-  setSubmitData
-}: TextareaFormProps) {
+export default function TextareaForm({ title, placeholder, name, maxLength, submitData, onChange }: TextareaFormProps) {
   const [inputValue, setInputValue] = useState<string>('')
   const ValueLength = inputValue?.length
 
@@ -37,12 +30,12 @@ export default function TextareaForm({
     } else if (e.target.value.length > maxLength) {
       setInputValue(e.target.value.slice(0, maxLength))
     }
-    setSubmitData({ ...submitData, [name]: e.target.value })
+    onChange(name, e.target.value)
   }
 
   useEffect(() => {
-    setInputValue(submitData[name])
-  }, [submitData[name]])
+    handelChage
+  }, [submitData])
 
   return (
     <>

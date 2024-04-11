@@ -17,7 +17,7 @@ import UserCircle from 'public/assets/icons/user_circle.svg'
 import VecterIcon from 'public/assets/icons/vector.svg'
 
 interface IPops {
-  onChange: (id: string, name: string) => void
+  onChange: (value: string) => void
 }
 
 export default function TeacherInfo({ onChange }: IPops) {
@@ -76,7 +76,7 @@ export default function TeacherInfo({ onChange }: IPops) {
               }}
               onChange={e => {
                 setTeacherName(e.target.value)
-                onChange('teacherId', e.target.value)
+                onChange(e.target.value)
               }}
             />
 
@@ -117,7 +117,7 @@ export default function TeacherInfo({ onChange }: IPops) {
                           setCheckInclude(prev => !prev)
                           setNameValue(data.name)
                           setOpenTeacherList(prev => !prev)
-                          onChange('teacherId', data.id)
+                          onChange(data.id)
                         }}
                       >
                         <UserCircle className="text-gray-400" />

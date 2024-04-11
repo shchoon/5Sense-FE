@@ -1,27 +1,37 @@
+import { IClassInfo } from '@/app/(nav)/class/register/page'
 import { useInput } from '@/hooks/useInput'
 import { SetStateAction } from 'react'
 
 export interface InputFormProps {
+  vaild?: boolean
   title: string
   placeholder: string
   name: string
   maxLength: number
-  submitData: any
-  setSubmitData: React.Dispatch<SetStateAction<any>>
+  submitData: IClassInfo
+  onChange: (name: string, value: string) => void
 }
 
-export default function InputForm({ name, title, placeholder, maxLength, submitData, setSubmitData }: InputFormProps) {
+export default function InputForm({
+  name,
+  title,
+  placeholder,
+  maxLength,
+  submitData,
+  onChange,
+  vaild
+}: InputFormProps) {
   const [inputValue, handleChange] = useInput({
     name,
     maxLength,
     submitData,
-    setSubmitData
+    onChange
   })
-  const valueLength = inputValue.length
+  const valueLength = inputValue?.length
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="gray-800-semibold">{title}</p>
+      <p className={`${vaild ? '' : 'text-[#EF5D5D]'} gray-800-semibold`}>{title}</p>
 
       <input
         className={`${valueLength > 0 ? 'bg-gray-50' : 'bg-white'} w-full h-auto input-line-gray`}

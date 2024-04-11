@@ -1,25 +1,24 @@
 'use client'
-import Image from 'next/image'
 import { useRef, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import LessonTimeModal from '../modal/RoundLessonTimeModal'
-import DayDatePicker from '../datePicker/dayDatePicker'
-import PeriodDatePicker from '../datePicker/periodDatePicker'
-import ClockIcon from '../../../public/assets/icons/clock'
-import CalendarIcon from '../../../public/assets/icons/calendar'
-import RoomReservationCheck from '../check/RoomReservationCheck'
-import Modal from '../common/modal'
-import PeriodLessonTimeModal from '../modal/PeriodLessonTimeModal'
-import { dateDataType } from '../datePicker/dayDatePicker'
-import { modalState } from '@/lib/state/modal'
+
 import { durationScheduleState } from '@/lib/state/classDurationSchedule'
 import { lessonTimeState } from '@/lib/state/lessonTime'
+import { modalState } from '@/lib/state/modal'
+import CalendarIcon from '../../../public/assets/icons/calendar'
+import ClockIcon from '../../../public/assets/icons/clock'
+import RoomReservationCheck from '../check/RoomReservationCheck'
+import Modal from '../common/modal'
+import DayDatePicker, { dateDataType } from '../datePicker/dayDatePicker'
+import PeriodDatePicker from '../datePicker/periodDatePicker'
+import PeriodLessonTimeModal from '../modal/PeriodLessonTimeModal'
 
+import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
+import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
 import SearchIcon from 'public/assets/icons/search_white.svg'
 import UserIcon from 'public/assets/icons/user.svg'
-import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
-import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
 
 interface RoomDataType {
   id: number

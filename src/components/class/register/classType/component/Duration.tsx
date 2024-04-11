@@ -1,58 +1,56 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 
-import { IDuration } from '@/app/(nav)/class/register/page'
 import Modal from '@/components/common/modal'
 import AddClassModal from '@/components/modal/AddClassModal'
-import { modalState } from '@/lib/state/modal'
-import { useSetRecoilState, useRecoilValue } from 'recoil'
 import { durationScheduleState } from '@/lib/state/classDurationSchedule'
+import { modalState } from '@/lib/state/modal'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import DurationScheduleCheck from '../../../../check/ClassDurationScheduleCheck'
 
 import PlusIcon from 'public/assets/icons/circle/plus.svg'
+import { ITypeProps } from '..'
 
-interface IProps {
-  duration: IDuration
-  setDuration: Dispatch<SetStateAction<IDuration>>
-}
-
-export default function Duration({ duration, setDuration }: IProps) {
+export default function Duration({ classType, setClassType }: ITypeProps) {
   const setModal = useSetRecoilState(modalState)
   const duarationSchedule = useRecoilValue(durationScheduleState)
   const [noticeModal, setNoticeModal] = useState(false)
   const [scheduleModal, setScheduleModal] = useState(false)
 
-  const changeKoreanNumber = (value: string) => {
-    const unit1 = ['', '십', '백', '천']
-    const unit2 = ['', '만', '억', '조', '경']
-    const digits = ['영', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구']
+  function geKoreanNumber(value: string) {
+    const koreanNumber = ['', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구']
+    const tenUnit = ['', '십', '백', '천']
+    const tenThousandUnit = ['조', '억', '만', '']
+    const unit = 10000
 
-    const numStr = value.replaceAll(',', '')
-    let result = ''
+    let number = Number(value.replaceAll(',', ''))
 
-    for (let i = numStr.length - 1, j = 0; i >= 0; i--, j++) {
-      const num = Number(numStr[i])
+    let answer = ''
 
-      console.log(i, j)
+    while (number > 0) {
+      const mod = number % unit
+      const modToArray = mod.toString().split('')
+      const length = modToArray.length - 1
 
-      if (num !== 0) {
-        result = digits[num] + unit1[j % 4] + result
-      }
+      const modToKorean = modToArray.reduce((acc, value, index) => {
+        const valueToNumber = +value
+        if (!valueToNumber) return acc
+        // 단위가 십 이상인 '일'글자는 출력하지 않는다. ex) 일십 -> 십
+        const numberToKorean = index < length && valueToNumber === 1 ? '' : koreanNumber[valueToNumber]
+        return `${acc}${numberToKorean}${tenUnit[length - index]}`
+      }, '')
 
-      if (j % 4 === 0 && j !== 0) {
-        result = unit2[j / 4] + result
-      }
-
-      console.log(result)
+      answer = `${modToKorean}${tenThousandUnit.pop()} ${answer}`
+      number = Math.floor(number / unit)
     }
 
-    return result
+    return answer
   }
 
   const changeTuitionFee = (e: ChangeEvent<HTMLInputElement>) => {
     const value: string = e.target.value
     const removedCommaValue = value.replaceAll(',', '')
     if (isNaN(Number(removedCommaValue))) {
-      return setDuration(prev => ({ ...prev, tuitionFee: '' }))
+      return setClassType(prev => ({ ...prev, tuitionFee: '' }))
     }
 
     if (removedCommaValue.length > 9) {
@@ -60,7 +58,7 @@ export default function Duration({ duration, setDuration }: IProps) {
       setNoticeModal(true)
     }
 
-    setDuration(prev => ({ ...prev, tuitionFee: Number(removedCommaValue.slice(0, 9)).toLocaleString() }))
+    setClassType(prev => ({ ...prev, tuitionFee: Number(removedCommaValue.slice(0, 9)).toLocaleString() }))
   }
 
   console.log(duarationSchedule)
@@ -73,10 +71,10 @@ export default function Duration({ duration, setDuration }: IProps) {
           type="text"
           className="w-full h-[60px] py-3 box-border border-b-2 flex-row-reverse items-center justify-end border-gray-700 text-gray-900 text-2xl font-semibold focus:outline-none placeholder:text-gray-300"
           onChange={changeTuitionFee}
-          value={duration.tuitionFee}
+          value={classType.tuitionFee}
           placeholder="0 원"
         />
-        <p className="text-gray-500 text-sm font-normal font-['Inter']">{changeKoreanNumber(duration.tuitionFee)}원</p>
+        <p className="text-gray-500 text-sm font-normal font-['Inter']">{geKoreanNumber(classType.tuitionFee)}원</p>
       </div>
       <div className="w-full flex flex-col gap-2">
         <p className="gray-800-semibold">일정</p>
