@@ -51,10 +51,12 @@ export default function AcademyInfo(props: any) {
   return (
     <div className="infoContent w-full flex flex-col items-center gap-7">
       <div className="relative w-full flex flex-col items-center gap-4">
-        {centerInfo.profile ? (
-          <img width={90} height={90} src={centerInfo.profile} />
+        {centerInfo.profile !== null ? (
+          <div className="absolute -top-5 w-[148px] h-[148px] flex justify-center items-center ">
+            <img width={90} height={90} src={centerInfo.profile} />
+          </div>
         ) : (
-          <ProfileIcon className="absolute -top-5" />
+          <ProfileIcon width={150} className="absolute -top-5" />
         )}
 
         {centerInfo.name !== '' && (
@@ -69,9 +71,7 @@ export default function AcademyInfo(props: any) {
       </div>
       <button
         onClick={onProfileHandler}
-        className={`${centerInfo.profile === null && 'mt-[160px]'} mt-[80px]  w-[200px] h-[45px] px-4 py-3 box-border ${
-          props.btnColor
-        } rounded-md justify-center items-center`}
+        className={`mt-[160px] w-[200px] h-[45px] px-4 py-3 box-border ${props.btnColor} rounded-md justify-center items-center`}
       >
         <span className="text-center text-white text-sm font-bold leading-[21px]">내 프로필 관리</span>
       </button>

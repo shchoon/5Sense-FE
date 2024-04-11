@@ -7,6 +7,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 import DropDown from '@/components/common/DropDown'
 import { centerDataType } from '@/app/myCenter/page'
 import { centerInfoState } from '@/lib/state/centerInfoState'
+import instance from '@/lib/api/axios'
 
 import ProfileIcon from 'public/assets/images/defaultProfile.svg'
 import CameraIcon from 'public/assets/icons/camera.svg'
@@ -15,7 +16,7 @@ import ToggleOn from 'public/assets/icons/toggle_on.svg'
 import ToggleOff from 'public/assets/icons/toggle_off.svg'
 import GoogleIcon from 'public/assets/logo/googleLogo.svg'
 import NaverIcon from 'public/assets/logo/naverLogo.svg'
-import instance from '@/lib/api/axios'
+import NaverWhite from 'public/assets/logo/naverWhite.svg'
 
 interface snsLinkType {
   kakao: boolean
@@ -201,7 +202,9 @@ export default function ManageMent() {
                     <ProfileIcon className="" width={140} height={140} alt="" />
                   </div>
                 ) : (
-                  <img src={img} className="rounded-full" width={120} height={120} alt="" />
+                  <div className="w-[140px] h-[140px] ">
+                    <img src={img} className="rounded-full" width={140} height={140} alt="" />
+                  </div>
                 )}
 
                 <div className="absolute left-[35px] top-[124px] bg-white w-[70px] h-[34px] pl-2.5 pr-3 py-2 flex justify-center rounded-lg border border-primary-600">
@@ -277,7 +280,11 @@ export default function ManageMent() {
           <div className="w-full px-6 py-8 flex flex-col gap-10 border rounded-xl border-gray-200">
             <div className="gray-900-bold text-xl font-['Pretendard']">SNS 연결 설정</div>
             <div className="w-full flex flex-col gap-[14px]">
-              <div className="relative w-full h-16 flex items-center bg-[#FFE812] rounded-md ">
+              <div
+                className={`relative w-full h-16 flex items-center ${
+                  snsLink.kakao ? 'bg-[#FFE812]' : 'border border-1 border-[#FFE812]'
+                } rounded-md `}
+              >
                 <KakaoIcon className="absolute left-2" width={48} height={48} alt="" />
                 <div className="absolute left-[68px] text-stone-800 text-base font-semibold font-['Pretendard']">
                   카카오 계정 연결
@@ -311,12 +318,29 @@ export default function ManageMent() {
                   />
                 )}
               </div>
-              <div className="relative w-full h-16 flex items-center border border-[#2BB500] rounded-md ">
-                <NaverIcon className="absolute left-2" width={48} height={48} alt="" />
-                <div className="absolute left-[68px] text-[#2BB500] text-base font-semibold font-['Pretendard']">
+              <div
+                className={`relative w-full h-16 flex items-center ${
+                  snsLink.naver ? 'bg-[#2BB500]' : 'border border-[#2BB500]'
+                }  rounded-md `}
+              >
+                {snsLink.naver ? (
+                  <NaverWhite className="absolute left-2" width={48} height={48} alt="" />
+                ) : (
+                  <NaverIcon className="absolute left-2" width={48} height={48} alt="" />
+                )}
+
+                <div
+                  className={`absolute left-[68px] ${
+                    snsLink.naver ? 'text-white' : 'text-[#2BB500]'
+                  }  text-base font-semibold`}
+                >
                   네이버 계정 연결
                 </div>
-                <div className="absolute left-[200px] text-stone-800 text-sm font-medium font-['Pretendard']">
+                <div
+                  className={`absolute left-[200px] ${
+                    snsLink.naver ? 'text-white' : 'text-stone-800'
+                  } text-sm font-medium`}
+                >
                   2024.01.07
                 </div>
                 {snsLink.naver ? (

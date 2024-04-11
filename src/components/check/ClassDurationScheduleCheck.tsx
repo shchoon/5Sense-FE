@@ -11,7 +11,6 @@ export default function DurationScheduleCheck() {
   const durationSchedules = useRecoilValue(durationScheduleState)
 
   const deleteDurationSchedule = (index: number) => {
-    console.log('s')
     setDurationScheduleState(durationSchedules.filter((schedule, i) => index !== i))
   }
 

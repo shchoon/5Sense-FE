@@ -11,9 +11,10 @@ import CalendarIcon from '../../../public/assets/icons/calendar'
 import ClockIcon from '../../../public/assets/icons/clock'
 import RoomReservationCheck from '../check/RoomReservationCheck'
 import Modal from '../common/modal'
-import DayDatePicker, { dateDataType } from '../datePicker/dayDatePicker'
+import DayDatePicker, { dateDataType } from '../datePicker/dayDatePIcker'
 import PeriodDatePicker from '../datePicker/periodDatePicker'
 import PeriodLessonTimeModal from '../modal/PeriodLessonTimeModal'
+import { centerInfoState } from '@/lib/state/centerInfoState'
 
 import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
 import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
@@ -42,10 +43,12 @@ export default function RoomReservation(props: IProps) {
   const refs = useRef<(HTMLDivElement | null)[]>([])
   const modal = useRecoilValue(modalState)
   const setModal = useSetRecoilState(modalState)
+  const durationSchedules = useRecoilValue(durationScheduleState)
   const setDurationSchedule = useSetRecoilState(durationScheduleState)
   const setLessonTimeState = useSetRecoilState(lessonTimeState)
+  const centerInfo = useRecoilValue(centerInfoState)
 
-  console.log(durationScheduleState)
+  console.log(durationSchedules)
 
   const currentDate = new Date()
   const [dateData, setDateData] = useState<dateDataType>({
@@ -122,7 +125,8 @@ export default function RoomReservation(props: IProps) {
       setLessonTime(time)
     }
     if (type === 'duration') {
-      console.log('duration')
+      time = time.replace(/,/g, ' ')
+      time = time.replace(/\//g, ',')
       setLessonTime(time)
     }
 
@@ -148,26 +152,20 @@ export default function RoomReservation(props: IProps) {
     }
   }
 
-  const openTimeList: string[] = [
-    '8',
-    '9',
-    '10',
-    '11',
-    '12',
-    '13',
-    '14',
-    '15',
-    '16',
-    '17',
-    '18',
-    '19',
-    '20',
-    '21',
-    '22'
-  ]
+  const openTimeList: string[] = []
   const roomClickList: string[] = []
-  for (var i = 0; i < openTimeList.length * 2; i++) {
-    roomClickList.push('')
+
+  if (centerInfo.name !== '') {
+    console.log(centerInfo)
+    const time = {
+      open: Number(centerInfo.open.split(':')[0]),
+      close: Number(centerInfo.close.split(':')[0])
+    }
+    for (var i = time.open; i <= time.close; i++) {
+      openTimeList.push(`${i}`)
+      roomClickList.push(' ')
+      roomClickList.push(' ')
+    }
   }
 
   const roomData: RoomDataType[] = [
@@ -236,13 +234,40 @@ export default function RoomReservation(props: IProps) {
   }
 
   const calculatePeriodClassLessonTime = () => {
-    const start = lessonTime.slice(0, 5)
-    const end = lessonTime.slice(6, 11)
-    const time =
-      (Number(end.split(':')[0]) - Number(start.split(':')[0])) * 2 +
-      (Number(end.split(':')[1]) - Number(start.split(':')[1])) / 30
+    let time = lessonTime.split(',')[1].split('')
+    return Number(time.slice(1, time.length - 1).join(''))
+  }
 
-    return time
+  const selectedDate = () => {
+    const startDate = new Date(durationSchedules[0].startDate)
+    const endDate = new Date(durationSchedules[0].endDate)
+
+    return `${startDate.getFullYear()}.${
+      startDate.getMonth() + 1
+    }.${startDate.getDate()} - ${endDate.getFullYear()}.${endDate.getMonth()}.${endDate.getDate()}`
+  }
+
+  console.log(clickedRoomData)
+
+  const calculateLessonTimeOfRoom = (timeRange: number) => {
+    const index = Number(clickedRoomData.clickedTime)
+    let startTime = {
+      hour: openTimeList[Number(Math.ceil((index + 1) / 2 - 1))],
+      min: (index + 1) % 2 === 0 ? '30' : '00'
+    }
+
+    let closeTime = {
+      hour:
+        (index + timeRange) % 2 === 0
+          ? openTimeList[(index + timeRange) / 2]
+          : openTimeList[Math.ceil((index + timeRange) / 2) - 1],
+      min: (index + timeRange) % 2 === 0 ? '00' : '30'
+    }
+
+    return {
+      startTime: `${startTime.hour}:${startTime.min}`,
+      closeTime: `${closeTime.hour}:${closeTime.min}`
+    }
   }
 
   return (
@@ -264,14 +289,22 @@ export default function RoomReservation(props: IProps) {
                 ? 'w-[254.5px] py-1.5 px-[18px] h-14 border border-1 border-primary-600 rounded-full'
                 : 'w-[218.5px] h-full'
             }  flex gap-2 bg-white`}
-            onClick={() => handleClickTab('date')}
+            onClick={() => {
+              if (durationSchedules.length === 0) {
+                handleClickTab('date')
+              } else {
+                return
+              }
+            }}
           >
             <div className="w-[18px] mt-1/2 flex items-start">
               <CalendarIcon width="18" height="18" color={isClickedTab.date ? '#7354E8' : '#6B7280'} />
             </div>
             <div className="w-full h-full flex flex-col">
               <div className="w-full h-full text-left text-gray-700 font-medium text-sm">날짜</div>
-              <div className="w-full h-full text-left text-gray-400 font-medium text-[15px]">{dateValue}</div>
+              <div className="w-full h-full text-left text-gray-400 font-medium text-[15px]">
+                {durationSchedules.length === 0 ? dateValue : selectedDate()}
+              </div>
             </div>
           </button>
           {!isClickedTab.date && !isClickedTab.time && <div className="w-px h-7 bg-gray-300"></div>}
@@ -288,7 +321,7 @@ export default function RoomReservation(props: IProps) {
               <ClockIcon width="18" height="18" color={isClickedTab.time ? '#7354E8' : '#6B7280'} />
             </div>
             <div className="w-full h-full flex flex-col">
-              <div className="w-full h-full text-left text-gray-700 font-medium text-sm">소요시간</div>
+              <div className="w-full h-full text-left text-gray-700 font-medium text-sm">요일/소요시간</div>
               <div className="w-full h-full text-left text-gray-400 font-medium text-[15px]">
                 {lessonTime === '시간' ? lessonTime : props.classType === 'session' ? lessonTime + '분' : lessonTime}
               </div>
@@ -297,7 +330,7 @@ export default function RoomReservation(props: IProps) {
           <div
             className="w-12 h-12 rounded-full bg-primary-600 flex items-center justify-center cursor-pointer"
             onClick={() => {
-              if (dateValue !== '날짜' && lessonTime !== '시간') {
+              if ((dateValue !== '날짜' && lessonTime !== '시간') || durationSchedules.length >= 1) {
                 setIsClickedSearch(true)
               } else {
                 return
@@ -341,7 +374,7 @@ export default function RoomReservation(props: IProps) {
       )}
 
       {/* 일정 선택 */}
-      {dateValue !== '날짜' && lessonTime !== '시간' && isClickedSearch && (
+      {isClickedSearch && (
         <div className="w-full mb-[60px] p-6 flex flex-col gap-6 border border-1 border-gray-200 rounded-lg max-h-[450px] overflow-y-scroll">
           {/* 룸 선택*/}
           <div className="w-full flex flex-col gap-10">
@@ -353,7 +386,7 @@ export default function RoomReservation(props: IProps) {
                   ? undefined
                   : lessonTime.length <= 3
                     ? Number(lessonTime) / 30
-                    : calculatePeriodClassLessonTime()
+                    : calculatePeriodClassLessonTime() / 30
               return (
                 <div key={i} className="relative flex flex-col gap-4">
                   <div className="flex justify-between">
@@ -404,18 +437,9 @@ export default function RoomReservation(props: IProps) {
                             }
                           }
                         } else if (props.classType === 'duration') {
-                          const time = lessonTime.split(',')[0]
-                          const day = lessonTime.slice(12, lessonTime.length)
-                          const data = {
-                            date: dateValue,
-                            lessonTime: time,
-                            day: day,
-                            room: clickedRoomData.room
-                          }
-                          const startDateData = dateValue.split('~')[0].split('.')
-                          const endDateData = dateValue.split('~')[1].split('.')
-
-                          if (timeRange !== undefined) {
+                          if (timeRange !== undefined && durationSchedules.length === 0) {
+                            const startDateData = dateValue.split('~')[0].split('.')
+                            const endDateData = dateValue.split('~')[1].split('.')
                             setDurationSchedule(prev => [
                               ...prev,
                               {
@@ -429,11 +453,24 @@ export default function RoomReservation(props: IProps) {
                                   Number(endDateData[1]) - 1,
                                   Number(endDateData[2])
                                 ).toISOString(),
-                                startTime: lessonTime.slice(0, 5),
-                                endTime: lessonTime.slice(6, 11),
-                                repeatDate: lessonTime.slice(12, lessonTime.length).split(' ')[0],
+                                startTime: calculateLessonTimeOfRoom(timeRange).startTime,
+                                endTime: calculateLessonTimeOfRoom(timeRange).closeTime,
+                                repeatDate: lessonTime.split(',')[0].replace(' 반복', '').replace(/\s+/g, ','),
                                 roomId: 1,
-                                lessonTime: timeRange * 30
+                                lessonTime: calculatePeriodClassLessonTime()
+                              }
+                            ])
+                          } else if (timeRange !== undefined && durationSchedules.length >= 1) {
+                            setDurationSchedule(prev => [
+                              ...prev,
+                              {
+                                startDate: durationSchedules[0].startDate,
+                                endDate: durationSchedules[0].endDate,
+                                startTime: calculateLessonTimeOfRoom(timeRange).startTime,
+                                endTime: calculateLessonTimeOfRoom(timeRange).closeTime,
+                                repeatDate: lessonTime.split(',')[0].replace(' 반복', '').replace(/\s+/g, ','),
+                                roomId: 1,
+                                lessonTime: calculatePeriodClassLessonTime()
                               }
                             ])
                           }
