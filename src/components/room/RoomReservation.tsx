@@ -11,9 +11,10 @@ import CalendarIcon from '../../../public/assets/icons/calendar'
 import ClockIcon from '../../../public/assets/icons/clock'
 import RoomReservationCheck from '../check/RoomReservationCheck'
 import Modal from '../common/modal'
-import DayDatePicker, { dateDataType } from '../datePicker/dayDatePicker'
+import DayDatePicker, { dateDataType } from '../datePicker/dayDatePIcker'
 import PeriodDatePicker from '../datePicker/periodDatePicker'
 import PeriodLessonTimeModal from '../modal/PeriodLessonTimeModal'
+import { centerInfoState } from '@/lib/state/centerInfoState'
 
 import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
 import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
@@ -44,6 +45,7 @@ export default function RoomReservation(props: IProps) {
   const setModal = useSetRecoilState(modalState)
   const setDurationSchedule = useSetRecoilState(durationScheduleState)
   const setLessonTimeState = useSetRecoilState(lessonTimeState)
+  const centerInfo = useRecoilValue(centerInfoState)
 
   console.log(durationScheduleState)
 
@@ -122,7 +124,8 @@ export default function RoomReservation(props: IProps) {
       setLessonTime(time)
     }
     if (type === 'duration') {
-      console.log('duration')
+      time = time.replace(/,/g, ' ')
+      time = time.replace(/\//g, ',')
       setLessonTime(time)
     }
 
@@ -148,26 +151,20 @@ export default function RoomReservation(props: IProps) {
     }
   }
 
-  const openTimeList: string[] = [
-    '8',
-    '9',
-    '10',
-    '11',
-    '12',
-    '13',
-    '14',
-    '15',
-    '16',
-    '17',
-    '18',
-    '19',
-    '20',
-    '21',
-    '22'
-  ]
+  const openTimeList: string[] = []
   const roomClickList: string[] = []
-  for (var i = 0; i < openTimeList.length * 2; i++) {
-    roomClickList.push('')
+
+  if (centerInfo.name !== '') {
+    console.log(centerInfo)
+    const time = {
+      open: Number(centerInfo.open.split(':')[0]),
+      close: Number(centerInfo.close.split(':')[0])
+    }
+    for (var i = time.open; i <= time.close; i++) {
+      openTimeList.push(`${i}`)
+      roomClickList.push(' ')
+      roomClickList.push(' ')
+    }
   }
 
   const roomData: RoomDataType[] = [
@@ -236,13 +233,22 @@ export default function RoomReservation(props: IProps) {
   }
 
   const calculatePeriodClassLessonTime = () => {
-    const start = lessonTime.slice(0, 5)
-    const end = lessonTime.slice(6, 11)
-    const time =
-      (Number(end.split(':')[0]) - Number(start.split(':')[0])) * 2 +
-      (Number(end.split(':')[1]) - Number(start.split(':')[1])) / 30
+    let time = lessonTime.split(',')[1].split('')
+    return Number(time.slice(1, time.length - 1).join(''))
+  }
 
-    return time
+  console.log(clickedRoomData)
+
+  const calculateLessonTimeOfRoom = (timeRange: number) => {
+    let startTime = {
+      hour: Number(openTimeList[0]) + (Number(clickedRoomData.clickedTime) * 30) / 60,
+      min: (Number(clickedRoomData.clickedTime) * 30) % 60
+    }
+    let closeTime = {
+      hour: startTime.hour + timeRange / 2,
+      min: startTime.min + (timeRange % 2) * 30
+    }
+    console.log(startTime, closeTime)
   }
 
   return (
@@ -288,7 +294,7 @@ export default function RoomReservation(props: IProps) {
               <ClockIcon width="18" height="18" color={isClickedTab.time ? '#7354E8' : '#6B7280'} />
             </div>
             <div className="w-full h-full flex flex-col">
-              <div className="w-full h-full text-left text-gray-700 font-medium text-sm">소요시간</div>
+              <div className="w-full h-full text-left text-gray-700 font-medium text-sm">요일/소요시간</div>
               <div className="w-full h-full text-left text-gray-400 font-medium text-[15px]">
                 {lessonTime === '시간' ? lessonTime : props.classType === 'session' ? lessonTime + '분' : lessonTime}
               </div>
@@ -353,7 +359,7 @@ export default function RoomReservation(props: IProps) {
                   ? undefined
                   : lessonTime.length <= 3
                     ? Number(lessonTime) / 30
-                    : calculatePeriodClassLessonTime()
+                    : calculatePeriodClassLessonTime() / 30
               return (
                 <div key={i} className="relative flex flex-col gap-4">
                   <div className="flex justify-between">
@@ -404,6 +410,10 @@ export default function RoomReservation(props: IProps) {
                             }
                           }
                         } else if (props.classType === 'duration') {
+                          if (timeRange) {
+                            calculateLessonTimeOfRoom(timeRange)
+                          }
+
                           const time = lessonTime.split(',')[0]
                           const day = lessonTime.slice(12, lessonTime.length)
                           const data = {
@@ -431,7 +441,7 @@ export default function RoomReservation(props: IProps) {
                                 ).toISOString(),
                                 startTime: lessonTime.slice(0, 5),
                                 endTime: lessonTime.slice(6, 11),
-                                repeatDate: lessonTime.slice(12, lessonTime.length).split(' ')[0],
+                                repeatDate: lessonTime.split(',')[0],
                                 roomId: 1,
                                 lessonTime: timeRange * 30
                               }
