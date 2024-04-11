@@ -22,6 +22,12 @@ export interface IInfoValid {
   category: boolean
 }
 
+export interface ITypeValid {
+  valid: boolean
+  fee: boolean
+  schedule: boolean
+}
+
 export interface IClassType {
   type: string
   lessonTime: number
@@ -54,7 +60,8 @@ export default function RegisterPage() {
 
   const [teacherInfo, setTeacherInfo] = useState('')
 
-  const [durationSchedule, setDurationSchedule] = useRecoilValue(durationScheduleState)
+  const durationSchedule = useRecoilValue(durationScheduleState)
+  const setDurationSchedule = useSetRecoilState(durationScheduleState)
 
   const [infoValid, setInfoValid] = useState({
     valid: true,
@@ -64,12 +71,11 @@ export default function RegisterPage() {
 
   const [typeValid, setTypeValid] = useState({
     valid: true,
-    fee: true
+    fee: true,
+    schedule: true
   })
 
-  const [teacherValid, setTeacherValid] = useState({
-    valid: true
-  })
+  const [teacherValid, setTeacherValid] = useState(true)
 
   useEffect(() => {
     console.log(classInfo)
@@ -80,30 +86,28 @@ export default function RegisterPage() {
   console.log(durationSchedule)
 
   const handleRegisterClass = () => {
-    Object.entries(classInfo).map(([key, value]) => {
-      if (key === 'name' && value.length === 0) {
-        console.log('뭐지')
-        return setInfoValid(prev => ({ ...prev, valid: false, name: false }))
-      }
-      if (key === 'categoryId' && value.length === 0) {
-        return setInfoValid(prev => ({ ...prev, valid: false, name: true, category: false }))
-      }
-    })
+    setInfoValid(prev => ({ ...prev, valid: true, name: true, category: true }))
+    setTypeValid(prev => ({ ...prev, valid: true, fee: true, schedule: true }))
+    setTeacherValid(true)
 
-    if (classType.tuitionFee.length === 0) {
-      setInfoValid(prev => ({ ...prev, valid: true, category: true }))
-      return setTypeValid(prev => ({ ...prev, valid: false, fee: false }))
+    if (classInfo.name.length === 0) {
+      return setInfoValid(prev => ({ ...prev, valid: false, name: false }))
+    }
+
+    if (classInfo.categoryId.length === 0) {
+      return setInfoValid(prev => ({ ...prev, valid: false, category: false }))
     }
 
     if (classType.tuitionFee.length === 0) {
-      setInfoValid(prev => ({ ...prev, valid: true, category: true }))
       return setTypeValid(prev => ({ ...prev, valid: false, fee: false }))
+    }
+
+    if (durationSchedule.length === 0) {
+      return setTypeValid(prev => ({ ...prev, valid: false, schedule: false }))
     }
 
     if (teacherInfo.length === 0) {
-      setInfoValid(prev => ({ ...prev, valid: true }))
-      setTypeValid(prev => ({ ...prev, valid: true }))
-      return setTeacherValid(prev => ({ ...prev, valid: false }))
+      return setTeacherValid(false)
     }
 
     let data
@@ -138,6 +142,7 @@ export default function RegisterPage() {
     postClassData(data).then(res => {
       console.log(res.data)
       if (res.status === 201) {
+        setDurationSchedule([])
         router.push('/class')
       }
     })
@@ -150,8 +155,8 @@ export default function RegisterPage() {
         vaild={infoValid}
         onChange={(name: string, value: string) => setClassInfo(prev => ({ ...prev, [name]: value }))}
       />
-      <ClassType classType={classType} setClassType={setClassType} />
-      <TeacherInfo onChange={(value: string) => setTeacherInfo(value)} />
+      <ClassType classType={classType} valid={typeValid} setClassType={setClassType} />
+      <TeacherInfo valid={teacherValid} onChange={(value: string) => setTeacherInfo(value)} />
       <div className="Button w-full btn-purple-lg" onClick={handleRegisterClass}>
         등록하기
       </div>

@@ -6,7 +6,7 @@ import MinusIcon from 'public/assets/icons/minus_vector.svg'
 import PlusIcon from 'public/assets/icons/plus_vector.svg'
 import { ITypeProps } from '..'
 
-export default function Session({ classType, setClassType }: ITypeProps) {
+export default function Session({ classType, setClassType, valid }: ITypeProps) {
   function geKoreanNumber(value: string) {
     const koreanUnits = ['조', '억', '만', '']
     const unit = 10000
@@ -68,7 +68,7 @@ export default function Session({ classType, setClassType }: ITypeProps) {
     <div className="w-full flex flex-col">
       {/* 수강료 */}
       <div className="payBox w-full flex flex-col gap-2">
-        <p className="gray-800-semibold text-base">수강료</p>
+        <p className={`${valid ? '' : 'text-[#EF5D5D]'} gray-800-semibold`}>수강료</p>
         <div className="flex flex-col gap-2.5">
           <div className="w-full px-5 py-4 bg-white rounded-lg border border-gray-200 flex flex-col justify-between gap-4">
             <div className="flex w-full">

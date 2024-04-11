@@ -176,7 +176,7 @@ export default function Category({ classInfo, valid, onChange }: IProps) {
   }
   return (
     <div>
-      <p className="gray-800-semibold">카테고리</p>
+      <p className={`${valid ? '' : 'text-[#EF5D5D]'} gray-800-semibold`}>카테고리</p>
       {/* 대분류 소분류 박스 */}
       <div className="flex flex-col gap-6 mt-2">
         <div className="grid grid-cols-3 w-full gap-2">

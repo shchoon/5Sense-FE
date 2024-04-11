@@ -1,5 +1,5 @@
 'use client'
-import { IClassType } from '@/app/(nav)/class/register/page'
+import { IClassType, ITypeValid } from '@/app/(nav)/class/register/page'
 import { Dispatch, SetStateAction, useState } from 'react'
 import Duration from './component/Duration'
 import Session from './component/Session'
@@ -12,10 +12,11 @@ export type scheduleItem = {
 
 export interface ITypeProps {
   classType: IClassType
+  valid?: ITypeValid
   setClassType: Dispatch<SetStateAction<IClassType>>
 }
 
-export default function ClassType({ classType, setClassType }: ITypeProps) {
+export default function ClassType({ classType, setClassType, valid }: ITypeProps) {
   const [tab, setTab] = useState<boolean>(true)
 
   const onTabHandler = (date: string) => {
@@ -56,16 +57,16 @@ export default function ClassType({ classType, setClassType }: ITypeProps) {
   }
 
   return (
-    <div className="class-box">
+    <div className={`${valid?.valid ? '' : 'border-[#EF5D5D]'} class-box`}>
       <div className="Title gray-900-bold text-xl">클래스 유형</div>
       <div className="flex w-full h-[52px] p-1.5 rounded-md border border-gray-300 ">
         {activeTab('기간반', tab)}
         {activeTab('회차반', !tab)}
       </div>
       {tab ? (
-        <Duration classType={classType} setClassType={setClassType} />
+        <Duration classType={classType} valid={valid} setClassType={setClassType} />
       ) : (
-        <Session classType={classType} setClassType={setClassType} />
+        <Session classType={classType} valid={valid} setClassType={setClassType} />
       )}
     </div>
   )

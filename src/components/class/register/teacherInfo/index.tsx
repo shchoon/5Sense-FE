@@ -18,9 +18,10 @@ import VecterIcon from 'public/assets/icons/vector.svg'
 
 interface IPops {
   onChange: (value: string) => void
+  valid: boolean
 }
 
-export default function TeacherInfo({ onChange }: IPops) {
+export default function TeacherInfo({ onChange, valid }: IPops) {
   const inputClickRef = useRef<HTMLInputElement>(null)
   const autoCompleteTeacherNameRef = useRef<HTMLDivElement>(null)
 
@@ -60,8 +61,12 @@ export default function TeacherInfo({ onChange }: IPops) {
 
   return (
     <>
-      <div className="flex flex-col items-start gap-10 w-[640px] py-8 px-6 border border-[#E5E7EB] rounded-xl bg-[#FFF]">
-        <div className="gray-900-bold text-[20px]">강사 정보</div>
+      <div
+        className={`flex flex-col items-start gap-10 w-[640px] py-8 px-6 border ${
+          valid ? 'border-[#E5E7EB]' : 'border-[#EF5D5D]'
+        } rounded-xl bg-[#FFF]`}
+      >
+        <div className={`gray-900-bold text-[20px]`}>강사 정보</div>
         <div className="flex flex-start flex-col w-[100%] h-[auto] px-4 py-[14px] justify-center border border-[#E5E7EB] bg-[#F9FAFB] rounded-lg focus-within:border-[#7354E8]">
           <div className="relative flex w-[100%] items-center gap-2">
             <SearchIcon />

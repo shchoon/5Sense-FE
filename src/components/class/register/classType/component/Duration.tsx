@@ -10,7 +10,7 @@ import DurationScheduleCheck from '../../../../check/ClassDurationScheduleCheck'
 import PlusIcon from 'public/assets/icons/circle/plus.svg'
 import { ITypeProps } from '..'
 
-export default function Duration({ classType, setClassType }: ITypeProps) {
+export default function Duration({ classType, setClassType, valid }: ITypeProps) {
   const setModal = useSetRecoilState(modalState)
   const duarationSchedule = useRecoilValue(durationScheduleState)
   const [noticeModal, setNoticeModal] = useState(false)
@@ -66,7 +66,7 @@ export default function Duration({ classType, setClassType }: ITypeProps) {
   return (
     <div className="flex flex-col gap-10">
       <div className="w-full flex flex-col gap-2">
-        <p className="gray-800-semibold">수강료</p>
+        <p className={`${valid?.fee ? '' : 'text-[#EF5D5D]'} gray-800-semibold`}>수강료</p>
         <input
           type="text"
           className="w-full h-[60px] py-3 box-border border-b-2 flex-row-reverse items-center justify-end border-gray-700 text-gray-900 text-2xl font-semibold focus:outline-none placeholder:text-gray-300"
@@ -77,7 +77,7 @@ export default function Duration({ classType, setClassType }: ITypeProps) {
         <p className="text-gray-500 text-sm font-normal font-['Inter']">{geKoreanNumber(classType.tuitionFee)}원</p>
       </div>
       <div className="w-full flex flex-col gap-2">
-        <p className="gray-800-semibold">일정</p>
+        <p className={`${valid?.schedule ? '' : 'text-[#EF5D5D]'} gray-800-semibold`}>일정</p>
         <button
           className="w-full px-6 py-3.5 btn-line-purple flex items-center justify-center gap-2"
           onClick={() => {

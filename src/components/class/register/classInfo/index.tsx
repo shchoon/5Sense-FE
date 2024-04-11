@@ -13,7 +13,7 @@ interface IProps {
 
 export default function ClassInfo({ classInfo, vaild, onChange }: IProps) {
   const classNameProps: InputFormProps = {
-    vaild: vaild.name,
+    valid: vaild.name,
     title: '클래스 명',
     placeholder: '클래스명을 입력해 주세요',
     name: 'name',

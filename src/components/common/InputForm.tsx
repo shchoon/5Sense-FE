@@ -3,7 +3,7 @@ import { useInput } from '@/hooks/useInput'
 import { SetStateAction } from 'react'
 
 export interface InputFormProps {
-  vaild?: boolean
+  valid?: boolean
   title: string
   placeholder: string
   name: string
@@ -19,7 +19,7 @@ export default function InputForm({
   maxLength,
   submitData,
   onChange,
-  vaild
+  valid = true
 }: InputFormProps) {
   const [inputValue, handleChange] = useInput({
     name,
@@ -31,7 +31,7 @@ export default function InputForm({
 
   return (
     <div className="flex flex-col gap-2">
-      <p className={`${vaild ? '' : 'text-[#EF5D5D]'} gray-800-semibold`}>{title}</p>
+      <p className={`${valid ? '' : 'text-[#EF5D5D]'} gray-800-semibold`}>{title}</p>
 
       <input
         className={`${valueLength > 0 ? 'bg-gray-50' : 'bg-white'} w-full h-auto input-line-gray`}
