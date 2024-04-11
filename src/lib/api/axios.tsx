@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { AxiosResponse, AxiosError } from 'axios'
+import { request } from 'http'
 
 const current: Date = new Date()
 const checkToken = (accessTokenExp: string) => {
@@ -42,7 +43,11 @@ instance.interceptors.request.use(
           console.log(error)
         }
       }
-      config.headers.Authorization = `Bearer ${accessToken}`
+      if (config.url === '/auth/cancelMembership') {
+        config.headers.Authorization = `Bearer ${refreshToken}`
+      } else {
+        config.headers.Authorization = `Bearer ${accessToken}`
+      }
     }
     return config
   },

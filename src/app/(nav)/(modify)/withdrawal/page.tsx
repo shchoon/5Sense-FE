@@ -1,9 +1,12 @@
 'use client'
 import { useState } from 'react'
-import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+
 import DropDown from '@/components/common/DropDown'
+import instance from '@/lib/api/axios'
 
 export default function WithDrawal() {
+  const router = useRouter()
   const [postData, setPostData] = useState({
     reason: '',
     detail: ''
@@ -78,10 +81,37 @@ export default function WithDrawal() {
         type="submit"
         className="w-full h-[52px] btn-purple"
         onClick={() => {
-          console.log(postData)
+          if (postData.reason !== '') {
+            const please = prompt(
+              "자본주의의 세상에서 학원 운영을 '무료!'로 관리할 수 있는 편리한 플랫폼 오센스를 그래도 떠나시나요..?? \n (탈퇴하시려면 로그인했던 이메일 또는 번호를 입력해주세요.) "
+            )
+            if (please) {
+              let type: string = ''
+              if (please.includes('@')) {
+                type = 'email'
+              } else {
+                type = 'phone'
+              }
+              const formData = new FormData()
+              formData.append(`${type}`, please)
+              instance
+                .delete(`/auth/cancelMembership`, { data: formData })
+                .then(res => {
+                  console.log(res)
+                  localStorage.clear()
+                  router.push('/login')
+                })
+                .catch(err => {
+                  const message = err.response.data.message
+                  alert(message)
+                })
+            }
+          } else {
+            alert('탈퇴 사유를 선택해주세요.')
+          }
         }}
       >
-        수정하기
+        탈퇴하기
       </button>
     </form>
   )
