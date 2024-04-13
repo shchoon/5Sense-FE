@@ -8,10 +8,10 @@ import InputForm, { InputFormProps } from '@/components/common/InputForm'
 import useInputNum from '@/hooks/useInputNum'
 import { InputNumProps } from '@/app/(nav)/student/register/page'
 
-import ImgArrowBack from 'public/assets/icons/allowBack.svg'
-import ImgEllipsis from 'public/assets/icons/ellipsis75.svg'
-import Minus from 'public/assets/icons/minus_vector.svg'
-import Plus from 'public/assets/icons/plus_vector.svg'
+import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
+import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
+import MinusIcon from 'public/assets/icons/minus_vector.svg'
+import PlusIcon from 'public/assets/icons/plus_vector.svg'
 
 export default function ModifyRoom() {
   const pathName = usePathname()
@@ -38,8 +38,8 @@ export default function ModifyRoom() {
     <>
       <div className="relative">
         <Link href={'/room'}>
-          <Image className="absolute left-[48px] top-[61px]" src={ImgEllipsis} width={28} height={28} alt="" />
-          <Image className="absolute left-[55px] top-[68px]" src={ImgArrowBack} width={14} height={14} alt="" />
+          <EllipsisIcon className="absolute left-[48px] top-[61px]" width={28} height={28} alt="" />
+          <ArrowBackIcon className="absolute left-[55px] top-[68px]" width={14} height={14} alt="" />
         </Link>
         <div className="absolute left-[92px] top-[60px] black-bold text-3xl font-['Pretendard']">강의실 수정</div>
       </div>
@@ -72,7 +72,7 @@ export default function ModifyRoom() {
                     }
                   }}
                 >
-                  <Image src={Minus} width={12} height={10} alt="Minus" />
+                  <MinusIcon width={12} height={10} alt="Minus" />
                 </button>
                 <div className="w-[472px] h-full flex items-center justify-center text-lg gray-800-semibold">
                   {permissonNum}명
@@ -84,7 +84,7 @@ export default function ModifyRoom() {
                     setPermissonNum(prev => prev + 1)
                   }}
                 >
-                  <Image src={Plus} width={14} height={14} alt="Plus" />
+                  <PlusIcon width={14} height={14} alt="Plus" />
                 </button>
               </div>
             </div>

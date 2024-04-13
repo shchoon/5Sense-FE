@@ -4,12 +4,14 @@ import Image from 'next/image'
 
 import DropDown from '@/components/common/DropDown'
 import RoomReservation from '@/components/room/RoomReservation'
-
-import ImgArrowBack from 'public/assets/icons/allowBack.svg'
-import ImgEllipsis from 'public/assets/icons/ellipsis75.svg'
-import AlertCircle from 'public/assets/icons/alert-circle.svg'
-import Search from 'public/assets/icons/search.svg'
 import { useState } from 'react'
+import SearchInput from '@/components/common/SearchInput'
+import FilterSearchName from '@/components/common/FilterSearchName'
+
+import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
+import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
+import AlertIcon from 'public/assets/icons/alert-circle.svg'
+import SearchIcon from 'public/assets/icons/search.svg'
 
 export default function Reservatoin() {
   const dropDownProps = {
@@ -28,8 +30,8 @@ export default function Reservatoin() {
     <>
       <div className="relative">
         <Link href={'/room'}>
-          <Image className="absolute left-[48px] top-[61px]" src={ImgEllipsis} width={28} height={28} alt="" />
-          <Image className="absolute left-[55px] top-[68px]" src={ImgArrowBack} width={14} height={14} alt="" />
+          <EllipsisIcon className="absolute left-[48px] top-[61px]" width={28} height={28} alt="" />
+          <ArrowBackIcon className="absolute left-[55px] top-[68px]" width={14} height={14} alt="" />
         </Link>
         <div className="absolute left-[92px] top-[60px] black-bold text-3xl font-['Pretendard']">예약하기</div>
       </div>
@@ -43,7 +45,7 @@ export default function Reservatoin() {
                 <DropDown {...dropDownProps} handleChangeParentsDropdownData={handleChangeParentsDropdownData} />
               </div>
               <div className="w-full flex gap-1.5 items-center">
-                <Image src={AlertCircle} width={18} height={18} alt="AlertCircle" />
+                <AlertIcon width={18} height={18} alt="AlertCircle" />
                 <div className="w-full gray-500-normal text-sm">
                   기간반은 [클래스 관리 - 클래스 등록]에서 강의실을 등록하고있습니다.
                 </div>
@@ -51,8 +53,9 @@ export default function Reservatoin() {
             </div>
             <div className="w-full flex flex-col gap-2">
               <div className="w-full text-left gray-800-semibold text-base">수강생 찾기</div>
-              <div className="w-full h-[52px] flex px-3 py-2.5 gap-2 border border-1 border-gray-200 rounded-lg focus-within:border-[#5539C0]">
-                <Image src={Search} width={18} height={18} alt="Search" />
+              <FilterSearchName type="search" target="students" />
+              {/* <div className="w-full h-[52px] flex items-center px-3 py-2.5 gap-2 border border-1 border-gray-200 rounded-lg focus-within:border-[#5539C0]">
+                <SearchIcon width={18} height={18} alt="Search" />
                 <input
                   placeholder="수강생 이름"
                   value={studentName}
@@ -61,7 +64,7 @@ export default function Reservatoin() {
                   }}
                   className=" w-full focus:outline-none"
                 />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -71,9 +74,9 @@ export default function Reservatoin() {
         >
           클래스를 선택해주시면 예약가능 리스트를 볼 수 있습니다.
         </div> */}
-        {selectedClass !== '' && (
+        {/* {selectedClass !== '' && (
           <RoomReservation class={selectedClass} studentName={studentName} classType="round" viewType="page" />
-        )}
+        )} */}
       </div>
     </>
   )

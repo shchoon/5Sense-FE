@@ -5,9 +5,12 @@ import SearchInput from '@/components/common/SearchInput'
 import { studentType, metaType } from '../student/page'
 import ListInfo from '@/components/view/ListInfo'
 import instance from '@/lib/api/axios'
+
 import NoneResult from '@/components/common/NoneResult'
 import List from '@/components/view/List'
 import Loading from '@/components/common/Loading'
+import ChevronDownIcon from 'public/assets/icons/chevron/chevron-down-blue.svg'
+import ChevronUpIcon from 'public/assets/icons/chevron/chevron-up-blue.svg'
 
 export default function PayPage() {
   const target = useRef<HTMLDivElement>(null)
@@ -120,7 +123,11 @@ export default function PayPage() {
       <div className="flex w-full justify-between items-center mb-[30px]">
         <div className="black-bold text-3xl">청구/납부</div>
       </div>
-      <div className="w-full flex justify-end">
+      <div className="w-full flex justify-between">
+        <button className="w-[100px] h-[37px] flex items-center gap-2 px-3 py-2 rounded-lg border border-primary-600">
+          <div className="text-primary-600 text-sm font-semibold">결제상태</div>
+          <ChevronDownIcon width={16} height={16} />
+        </button>
         <SearchInput type="students" passInputData={getInputDataFromChild} />
       </div>
       <div className="w-full flex flex-col gap-3">

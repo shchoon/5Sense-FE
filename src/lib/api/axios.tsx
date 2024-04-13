@@ -25,7 +25,7 @@ instance.interceptors.request.use(
     const accessTokenExp = localStorage.getItem('accessTokenExp')
 
     if (accessToken) {
-      if (accessTokenExp && 0 < checkToken(accessTokenExp) && checkToken(accessTokenExp) < 5) {
+      if (accessTokenExp && checkToken(accessTokenExp) < 5) {
         try {
           const res = await axios.post(
             process.env.NEXT_PUBLIC_IP_ADDRESS + '/auth/reissue',

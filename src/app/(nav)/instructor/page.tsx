@@ -230,7 +230,7 @@ export default function InstructorPage() {
           <RegisterModal
             onClose={() => setIsClickedRegister(false)}
             onCloseState={() => setModal(false)}
-            rigister={() => setIsRegistered(true)}
+            onRigister={() => setIsRegistered(true)}
           />
         </Modal>
       )}

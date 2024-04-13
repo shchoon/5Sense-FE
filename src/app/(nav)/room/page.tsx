@@ -6,22 +6,22 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { useRouter } from 'next/navigation'
 
 import { useWindowSize } from '@/hooks/useWindowSize'
-import DayDatePicker from '@/components/datePicker/dayDatePicker'
+import DayDatePicker from '@/components/datePicker/dayDatePIcker'
 import CalendarIcon from '../../../../public/assets/icons/calendar'
-import { dateDataType } from '@/components/datePicker/dayDatePicker'
+import { dateDataType } from '@/components/datePicker/dayDatePIcker'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
 import { modalState } from '@/lib/state/modal'
 import DeleteModal from '@/components/modal/DeleteModal'
 import PlusCircleIcon from '../../../../public/assets/icons/plus-circle'
 import Modal from '@/components/common/modal'
 
-import chevronLeft from 'public/assets/icons/chevron/chevron-left.svg'
-import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
-import user from 'public/assets/icons/user_icon.svg'
+import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
+import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
+import UserIcon from 'public/assets/icons/user_icon.svg'
 import calendar from 'public/assets/icons/calendar-white.svg'
-import dots from 'public/assets/icons/dotsVertical.svg'
-import modify from 'public/assets/icons/modify.svg'
-import deleteIcon from 'public/assets/icons/trash.svg'
+import DotsIcon from 'public/assets/icons/dotsVertical.svg'
+import ModifyIcon from 'public/assets/icons/modify.svg'
+import DeleteIcon from 'public/assets/icons/trash.svg'
 
 export default function Room() {
   const { width, height } = useWindowSize()
@@ -245,67 +245,6 @@ export default function Room() {
         }
       ]
     }
-    /* {
-      roomName: 'A',
-      resetvation: [
-        {
-          time: '09:00',
-          lesseonTime: 90,
-          className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-          teacher: '김솔지',
-          studentNum: 5,
-          limit: 10
-        },
-        {
-          time: '09:30',
-          lesseonTime: 90,
-          className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-          teacher: '김솔지',
-          studentNum: 5,
-          limit: 10
-        },
-        {
-          time: '10:00',
-          lesseonTime: 90,
-          className: '반야사 요가',
-          teacher: '윤태식',
-          studentNum: 5,
-          limit: 10
-        },
-        {
-          time: '10:30',
-          lesseonTime: 90,
-          className: '바른 자세 찾기',
-          teacher: '엄세리',
-          studentNum: 5,
-          limit: 10
-        },
-        {
-          time: '',
-          lesseonTime: undefined,
-          className: '',
-          teacher: '',
-          studentNum: undefined,
-          limit: undefined
-        },
-        {
-          time: '11:30',
-          lesseonTime: 90,
-          className: '필라테스',
-          teacher: '조성훈',
-          studentNum: 5,
-          limit: 10
-        },
-        {
-          time: '',
-          lesseonTime: undefined,
-          className: '',
-          teacher: '',
-          studentNum: undefined,
-          limit: undefined
-        }
-      ]
-    } */
   ]
   const modal = useRecoilValue(modalState) // 상태의 값을 가져옴
   const setModal = useSetRecoilState(modalState)
@@ -326,9 +265,9 @@ export default function Room() {
   const lastDateOfCurrnetMonthData = new Date(dateData.year, dateData.month + 1, 0)
   const lastDateOfLastMonthData = new Date(dateData.year, dateData.month, 0)
 
-  /*   const onClickOutsideOfOption = (e: any) => {
-    console.log(e)
+  const onClickOutsideOfOption = (e: any) => {
     if (isClickOption.isClicked && !optionRef.current?.contains(e.target)) {
+      console.log('outside')
       setIsClickOption(prev => ({
         ...prev,
         isClicked: false,
@@ -338,7 +277,7 @@ export default function Room() {
   }
 
   useOnClickOutside(optionRef, onClickOutsideOfOption)
- */
+
   const onClickDatePickerHandler = () => {
     setIsClickedDatePicker(prev => !prev)
   }
@@ -407,8 +346,7 @@ export default function Room() {
     setIsClickedDatePicker(false)
   }
 
-  //  console.log(isClickOptios)
-  console.log(modal)
+  console.log(isClickOption)
 
   return (
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-[60px]">
@@ -419,7 +357,7 @@ export default function Room() {
         <div className="w-[300px] h-[41px] flex rounded-lg bg-primary-600">
           <Link
             href={'/room/schedule'}
-            className="flex items-center gap-2 w-full px-5 py-2.5 border border-r rounded-r-none border-r-primary-700 btn-purple"
+            className="flex items-center gap-2 w-full px-5 py-2.5 border-r border-r-primary-700 btn-purple"
           >
             <Image src={calendar} width={20} height={20} alt="calendar" />
             <div className="text-white text-sm font-semibold">일정 찾기</div>
@@ -432,7 +370,7 @@ export default function Room() {
       </div>
       {/* 캘린더 */}
       <div
-        className={`flex mx-auto ${
+        className={`flex items-center mx-auto ${
           width > 950 ? 'w-[420px]' : 'w-[312px]'
         }  h-full p-1.5 border rounded-md border-gray-100 bg-[#F8FAFD] mb-[32px]`}
       >
@@ -440,7 +378,7 @@ export default function Room() {
           className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
           onClick={moveBackDay}
         >
-          <Image src={chevronLeft} width={24} height={24} alt=" " />
+          <ChevronLeftIcon width={24} height={24} />
         </div>
         <div
           className="w-full px-3 py-2 flex justify-center gap-2 items-center gray-900-semibold text-base font-['Pretendard'] hover:text-primary-600 cursor-pointer"
@@ -453,7 +391,7 @@ export default function Room() {
           className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
           onClick={moveForwardDay}
         >
-          <Image src={chevronRight} width={24} height={24} alt=" " />
+          <ChevronRightIcon width={24} height={24} />
         </div>
       </div>
       {isClickedDatePicker && (
@@ -465,10 +403,10 @@ export default function Room() {
       {/* 룸 리스트 */}
       <div className="relative w-full pl-[84px]">
         <span className="absolute z-10 w-6 h-6 left-[72px] top-7 bg-white flex items-center justify-center border border-1 border-gray-200 rounded-full ">
-          <Image src={chevronLeft} width={16} height={16} alt="chevronLeft" />
+          <ChevronLeftIcon width={16} height={16} alt="chevronLeft" />
         </span>
         <span className="absolute z-10 w-6 h-6 -right-3 top-7 bg-white flex items-center justify-center border border-1 border-gray-200 rounded-full ">
-          <Image src={chevronRight} width={16} height={16} alt="chevronRight" />
+          <ChevronRightIcon width={16} height={16} alt="chevronRight" />
         </span>
         <div className="w-full grid grid-cols-4 gap-2">
           {roomList.map((data, i) => {
@@ -483,20 +421,19 @@ export default function Room() {
                   <>
                     <div className="w-full gray-900-semibold">{data.room} Room</div>
                     <div className="flex gap-1/2 h-4 justify-center">
-                      <Image src={user} width={16} height={16} alt="user" />
+                      <UserIcon width={16} height={16} alt="user" />
                       <span className="gray-500-medium flex items-center">15인</span>
                     </div>
                     <button
                       ref={optionRef}
-                      className="absolute right-3 top-3 w-8 h-8 p-1 rounded-full hover:bg-gray-100 focus:bg-gray-100"
+                      className={`absolute right-3 top-3 w-8 h-8 p-1 rounded-full hover:bg-gray-100 ${
+                        isClickOption && 'focus:bg-gray-100'
+                      } `}
                       onClick={() => {
-                        if (isClickOption.isClicked && isClickOption.id === i) {
-                          setIsClickOption(prev => ({
-                            ...prev,
-                            isClicked: false,
-                            id: undefined
-                          }))
-                        } else {
+                        /* if (isClickOption.id === undefined) {
+                          return
+                        } */
+                        if (isClickOption.id !== i) {
                           setIsClickOption(prev => ({
                             ...prev,
                             isClicked: true,
@@ -505,7 +442,7 @@ export default function Room() {
                         }
                       }}
                     >
-                      <Image src={dots} width={24} height={24} alt="dots" />
+                      <DotsIcon width={24} height={24} alt="dots" />
                     </button>
                   </>
                 ) : (
@@ -525,7 +462,7 @@ export default function Room() {
                       onClick={() => router.push('/room/modifyRoom/' + `${data.room}`)}
                     >
                       <div className="w-[98px] gray-500-medium text-sm">수정하기</div>
-                      <Image src={modify} width={16} height={16} alt="modify" />
+                      <ModifyIcon width={16} height={16} alt="modify" />
                     </button>
                     <button
                       type="button"
@@ -533,7 +470,7 @@ export default function Room() {
                       onClick={() => setModal(true)}
                     >
                       <div className="w-[98px] gray-500-medium text-sm">삭제하기</div>
-                      <Image src={deleteIcon} width={16} height={16} alt="modify" />
+                      <DeleteIcon className="text-gray-400" width={16} height={16} alt="modify" />
                     </button>
                   </div>
                 )}
@@ -597,8 +534,8 @@ export default function Room() {
                                 </div>
                                 <div className="w-full flex justify-end ">
                                   <button
-                                    className="w-[85px] h-[37px] flex items-center px-3 py-2 border rounded-lg border-1 border-gray-200
-                                    gray-800-semibold text-sm"
+                                    className="w-[76px] h-[37px] flex items-center px-3 py-2 border rounded-lg border-1 border-gray-200
+                                    gray-800-semibold text-sm text-center"
                                     onClick={() => router.push('/room/reservation')}
                                   >
                                     예약하기
@@ -609,7 +546,7 @@ export default function Room() {
                           </div>
                         ) : (
                           <button
-                            className="w-[85px] h-[37px] flex items-center px-3 py-2 border rounded-lg border-1 border-gray-200
+                            className="w-[76px] h-[37px] flex items-center px-3 py-2 border rounded-lg border-1 border-gray-200
                              gray-800-semibold text-sm"
                             onClick={() => router.push('/room/reservation')}
                           >

@@ -259,7 +259,9 @@ export default function RoomReservation(props: IProps) {
     let closeTime = {
       hour:
         (index + timeRange) % 2 === 0
-          ? openTimeList[(index + timeRange) / 2]
+          ? openTimeList[(index + timeRange) / 2] === undefined
+            ? Number(openTimeList[(index + timeRange) / 2 - 1]) + 1
+            : openTimeList[(index + timeRange) / 2]
           : openTimeList[Math.ceil((index + timeRange) / 2) - 1],
       min: (index + timeRange) % 2 === 0 ? '00' : '30'
     }
@@ -269,6 +271,7 @@ export default function RoomReservation(props: IProps) {
       closeTime: `${closeTime.hour}:${closeTime.min}`
     }
   }
+  console.log(dateValue)
 
   return (
     <>
@@ -288,7 +291,7 @@ export default function RoomReservation(props: IProps) {
               isClickedTab.date
                 ? 'w-[254.5px] py-1.5 px-[18px] h-14 border border-1 border-primary-600 rounded-full'
                 : 'w-[218.5px] h-full'
-            }  flex gap-2 bg-white`}
+            }  flex gap-2 bg-inherit`}
             onClick={() => {
               if (durationSchedules.length === 0) {
                 handleClickTab('date')
@@ -297,7 +300,7 @@ export default function RoomReservation(props: IProps) {
               }
             }}
           >
-            <div className="w-[18px] mt-1/2 flex items-start">
+            <div className={`w-[18px] mt-1/2 flex items-start`}>
               <CalendarIcon width="18" height="18" color={isClickedTab.date ? '#7354E8' : '#6B7280'} />
             </div>
             <div className="w-full h-full flex flex-col">
