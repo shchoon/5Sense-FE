@@ -63,6 +63,18 @@ export default function StudentRegister() {
     setSubmitData: setStudentInfo
   } */
 
+  const onInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const maxLength: number = e.target.maxLength
+    const title: string = e.target.title
+    if (e.target.value.length > maxLength) {
+      e.target.value = e.target.value.slice(0, maxLength)
+    }
+    setStudentInfo(prev => ({
+      ...prev,
+      [title]: e.target.value
+    }))
+  }
+
   const studentRigister = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault()
     instance.post('/students', studentInfo).then((res: AxiosResponse) => {
@@ -91,17 +103,55 @@ export default function StudentRegister() {
             <div className="gray-900-bold text-xl font-['Pretendard']">수강생 정보</div>
             <div className="flex flex-col gap-4 w-full">
               <div className="flex flex-col gap-2">
-                <div className="gray-800-semibold">전화번호</div>
+                <div className="gray-800-semibold">이름</div>
                 <input
                   className={`${
                     InputValue.length > 0 ? 'bg-gray-50' : 'bg-white'
                   } w-full h-auto input-line-gray gray-900-400`}
                   type="text"
+                  title="name"
+                  placeholder="이름을 입력해주세요"
+                  value={studentInfo.name}
+                  maxLength={20}
+                  onChange={onInputHandler}
+                />
+                <div className="w-full text-right gray-500-normal text-sm font-['Inter']">
+                  {studentInfo.name.length}/20
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <div className="gray-800-semibold">전화번호</div>
+                <input
+                  className={`${
+                    InputValue.length > 0 ? 'bg-gray-50' : 'bg-white'
+                  } w-full h-auto input-line-gray gray-900-400`}
+                  type="number"
+                  title="phone"
                   placeholder="전화번호를 입력해주세요 (-제외)"
-                  value={InputValue}
-                  onChange={handleChange}
+                  value={studentInfo.phone}
+                  onChange={onInputHandler}
                   maxLength={12}
                 />
+                <div className="w-full text-right gray-500-normal text-sm font-['Inter']">
+                  {studentInfo.phone.length}/12
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <div className="gray-800-semibold">특이사항</div>
+                <input
+                  className={`${
+                    InputValue.length > 0 ? 'bg-gray-50' : 'bg-white'
+                  } w-full h-auto input-line-gray gray-900-400`}
+                  type="text"
+                  title="particulars"
+                  placeholder="수강생 특이사항을 적어주세요"
+                  value={studentInfo.particulars}
+                  onChange={onInputHandler}
+                  maxLength={300}
+                />
+                <div className="w-full text-right gray-500-normal text-sm font-['Inter']">
+                  {studentInfo.particulars.length}/300
+                </div>
               </div>
             </div>
           </div>

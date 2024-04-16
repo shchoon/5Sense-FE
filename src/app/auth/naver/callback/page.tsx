@@ -23,6 +23,7 @@ export default function NaverCallback() {
         localStorage.setItem('accessTokenExp', res.data.data.accessTokenExp)
         localStorage.setItem('hasCenter', res.data.data.hasCenter)
         localStorage.setItem('isNew', res.data.data.isNew)
+        localStorage.setItem('social', res.data.data.type)
         if (!res.data.data.isNew) {
           router.push('/home')
         } else {

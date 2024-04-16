@@ -25,6 +25,7 @@ interface snsLinkType {
 }
 
 export default function ManageMent() {
+  const socialType = localStorage.getItem('social')
   const [postData, setPostData] = useState<centerDataType>({
     name: '',
     address: '',
@@ -34,9 +35,9 @@ export default function ManageMent() {
     profile: ''
   })
   const [snsLink, setSnsLink] = useState<snsLinkType>({
-    kakao: true,
-    naver: false,
-    google: false
+    kakao: socialType === 'kakao' ? true : false,
+    naver: socialType === 'naver' ? true : false,
+    google: socialType === 'google' ? true : false
   })
   const [img, setImg] = useState<string | null>()
   const [imgFile, setImgFile] = useState<File>()

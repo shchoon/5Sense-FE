@@ -34,7 +34,6 @@ export default function StudentAddClassModal({ onClose }: IProps) {
   useEffect(() => {
     instance(`/lessons/filters?type=${classType}&take=100`).then(res => {
       const lessonData = res.data.data.lessons
-      console.log(lessonData)
       let classList: string[] = []
       lessonData.map((data: any, i: number) => {
         classList.push(`${data.name} / ${data.teacher}`)

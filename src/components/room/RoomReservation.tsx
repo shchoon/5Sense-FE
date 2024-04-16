@@ -247,8 +247,6 @@ export default function RoomReservation(props: IProps) {
     }.${startDate.getDate()} - ${endDate.getFullYear()}.${endDate.getMonth()}.${endDate.getDate()}`
   }
 
-  console.log(clickedRoomData)
-
   const calculateLessonTimeOfRoom = (timeRange: number) => {
     const index = Number(clickedRoomData.clickedTime)
     let startTime = {
@@ -271,7 +269,6 @@ export default function RoomReservation(props: IProps) {
       closeTime: `${closeTime.hour}:${closeTime.min}`
     }
   }
-  console.log(dateValue)
 
   return (
     <>
