@@ -45,23 +45,23 @@ export default function StudentRegister() {
     submitData: studentInfo,
     setSubmitData: setStudentInfo
   })
-  const studentNameProps: InputFormProps = {
+  /* const studentNameProps: InputFormProps = {
     title: '이름',
     placeholder: '이름을 입력해 주세요',
     name: 'name',
     maxLength: 20,
     submitData: studentInfo,
     setSubmitData: setStudentInfo
-  }
+  } */
 
-  const studentMemoProps: TextareaFormProps = {
+  /* const studentMemoProps: TextareaFormProps = {
     title: '특이사항',
     placeholder: '수강생 특이사항을 적어주세요.',
     name: 'particulars',
     maxLength: 300,
     submitData: studentInfo,
     setSubmitData: setStudentInfo
-  }
+  } */
 
   const studentRigister = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -90,7 +90,6 @@ export default function StudentRegister() {
           <div className="flex flex-col gap-10 w-[640px] px-6 py-8 border rounded-xl border-gray-200">
             <div className="gray-900-bold text-xl font-['Pretendard']">수강생 정보</div>
             <div className="flex flex-col gap-4 w-full">
-              <InputForm {...studentNameProps} />
               <div className="flex flex-col gap-2">
                 <div className="gray-800-semibold">전화번호</div>
                 <input
@@ -104,7 +103,6 @@ export default function StudentRegister() {
                   maxLength={12}
                 />
               </div>
-              <TextareaForm {...studentMemoProps} />
             </div>
           </div>
           {/* 클래스 등록 */}

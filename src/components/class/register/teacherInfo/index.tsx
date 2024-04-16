@@ -58,7 +58,7 @@ export default function TeacherInfo({ onChange, valid }: IPops) {
       setTeacherList(res.data.data.teachers)
     })
   }, [isClickedAddTeacher])
-
+  console.log(teacherName)
   return (
     <>
       <div
@@ -76,7 +76,6 @@ export default function TeacherInfo({ onChange, valid }: IPops) {
               placeholder="강사 이름을 입력해주세요"
               value={teacherName}
               onClick={() => {
-                //clickInput
                 handleClickInsideOfInput()
               }}
               onChange={e => {

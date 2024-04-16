@@ -12,6 +12,7 @@ import instance from '@/lib/api/axios'
 import ContentHeader from '@/components/common/contentHeader'
 import SearchInput from '@/components/common/SearchInput'
 import ListInfo from '@/components/view/ListInfo'
+import { PaymentType } from '../pay/page'
 import List from '@/components/view/List'
 
 export interface studentType {

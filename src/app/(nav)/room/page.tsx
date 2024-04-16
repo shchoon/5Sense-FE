@@ -37,19 +37,37 @@ export default function Room() {
     height: '24',
     color: '#9CA3AF'
   }
+
+  const [roomListNum, setRoomListNum] = useState<number>(0)
   const roomList = [
-    {
-      room: 'A'
-    },
-    {
-      room: 'B'
-    },
-    {
-      room: 'C'
-    },
-    {
-      room: undefined
-    }
+    [
+      {
+        room: 'A'
+      },
+      {
+        room: 'B'
+      },
+      {
+        room: 'C'
+      },
+      {
+        room: undefined
+      }
+    ],
+    [
+      {
+        room: undefined
+      },
+      {
+        room: undefined
+      },
+      {
+        room: undefined
+      },
+      {
+        room: undefined
+      }
+    ]
   ]
 
   const timeData = [
@@ -62,189 +80,192 @@ export default function Room() {
     { time: '12:00' }
   ]
   const roomData = [
-    {
-      roomName: 'A',
-      resetvation: [
-        {
-          time: '09:00',
-          lesseonTime: 90,
-          className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-          teacher: '김솔지',
-          studentNum: 5,
-          limit: 10
-        },
-        {
-          time: '09:30',
-          lesseonTime: 90,
-          className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-          teacher: '김솔지',
-          studentNum: 5,
-          limit: 10
-        },
-        {
-          time: '10:00',
-          lesseonTime: 90,
-          className: '반야사 요가',
-          teacher: '윤태식',
-          studentNum: 5,
-          limit: 10
-        },
-        {
-          time: '10:30',
-          lesseonTime: 90,
-          className: '바른 자세 찾기',
-          teacher: '엄세리',
-          studentNum: 5,
-          limit: 10
-        },
-        {
-          time: '',
-          lesseonTime: undefined,
-          className: '',
-          teacher: '',
-          studentNum: undefined,
-          limit: undefined
-        },
-        {
-          time: '11:30',
-          lesseonTime: 90,
-          className: '필라테스',
-          teacher: '조성훈',
-          studentNum: 5,
-          limit: 10
-        },
-        {
-          time: '',
-          lesseonTime: undefined,
-          className: '',
-          teacher: '',
-          studentNum: undefined,
-          limit: undefined
-        }
-      ]
-    },
-    {
-      roomName: 'B',
-      resetvation: [
-        {
-          time: '09:00',
-          lesseonTime: 90,
-          className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-          teacher: '김솔지',
-          studentNum: 5,
-          limit: 10
-        },
-        {
-          time: '09:30',
-          lesseonTime: 90,
-          className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-          teacher: '김솔지',
-          studentNum: 5,
-          limit: 10
-        },
-        {
-          time: '10:00',
-          lesseonTime: 90,
-          className: '반야사 요가',
-          teacher: '윤태식',
-          studentNum: 5,
-          limit: 10
-        },
-        {
-          time: '10:30',
-          lesseonTime: 90,
-          className: '바른 자세 찾기',
-          teacher: '엄세리',
-          studentNum: 5,
-          limit: 10
-        },
-        {
-          time: '',
-          lesseonTime: undefined,
-          className: '',
-          teacher: '',
-          studentNum: undefined,
-          limit: undefined
-        },
-        {
-          time: '11:30',
-          lesseonTime: 90,
-          className: '필라테스',
-          teacher: '조성훈',
-          studentNum: 5,
-          limit: 10
-        },
-        {
-          time: '',
-          lesseonTime: undefined,
-          className: '',
-          teacher: '',
-          studentNum: undefined,
-          limit: undefined
-        }
-      ]
-    },
-    {
-      roomName: 'C',
-      resetvation: [
-        {
-          time: '',
-          lesseonTime: 90,
-          className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-          teacher: '김솔지',
-          studentNum: 5,
-          limit: 10
-        },
-        {
-          time: '09:30',
-          lesseonTime: 90,
-          className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-          teacher: '김솔지',
-          studentNum: 5,
-          limit: 10
-        },
-        {
-          time: '10:00',
-          lesseonTime: 90,
-          className: '반야사 요가',
-          teacher: '윤태식',
-          studentNum: 5,
-          limit: 10
-        },
-        {
-          time: '10:30',
-          lesseonTime: 90,
-          className: '바른 자세 찾기',
-          teacher: '엄세리',
-          studentNum: 5,
-          limit: 10
-        },
-        {
-          time: '11:00',
-          lesseonTime: 60,
-          className: '바른 자세 찾기',
-          teacher: '조성훈',
-          studentNum: 3,
-          limit: 5
-        },
-        {
-          time: '11:30',
-          lesseonTime: 90,
-          className: '필라테스',
-          teacher: '조성훈',
-          studentNum: 5,
-          limit: 10
-        },
-        {
-          time: '12:00',
-          lesseonTime: 90,
-          className: '반야사 요가',
-          teacher: '윤태식',
-          studentNum: 7,
-          limit: 15
-        }
-      ]
-    }
+    [
+      {
+        roomName: 'A',
+        resetvation: [
+          {
+            time: '09:00',
+            lesseonTime: 90,
+            className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
+            teacher: '김솔지',
+            studentNum: 5,
+            limit: 10
+          },
+          {
+            time: '09:30',
+            lesseonTime: 90,
+            className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
+            teacher: '김솔지',
+            studentNum: 5,
+            limit: 10
+          },
+          {
+            time: '10:00',
+            lesseonTime: 90,
+            className: '반야사 요가',
+            teacher: '윤태식',
+            studentNum: 5,
+            limit: 10
+          },
+          {
+            time: '10:30',
+            lesseonTime: 90,
+            className: '바른 자세 찾기',
+            teacher: '엄세리',
+            studentNum: 5,
+            limit: 10
+          },
+          {
+            time: '',
+            lesseonTime: undefined,
+            className: '',
+            teacher: '',
+            studentNum: undefined,
+            limit: undefined
+          },
+          {
+            time: '11:30',
+            lesseonTime: 90,
+            className: '필라테스',
+            teacher: '조성훈',
+            studentNum: 5,
+            limit: 10
+          },
+          {
+            time: '',
+            lesseonTime: undefined,
+            className: '',
+            teacher: '',
+            studentNum: undefined,
+            limit: undefined
+          }
+        ]
+      },
+      {
+        roomName: 'B',
+        resetvation: [
+          {
+            time: '09:00',
+            lesseonTime: 90,
+            className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
+            teacher: '김솔지',
+            studentNum: 5,
+            limit: 10
+          },
+          {
+            time: '09:30',
+            lesseonTime: 90,
+            className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
+            teacher: '김솔지',
+            studentNum: 5,
+            limit: 10
+          },
+          {
+            time: '10:00',
+            lesseonTime: 90,
+            className: '반야사 요가',
+            teacher: '윤태식',
+            studentNum: 5,
+            limit: 10
+          },
+          {
+            time: '10:30',
+            lesseonTime: 90,
+            className: '바른 자세 찾기',
+            teacher: '엄세리',
+            studentNum: 5,
+            limit: 10
+          },
+          {
+            time: '',
+            lesseonTime: undefined,
+            className: '',
+            teacher: '',
+            studentNum: undefined,
+            limit: undefined
+          },
+          {
+            time: '11:30',
+            lesseonTime: 90,
+            className: '필라테스',
+            teacher: '조성훈',
+            studentNum: 5,
+            limit: 10
+          },
+          {
+            time: '',
+            lesseonTime: undefined,
+            className: '',
+            teacher: '',
+            studentNum: undefined,
+            limit: undefined
+          }
+        ]
+      },
+      {
+        roomName: 'C',
+        resetvation: [
+          {
+            time: '',
+            lesseonTime: 90,
+            className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
+            teacher: '김솔지',
+            studentNum: 5,
+            limit: 10
+          },
+          {
+            time: '09:30',
+            lesseonTime: 90,
+            className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
+            teacher: '김솔지',
+            studentNum: 5,
+            limit: 10
+          },
+          {
+            time: '10:00',
+            lesseonTime: 90,
+            className: '반야사 요가',
+            teacher: '윤태식',
+            studentNum: 5,
+            limit: 10
+          },
+          {
+            time: '10:30',
+            lesseonTime: 90,
+            className: '바른 자세 찾기',
+            teacher: '엄세리',
+            studentNum: 5,
+            limit: 10
+          },
+          {
+            time: '11:00',
+            lesseonTime: 60,
+            className: '바른 자세 찾기',
+            teacher: '조성훈',
+            studentNum: 3,
+            limit: 5
+          },
+          {
+            time: '11:30',
+            lesseonTime: 90,
+            className: '필라테스',
+            teacher: '조성훈',
+            studentNum: 5,
+            limit: 10
+          },
+          {
+            time: '12:00',
+            lesseonTime: 90,
+            className: '반야사 요가',
+            teacher: '윤태식',
+            studentNum: 7,
+            limit: 15
+          }
+        ]
+      }
+    ],
+    []
   ]
   const modal = useRecoilValue(modalState) // 상태의 값을 가져옴
   const setModal = useSetRecoilState(modalState)
@@ -346,7 +367,7 @@ export default function Room() {
     setIsClickedDatePicker(false)
   }
 
-  console.log(isClickOption)
+  console.log(roomListNum)
 
   return (
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-[60px]">
@@ -402,14 +423,32 @@ export default function Room() {
 
       {/* 룸 리스트 */}
       <div className="relative w-full pl-[84px]">
-        <span className="absolute z-10 w-6 h-6 left-[72px] top-7 bg-white flex items-center justify-center border border-1 border-gray-200 rounded-full ">
+        <span
+          className="absolute z-10 w-6 h-6 left-[72px] top-7 bg-white flex items-center justify-center border border-1 border-gray-200 rounded-full cursor-pointer"
+          onClick={() => {
+            if (roomListNum === 0) {
+              return
+            } else {
+              setRoomListNum(roomListNum - 1)
+            }
+          }}
+        >
           <ChevronLeftIcon width={16} height={16} alt="chevronLeft" />
         </span>
-        <span className="absolute z-10 w-6 h-6 -right-3 top-7 bg-white flex items-center justify-center border border-1 border-gray-200 rounded-full ">
+        <span
+          className="absolute z-10 w-6 h-6 -right-3 top-7 bg-white flex items-center justify-center border border-1 border-gray-200 rounded-full cursor-pointer"
+          onClick={() => {
+            if (roomListNum === 1) {
+              return
+            } else {
+              setRoomListNum(roomListNum + 1)
+            }
+          }}
+        >
           <ChevronRightIcon width={16} height={16} alt="chevronRight" />
         </span>
         <div className="w-full grid grid-cols-4 gap-2">
-          {roomList.map((data, i) => {
+          {roomList[roomListNum].map((data, i) => {
             return (
               <div
                 key={i}
@@ -506,7 +545,7 @@ export default function Room() {
           </div>
 
           <div className="w-full grid grid-cols-4">
-            {roomData.map((data, i) => {
+            {roomData[roomListNum].map((data, i) => {
               return (
                 <div key={i} className="w-full flex flex-col">
                   {data.resetvation.map((data, i) => {

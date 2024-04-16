@@ -3,6 +3,7 @@ import { useRef, useState } from 'react'
 import instance from '@/lib/api/axios'
 
 import { studentType, metaType } from '@/app/(nav)/student/page'
+import { PaymentType } from '@/app/(nav)/pay/page'
 
 import SearchIconWhite from 'public/assets/icons/search_white.svg'
 import CloseIcon from 'public/assets/icons/close.svg'
@@ -10,7 +11,8 @@ import SearchIconGray from 'public/assets/icons/search.svg'
 
 interface IProps {
   type: string
-  passInputData: (data: { value: string; searchBy: string; list: studentType[]; meta: metaType }) => void
+  passInputData: (data: { value: string; searchBy: string; list: any; meta: metaType }) => void
+  paymentStatus?: string
 }
 
 export default function SearchInput(props: IProps) {
@@ -29,12 +31,23 @@ export default function SearchInput(props: IProps) {
     } else {
       searchBy = 'name'
     }
-    instance(`/${props.type}?searchBy=${searchBy}&${searchBy}=${inputValue}`).then(res => {
-      const data = props.type === 'students' ? res.data.data.students : res.data.data.teachers
-      const meta = res.data.data.meta
+    if (props.type === 'payment') {
+      instance(
+        `/lesson-registrations/billing-payments?searchBy=${searchBy}&${searchBy}=${inputValue}&PaymentStatus=${props.paymentStatus}`
+      ).then(res => {
+        const data = res.data.data.students
+        const meta = res.data.data.meta
 
-      props.passInputData({ value: inputValue, searchBy: searchBy, list: data, meta: meta })
-    })
+        props.passInputData({ value: inputValue, searchBy: searchBy, list: data, meta: meta })
+      })
+    } else {
+      instance(`/${props.type}?searchBy=${searchBy}&${searchBy}=${inputValue}`).then(res => {
+        const data = props.type === 'teachers' ? res.data.data.teachers : res.data.data.students
+        const meta = res.data.data.meta
+
+        props.passInputData({ value: inputValue, searchBy: searchBy, list: data, meta: meta })
+      })
+    }
   }
 
   const handleClickInputRefresh = () => {
@@ -46,6 +59,8 @@ export default function SearchInput(props: IProps) {
       handleClickSearch()
     }
   }
+
+  console.log(inputValue)
 
   return (
     <div className="flex gap-2.5 lg:w-[377px] lg:h-[42px] w-[326px] h-[37px] mb-5">
