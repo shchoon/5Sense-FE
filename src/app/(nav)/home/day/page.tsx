@@ -1,15 +1,16 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import instance from '@/lib/api/axios'
-import DaySchedule from '@/components/main/DaySchedule'
 import Image from 'next/image'
+
 import { useWindowSize } from '@/hooks/useWindowSize'
-import chevronLeft from 'public/assets/icons/chevron/chevron-left.svg'
-import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
+import DaySchedule from '@/components/main/DaySchedule'
 import CalendarIcon from '../../../../../public/assets/icons/calendar'
 import DateSlideTab from '@/components/main/DateSlideTab'
-import { dateDataType } from '@/components/datePicker/dayDatePicker'
-import DayDatePicker from '@/components/datePicker/dayDatePicker'
+import { dateDataType } from '@/components/datePicker/dayDatePIcker'
+import DayDatePicker from '@/components/datePicker/dayDatePIcker'
+
+import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
+import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
 
 export default function MainPageDay() {
   const { width, height } = useWindowSize()
@@ -104,7 +105,7 @@ export default function MainPageDay() {
               className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
               onClick={moveBackDay}
             >
-              <Image src={chevronLeft} width={24} height={24} alt=" " />
+              <ChevronLeftIcon width={24} height={24} alt=" " />
             </div>
             <div
               className="w-full px-3 py-2 flex justify-center gap-2 items-center gray-900-semibold text-base font-['Pretendard'] hover:text-primary-600 cursor-pointer"
@@ -117,7 +118,7 @@ export default function MainPageDay() {
               className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
               onClick={moveForwardDay}
             >
-              <Image src={chevronRight} width={24} height={24} alt=" " />
+              <ChevronRightIcon width={24} height={24} alt=" " />
             </div>
           </div>
           <DateSlideTab />

@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useState, useRef, useEffect } from 'react'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
 import { classifyListType } from '../class/classFilter'
+import { classType } from '../modal/StudentAddClassModal'
 
 import ChevronDownIcon from 'public/assets/icons/chevron/chevron_down_gray.svg'
 import ChevronUpIcon from 'public/assets/icons/chevron/chevron_up_gray.svg'
@@ -24,6 +25,7 @@ interface IProps {
   handleChangeParentsOpenTimeData?: (data: { time: string }) => void
   handleChangeParentsCloseTimeData?: (data: { time: string }) => void
   handleChangeParentsDropdownData?: (data: string) => void
+  handleChangeParentsClassDropdownData?: (data: classType) => void
   handleChangeParentsCategoryData?: (data: any, type: string) => void
   handleChangeParentsDropdownDataCheckbox?: (data: string) => void
   type: string
@@ -43,6 +45,8 @@ export default function DropDown(props: IProps) {
       })
     } else if (props.type === 'dropdown' && props.handleChangeParentsDropdownData) {
       props.handleChangeParentsDropdownData(item)
+    } else if (props.type === 'class' && props.handleChangeParentsClassDropdownData) {
+      props.handleChangeParentsClassDropdownData(item)
     } else if (props.type === 'category' && props.title === '대분류 선택' && props.handleChangeParentsCategoryData) {
       props.handleChangeParentsCategoryData(
         {
@@ -131,6 +135,7 @@ export default function DropDown(props: IProps) {
         >
           {props.type !== 'category' &&
             props.type !== 'checkbox' &&
+            props.type !== 'class' &&
             props.list.map((item: string, i: number) => {
               return (
                 <div
@@ -145,6 +150,26 @@ export default function DropDown(props: IProps) {
                 >
                   <div id="box" className="w-full gray-900-normal text-base">
                     {item}
+                  </div>
+                </div>
+              )
+            })}
+          {props.type === 'class' &&
+            props.list.map((item, i) => {
+              return (
+                <div
+                  key={i}
+                  className={`flex h-[42px] px-3 py-2.5 items-center rounded-lg hover:bg-purple-100 cursor-pointer`}
+                  title={item.name}
+                  onClick={() => {
+                    propsFunction(item)
+                    setClickedItem(item)
+                    setClickedItemTitle(item.name)
+                    setIsClickDropDown(false)
+                  }}
+                >
+                  <div id="box" className="w-full gray-900-normal text-base">
+                    {item.name} / {item.teacher}
                   </div>
                 </div>
               )

@@ -4,9 +4,11 @@ import Image from 'next/image'
 
 import DropDown from '@/components/common/DropDown'
 import RoomReservation from '@/components/room/RoomReservation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import SearchInput from '@/components/common/SearchInput'
 import FilterSearchName from '@/components/common/FilterSearchName'
+import instance from '@/lib/api/axios'
+import { classType } from '@/components/modal/StudentAddClassModal'
 
 import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
 import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
@@ -14,18 +16,29 @@ import AlertIcon from 'public/assets/icons/alert-circle.svg'
 import SearchIcon from 'public/assets/icons/search.svg'
 
 export default function Reservatoin() {
-  const dropDownProps = {
+  const [dropDownProps, setDropDownProps] = useState({
     title: '클래스를 선택해주세요',
-    list: ['반야사 요가', '필라테스', '체형 관리'],
-    type: 'dropdown'
-  }
+    list: [],
+    type: 'class'
+  })
 
-  const [selectedClass, setSelectedClass] = useState<string>('')
+  const [selectedClass, setSelectedClass] = useState<classType>()
   const [studentName, setStudentName] = useState<string>('')
 
-  const handleChangeParentsDropdownData = (data: string) => {
+  const handleChangeParentsDropdownData = (data: classType) => {
     setSelectedClass(data)
   }
+
+  useEffect(() => {
+    instance('/lessons/filters?type=session&take=100&page=1').then(res => {
+      const classData = res.data.data.lessons
+      setDropDownProps(prev => ({
+        ...prev,
+        list: classData
+      }))
+    })
+  }, [])
+
   return (
     <>
       <div className="relative">
@@ -42,7 +55,7 @@ export default function Reservatoin() {
             <div className="w-full flex flex-col gap-2">
               <div className="flex flex-col gap-2">
                 <div className="w-full text-left gray-800-semibold text-base">클래스 선택</div>
-                <DropDown {...dropDownProps} handleChangeParentsDropdownData={handleChangeParentsDropdownData} />
+                <DropDown {...dropDownProps} handleChangeParentsClassDropdownData={handleChangeParentsDropdownData} />
               </div>
               <div className="w-full flex gap-1.5 items-center">
                 <AlertIcon width={18} height={18} alt="AlertCircle" />
@@ -68,15 +81,17 @@ export default function Reservatoin() {
             </div>
           </div>
         </div>
-        {/* <div
-          className="w-full h-[400px] border border-1 border-gray-200 rounded-xl flex items-center justify-center
-         text-gray-400 text-base font-semibold"
-        >
-          클래스를 선택해주시면 예약가능 리스트를 볼 수 있습니다.
-        </div> */}
-        {/* {selectedClass !== '' && (
-          <RoomReservation class={selectedClass} studentName={studentName} classType="round" viewType="page" />
-        )} */}
+        {selectedClass === undefined && (
+          <div
+            className="w-full h-[400px] border border-1 border-gray-200 rounded-xl flex items-center justify-center
+       text-gray-400 text-base font-semibold"
+          >
+            클래스를 선택해주시면 예약가능 리스트를 볼 수 있습니다.
+          </div>
+        )}
+        {selectedClass !== undefined && (
+          <RoomReservation class={selectedClass} studentName={studentName} classType="session" viewType="page" />
+        )}
       </div>
     </>
   )

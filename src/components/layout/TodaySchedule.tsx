@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 
 import instance from '@/lib/api/axios'
-import { dateDataType } from '../datePicker/dayDatePicker'
+import { dateDataType } from '../datePicker/dayDatePIcker'
 
 interface getLessonDataType {
   id: number
@@ -74,7 +74,7 @@ export default function TodaySchedule() {
     <>
       {todayLessonData.length !== 0 && (
         <div className="flex flex-col w-full lg:w-[248px] gap-3">
-          <div className="today flex w-fit h-[29px] items-center box-border px-2 py-1 gap-[6px] bg-primary-50 rounded">
+          <div className="today flex w-fit h-[29px] items-center box-border px-2 py-1 gap-[6px] bg-primary-100 rounded">
             <span className="bold-500 text-sm leading-[21px]">TODAY</span>
             <span className="medium-500 text-sm leading-[21px]">
               {currentDateData.year}/{currentDateData.month}/{currentDateData.date}

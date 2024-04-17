@@ -148,6 +148,12 @@ export default function RegisterPage() {
     })
   }
 
+  useEffect(() => {
+    return () => {
+      setDurationSchedule([])
+    }
+  }, [])
+
   return (
     <div className="w-[640px] flex flex-col gap-5">
       <ClassInfo

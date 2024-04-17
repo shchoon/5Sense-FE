@@ -23,19 +23,9 @@ export default function AcademyInfo(props: any) {
   const centerInfo = useRecoilValue(centerInfoState)
   const setCenterInfo = useSetRecoilState(centerInfoState)
 
-  /* const [centerInfo, setCenterInfo] = useState<centerDataType>({
-    name: '',
-    address: '',
-    mainPhone: '',
-    open: '',
-    close: ''
-  }) */
-
   useEffect(() => {
     instance('/centers/my').then(res => {
       const centerData = res.data.data
-      console.log(toLocalString(centerData.mainPhone))
-      console.log(centerData)
       setCenterInfo(prev => ({
         ...prev,
         name: centerData.name,

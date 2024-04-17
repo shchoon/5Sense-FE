@@ -12,13 +12,29 @@ interface IProps {
   onClose: () => void
 }
 
+export interface classType {
+  category: string
+  id: number
+  name: string
+  numberOfStudents: string
+  teacher: string
+  type: string
+}
+
 export default function StudentAddClassModal({ onClose }: IProps) {
   const [classType, setClassType] = useState<string>('duration')
-  const [selectedClass, setSelectedClass] = useState('')
+  const [selectedClass, setSelectedClass] = useState<classType>({
+    category: '',
+    id: 0,
+    name: '',
+    numberOfStudents: '',
+    teacher: '',
+    type: ''
+  })
   const [isPaid, setIsPaid] = useState<boolean>(false)
   const [studentName, setStudentName] = useState('조성훈')
 
-  const handleChangeClassData = (data: string) => {
+  const handleChangeClassData = (data: classType) => {
     setSelectedClass(data)
   }
 
@@ -33,14 +49,15 @@ export default function StudentAddClassModal({ onClose }: IProps) {
 
   useEffect(() => {
     instance(`/lessons/filters?type=${classType}&take=100`).then(res => {
+      console.log(res)
       const lessonData = res.data.data.lessons
       let classList: string[] = []
-      lessonData.map((data: any, i: number) => {
+      /* lessonData.map((data: any, i: number) => {
         classList.push(`${data.name} / ${data.teacher}`)
-      })
+      }) */
       setDropDownProps(prev => ({
         ...prev,
-        list: classList
+        list: lessonData
       }))
     })
     return () => {
@@ -51,6 +68,8 @@ export default function StudentAddClassModal({ onClose }: IProps) {
       }))
     }
   }, [classType])
+
+  console.log(selectedClass)
 
   return (
     <div className="w-[640px] border border-1 border-gray-200 rounded-xl bg-white">
@@ -67,7 +86,14 @@ export default function StudentAddClassModal({ onClose }: IProps) {
             } text-base`}
             onClick={() => {
               setClassType('duration')
-              setSelectedClass('')
+              setSelectedClass({
+                category: '',
+                id: 0,
+                name: '',
+                numberOfStudents: '',
+                teacher: '',
+                type: ''
+              })
             }}
           >
             기간반
@@ -79,7 +105,14 @@ export default function StudentAddClassModal({ onClose }: IProps) {
             } text-base`}
             onClick={() => {
               setClassType('session')
-              setSelectedClass('')
+              setSelectedClass({
+                category: '',
+                id: 0,
+                name: '',
+                numberOfStudents: '',
+                teacher: '',
+                type: ''
+              })
             }}
           >
             회차반
@@ -91,8 +124,8 @@ export default function StudentAddClassModal({ onClose }: IProps) {
           <>
             <div className="w-full flex flex-col gap-2">
               <div className="w-full text-left gray-900-semibold text-base">클래스 선택</div>
-              <DropDown {...dropDownProps} handleChangeParentsDropdownData={handleChangeClassData} type="dropdown" />
-              {selectedClass !== '' && (
+              <DropDown {...dropDownProps} handleChangeParentsClassDropdownData={handleChangeClassData} type="class" />
+              {selectedClass !== undefined && (
                 <div className="w-full h-[69px] flex justify-between items-center px-6 py-[18px] bg-[#F8FAFD]">
                   <div className="w-[100px] h-[21px] flex items-center justify-center gray-900-semibold text-sm">
                     결제 상태
@@ -117,7 +150,7 @@ export default function StudentAddClassModal({ onClose }: IProps) {
             <button
               type="button"
               className={`w-full h-[52px] mt-[300px] rounded-lg ${
-                selectedClass !== '' ? 'bg-primary-600' : 'bg-gray-400'
+                selectedClass !== undefined ? 'bg-primary-600' : 'bg-gray-400'
               } text-white text-base font-semibold flex items-center justify-center btn-purple`}
             >
               추가하기
@@ -130,8 +163,8 @@ export default function StudentAddClassModal({ onClose }: IProps) {
           <>
             <div className="w-full flex flex-col gap-2">
               <div className="w-full text-left gray-900-semibold text-base">클래스 선택</div>
-              <DropDown {...dropDownProps} handleChangeParentsDropdownData={handleChangeClassData} type="dropdown" />
-              {selectedClass !== '' && (
+              <DropDown {...dropDownProps} handleChangeParentsClassDropdownData={handleChangeClassData} type="class" />
+              {selectedClass !== undefined && (
                 <div className="w-full h-[69px] flex justify-between items-center px-6 py-[18px] bg-[#F8FAFD]">
                   <div className="w-[100px] h-[21px] flex items-center justify-center gray-900-semibold text-sm">
                     결제 상태

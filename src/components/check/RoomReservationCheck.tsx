@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import CloseCircle from 'public/assets/icons/closeCircle.svg'
+import CloseIcon from 'public/assets/icons/closeCircle.svg'
 
 interface IProps {
   onClose: () => void
@@ -17,9 +17,8 @@ export default function RoomReservationCheck(props: IProps) {
     <div className="w-[640px] bg-white border border-1 border-gray-900 rounded-xl">
       <div className="relative w-full h-[90px]">
         <div className="absolute left-6 top-10 w-[100px] gray-900-bold text-[22px]">예약하기</div>
-        <Image
+        <CloseIcon
           className="absolute right-4 top-4 cursor-pointer"
-          src={CloseCircle}
           width={35}
           height={35}
           alt="CloseCircle"

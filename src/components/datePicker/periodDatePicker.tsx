@@ -2,7 +2,7 @@
 import Image from 'next/image'
 
 import { useEffect, useState } from 'react'
-import { dateDataType } from './dayDatePicker'
+import { dateDataType } from './dayDatePIcker'
 import { useGetCalendarData } from '@/hooks/useGetCalendarData'
 
 import AllowLeftIcon from 'public/assets/icons/allow_left.svg'
@@ -594,26 +594,6 @@ export default function PeriodDatePicker(props: IProps) {
                               month: secondDateData.month,
                               date: [dateData.date]
                             }))
-                            /* if (
-                              (firstClickedData.year === secondDateData.year &&
-                                firstClickedData.month !== undefined &&
-                                firstClickedData.month <= secondDateData.month) ||
-                              (firstClickedData.year !== undefined && firstClickedData.year < secondDateData.year)
-                            ) {
-                              setFirstClickedData(prev => ({
-                                ...prev,
-                                year: undefined,
-                                month: undefined,
-                                date: []
-                              }))
-                            } else {
-                              setSecondClickedData(prev => ({
-                                ...prev,
-                                year: secondDateData.year,
-                                month: secondDateData.month,
-                                date: [dateData.date]
-                              }))
-                            } */
                           }
                           if (secondClickedData.date.length === 1) {
                             if (
@@ -658,7 +638,7 @@ export default function PeriodDatePicker(props: IProps) {
         </div>
         <div className="w-full h-[37px]">
           <div
-            className="w-full h-full  px-3 py-2 flex justify-center btn-white text-sm gray-800-semibold"
+            className="w-full h-full  px-3 py-2 flex justify-center btn-purple text-sm"
             onClick={onClickCheckHandler}
           >
             확인

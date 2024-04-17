@@ -14,6 +14,7 @@ import { modalState } from '@/lib/state/modal'
 import DeleteModal from '@/components/modal/DeleteModal'
 import PlusCircleIcon from '../../../../public/assets/icons/plus-circle'
 import Modal from '@/components/common/modal'
+import { centerInfoState } from '@/lib/state/centerInfoState'
 
 import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
 import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
@@ -25,6 +26,7 @@ import DeleteIcon from 'public/assets/icons/trash.svg'
 
 export default function Room() {
   const { width, height } = useWindowSize()
+  const centerInfo = useRecoilValue(centerInfoState)
   const router = useRouter()
   const optionRef = useRef<HTMLButtonElement>(null)
   const whitePlusCircleProps = {
@@ -70,15 +72,32 @@ export default function Room() {
     ]
   ]
 
-  const timeData = [
-    { time: '9:00' },
-    { time: '9:30' },
-    { time: '10:00' },
-    { time: '10:30' },
-    { time: '11:00' },
-    { time: '11:30' },
-    { time: '12:00' }
-  ]
+  const createTimeList = () => {
+    const openTime: string = centerInfo.open
+    const closeTime: string = centerInfo.close
+
+    let timeList = [{ time: openTime }]
+    let time: string = openTime
+
+    while (time !== closeTime) {
+      let hour: number = Number(time.split(':')[0])
+      let min: string = time.split(':')[1]
+      if (Number(min) + 30 === 60) {
+        hour = hour + 1
+        min = '00'
+      } else {
+        min = '30'
+      }
+
+      time = String(hour).length === 1 ? '0' + String(hour) + ':' + min : String(hour) + ':' + min
+      timeList.push({ time: time })
+    }
+
+    return timeList
+  }
+  console.log(createTimeList())
+
+  const timeData = createTimeList()
   const roomData = [
     [
       {

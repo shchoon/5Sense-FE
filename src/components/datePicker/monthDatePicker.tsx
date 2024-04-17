@@ -1,8 +1,8 @@
 'use client'
-import allowLeft from 'public/assets/icons/allow_left.svg'
-import allowRight from 'public/assets/icons/allow_right.svg'
-import Image from 'next/image'
 import { useState } from 'react'
+
+import AllowLeftIcon from 'public/assets/icons/allow_left.svg'
+import AllowRightIcon from 'public/assets/icons/allow_right.svg'
 
 interface dateType {
   year: number
@@ -76,17 +76,15 @@ export default function MonthDatePicker(props: any) {
   return (
     <div className="flex flex-col gap-2 w-[255px] bg-white p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
       <div className="w-full flex justify-between">
-        <Image
-          src={allowLeft}
+        <AllowLeftIcon
           width={20}
           height={20}
           alt="allowLeft"
           className="cursor-pointer"
           onClick={onClickYearBackHandler}
         />
-        <div className="w-[126px] text-center gray-900-bold text-xs font-['Pretendard']">{dateData.year}년</div>
-        <Image
-          src={allowRight}
+        <div className="w-[126px] text-center gray-900-bold text-xs">{dateData.year}년</div>
+        <AllowRightIcon
           width={20}
           height={20}
           alt="allowRight"
@@ -101,8 +99,8 @@ export default function MonthDatePicker(props: any) {
             <div
               key={i}
               id={`${i}`}
-              className={`px-1 py-2 h-[32px] cursor-pointer text-xs text-center gray-900-medium font-['Pretendard'] ${
-                clickedMonth === date ? 'border rounded-lg bg-primary-700 text-white' : ''
+              className={`px-1 py-2 h-[32px] cursor-pointer text-xs text-center gray-900-medium ${
+                clickedMonth === date && 'border rounded-lg bg-primary-700 text-white'
               }`}
               onClick={e => {
                 onClickMonthHandler(e)
