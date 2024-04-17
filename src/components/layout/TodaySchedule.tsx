@@ -34,7 +34,6 @@ export default function TodaySchedule() {
 
   useEffect(() => {
     instance(`/lessons/${currentDateData.year}/${currentDateData.month}`).then(res => {
-      //console.log(res.data.data)
       const classData: getLessonDataType[] = res.data.data[currentDateData.date - 1]
       setPageData(prev => ({
         ...prev,
