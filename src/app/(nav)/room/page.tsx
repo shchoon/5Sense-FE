@@ -19,7 +19,7 @@ import { centerInfoState } from '@/lib/state/centerInfoState'
 import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
 import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
 import UserIcon from 'public/assets/icons/user_icon.svg'
-import calendar from 'public/assets/icons/calendar-white.svg'
+import ScheduleIcon from 'public/assets/icons/schedule.svg'
 import DotsIcon from 'public/assets/icons/dotsVertical.svg'
 import ModifyIcon from 'public/assets/icons/modify.svg'
 import DeleteIcon from 'public/assets/icons/trash.svg'
@@ -386,15 +386,23 @@ export default function Room() {
     setIsClickedDatePicker(false)
   }
 
-  console.log(roomListNum)
-
   return (
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-[60px]">
       <div className="flex w-full pt-12 mb-[30px] justify-between">
         <div className=" h-[30px]">
           <div className="w-full black-bold text-3xl font-['Pretendard']">강의실 관리</div>
         </div>
-        <div className="w-[300px] h-[41px] flex rounded-lg bg-primary-600">
+        <div className=" flex gap-2">
+          <Link href={'/room/schedule'} className="flex btn-white-md gap-2 ">
+            <ScheduleIcon />
+            <div className=" text-sm font-semibold">일정 찾기</div>
+          </Link>
+          <Link href={'/room/addRoom'} className="flex btn-purple-test gap-2">
+            <PlusCircleIcon {...whitePlusCircleProps} />
+            <div className="text-sm font-semibold">강의실 추가</div>
+          </Link>
+        </div>
+        {/* <div className="w-[300px] h-[41px] flex rounded-lg bg-primary-600">
           <Link
             href={'/room/schedule'}
             className="flex items-center gap-2 w-full px-5 py-2.5 border-r border-r-primary-700 btn-purple"
@@ -406,7 +414,7 @@ export default function Room() {
             <PlusCircleIcon {...whitePlusCircleProps} />
             <div className="text-white text-sm font-semibold">강의실 추가</div>
           </Link>
-        </div>
+        </div> */}
       </div>
       {/* 캘린더 */}
       <div

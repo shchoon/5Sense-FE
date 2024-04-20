@@ -204,7 +204,7 @@ export default function ManageMent() {
                   </div>
                 ) : (
                   <div className="w-[140px] h-[140px] ">
-                    <img src={img} className="rounded-full" width={140} height={140} alt="" />
+                    <img src={img} className="rounded-full w-[140px] h-[140px]" alt="" />
                   </div>
                 )}
 
@@ -224,7 +224,7 @@ export default function ManageMent() {
                   />
                   <label htmlFor="file" className="w-full flex gap-1 items-center cursor-pointer">
                     <CameraIcon width={16} height={16} alt="" />
-                    <div className="indigo-500-semibold text-xs font-['Pretendard']">수정</div>
+                    <div className="indigo-500-semibold text-xs">수정</div>
                   </label>
                 </div>
               </div>

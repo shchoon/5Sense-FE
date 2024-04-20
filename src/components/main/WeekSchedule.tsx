@@ -1,6 +1,6 @@
 'use client'
 import { useState, useRef, useEffect, useLayoutEffect } from 'react'
-import { dateDataType } from '../datePicker/dayDatePicker'
+import { dateDataType } from '../datePicker/dayDatePIcker'
 import instance from '@/lib/api/axios'
 
 interface IProps {
@@ -24,7 +24,6 @@ export default function WeekSchedule({ dateData, week }: IProps) {
   }
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    const y = scrollY
     const minusXValue: number = e.currentTarget.getBoundingClientRect().left
     const minusYValue: number = e.currentTarget.getBoundingClientRect().top
 
@@ -148,8 +147,6 @@ export default function WeekSchedule({ dateData, week }: IProps) {
     })
   }, [dateData.month])
 
-  console.log(week)
-
   return (
     <>
       {/* 회차반 / 기간반 */}
@@ -173,10 +170,10 @@ export default function WeekSchedule({ dateData, week }: IProps) {
             lessonData[week - 1].map((data1: any, pI: number) => {
               return (
                 <div key={pI} className="w-full flex xl:gap-5 lg:gap-4 md:gap-[14px] gap-3.5">
-                  <div className="xl:w-[51px] lg:w-[45px] md:w-12 w-[49px] text-right gray-800-semibold text-base">
+                  <div className="w-[50px] text-right gray-800-semibold text-base">
                     {data1.time.split(':')[0]}:{data1.time.split(':')[1]}
                   </div>
-                  <div className={`w-full  grid grid-cols-7`}>
+                  <div className={`w-full grid grid-cols-7`}>
                     {data1.classData.map((data2: any, cI: number) => {
                       return (
                         <div key={cI} className={`p-[6px] flex flex-col gap-1 outline outline-1 outline-gray-200 `}>
@@ -194,7 +191,7 @@ export default function WeekSchedule({ dateData, week }: IProps) {
                               >
                                 {mouseOverId === `${pI}` + `${cI}` + i.toString() && (
                                   <div
-                                    className={`absolute z-10 left-10 top-10 w-[180px] p-[5px] flex flex-col gap-2 outline outline-1 ${
+                                    className={`absolute z-10 left-10 top-10 w-[180px] min-h-[160px] p-[5px] flex flex-col gap-2 outline outline-1 ${
                                       data.type === 'duration' ? 'outline-primary-200' : 'outline-orange-200'
                                     } bg-stone-50 rounded`}
                                     style={{

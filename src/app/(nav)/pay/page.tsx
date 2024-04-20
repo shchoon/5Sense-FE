@@ -41,7 +41,6 @@ export default function PayPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isRefresh, setIsRefresh] = useState<boolean>(false)
   const listInfoProps = ['이름', '전화번호', '수강중인 클래스', '결제상태']
-  //const [changePaymentStatus, setChangePaymentStatus] = useState<number>(0)
 
   const getInputDataFromChild = (data: { value: string; searchBy: string; list: PaymentType[]; meta: metaType }) => {
     setInputData(prev => ({
@@ -139,8 +138,6 @@ export default function PayPage() {
     }
   }, [metaData])
 
-  console.log(inputData)
-
   return (
     <div className="w-full h-full px-6 md:px-12 lg:px-6 xl:px-12 py-[60px] box-border">
       <div className="flex w-full justify-between items-center mb-[30px]">
@@ -148,13 +145,19 @@ export default function PayPage() {
       </div>
       <div className="w-full flex justify-between">
         <button
-          className="group relative w-[100px] h-[37px] flex items-center gap-2 px-3 py-2 rounded-lg border border-primary-600 hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9]"
+          className={`group relative w-[100px] h-[37px] flex items-center gap-2 px-3 py-2 rounded-lg border border-primary-600 hover:bg-indigo-700 ${
+            isClickedDropdown && 'bg-indigo-700 outline outline-2.5 outline-[#D3C4F9]'
+          }`}
           onClick={() => {
             setIsClickedDropdown(prev => !prev)
           }}
         >
-          <div className="text-primary-600 group-hover:text-white group-focus:text-white text-sm font-semibold">
-            {currentPaymentStatus === 'All' ? '결제상태' : currentPaymentStatus === 'Paid' ? '결제' : '미결제'}
+          <div
+            className={`group-hover:text-white ${
+              isClickedDropdown ? 'text-white' : 'text-primary-600'
+            } text-sm font-semibold`}
+          >
+            {currentPaymentStatus === 'All' ? '결제상태' : currentPaymentStatus === 'Paid' ? '결제완료' : '미결제'}
           </div>
           {isClickedDropdown ? (
             <ChevronUpIcon className="absolute top-2 right-3" width={16} height={16} />
@@ -162,14 +165,14 @@ export default function PayPage() {
             <ChevronDownIcon className="absolute top-2 right-3" width={16} height={16} />
           )}
           {isClickedDropdown && (
-            <div className="absolute top-[40px] left-0 w-[120px] flex flex-col p-4 border rounded-lg border-gray-300 shadow-[0_1px_2px_0_rgba(0,0,0,0.08)] bg-white">
+            <div className="absolute top-[40px] left-0 w-[195px] flex flex-col p-4 border rounded-lg border-gray-300 shadow-[0_1px_2px_0_rgba(0,0,0,0.08)] bg-white">
               <div id="classTypeFilter" className="w-[130px] h-[54] flex flex-col gap-3 ">
                 <p className="flex gap-2 items-center">
                   <input
                     className="cursor-pointer"
                     type="radio"
                     id="paid"
-                    value="결제"
+                    value="결제완료"
                     checked={currentPaymentStatus === 'Paid' && true}
                     onChange={() => {
                       setCurrentPaymentStatus('Paid')
@@ -182,7 +185,7 @@ export default function PayPage() {
                       setCurrentPaymentStatus('Paid')
                     }}
                   >
-                    결제
+                    결제완료
                   </label>
                 </p>
                 <p className="flex gap-2 items-center cursor-pointer">
@@ -213,84 +216,89 @@ export default function PayPage() {
         <SearchInput type="payment" paymentStatus={currentPaymentStatus} passInputData={getInputDataFromChild} />
       </div>
       <div className="w-full flex flex-col gap-3">
-        <ListInfo type="pay" listInfo={listInfoProps} />
+        <div className="w-full h-[46px] lg:px-7 px-6 py-4 flex items-center lg:gap-8 gap-5 rounded bg-[#F0EFFF]">
+          <div className="lg:w-[100px] w-[70px] indigo-500-semibold text-sm">이름</div>
+          <div className="lg:w-[160px] w-[110px] indigo-500-semibold text-sm">전화번호</div>
+          <div className="flex-grow min-w-[100px] indigo-500-semibold text-sm">수강중인 클래스</div>
+          <div className="lg:w-[140px] w-[110px] indigo-500-semibold text-sm">총 수강료</div>
+          <div className={`lg:w-[220px] w-[148px] indigo-500-semibold text-sm`}>결제상태</div>
+        </div>
         <div className="w-full flex flex-col gap-[14px]">
           {isRefresh && studentList.length === 0 ? <NoneResult /> : null}
           {studentList?.map(({ id, studentName, name, studentPhone, type, paymentStatus }, i) => {
             return (
               <button
                 key={i}
-                className="w-full flex lg:gap-10 gap-8 lg:p-7 p-6 outline rounded-md outline-1 outline-gray-200 shadow-[0_5px_15px_0px_rgba(0,0,0,0.02)] hover:outline-primary-600"
+                className="w-full flex lg:gap-8 gap-5 p-6 outline rounded-md outline-1 outline-gray-200 shadow-[0_5px_15px_0px_rgba(0,0,0,0.02)] hover:outline-primary-600"
                 onClick={() => {}}
               >
-                <div className="flex lg:gap-6 gap-4 flex-1">
-                  <div className="w-[100px] gray-800-semibold text-sm text-left">{studentName}</div>
-                  <div className="lg:w-[160px] w-[130px] gray-800-semibold text-sm text-left">
-                    {studentPhone.slice(0, 3)}-{studentPhone.slice(3, 7)}-{studentPhone.slice(7, 11)}
-                  </div>
-                  <div className="flex-grow min-w-[100px] gray-800-semibold text-sm text-left">{name}</div>
-                  <div className={`xl:w-[220px] w-40  gray-900-normal text-base text-left`}>
-                    <div className="w-full flex items-center xl:gap-2.5 gap-2">
-                      <div className="text-gray-700 text-base font-medium">미결제</div>
-                      {paymentStatus === 'Paid' ? (
-                        <ToggleOnIcon
-                          onClick={() => {
-                            if (confirm('결제상태를 변경하시겠습니까?')) {
-                              instance
-                                .patch(`/lesson-registrations/${id}`, {
-                                  type: type,
-                                  paymentStatus: 'Unpaid'
+                <div className=" lg:w-[100px] w-[70px] gray-800-semibold text-sm text-left">{studentName}</div>
+                <div className="lg:w-[160px] w-[110px] gray-800-semibold text-sm text-left">
+                  {studentPhone.slice(0, 3)}-{studentPhone.slice(3, 7)}-{studentPhone.slice(7, 11)}
+                </div>
+                <div className="flex-1 gray-800-semibold text-sm text-left">{name}</div>
+                <div className="lg:w-[140px] w-[110px] grsy-800-semibold text-sm text-left">1,500,000</div>
+                <div className={`lg:w-[220px] w-[148px] gray-900-normal text-base text-left`}>
+                  <div className="w-full flex items-center xl:gap-2.5 gap-2">
+                    <div className="text-gray-700 xl:text-base text-sm font-medium">미결제</div>
+                    {paymentStatus === 'Paid' ? (
+                      <ToggleOnIcon
+                        onClick={() => {
+                          if (confirm('결제상태를 변경하시겠습니까?')) {
+                            instance
+                              .patch(`/lesson-registrations/${id}`, {
+                                type: type,
+                                paymentStatus: 'Unpaid'
+                              })
+                              .then(res => {
+                                instance(
+                                  `/lesson-registrations/billing-payments?page=1&take=10&searchBy=none&PaymentStatus=${currentPaymentStatus}`
+                                ).then(res => {
+                                  const studentsData = res.data.data.students
+                                  const meta = res.data.data.meta
+                                  setStudentList(studentsData)
+                                  setMetaData(prev => ({
+                                    ...prev,
+                                    page: meta.page,
+                                    hasNextPage: meta.hasNextPage
+                                  }))
                                 })
-                                .then(res => {
-                                  instance(
-                                    `/lesson-registrations/billing-payments?page=1&take=10&searchBy=none&PaymentStatus=${currentPaymentStatus}`
-                                  ).then(res => {
-                                    const studentsData = res.data.data.students
-                                    const meta = res.data.data.meta
-                                    setStudentList(studentsData)
-                                    setMetaData(prev => ({
-                                      ...prev,
-                                      page: meta.page,
-                                      hasNextPage: meta.hasNextPage
-                                    }))
-                                  })
+                              })
+                          } else {
+                            return
+                          }
+                        }}
+                      />
+                    ) : (
+                      <ToggleOffIcon
+                        onClick={() => {
+                          if (confirm('결제상태를 변경하시겠습니까?')) {
+                            instance
+                              .patch(`/lesson-registrations/${id}`, {
+                                type: type,
+                                paymentStatus: 'Paid'
+                              })
+                              .then(res => {
+                                instance(
+                                  `/lesson-registrations/billing-payments?page=1&take=10&searchBy=none&PaymentStatus=${currentPaymentStatus}`
+                                ).then(res => {
+                                  const studentsData = res.data.data.students
+                                  const meta = res.data.data.meta
+                                  setStudentList(studentsData)
+                                  setMetaData(prev => ({
+                                    ...prev,
+                                    page: meta.page,
+                                    hasNextPage: meta.hasNextPage
+                                  }))
                                 })
-                            } else {
-                              return
-                            }
-                          }}
-                        />
-                      ) : (
-                        <ToggleOffIcon
-                          onClick={() => {
-                            if (confirm('결제상태를 변경하시겠습니까?')) {
-                              instance
-                                .patch(`/lesson-registrations/${id}`, {
-                                  type: type,
-                                  paymentStatus: 'Paid'
-                                })
-                                .then(res => {
-                                  instance(
-                                    `/lesson-registrations/billing-payments?page=1&take=10&searchBy=none&PaymentStatus=${currentPaymentStatus}`
-                                  ).then(res => {
-                                    const studentsData = res.data.data.students
-                                    const meta = res.data.data.meta
-                                    setStudentList(studentsData)
-                                    setMetaData(prev => ({
-                                      ...prev,
-                                      page: meta.page,
-                                      hasNextPage: meta.hasNextPage
-                                    }))
-                                  })
-                                })
-                            } else {
-                              return
-                            }
-                          }}
-                        />
-                      )}
-                      <div className="text-gray-700 text-base font-medium">결제완료</div>
-                    </div>
+                              })
+                          } else {
+                            return
+                          }
+                        }}
+                      />
+                    )}
+                    <div className="text-gray-700 xl:text-base text-sm font-medium">결제완료</div>
                   </div>
                 </div>
               </button>

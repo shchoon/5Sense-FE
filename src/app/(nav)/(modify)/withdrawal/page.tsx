@@ -64,7 +64,7 @@ export default function WithDrawal() {
       </div>
       <div className="w-full flex flex-col gap-4">
         <div className="w-full flex flex-col gap-2">
-          <div className="w-[592px] gray-800-semibold text-base font-['Pretendard']">탈퇴 사유 및 개선점(선택)</div>
+          <div className="w-[592px] gray-800-semibold text-base font-['Pretendard']">탈퇴 사유 및 개선점</div>
           {/* <DropDown {...dropDownProps} /> */}
           <DropDown {...dropDownProps} handleChangeParentsDropdownData={handleChangeReasonFromChild} type="dropdown" />
         </div>

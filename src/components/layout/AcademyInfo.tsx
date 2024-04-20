@@ -44,7 +44,7 @@ export default function AcademyInfo(props: any) {
         {centerInfo.name !== '' &&
           (centerInfo.profile !== null ? (
             <div className="absolute -top-5 w-[148px] h-[148px] flex justify-center items-center ">
-              <img className="rounded-full" width={90} height={90} src={centerInfo.profile} />
+              <img className="rounded-full w-[90px] h-[90px]" src={centerInfo.profile} />
             </div>
           ) : (
             <ProfileIcon width={150} className="absolute -top-5" />

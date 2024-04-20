@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import MainLogoIcon from 'public/assets/logo/mainlogo.svg'
+import MainLogoIcon from 'public/assets/logo/mainLogo.svg'
 
 export default function myCenterLayout({ children }: { children: React.ReactNode }) {
   return (
