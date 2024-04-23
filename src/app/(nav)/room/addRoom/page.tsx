@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 
@@ -12,6 +13,7 @@ import MinusIcon from 'public/assets/icons/minus_vector.svg'
 import PlusIcon from 'public/assets/icons/plus_vector.svg'
 
 export default function AddRoom() {
+  const router = useRouter()
   const [permissonNum, setPermissonNum] = useState<number>(1)
   const [roomName, setRoomName] = useState<string>('')
   const [inputCount, setInputCount] = useState<number>(0)
@@ -38,10 +40,14 @@ export default function AddRoom() {
         className="w-[640px] pt-[120px] flex flex-col gap-[34px] mx-auto"
         onSubmit={e => {
           e.preventDefault()
-          instance.post('lesson-rooms', {
-            name: roomName,
-            capacity: permissonNum
-          })
+          instance
+            .post('lesson-rooms', {
+              name: roomName,
+              capacity: permissonNum
+            })
+            .then(res => {
+              router.push('/room')
+            })
         }}
       >
         <div className="w-full px-6 py-8 flex flex-col gap-10 border rounded-xl border-1 border-gray-200">

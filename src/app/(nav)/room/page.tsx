@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { useRouter } from 'next/navigation'
 
@@ -15,6 +15,7 @@ import DeleteModal from '@/components/modal/DeleteModal'
 import PlusCircleIcon from '../../../../public/assets/icons/plus-circle'
 import Modal from '@/components/common/modal'
 import { centerInfoState } from '@/lib/state/centerInfoState'
+import instance from '@/lib/api/axios'
 
 import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
 import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
@@ -39,39 +40,29 @@ export default function Room() {
     height: '24',
     color: '#9CA3AF'
   }
+  const modal = useRecoilValue(modalState) // 상태의 값을 가져옴
+  const setModal = useSetRecoilState(modalState)
 
   const [roomListNum, setRoomListNum] = useState<number>(0)
-  const roomList = [
-    [
-      {
-        room: 'A'
-      },
-      {
-        room: 'B'
-      },
-      {
-        room: 'C'
-      },
-      {
-        room: undefined
-      }
-    ],
-    [
-      {
-        room: undefined
-      },
-      {
-        room: undefined
-      },
-      {
-        room: undefined
-      },
-      {
-        room: undefined
-      }
-    ]
-  ]
+  const [room, setRoom] = useState<any>([])
+  const [timeList, setTimeList] = useState<{ time: string }[]>([])
+  const currentDate = new Date()
+  const [dateData, setDateData] = useState<dateDataType>({
+    year: currentDate.getFullYear(),
+    month: currentDate.getMonth(),
+    date: currentDate.getDate()
+  })
 
+  const [isClickedDatePicker, setIsClickedDatePicker] = useState<boolean>(false)
+  const [roomOption, setRoomOption] = useState<{
+    isClicked: boolean
+    id: undefined | number
+    roomId: number
+  }>({
+    isClicked: false,
+    id: undefined,
+    roomId: 0
+  })
   const createTimeList = () => {
     const openTime: string = centerInfo.open
     const closeTime: string = centerInfo.close
@@ -95,220 +86,11 @@ export default function Room() {
 
     return timeList
   }
-  console.log(createTimeList())
-
-  const timeData = createTimeList()
-  const roomData = [
-    [
-      {
-        roomName: 'A',
-        resetvation: [
-          {
-            time: '09:00',
-            lesseonTime: 90,
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-            teacher: '김솔지',
-            studentNum: 5,
-            limit: 10
-          },
-          {
-            time: '09:30',
-            lesseonTime: 90,
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-            teacher: '김솔지',
-            studentNum: 5,
-            limit: 10
-          },
-          {
-            time: '10:00',
-            lesseonTime: 90,
-            className: '반야사 요가',
-            teacher: '윤태식',
-            studentNum: 5,
-            limit: 10
-          },
-          {
-            time: '10:30',
-            lesseonTime: 90,
-            className: '바른 자세 찾기',
-            teacher: '엄세리',
-            studentNum: 5,
-            limit: 10
-          },
-          {
-            time: '',
-            lesseonTime: undefined,
-            className: '',
-            teacher: '',
-            studentNum: undefined,
-            limit: undefined
-          },
-          {
-            time: '11:30',
-            lesseonTime: 90,
-            className: '필라테스',
-            teacher: '조성훈',
-            studentNum: 5,
-            limit: 10
-          },
-          {
-            time: '',
-            lesseonTime: undefined,
-            className: '',
-            teacher: '',
-            studentNum: undefined,
-            limit: undefined
-          }
-        ]
-      },
-      {
-        roomName: 'B',
-        resetvation: [
-          {
-            time: '09:00',
-            lesseonTime: 90,
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-            teacher: '김솔지',
-            studentNum: 5,
-            limit: 10
-          },
-          {
-            time: '09:30',
-            lesseonTime: 90,
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-            teacher: '김솔지',
-            studentNum: 5,
-            limit: 10
-          },
-          {
-            time: '10:00',
-            lesseonTime: 90,
-            className: '반야사 요가',
-            teacher: '윤태식',
-            studentNum: 5,
-            limit: 10
-          },
-          {
-            time: '10:30',
-            lesseonTime: 90,
-            className: '바른 자세 찾기',
-            teacher: '엄세리',
-            studentNum: 5,
-            limit: 10
-          },
-          {
-            time: '',
-            lesseonTime: undefined,
-            className: '',
-            teacher: '',
-            studentNum: undefined,
-            limit: undefined
-          },
-          {
-            time: '11:30',
-            lesseonTime: 90,
-            className: '필라테스',
-            teacher: '조성훈',
-            studentNum: 5,
-            limit: 10
-          },
-          {
-            time: '',
-            lesseonTime: undefined,
-            className: '',
-            teacher: '',
-            studentNum: undefined,
-            limit: undefined
-          }
-        ]
-      },
-      {
-        roomName: 'C',
-        resetvation: [
-          {
-            time: '',
-            lesseonTime: 90,
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-            teacher: '김솔지',
-            studentNum: 5,
-            limit: 10
-          },
-          {
-            time: '09:30',
-            lesseonTime: 90,
-            className: '체형 교정 및 이완을 통한 삶의 균형 찾기',
-            teacher: '김솔지',
-            studentNum: 5,
-            limit: 10
-          },
-          {
-            time: '10:00',
-            lesseonTime: 90,
-            className: '반야사 요가',
-            teacher: '윤태식',
-            studentNum: 5,
-            limit: 10
-          },
-          {
-            time: '10:30',
-            lesseonTime: 90,
-            className: '바른 자세 찾기',
-            teacher: '엄세리',
-            studentNum: 5,
-            limit: 10
-          },
-          {
-            time: '11:00',
-            lesseonTime: 60,
-            className: '바른 자세 찾기',
-            teacher: '조성훈',
-            studentNum: 3,
-            limit: 5
-          },
-          {
-            time: '11:30',
-            lesseonTime: 90,
-            className: '필라테스',
-            teacher: '조성훈',
-            studentNum: 5,
-            limit: 10
-          },
-          {
-            time: '12:00',
-            lesseonTime: 90,
-            className: '반야사 요가',
-            teacher: '윤태식',
-            studentNum: 7,
-            limit: 15
-          }
-        ]
-      }
-    ],
-    []
-  ]
-  const modal = useRecoilValue(modalState) // 상태의 값을 가져옴
-  const setModal = useSetRecoilState(modalState)
-
-  const currentDate = new Date()
-  const [dateData, setDateData] = useState({
-    year: currentDate.getFullYear(),
-    month: currentDate.getMonth(),
-    date: currentDate.getDate()
-  })
-
-  const [isClickedDatePicker, setIsClickedDatePicker] = useState<boolean>(false)
-  const [isClickOption, setIsClickOption] = useState<{ isClicked: boolean; id: undefined | number }>({
-    isClicked: false,
-    id: undefined
-  })
-
-  const lastDateOfCurrnetMonthData = new Date(dateData.year, dateData.month + 1, 0)
-  const lastDateOfLastMonthData = new Date(dateData.year, dateData.month, 0)
 
   const onClickOutsideOfOption = (e: any) => {
-    if (isClickOption.isClicked && !optionRef.current?.contains(e.target)) {
+    if (roomOption.isClicked && !optionRef.current?.contains(e.target)) {
       console.log('outside')
-      setIsClickOption(prev => ({
+      setRoomOption(prev => ({
         ...prev,
         isClicked: false,
         id: undefined
@@ -316,7 +98,7 @@ export default function Room() {
     }
   }
 
-  useOnClickOutside(optionRef, onClickOutsideOfOption)
+  //useOnClickOutside(optionRef, onClickOutsideOfOption)
 
   const onClickDatePickerHandler = () => {
     setIsClickedDatePicker(prev => !prev)
@@ -324,6 +106,7 @@ export default function Room() {
 
   const moveForwardDay = () => {
     setIsClickedDatePicker(false)
+    const lastDateOfCurrnetMonthData = new Date(dateData.year, dateData.month + 1, 0)
     let lastDateOfCurrentMonth = lastDateOfCurrnetMonthData.getDate()
 
     if (dateData.date === lastDateOfCurrentMonth) {
@@ -351,6 +134,7 @@ export default function Room() {
 
   const moveBackDay = () => {
     setIsClickedDatePicker(false)
+    const lastDateOfLastMonthData = new Date(dateData.year, dateData.month, 0)
     let lastDateOfLastMonth = lastDateOfLastMonthData.getDate()
 
     if (dateData.date === 1) {
@@ -386,35 +170,94 @@ export default function Room() {
     setIsClickedDatePicker(false)
   }
 
+  useEffect(() => {
+    if (!modal) {
+      if (roomOption.isClicked) {
+        setRoomOption({
+          isClicked: false,
+          id: undefined,
+          roomId: 0
+        })
+      }
+      setTimeList(createTimeList())
+      instance('lesson-rooms/daily', {
+        params: {
+          date: new Date(dateData.year, dateData.month, dateData.date).toISOString()
+        }
+      }).then(res => {
+        const list = res.data.data
+        for (var i = 0; i < list.length; i++) {
+          const test: any = []
+          const keys = Object.keys(list[i].workTime)
+          for (var j = 0; j < keys.length; j++) {
+            const key = keys[j]
+            let value = list[i].workTime[key]
+            value.time = key
+            test.push(value)
+          }
+          list[i].workTime = test
+          list[i].index = i
+        }
+
+        list[0].workTime[3] = {
+          id: 1,
+          type: 'session',
+          name: '체형 교정 및 삶의 균형을 통한 이완 찾기',
+          lessonTime: 90,
+          teacher: '조성훈',
+          time: '10:30',
+          capacity: 5,
+          studentCount: 3,
+          isOpenForBooking: false
+        }
+
+        list[0].workTime[8] = {
+          id: 1,
+          type: 'duration',
+          name: '반야사 요가',
+          lessonTime: 60,
+          teacher: '윤태식',
+          time: '13:00',
+          isOpenForBooking: false
+        }
+
+        /* for (var i = 0; i < 7; i++) {
+        list.push({})
+      } */
+        if (list.length >= 4) {
+          const pushedCount: number = 4 - (list.length % 4)
+          for (var i = 0; i < pushedCount; i++) {
+            list.push({})
+          }
+          const result = []
+          for (var i = 0; i < list.length; i += 4) {
+            result.push([...list.slice(i, i + 4)])
+          }
+          setRoom(result)
+        } else if (list.length < 4) {
+          const pushedCount: number = 4 - list.length
+          for (var i = 0; i < pushedCount; i++) {
+            list.push({})
+          }
+          setRoom([list])
+        }
+      })
+    }
+  }, [dateData, modal])
+
+  console.log(room)
+  console.log(roomOption)
+
   return (
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-[60px]">
       <div className="flex w-full pt-12 mb-[30px] justify-between">
         <div className=" h-[30px]">
           <div className="w-full black-bold text-3xl font-['Pretendard']">강의실 관리</div>
         </div>
-        <div className=" flex gap-2">
-          <Link href={'/room/schedule'} className="flex btn-white-md gap-2 ">
-            <ScheduleIcon />
-            <div className=" text-sm font-semibold">일정 찾기</div>
-          </Link>
-          <Link href={'/room/addRoom'} className="flex btn-purple-test gap-2">
-            <PlusCircleIcon {...whitePlusCircleProps} />
-            <div className="text-sm font-semibold">강의실 추가</div>
-          </Link>
-        </div>
-        {/* <div className="w-[300px] h-[41px] flex rounded-lg bg-primary-600">
-          <Link
-            href={'/room/schedule'}
-            className="flex items-center gap-2 w-full px-5 py-2.5 border-r border-r-primary-700 btn-purple"
-          >
-            <Image src={calendar} width={20} height={20} alt="calendar" />
-            <div className="text-white text-sm font-semibold">일정 찾기</div>
-          </Link>
-          <Link href={'/room/addRoom'} className="flex items-center w-full gap-2 px-5 py-2.5 btn-purple">
-            <PlusCircleIcon {...whitePlusCircleProps} />
-            <div className="text-white text-sm font-semibold">강의실 추가</div>
-          </Link>
-        </div> */}
+        <Link href={'/room/addRoom'} className="flex btn-purple-test gap-2">
+          <PlusCircleIcon {...whitePlusCircleProps} />
+          <div className="text-sm font-semibold">강의실 추가</div>
+        </Link>
       </div>
       {/* 캘린더 */}
       <div
@@ -450,99 +293,118 @@ export default function Room() {
 
       {/* 룸 리스트 */}
       <div className="relative w-full pl-[84px]">
-        <span
-          className="absolute z-10 w-6 h-6 left-[72px] top-7 bg-white flex items-center justify-center border border-1 border-gray-200 rounded-full cursor-pointer"
-          onClick={() => {
-            if (roomListNum === 0) {
-              return
-            } else {
-              setRoomListNum(roomListNum - 1)
-            }
-          }}
-        >
-          <ChevronLeftIcon width={16} height={16} alt="chevronLeft" />
-        </span>
-        <span
-          className="absolute z-10 w-6 h-6 -right-3 top-7 bg-white flex items-center justify-center border border-1 border-gray-200 rounded-full cursor-pointer"
-          onClick={() => {
-            if (roomListNum === 1) {
-              return
-            } else {
-              setRoomListNum(roomListNum + 1)
-            }
-          }}
-        >
-          <ChevronRightIcon width={16} height={16} alt="chevronRight" />
-        </span>
+        {roomListNum !== 0 && (
+          <span
+            className="absolute z-10 w-6 h-6 left-[72px] top-7 bg-white flex items-center justify-center border border-1 border-gray-200 rounded-full cursor-pointer"
+            onClick={() => {
+              if (roomListNum === 0) {
+                return
+              } else {
+                setRoomListNum(roomListNum - 1)
+              }
+            }}
+          >
+            <ChevronLeftIcon width={16} height={16} alt="chevronLeft" />
+          </span>
+        )}
+        {roomListNum !== room.length - 1 && (
+          <span
+            className="absolute z-10 w-6 h-6 -right-3 top-7 bg-white flex items-center justify-center border border-1 border-gray-200 rounded-full cursor-pointer"
+            onClick={() => {
+              if (roomListNum === room.length - 1) {
+                return
+              } else {
+                setRoomListNum(roomListNum + 1)
+              }
+            }}
+          >
+            <ChevronRightIcon width={16} height={16} alt="chevronRight" />
+          </span>
+        )}
+
         <div className="w-full grid grid-cols-4 gap-2">
-          {roomList[roomListNum].map((data, i) => {
-            return (
-              <div
-                key={i}
-                className={`relative w-full flex flex-col gap-1.5 justify-center text-center h-[80px] border rounded-lg ${
-                  data.room !== undefined ? 'border-gray-300' : 'border-gray-100 bg-primary-50'
-                }  py-2 px-3`}
-              >
-                {data.room !== undefined ? (
-                  <>
-                    <div className="w-full gray-900-semibold">{data.room} Room</div>
-                    <div className="flex gap-1/2 h-4 justify-center">
-                      <UserIcon width={16} height={16} alt="user" />
-                      <span className="gray-500-medium flex items-center">15인</span>
+          {room.length !== 0 &&
+            room[roomListNum].map((data, i) => {
+              return (
+                <div
+                  key={i}
+                  className={`relative w-full flex flex-col gap-1.5 justify-center text-center h-[80px] border rounded-lg ${
+                    data !== undefined ? 'border-gray-300' : 'border-gray-100 bg-primary-50'
+                  }  py-2 px-3`}
+                >
+                  {Object.keys(data).length !== 0 ? (
+                    <>
+                      <div className="w-full gray-900-semibold">{data.name} </div>
+                      <div className="flex gap-1/2 h-4 justify-center">
+                        <UserIcon width={16} height={16} alt="user" />
+                        <span className="gray-500-medium flex items-center">{data.capacity} 인</span>
+                      </div>
+                      <button
+                        ref={optionRef}
+                        className={`absolute right-3 top-3 w-8 h-8 p-1 rounded-full hover:bg-gray-100 ${
+                          roomOption && 'focus:bg-gray-100'
+                        } `}
+                        onClick={() => {
+                          if (roomOption.id === i && roomOption) {
+                            setRoomOption(prev => ({
+                              ...prev,
+                              isClicked: false,
+                              id: undefined,
+                              roomId: 0
+                            }))
+                          }
+                          if (roomOption.id !== i) {
+                            setRoomOption(prev => ({
+                              ...prev,
+                              isClicked: true,
+                              id: data.index,
+                              roomId: data.id
+                            }))
+                          }
+                        }}
+                      >
+                        <DotsIcon width={24} height={24} alt="dots" />
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      className="w-full h-full flex justify-center items-center"
+                      onClick={() => router.push('/room/addRoom')}
+                    >
+                      <PlusCircleIcon {...grayPlusCircleProps} />
+                    </button>
+                  )}
+                  {/* 룸 옵션 모달 */}
+                  {roomOption.isClicked && roomOption.id === i && (
+                    <div className="absolute right-2 bg-white top-[45px] w-[140px] p-1 flex flex-col gap-1/2 border border-1 border-primary-600 rounded-md shadow-[0_2px_5px_0_rgba(0, 0, 0, 0.12)]">
+                      <button
+                        type="button"
+                        className="w-full flex items-center justify-between px-2 py-1"
+                        onClick={() => {
+                          localStorage.setItem('roomName', data.name)
+                          localStorage.setItem('roomId', data.id)
+                          localStorage.setItem('capacity', data.capacity)
+                          router.push('/room/modifyRoom/' + `${data.name}`)
+                        }}
+                      >
+                        <div className="w-[98px] gray-500-medium text-sm">수정하기</div>
+                        <ModifyIcon width={16} height={16} alt="modify" />
+                      </button>
+                      <button
+                        type="button"
+                        className="w-full flex items-center justify-between px-2 py-1"
+                        onClick={() => {
+                          setModal(true)
+                        }}
+                      >
+                        <div className="w-[98px] gray-500-medium text-sm">삭제하기</div>
+                        <DeleteIcon className="text-gray-400" width={16} height={16} alt="modify" />
+                      </button>
                     </div>
-                    <button
-                      ref={optionRef}
-                      className={`absolute right-3 top-3 w-8 h-8 p-1 rounded-full hover:bg-gray-100 ${
-                        isClickOption && 'focus:bg-gray-100'
-                      } `}
-                      onClick={() => {
-                        /* if (isClickOption.id === undefined) {
-                          return
-                        } */
-                        if (isClickOption.id !== i) {
-                          setIsClickOption(prev => ({
-                            ...prev,
-                            isClicked: true,
-                            id: i
-                          }))
-                        }
-                      }}
-                    >
-                      <DotsIcon width={24} height={24} alt="dots" />
-                    </button>
-                  </>
-                ) : (
-                  <button
-                    className="w-full h-full flex justify-center items-center"
-                    onClick={() => router.push('/room/addRoom')}
-                  >
-                    <PlusCircleIcon {...grayPlusCircleProps} />
-                  </button>
-                )}
-                {/* 룸 옵션 모달 */}
-                {isClickOption.isClicked && isClickOption.id === i && (
-                  <div className="absolute right-2 bg-white top-[45px] w-[140px] p-1 flex flex-col gap-1/2 border border-1 border-primary-600 rounded-md shadow-[0_2px_5px_0_rgba(0, 0, 0, 0.12)]">
-                    <button
-                      type="button"
-                      className="w-full flex items-center justify-between px-2 py-1"
-                      onClick={() => router.push('/room/modifyRoom/' + `${data.room}`)}
-                    >
-                      <div className="w-[98px] gray-500-medium text-sm">수정하기</div>
-                      <ModifyIcon width={16} height={16} alt="modify" />
-                    </button>
-                    <button
-                      type="button"
-                      className="w-full flex items-center justify-between px-2 py-1"
-                      onClick={() => setModal(true)}
-                    >
-                      <div className="w-[98px] gray-500-medium text-sm">삭제하기</div>
-                      <DeleteIcon className="text-gray-400" width={16} height={16} alt="modify" />
-                    </button>
-                  </div>
-                )}
-              </div>
-            )
-          })}
+                  )}
+                </div>
+              )
+            })}
         </div>
       </div>
       <div className="w-full flex flex-col gap-4 pt-8 pb-[80px]">
@@ -562,116 +424,129 @@ export default function Room() {
         {/* 룸 예약표 */}
         <div className="w-full flex gap-6">
           <div className="flex flex-col">
-            {timeData.map((data, i) => {
-              return (
-                <div key={i} className="w-[60px] h-[210px] text-right gray-800-semibold text-base">
-                  {data.time}
-                </div>
-              )
-            })}
+            {timeList.length !== 0 &&
+              timeList.map((data, i) => {
+                return (
+                  <div
+                    key={i}
+                    className="w-[60px] 2xl:h-[162px] lg:h-[183px] h-[180px] text-right gray-800-semibold text-base"
+                  >
+                    {data.time}
+                  </div>
+                )
+              })}
           </div>
 
           <div className="w-full grid grid-cols-4">
-            {roomData[roomListNum].map((data, i) => {
-              return (
-                <div key={i} className="w-full flex flex-col">
-                  {data.resetvation.map((data, i) => {
-                    return (
-                      <div
-                        key={i}
-                        className="w-full h-[210px] p-1.5 border border-1 border-gray-200 flex items-center justify-center"
-                      >
-                        {data.time !== '' ? (
-                          <div className="w-full h-full p-1.5 bg-secondary-50 border rounded border-1 border-secondary-200">
-                            <div className="w-full h-full flex flex-col gap-1.5">
-                              <div className="w-full p-1.5 flex gap-1.5 bg-secondary-100 items-center">
-                                <div className="text-secondary-600 text-sm font-bold">{data.time}</div>
-                                <div className="text-secondary-400 text-xs font-semibold">{data.lesseonTime}분</div>
-                              </div>
-                              <div className="w-full h-full flex flex-col gap-2">
-                                <div className="w-full text-secondary-400 text-sm font-bold">{data.className}</div>
-                                <div className="w-full flex flex-col">
-                                  <div className="w-full text-left text-secondary-600 text-xs font-medium">
-                                    담당 강사 : {data.teacher}
-                                  </div>
-                                  <div className="w-full text-left text-secondary-600 text-xs font-medium">
-                                    회원 수 : {data.studentNum}/{data.limit}
-                                  </div>
-                                </div>
-                                <div className="w-full flex justify-end ">
-                                  <button
-                                    className="w-[76px] h-[37px] flex items-center px-3 py-2 border rounded-lg border-1 border-gray-200
-                                    gray-800-semibold text-sm text-center"
-                                    onClick={() => router.push('/room/reservation')}
-                                  >
-                                    예약하기
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        ) : (
-                          <button
-                            className="w-[76px] h-[37px] flex items-center px-3 py-2 border rounded-lg border-1 border-gray-200
-                             gray-800-semibold text-sm"
-                            onClick={() => router.push('/room/reservation')}
+            {room.length !== 0 &&
+              room[roomListNum].map((data: any, i: number) => {
+                return (
+                  <div key={i} className="w-full flex flex-col">
+                    {data.workTime &&
+                      data.workTime.map((data: any, i: number) => {
+                        const lessonTime = data.lessonTime
+                        let height: string = ''
+                        if (lessonTime / 30 > 1) {
+                          const multipleValue = lessonTime / 30
+                          if (width >= 1441) {
+                            const value = 162 * multipleValue
+                            height = `h-[${value}px]`
+                          }
+                        }
+
+                        return (
+                          <div
+                            key={i}
+                            className={`w-full ${
+                              lessonTime > 30 && data.type === 'session'
+                                ? 'h-[486px]'
+                                : '2xl:h-[162px] lg:h-[183px] h-[180px]'
+                            } p-1.5 border border-1 border-gray-200 flex items-center justify-center`}
                           >
-                            예약하기
-                          </button>
-                        )}
-                      </div>
-                    )
-                  })}
-                </div>
-              )
-            })}
+                            {data.id !== null ? (
+                              <div
+                                className={`relative w-full h-full p-1.5 ${
+                                  data.type === 'session'
+                                    ? 'bg-primary-50 border-primary-200'
+                                    : 'bg-secondary-50 border-secondary-200'
+                                } border rounded border-1 `}
+                              >
+                                <div className="w-full h-full flex flex-col gap-1.5">
+                                  <div
+                                    className={`w-full p-1.5 flex gap-1.5 ${
+                                      data.type === 'session' ? 'bg-primary-100' : 'bg-secondary-100'
+                                    } items-center`}
+                                  >
+                                    <div
+                                      className={`${
+                                        data.type === 'session' ? 'text-primary-600' : 'text-secondary-600'
+                                      } text-sm font-bold`}
+                                    >
+                                      {data.time}
+                                    </div>
+                                    <div
+                                      className={`${
+                                        data.type === 'session' ? 'text-primary-600' : 'text-secondary-400'
+                                      } text-xs font-semibold`}
+                                    >
+                                      {data.lessonTime}분
+                                    </div>
+                                  </div>
+                                  <div className="w-full h-full flex flex-col gap-2">
+                                    <div
+                                      className={`w-full ${
+                                        data.type === 'session' ? 'text-primary-400' : 'text-secondary-400'
+                                      } text-sm font-bold`}
+                                    >
+                                      {data.name}
+                                    </div>
+                                    <div className="w-full flex flex-col">
+                                      <div
+                                        className={`w-full text-left ${
+                                          data.type === 'session' ? 'text-primary-600' : 'text-secondary-600'
+                                        } text-xs font-medium`}
+                                      >
+                                        담당 강사 : {data.teacher}
+                                      </div>
+                                      {data.type === 'session' && (
+                                        <div className="w-full text-left text-primary-600 text-xs font-medium">
+                                          회원 수 : {data.studentCount}/{data.capacity}
+                                        </div>
+                                      )}
+                                    </div>
+                                    {data.type === 'session' && (
+                                      <button
+                                        className="absolute right-1.5 bottom-1.5 lg:w-[75px] lg:h-[39px] w-[68px] h-[36px] flex items-center px-3 py-2 bg-white border rounded-lg border-1 border-gray-200
+                                    gray-800-semibold lg:text-sm text-xs text-center"
+                                        //onClick={() => router.push('/room/reservation')}
+                                      >
+                                        예약하기
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            ) : (
+                              <button
+                                className="lg:w-[75px] lg:h-[39px] w-[68px] h-[36px] flex items-center px-3 py-2 border rounded-lg border-1 border-gray-200
+                             gray-800-semibold lg:text-sm text-xs"
+                                //onClick={() => router.push('/room/reservation')}
+                              >
+                                예약하기
+                              </button>
+                            )}
+                          </div>
+                        )
+                      })}
+                  </div>
+                )
+              })}
           </div>
         </div>
-
-        {/* <div className="w-full flex xl:gap-5 lg:gap-4 md:gap-[14px] gap-3.5">
-          {roomData.map((data, i) => {
-            return (
-              <>
-                <div
-                  key={i}
-                  className="xl:w-[51px] lg:w-[45px] md:w-12 w-[49px] text-right gray-800-semibold text-base"
-                >
-                  {data.time}
-                </div>
-                <div className="w-full grid grid-cols-4 border border-1 border-gray-100">
-                  {data.class.map((classData, i) => {
-                    return (
-                      <div key={i} className="w-full p-1.5 border border-r border-gray-100">
-                        <div className="w-full flex flex-col gap-2 p-[5px] border border-1 rounded border-orange-200 bg-[#FDFCF8]">
-                          <div className="flex flex-col gap-1/2 w-full py-5 px-4 rounded bg-[#FFF0E3]">
-                            <div className="flex items-center w-full h-4 text-left font-bold text-[13px] text-[#FF5A1F]">
-                              {classData.time}
-                            </div>
-                            <div className="flex items-center w-full h-[15px] text-left font-semibold text-xs text-[#FF8240]">
-                              {classData.lessonTime}
-                            </div>
-                          </div>
-                          <div className="flex flex-col gap-1/2">
-                            <div className="flex items-center w-full text-left font-bold text-sm text-[#FF7749]">
-                              {classData.className}
-                            </div>
-                            <div className="flex items-center w-full h-[18px] text-left font-semibold text-xs text-[#FF5A1F]">
-                              {classData.instructor}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              </>
-            )
-          })}
-        </div> */}
       </div>
       {modal && (
         <Modal small>
-          <DeleteModal onClose={() => setModal(false)} />
+          <DeleteModal onClose={() => setModal(false)} roomId={roomOption.roomId} />
         </Modal>
       )}
     </div>
