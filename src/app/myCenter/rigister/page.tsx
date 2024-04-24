@@ -1,5 +1,4 @@
 'use client'
-import '../globals.css'
 import Script from 'next/script'
 import React, { useRef, useState } from 'react'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
@@ -200,7 +199,7 @@ export default function MyCenter() {
     <>
       <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></Script>
       <form
-        className="flex flex-col w-[430px] h-[297px] gap-9"
+        className="w-full flex flex-col gap-16"
         onSubmit={async e => {
           e.preventDefault()
           console.log(postData)
@@ -252,17 +251,19 @@ export default function MyCenter() {
           }
         }}
       >
-        <div className="w-[430px] flex flex-col items-center gap-4">
-          <div className="relative w-[430px] h-[60px] flex items-center rounded-lg">
-            <input
-              ref={centerNameInputRef}
-              type="text"
-              name="center"
-              value={postData.name}
-              onFocus={e => {
-                handleOnFocus(e.target.name)
-              }}
-              className={`w-full px-3 py-5 text-sm gray-900-normal  
+        <div className="w-full flex flex-col items-center gap-8">
+          <div className="w-full text-left gray-900-bold text-xl">내 센터정보를 입력해 주세요</div>
+          <div className="w-full flex flex-col items-center gap-4">
+            <div className="relative w-full h-[60px] flex items-center rounded-lg">
+              <input
+                ref={centerNameInputRef}
+                type="text"
+                name="center"
+                value={postData.name}
+                onFocus={e => {
+                  handleOnFocus(e.target.name)
+                }}
+                className={`w-full px-3 py-5 text-sm gray-900-normal  
                 rounded-lg border border-1 border-[#E5E7EB] ${
                   danger.name
                     ? 'border-red-600'
@@ -270,33 +271,33 @@ export default function MyCenter() {
                       ? 'border-green-600'
                       : 'border-gray-200'
                 } focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0`}
-              placeholder="센터명"
-              onChange={e => {
-                handelChangeName('name', e)
-              }}
-            />
-            {(onFocusInput.nameInput || postData.name !== '' || danger.name) && (
-              <label className="absolute -top-2 left-3 w-[42px] h-5 bg-white">
-                <div
-                  className={`flex justify-center ${
-                    danger.name ? 'text-red-600' : !onFocusInput.nameInput ? 'text-green-600' : 'text-indigo-700'
-                  }  text-xs font-medium font-['Inter']`}
-                >
-                  센터명
-                </div>
-              </label>
-            )}
-          </div>
-          <div className="relative w-[430px] h-[60px]  flex items-center  rounded-lg">
-            <input
-              ref={addressNameInputRef}
-              type="text"
-              name="address"
-              value={postData.address}
-              onFocus={e => {
-                handleOnFocus(e.target.name)
-              }}
-              className={`w-full px-3 py-5 text-sm gray-900-normal  
+                placeholder="센터명"
+                onChange={e => {
+                  handelChangeName('name', e)
+                }}
+              />
+              {(onFocusInput.nameInput || postData.name !== '' || danger.name) && (
+                <label className="absolute -top-2 left-3 w-[42px] h-5 bg-white">
+                  <div
+                    className={`flex justify-center ${
+                      danger.name ? 'text-red-600' : !onFocusInput.nameInput ? 'text-green-600' : 'text-indigo-700'
+                    }  text-xs font-medium font-['Inter']`}
+                  >
+                    센터명
+                  </div>
+                </label>
+              )}
+            </div>
+            <div className="relative w-full h-[60px] flex items-center rounded-lg">
+              <input
+                ref={addressNameInputRef}
+                type="text"
+                name="address"
+                value={postData.address}
+                onFocus={e => {
+                  handleOnFocus(e.target.name)
+                }}
+                className={`w-full px-3 py-5 text-sm gray-900-normal  
               rounded-lg border border-1 border-[#E5E7EB] ${
                 danger.address
                   ? 'border-red-600'
@@ -304,30 +305,34 @@ export default function MyCenter() {
                     ? 'border-green-600'
                     : 'border-gray-200'
               } focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0`}
-              placeholder="주소"
-              onClick={onClickAdd}
-            />
-            {(onFocusInput.addressInput || postData.address !== '' || danger.address) && (
-              <label className="absolute -top-2 left-3 w-[28px] h-3 bg-white">
-                <div
-                  className={`flex justify-center ${
-                    danger.address ? 'text-red-600' : !onFocusInput.addressInput ? 'text-green-600' : 'text-indigo-700'
-                  }  text-xs font-medium font-['Inter']`}
-                >
-                  주소
-                </div>
-              </label>
-            )}
-          </div>
-          <div className="relative w-[430px] h-[60px] flex items-center rounded-lg">
-            <input
-              ref={phoneNumInputRef}
-              name="phone"
-              onFocus={e => {
-                handleOnFocus(e.target.name)
-              }}
-              type="number"
-              className={`w-full px-3 py-5 text-sm gray-900-normal  
+                placeholder="주소"
+                onClick={onClickAdd}
+              />
+              {(onFocusInput.addressInput || postData.address !== '' || danger.address) && (
+                <label className="absolute -top-2 left-3 w-[28px] h-3 bg-white">
+                  <div
+                    className={`flex justify-center ${
+                      danger.address
+                        ? 'text-red-600'
+                        : !onFocusInput.addressInput
+                          ? 'text-green-600'
+                          : 'text-indigo-700'
+                    }  text-xs font-medium font-['Inter']`}
+                  >
+                    주소
+                  </div>
+                </label>
+              )}
+            </div>
+            <div className="relative w-full h-[60px] flex items-center rounded-lg">
+              <input
+                ref={phoneNumInputRef}
+                name="phone"
+                onFocus={e => {
+                  handleOnFocus(e.target.name)
+                }}
+                type="number"
+                className={`w-full px-3 py-5 text-sm gray-900-normal  
               rounded-lg border border-1 border-[#E5E7EB] ${
                 danger.phone
                   ? 'border-red-600'
@@ -335,39 +340,41 @@ export default function MyCenter() {
                     ? 'border-green-600'
                     : 'border-gray-200'
               } focus:outline-none focus:ring-0 focus:border-primary-700 placeholder-gray-500 focus:placeholder-opacity-0`}
-              placeholder="대표번호 (- 없이 입력해주세요)"
-              value={postData.mainPhone}
-              onKeyDown={allowOnlyNum}
-              onChange={e => {
-                handelChangeName('phone', e)
-              }}
-            />
-            {(onFocusInput.phoneInput || postData.mainPhone !== '' || danger.phone) && (
-              <label className="absolute -top-2 left-3 w-[60px] h-5 bg-white">
-                <div
-                  className={`flex justify-center ${
-                    danger.phone ? 'text-red-600' : !onFocusInput.phoneInput ? 'text-green-600' : 'text-indigo-700'
-                  }  text-xs font-medium font-['Inter']`}
-                >
-                  전화번호
-                </div>
-              </label>
-            )}
-          </div>
-          <div className="w-full flex gap-2">
-            <DropDown
-              {...DropDownProps1}
-              handleChangeParentsOpenTimeData={handleChangeStartTimeFromChild}
-              type="open"
-            />
-            <div className="flex items-center gray-800-semibold text-base font-['Pretendard']">-</div>
-            <DropDown
-              {...DropDownProps2}
-              handleChangeParentsCloseTimeData={handleChangeCloseTimeFromChild}
-              type="close"
-            />
+                placeholder="대표번호 (- 없이 입력해주세요)"
+                value={postData.mainPhone}
+                onKeyDown={allowOnlyNum}
+                onChange={e => {
+                  handelChangeName('phone', e)
+                }}
+              />
+              {(onFocusInput.phoneInput || postData.mainPhone !== '' || danger.phone) && (
+                <label className="absolute -top-2 left-3 w-[60px] h-5 bg-white">
+                  <div
+                    className={`flex justify-center ${
+                      danger.phone ? 'text-red-600' : !onFocusInput.phoneInput ? 'text-green-600' : 'text-indigo-700'
+                    }  text-xs font-medium font-['Inter']`}
+                  >
+                    전화번호
+                  </div>
+                </label>
+              )}
+            </div>
+            <div className="w-full flex gap-2">
+              <DropDown
+                {...DropDownProps1}
+                handleChangeParentsOpenTimeData={handleChangeStartTimeFromChild}
+                type="open"
+              />
+              <div className="flex items-center gray-800-semibold text-base font-['Pretendard']">-</div>
+              <DropDown
+                {...DropDownProps2}
+                handleChangeParentsCloseTimeData={handleChangeCloseTimeFromChild}
+                type="close"
+              />
+            </div>
           </div>
         </div>
+
         <div className="w-full flex gap-[10px]">
           <div
             onClick={() => {

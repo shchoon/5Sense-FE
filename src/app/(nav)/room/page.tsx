@@ -196,7 +196,6 @@ export default function Room() {
             test.push(value)
           }
           list[i].workTime = test
-          list[i].index = i
         }
 
         list[0].workTime[3] = {
@@ -221,9 +220,97 @@ export default function Room() {
           isOpenForBooking: false
         }
 
-        /* for (var i = 0; i < 7; i++) {
-        list.push({})
-      } */
+        list[0].workTime[16] = {
+          id: 1,
+          type: 'session',
+          name: '체형 교정 및 삶의 균형을 통한 이완 찾기',
+          lessonTime: 90,
+          teacher: '조성훈',
+          time: '17:00',
+          capacity: 5,
+          studentCount: 3,
+          isOpenForBooking: false
+        }
+
+        list[1].workTime[0] = {
+          id: 1,
+          type: 'session',
+          name: '체형 교정 및 삶의 균형을 통한 이완 찾기',
+          lessonTime: 60,
+          teacher: '조성훈',
+          time: '09:00',
+          capacity: 5,
+          studentCount: 3,
+          isOpenForBooking: false
+        }
+
+        list[1].workTime[6] = {
+          id: 1,
+          type: 'session',
+          name: '체형 교정 및 삶의 균형을 통한 이완 찾기',
+          lessonTime: 60,
+          teacher: '조성훈',
+          time: '12:00',
+          capacity: 5,
+          studentCount: 3,
+          isOpenForBooking: false
+        }
+
+        list[1].workTime[10] = {
+          id: 1,
+          type: 'duration',
+          name: '반야사 요가',
+          lessonTime: 60,
+          teacher: '윤태식',
+          time: '14:00',
+          isOpenForBooking: false
+        }
+
+        list[2].workTime[10] = {
+          id: 1,
+          type: 'duration',
+          name: '반야사 요가',
+          lessonTime: 60,
+          teacher: '윤태식',
+          time: '14:00',
+          isOpenForBooking: false
+        }
+
+        if (list.length === 4) {
+          list[3].workTime[5] = {
+            id: 1,
+            type: 'session',
+            name: '체형 교정 및 삶의 균형을 통한 이완 찾기',
+            lessonTime: 60,
+            teacher: '조성훈',
+            time: '11:30',
+            capacity: 5,
+            studentCount: 3,
+            isOpenForBooking: false
+          }
+
+          list[3].workTime[20] = {
+            id: 1,
+            type: 'session',
+            name: '체형 교정 및 삶의 균형을 통한 이완 찾기',
+            lessonTime: 120,
+            teacher: '조성훈',
+            time: '19:00',
+            capacity: 5,
+            studentCount: 3,
+            isOpenForBooking: false
+          }
+        }
+
+        for (var j = 0; j < list.length; j++) {
+          for (var i = 0; i < list[j].workTime.length; i++) {
+            if (list[j].workTime[i].lessonTime > 30) {
+              const numOfRemove = list[j].workTime[i].lessonTime / 30
+              list[j].workTime.splice(i + 1, numOfRemove - 1)
+            }
+          }
+        }
+
         if (list.length >= 4) {
           const pushedCount: number = 4 - (list.length % 4)
           for (var i = 0; i < pushedCount; i++) {
@@ -245,9 +332,29 @@ export default function Room() {
     }
   }, [dateData, modal])
 
+  const test = (lessonTime: number) => {
+    if (lessonTime === 30 || lessonTime === null) {
+      return '2xl:h-[162px] lg:h-[183px] h-[180px]'
+    } else if (lessonTime === 60) {
+      return '2xl:h-[324px] lg:h-[366px] h-[360px]'
+    } else if (lessonTime === 90) {
+      return '2xl:h-[486px] lg:h-[549px] h-[540px]'
+    } else if (lessonTime === 120) {
+      return '2xl:h-[648px] lg:h-[732px] h-[720px]'
+    }
+
+    /* else {
+      const multipleValue = lessonTime / 30
+      const high = `2xl:h-[${162 * multipleValue}px] `
+      const middle = `lg:h-[${183 * multipleValue}px] `
+      const low = `h-[${180 * multipleValue}px]`
+
+      return `2xl:h-[${162 * multipleValue}px] lg:h-[${183 * multipleValue}px] h-[${180 * multipleValue}px]`
+    } */
+  }
+
   console.log(room)
   console.log(roomOption)
-
   return (
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-[60px]">
       <div className="flex w-full pt-12 mb-[30px] justify-between">
@@ -324,7 +431,7 @@ export default function Room() {
 
         <div className="w-full grid grid-cols-4 gap-2">
           {room.length !== 0 &&
-            room[roomListNum].map((data, i) => {
+            room[roomListNum].map((data: any, i: number) => {
               return (
                 <div
                   key={i}
@@ -345,7 +452,7 @@ export default function Room() {
                           roomOption && 'focus:bg-gray-100'
                         } `}
                         onClick={() => {
-                          if (roomOption.id === i && roomOption) {
+                          if (roomOption.roomId === data.id && roomOption.isClicked) {
                             setRoomOption(prev => ({
                               ...prev,
                               isClicked: false,
@@ -353,11 +460,10 @@ export default function Room() {
                               roomId: 0
                             }))
                           }
-                          if (roomOption.id !== i) {
+                          if (roomOption.roomId !== data.id) {
                             setRoomOption(prev => ({
                               ...prev,
                               isClicked: true,
-                              id: data.index,
                               roomId: data.id
                             }))
                           }
@@ -375,7 +481,7 @@ export default function Room() {
                     </button>
                   )}
                   {/* 룸 옵션 모달 */}
-                  {roomOption.isClicked && roomOption.id === i && (
+                  {roomOption.isClicked && roomOption.roomId === data.id && (
                     <div className="absolute right-2 bg-white top-[45px] w-[140px] p-1 flex flex-col gap-1/2 border border-1 border-primary-600 rounded-md shadow-[0_2px_5px_0_rgba(0, 0, 0, 0.12)]">
                       <button
                         type="button"
@@ -444,24 +550,23 @@ export default function Room() {
                   <div key={i} className="w-full flex flex-col">
                     {data.workTime &&
                       data.workTime.map((data: any, i: number) => {
-                        const lessonTime = data.lessonTime
+                        /* const lessonTime = data.lessonTime
                         let height: string = ''
                         if (lessonTime / 30 > 1) {
                           const multipleValue = lessonTime / 30
-                          if (width >= 1441) {
-                            const value = 162 * multipleValue
-                            height = `h-[${value}px]`
-                          }
-                        }
+                          height = `2xl:h-[${162 * multipleValue}px] lg:h-[${183 * multipleValue}px] h-[${
+                            180 * multipleValue
+                          }px]`
+
+                          console.log(height)
+                        } */
 
                         return (
                           <div
                             key={i}
-                            className={`w-full ${
-                              lessonTime > 30 && data.type === 'session'
-                                ? 'h-[486px]'
-                                : '2xl:h-[162px] lg:h-[183px] h-[180px]'
-                            } p-1.5 border border-1 border-gray-200 flex items-center justify-center`}
+                            className={`w-full ${test(
+                              data.lessonTime
+                            )} p-1.5 border border-1 border-gray-200 flex items-center justify-center`}
                           >
                             {data.id !== null ? (
                               <div
@@ -510,7 +615,7 @@ export default function Room() {
                                       </div>
                                       {data.type === 'session' && (
                                         <div className="w-full text-left text-primary-600 text-xs font-medium">
-                                          회원 수 : {data.studentCount}/{data.capacity}
+                                          예약 현황 : {data.studentCount}/{data.capacity}
                                         </div>
                                       )}
                                     </div>
