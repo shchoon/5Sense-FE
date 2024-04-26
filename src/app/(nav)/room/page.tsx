@@ -198,110 +198,6 @@ export default function Room() {
           list[i].workTime = test
         }
 
-        list[0].workTime[3] = {
-          id: 1,
-          type: 'session',
-          name: '체형 교정 및 삶의 균형을 통한 이완 찾기',
-          lessonTime: 90,
-          teacher: '조성훈',
-          time: '10:30',
-          capacity: 5,
-          studentCount: 3,
-          isOpenForBooking: false
-        }
-
-        list[0].workTime[8] = {
-          id: 1,
-          type: 'duration',
-          name: '반야사 요가',
-          lessonTime: 60,
-          teacher: '윤태식',
-          time: '13:00',
-          isOpenForBooking: false
-        }
-
-        list[0].workTime[16] = {
-          id: 1,
-          type: 'session',
-          name: '체형 교정 및 삶의 균형을 통한 이완 찾기',
-          lessonTime: 90,
-          teacher: '조성훈',
-          time: '17:00',
-          capacity: 5,
-          studentCount: 3,
-          isOpenForBooking: false
-        }
-
-        list[1].workTime[0] = {
-          id: 1,
-          type: 'session',
-          name: '체형 교정 및 삶의 균형을 통한 이완 찾기',
-          lessonTime: 60,
-          teacher: '조성훈',
-          time: '09:00',
-          capacity: 5,
-          studentCount: 3,
-          isOpenForBooking: false
-        }
-
-        list[1].workTime[6] = {
-          id: 1,
-          type: 'session',
-          name: '체형 교정 및 삶의 균형을 통한 이완 찾기',
-          lessonTime: 60,
-          teacher: '조성훈',
-          time: '12:00',
-          capacity: 5,
-          studentCount: 3,
-          isOpenForBooking: false
-        }
-
-        list[1].workTime[10] = {
-          id: 1,
-          type: 'duration',
-          name: '반야사 요가',
-          lessonTime: 60,
-          teacher: '윤태식',
-          time: '14:00',
-          isOpenForBooking: false
-        }
-
-        list[2].workTime[10] = {
-          id: 1,
-          type: 'duration',
-          name: '반야사 요가',
-          lessonTime: 60,
-          teacher: '윤태식',
-          time: '14:00',
-          isOpenForBooking: false
-        }
-
-        if (list.length === 4) {
-          list[3].workTime[5] = {
-            id: 1,
-            type: 'session',
-            name: '체형 교정 및 삶의 균형을 통한 이완 찾기',
-            lessonTime: 60,
-            teacher: '조성훈',
-            time: '11:30',
-            capacity: 5,
-            studentCount: 3,
-            isOpenForBooking: false
-          }
-
-          list[3].workTime[20] = {
-            id: 1,
-            type: 'session',
-            name: '체형 교정 및 삶의 균형을 통한 이완 찾기',
-            lessonTime: 120,
-            teacher: '조성훈',
-            time: '19:00',
-            capacity: 5,
-            studentCount: 3,
-            isOpenForBooking: false
-          }
-        }
-
         for (var j = 0; j < list.length; j++) {
           for (var i = 0; i < list[j].workTime.length; i++) {
             if (list[j].workTime[i].lessonTime > 30) {
@@ -389,7 +285,7 @@ export default function Room() {
           className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
           onClick={moveForwardDay}
         >
-          <ChevronRightIcon width={24} height={24} />
+          <ChevronRightIcon />
         </div>
       </div>
       {isClickedDatePicker && (
@@ -485,7 +381,7 @@ export default function Room() {
                     <div className="absolute right-2 bg-white top-[45px] w-[140px] p-1 flex flex-col gap-1/2 border border-1 border-primary-600 rounded-md shadow-[0_2px_5px_0_rgba(0, 0, 0, 0.12)]">
                       <button
                         type="button"
-                        className="w-full flex items-center justify-between px-2 py-1"
+                        className="w-full flex items-center justify-between px-2 py-1 rounded-[3px] hover:bg-primary-100"
                         onClick={() => {
                           localStorage.setItem('roomName', data.name)
                           localStorage.setItem('roomId', data.id)
@@ -498,7 +394,7 @@ export default function Room() {
                       </button>
                       <button
                         type="button"
-                        className="w-full flex items-center justify-between px-2 py-1"
+                        className="w-full flex items-center justify-between px-2 py-1 rounded-[3px] hover:bg-primary-100"
                         onClick={() => {
                           setModal(true)
                         }}
@@ -546,6 +442,8 @@ export default function Room() {
           <div className="w-full grid grid-cols-4">
             {room.length !== 0 &&
               room[roomListNum].map((data: any, i: number) => {
+                const roomId = data.id,
+                  roomName = data.name
                 return (
                   <div key={i} className="w-full flex flex-col">
                     {data.workTime &&
@@ -571,7 +469,7 @@ export default function Room() {
                             {data.id !== null ? (
                               <div
                                 className={`relative w-full h-full p-1.5 ${
-                                  data.type === 'session'
+                                  data.type === 'duration'
                                     ? 'bg-primary-50 border-primary-200'
                                     : 'bg-secondary-50 border-secondary-200'
                                 } border rounded border-1 `}
@@ -579,19 +477,19 @@ export default function Room() {
                                 <div className="w-full h-full flex flex-col gap-1.5">
                                   <div
                                     className={`w-full p-1.5 flex gap-1.5 ${
-                                      data.type === 'session' ? 'bg-primary-100' : 'bg-secondary-100'
+                                      data.type === 'duration' ? 'bg-primary-100' : 'bg-secondary-100'
                                     } items-center`}
                                   >
                                     <div
                                       className={`${
-                                        data.type === 'session' ? 'text-primary-600' : 'text-secondary-600'
+                                        data.type === 'duration' ? 'text-primary-600' : 'text-secondary-600'
                                       } text-sm font-bold`}
                                     >
                                       {data.time}
                                     </div>
                                     <div
                                       className={`${
-                                        data.type === 'session' ? 'text-primary-600' : 'text-secondary-400'
+                                        data.type === 'duration' ? 'text-primary-600' : 'text-secondary-400'
                                       } text-xs font-semibold`}
                                     >
                                       {data.lessonTime}분
@@ -600,7 +498,7 @@ export default function Room() {
                                   <div className="w-full h-full flex flex-col gap-2">
                                     <div
                                       className={`w-full ${
-                                        data.type === 'session' ? 'text-primary-400' : 'text-secondary-400'
+                                        data.type === 'duration' ? 'text-primary-400' : 'text-secondary-400'
                                       } text-sm font-bold`}
                                     >
                                       {data.name}
@@ -608,22 +506,40 @@ export default function Room() {
                                     <div className="w-full flex flex-col">
                                       <div
                                         className={`w-full text-left ${
-                                          data.type === 'session' ? 'text-primary-600' : 'text-secondary-600'
+                                          data.type === 'duration' ? 'text-primary-600' : 'text-secondary-600'
                                         } text-xs font-medium`}
                                       >
                                         담당 강사 : {data.teacher}
                                       </div>
                                       {data.type === 'session' && (
-                                        <div className="w-full text-left text-primary-600 text-xs font-medium">
+                                        <div className="w-full text-left text-secondary-600 text-xs font-medium">
                                           예약 현황 : {data.studentCount}/{data.capacity}
                                         </div>
                                       )}
                                     </div>
                                     {data.type === 'session' && (
                                       <button
-                                        className="absolute right-1.5 bottom-1.5 lg:w-[75px] lg:h-[39px] w-[68px] h-[36px] flex items-center px-3 py-2 bg-white border rounded-lg border-1 border-gray-200
-                                    gray-800-semibold lg:text-sm text-xs text-center"
-                                        //onClick={() => router.push('/room/reservation')}
+                                        className={`absolute right-1.5 bottom-1.5 lg:w-[75px] lg:h-[39px] w-[68px] h-[36px] flex items-center px-3 py-2 ${
+                                          data.isOpenForBooking
+                                            ? 'bg-white border border-1 border-gray-200 text-gray-800 hover:text-primary-600'
+                                            : 'bg-gray-400 text-white'
+                                        } rounded-lg
+                                    font-semibold lg:text-sm text-xs text-center`}
+                                        onClick={() => {
+                                          if (data.isOpenForBooking) {
+                                            router.push('/room/reservation')
+                                            localStorage.setItem('roomId', roomId)
+                                            localStorage.setItem('roomName', roomName)
+                                            localStorage.setItem('className', data.name)
+                                            localStorage.setItem('reservationTime', data.time)
+                                            localStorage.setItem(
+                                              'reservationDate',
+                                              `${dateData.year}.${dateData.month + 1}.${dateData.date}`
+                                            )
+                                            localStorage.setItem('classId', data.id)
+                                            localStorage.setItem('lessonTime', data.lessonTime)
+                                          }
+                                        }}
                                       >
                                         예약하기
                                       </button>
@@ -634,8 +550,20 @@ export default function Room() {
                             ) : (
                               <button
                                 className="lg:w-[75px] lg:h-[39px] w-[68px] h-[36px] flex items-center px-3 py-2 border rounded-lg border-1 border-gray-200
-                             gray-800-semibold lg:text-sm text-xs"
-                                //onClick={() => router.push('/room/reservation')}
+                             gray-800-semibold lg:text-sm text-xs hover:text-primary-600"
+                                onClick={() => {
+                                  router.push('/room/reservation')
+                                  localStorage.setItem('roomId', roomId)
+                                  localStorage.setItem('roomName', roomName)
+                                  localStorage.setItem('className', data.name)
+                                  localStorage.setItem('reservationTime', data.time)
+                                  localStorage.setItem(
+                                    'reservationDate',
+                                    `${dateData.year}.${dateData.month + 1}.${dateData.date}`
+                                  )
+                                  localStorage.setItem('classId', data.id)
+                                  localStorage.setItem('lessonTime', data.lessonTime)
+                                }}
                               >
                                 예약하기
                               </button>

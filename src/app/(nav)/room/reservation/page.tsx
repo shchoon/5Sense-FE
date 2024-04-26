@@ -1,21 +1,31 @@
 'use client'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 import DropDown from '@/components/common/DropDown'
 import RoomReservation from '@/components/room/RoomReservation'
 import { useState, useEffect } from 'react'
 import SearchInput from '@/components/common/SearchInput'
-import FilterSearchName from '@/components/common/FilterSearchName'
+import MemberOfCenter from '@/components/class/register/memberOfCenter'
 import instance from '@/lib/api/axios'
 import { classType } from '@/components/modal/StudentAddClassModal'
+import RoomReservationCheck from '@/components/check/RoomReservationCheck'
 
 import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
 import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
 import AlertIcon from 'public/assets/icons/alert-circle.svg'
 import SearchIcon from 'public/assets/icons/search.svg'
+import { start } from 'repl'
+
+interface IProps {
+  query: {
+    name?: string
+  }
+}
 
 export default function Reservatoin() {
+  const router = useRouter()
   const [dropDownProps, setDropDownProps] = useState({
     title: '클래스를 선택해주세요',
     list: [],
@@ -29,15 +39,52 @@ export default function Reservatoin() {
     setSelectedClass(data)
   }
 
+  const classId = localStorage.getItem('classId')
+
   useEffect(() => {
-    instance('/lessons/filters?type=session&take=100&page=1').then(res => {
-      const classData = res.data.data.lessons
-      setDropDownProps(prev => ({
-        ...prev,
-        list: classData
-      }))
-    })
+    const classId = localStorage.getItem('classId')
+    if (classId === 'null') {
+      instance(`/session-lessons`, {
+        params: {
+          isCheckRegistrationsCount: true
+        }
+      }).then(res => {
+        const classData = res.data.data
+        setDropDownProps(prev => ({
+          ...prev,
+          list: classData
+        }))
+      })
+    }
   }, [])
+
+  const reservationData = {
+    className: localStorage.getItem('className'),
+    date: localStorage.getItem('reservationDate'),
+    lessonTime: localStorage.getItem('lessonTime'),
+    roomName: localStorage.getItem('roomName'),
+    classId: localStorage.getItem('classId'),
+    roomId: localStorage.getItem('roomId'),
+    startTime: localStorage.getItem('reservationTime')
+  }
+
+  const calculateEndTime = () => {
+    const startTime = {
+      hour: Number(reservationData.startTime?.split(':')[0]),
+      min: Number(reservationData.startTime?.split(':')[1])
+    }
+
+    const timeSum = startTime.hour * 2 + startTime.min / 30 + Number(reservationData.lessonTime) / 30
+
+    const endTime = {
+      hour: `${Math.floor(timeSum / 2)}`,
+      min: timeSum / 2 - Math.floor(timeSum / 2) === 0 ? '00' : '30'
+    }
+
+    return endTime.hour + ':' + endTime.min
+  }
+
+  console.log(studentName, calculateEndTime())
 
   return (
     <>
@@ -48,50 +95,67 @@ export default function Reservatoin() {
         </Link>
         <div className="absolute left-[92px] top-[60px] black-bold text-3xl font-['Pretendard']">예약하기</div>
       </div>
-      <div className="w-[640px] pt-[120px] pb-[50px] flex flex-col gap-10 mx-auto ">
-        <div className="w-full px-6 py-8 flex flex-col gap-10 border rounded-xl border-1 border-gray-200">
-          <div className="gray-900-bold text-xl">클래스 정보</div>
-          <div className="w-full flex flex-col gap-6">
-            <div className="w-full flex flex-col gap-2">
-              <div className="flex flex-col gap-2">
-                <div className="w-full text-left gray-800-semibold text-base">클래스 선택</div>
-                <DropDown {...dropDownProps} handleChangeParentsClassDropdownData={handleChangeParentsDropdownData} />
-              </div>
-              <div className="w-full flex gap-1.5 items-center">
-                <AlertIcon width={18} height={18} alt="AlertCircle" />
-                <div className="w-full gray-500-normal text-sm">
-                  기간반은 [클래스 관리 - 클래스 등록]에서 강의실을 등록하고있습니다.
+      <div className="w-[640px] pt-[120px] flex flex-col items-center gap-5 mx-auto">
+        {classId === 'null' ? (
+          <div className="w-full flex flex-col gap-10">
+            <div className="w-full px-6 py-8 flex flex-col gap-10 border rounded-xl border-1 border-gray-200">
+              <div className="gray-900-bold text-xl">클래스 정보</div>
+              <div className="w-full flex flex-col gap-6">
+                <div className="w-full flex flex-col gap-2">
+                  <div className="flex flex-col gap-2">
+                    <div className="w-full text-left gray-800-semibold text-base">클래스 선택</div>
+                    <DropDown
+                      {...dropDownProps}
+                      handleChangeParentsClassDropdownData={handleChangeParentsDropdownData}
+                    />
+                  </div>
+                  <div className="w-full flex gap-1.5 items-center">
+                    <AlertIcon width={18} height={18} alt="AlertCircle" />
+                    <div className="w-full gray-500-normal text-sm">
+                      기간반은 [클래스 관리 - 클래스 등록]에서 강의실을 등록하고있습니다.
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="w-full flex flex-col gap-2">
-              <div className="w-full text-left gray-800-semibold text-base">수강생 찾기</div>
-              <FilterSearchName type="search" target="students" />
-              {/* <div className="w-full h-[52px] flex items-center px-3 py-2.5 gap-2 border border-1 border-gray-200 rounded-lg focus-within:border-[#5539C0]">
-                <SearchIcon width={18} height={18} alt="Search" />
-                <input
-                  placeholder="수강생 이름"
-                  value={studentName}
-                  onChange={e => {
-                    setStudentName(e.target.value)
-                  }}
-                  className=" w-full focus:outline-none"
-                />
-              </div> */}
-            </div>
           </div>
-        </div>
-        {selectedClass === undefined && (
-          <div
-            className="w-full h-[400px] border border-1 border-gray-200 rounded-xl flex items-center justify-center
-       text-gray-400 text-base font-semibold"
-          >
-            클래스를 선택해주시면 예약가능 리스트를 볼 수 있습니다.
-          </div>
+        ) : (
+          <RoomReservationCheck {...reservationData} />
         )}
-        {selectedClass !== undefined && (
-          <RoomReservation class={selectedClass} studentName={studentName} classType="session" viewType="page" />
-        )}
+
+        <MemberOfCenter
+          valid={true}
+          type="students"
+          onChange={(name: string) => {
+            setStudentName(name)
+          }}
+        />
+        <button
+          className="w-full h-[52px] btn-purple"
+          onClick={() => {
+            const date = reservationData.date?.split('.')
+            instance
+              .post('/session-lesson-schedules', {
+                lessonId: Number(reservationData.classId),
+                studentId: studentName,
+                sessionDate: date && new Date(Number(date[0]), Number(date[1]) - 1, Number(date[2])).toISOString(),
+                startTime: reservationData.startTime,
+                endTime: calculateEndTime(),
+                roomId: Number(reservationData.roomId)
+              })
+              .then(res => {
+                router.push('/room')
+              })
+              .catch(res => {
+                const errMessage = res.response.data.message
+                if (errMessage === '이미 해당 시간에 예약이 되어있습니다') {
+                  alert('선택한 수강생이 이미 예약되어있습니다.')
+                }
+              })
+          }}
+        >
+          예약하기
+        </button>
       </div>
     </>
   )

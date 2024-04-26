@@ -4,7 +4,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import ClassInfo from '@/components/class/register/classInfo'
 import ClassType from '@/components/class/register/classType'
-import TeacherInfo from '@/components/class/register/teacherInfo'
+import MemberOfCenter from '@/components/class/register/memberOfCenter'
 import { postClassData } from '@/lib/api/class'
 import { durationScheduleState } from '../../../../lib/state/classDurationSchedule'
 import { useRouter } from 'next/navigation'
@@ -162,7 +162,7 @@ export default function RegisterPage() {
         onChange={(name: string, value: string) => setClassInfo(prev => ({ ...prev, [name]: value }))}
       />
       <ClassType classType={classType} valid={typeValid} setClassType={setClassType} />
-      <TeacherInfo valid={teacherValid} onChange={(value: string) => setTeacherInfo(value)} />
+      <MemberOfCenter type="teachers" valid={teacherValid} onChange={(name: string) => setTeacherInfo(name)} />
       <div className="Button w-full btn-purple-lg" onClick={handleRegisterClass}>
         등록하기
       </div>

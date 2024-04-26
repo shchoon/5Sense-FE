@@ -32,6 +32,7 @@ interface IProps {
 }
 
 export default function DropDown(props: IProps) {
+  console.log(props)
   const refs = useRef<(HTMLDivElement | null)[]>([])
   const dropdownRef = useRef<HTMLDivElement>(null)
   const propsFunction = (item: any) => {
@@ -169,7 +170,7 @@ export default function DropDown(props: IProps) {
                   }}
                 >
                   <div id="box" className="w-full gray-900-normal text-base">
-                    {item.name} / {item.teacher}
+                    {item.name}
                   </div>
                 </div>
               )

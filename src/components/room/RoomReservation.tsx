@@ -571,7 +571,7 @@ export default function RoomReservation(props: IProps) {
       )}
       {props.viewType === 'page' && modal && (
         <Modal small>
-          <RoomReservationCheck reservationData={reservationData} onClose={() => setModal(false)} />
+          <RoomReservationCheck reservationData={reservationData} />
         </Modal>
       )}
     </>
