@@ -7,7 +7,7 @@ export interface TextareaFormProps {
   maxLength: number
   height?: string
   submitData: any
-  onChange: (name: string, value: string) => void
+  onChange: (vlaue: any) => void
 }
 
 export default function TextareaForm({ title, placeholder, name, maxLength, submitData, onChange }: TextareaFormProps) {
@@ -30,8 +30,12 @@ export default function TextareaForm({ title, placeholder, name, maxLength, subm
     } else if (e.target.value.length > maxLength) {
       setInputValue(e.target.value.slice(0, maxLength))
     }
-    onChange(name, e.target.value)
+    onChange({ [name]: e.target.value })
   }
+
+  useEffect(() => {
+    setInputValue(submitData[name])
+  }, [submitData])
 
   useEffect(() => {
     handelChage

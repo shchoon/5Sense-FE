@@ -131,10 +131,12 @@ export default function Category({ classInfo, valid, checkValid, onChange }: IPr
 
   const handleGroupChange = (groupId: number, groupName: string, optionList: any) => {
     setCategory(prev => ({ ...prev, id: groupId, name: groupName }))
+
     setSelectedOptionList(optionList)
   }
   const handleOptionChange = (optionId: number, optionName: string) => {
     setCategory(prev => ({ ...prev, subId: optionId, subName: optionName }))
+    onChange({ ['category']: category })
   }
 
   const renderOptionsList = () => {
@@ -175,7 +177,10 @@ export default function Category({ classInfo, valid, checkValid, onChange }: IPr
                 className={`relative flex justify-center items-center w-[142px] h-[45px] p-3 rounded-md border border-indigo-400 ${
                   category.subId === option.id ? 'bg-[#F0EFFF]' : 'bg-white cursor-pointer'
                 }`}
-                onClick={() => handleOptionChange(option.id, option.name)}
+                onClick={() => {
+                  handleOptionChange(option.id, option.name)
+                  onChange({ ['category']: category })
+                }}
               >
                 <>
                   {category.subId === option.id && <CheckIcon className="absolute top-1 right-1" />}
@@ -198,8 +203,14 @@ export default function Category({ classInfo, valid, checkValid, onChange }: IPr
 
   useEffect(() => {
     onChange({ ['category']: category })
-    console.log(classInfo)
-  }, [category, option])
+  }, [option])
+
+  useEffect(() => {
+    setCategory({ ...classInfo.category })
+  }, [classInfo])
+
+  console.log(classInfo.category)
+  console.log(category)
 
   return (
     <div>

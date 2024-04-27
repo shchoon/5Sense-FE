@@ -2,12 +2,12 @@
 import { useEffect, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import ClassInfo from '@/components/class/register/classInfo'
-import ClassType from '@/components/class/register/classType'
-import TeacherInfo from '@/components/class/register/teacherInfo'
-import { durationScheduleState } from '../../../../lib/state/classDurationSchedule'
-import { useRouter } from 'next/navigation'
-import { postDurationLessons, postSesstionLessons } from '@/lib/api/class'
+import { useParams, useRouter } from 'next/navigation'
+import { durationScheduleState } from '@/lib/state/classDurationSchedule'
+import ClassInfo from '@/components/class/edit/classInfo'
+import ClassType from '@/components/class/edit/classType'
+import TeacherInfo from '@/components/class/edit/teacherInfo'
+import { getDurationLessons, getSesstionLessons, putClassData } from '@/lib/api/class'
 
 export interface IClassInfo {
   name: string
@@ -18,6 +18,8 @@ export interface IClassInfo {
     subId: number
     subName: string
   }
+  categoryId: string
+  categoryName: string
 }
 
 export interface IInfoValid {
@@ -41,16 +43,14 @@ export interface IClassType {
 }
 
 export interface ITeacherInfo {
-  teacherId: string
+  id: string
+  name: string
 }
 
-interface IProps {
-  id: number
-  type: string
-}
-
-export default function RegisterPage(props: IProps) {
+export default function EditPage() {
   const router = useRouter()
+
+  const params = useParams<{ type: string; id: string }>()
 
   const [classInfo, setClassInfo] = useState({
     name: '',
@@ -71,7 +71,10 @@ export default function RegisterPage(props: IProps) {
     capacity: 1
   })
 
-  const [teacherInfo, setTeacherInfo] = useState('')
+  const [teacherInfo, setTeacherInfo] = useState({
+    id: '',
+    name: ''
+  })
 
   const durationSchedule = useRecoilValue(durationScheduleState)
   const setDurationSchedule = useSetRecoilState(durationScheduleState)
@@ -91,6 +94,31 @@ export default function RegisterPage(props: IProps) {
   const [teacherValid, setTeacherValid] = useState(true)
 
   useEffect(() => {
+    getSesstionLessons({ id: params.id }).then((res): any => {
+      const result = res.data.data
+      console.log('result', result)
+      setClassInfo(prev => ({
+        ...prev,
+        name: result.name,
+        memo: result.memo,
+        category: {
+          ...result.category
+        }
+      }))
+      setTeacherInfo({ ...result.teacher })
+      setClassType(prev => ({
+        ...prev,
+        type: result.type,
+        lessonTime: result.lessonTime,
+        tuitionFee: result.tuitionFee.toLocaleString(),
+        totalSessions: result.totalSessions,
+        capacity: result.capacity
+      }))
+      setDurationSchedule([...result.lessonDurations])
+    })
+  }, [])
+
+  useEffect(() => {
     console.log(classInfo)
     console.log(classType)
     console.log(teacherInfo)
@@ -99,11 +127,6 @@ export default function RegisterPage(props: IProps) {
   console.log(durationSchedule)
 
   const handleRegisterClass = () => {
-    // 전체 valid 코드 있어야해
-    // setInfoValid(prev => ({ ...prev, valid: true, name: true, category: true }))
-    // setTypeValid(prev => ({ ...prev, valid: true, fee: true, schedule: true }))
-    // setTeacherValid(true)
-
     if (classInfo.name.length === 0) {
       return setInfoValid(prev => ({ ...prev, valid: false, name: false }))
     } else {
@@ -130,7 +153,7 @@ export default function RegisterPage(props: IProps) {
       }
     }
 
-    if (teacherInfo.length === 0) {
+    if (teacherInfo.id.length === 0) {
       return setTeacherValid(false)
     }
 
@@ -159,7 +182,7 @@ export default function RegisterPage(props: IProps) {
         teacherId: Number(teacherInfo)
       }
 
-      console.log('session', data)
+      console.log(data)
 
       // return postSesstionLessons(data).then(res => {
       //   console.log(res)
@@ -180,9 +203,13 @@ export default function RegisterPage(props: IProps) {
         }}
       />
       <ClassType classType={classType} valid={typeValid} setClassType={setClassType} />
-      <TeacherInfo valid={teacherValid} onChange={(value: string) => setTeacherInfo(value)} />
+      <TeacherInfo
+        teacherInfo={teacherInfo}
+        valid={teacherValid}
+        onChange={(value: string) => setTeacherInfo(prev => ({ ...prev, id: value }))}
+      />
       <div className="Button w-full btn-purple-lg" onClick={handleRegisterClass}>
-        등록하기
+        수정하기
       </div>
     </div>
   )

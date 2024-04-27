@@ -18,12 +18,12 @@ import VecterIcon from 'public/assets/icons/vector.svg'
 import { ITeacherInfo } from '@/app/(nav)/class/edit/session/[id]/page'
 
 interface IProps {
-  teacherId?: ITeacherInfo
+  teacherInfo?: ITeacherInfo
   onChange: (value: string) => void
   valid: boolean
 }
 
-export default function TeacherInfo({ onChange, valid, teacherId }: IProps) {
+export default function TeacherInfo({ onChange, valid, teacherInfo }: IProps) {
   const inputClickRef = useRef<HTMLInputElement>(null)
   const autoCompleteTeacherNameRef = useRef<HTMLDivElement>(null)
 
@@ -62,8 +62,11 @@ export default function TeacherInfo({ onChange, valid, teacherId }: IProps) {
   }, [isClickedAddTeacher])
 
   useEffect(() => {
-    if (teacherId) setTeacherName(teacherId.name)
-  }, [teacherId])
+    if (teacherInfo) {
+      console.log(teacherInfo.name)
+      setTeacherName(teacherInfo.name)
+    }
+  }, [teacherInfo])
 
   return (
     <>

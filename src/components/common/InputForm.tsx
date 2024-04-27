@@ -1,49 +1,50 @@
 import { IClassInfo } from '@/app/(nav)/class/register/page'
-import { useInput } from '@/hooks/useInput'
-import { SetStateAction } from 'react'
 
 export interface InputFormProps {
   valid?: boolean
-  title: string
-  placeholder: string
+  label: string
   name: string
+  placeholder: string
   maxLength: number
-  submitData: IClassInfo
-  onChange: (name: string, value: string) => void
+  value: string
+  checkValid?: (vlaue: any) => void
+  onChange: (vlaue: any) => void
 }
 
-export default function InputForm({
-  name,
-  title,
+export default function CustomInput({
+  label,
   placeholder,
   maxLength,
-  submitData,
+  value,
+  name,
   onChange,
-  valid = true
+  checkValid,
+  valid = true // 초기값 true
 }: InputFormProps) {
-  const [inputValue, handleChange] = useInput({
-    name,
-    maxLength,
-    submitData,
-    onChange
-  })
-  const valueLength = inputValue?.length
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value
+    if (newValue.length && checkValid) {
+      checkValid({ [name]: true })
+    }
+    // checkValid(e.target.value)
+    onChange({ [name]: newValue })
+  }
 
   return (
     <div className="flex flex-col gap-2">
-      <p className={`${valid ? '' : 'text-[#EF5D5D]'} gray-800-semibold`}>{title}</p>
+      <p className={`${valid ? '' : 'text-[#EF5D5D]'} gray-800-semibold`}>{label}</p>
 
       <input
-        className={`${valueLength > 0 ? 'bg-gray-50' : 'bg-white'} w-full h-auto input-line-gray`}
+        className={`${value.length > 0 ? 'bg-gray-50' : 'bg-white'} w-full h-auto input-line-gray`}
         placeholder={placeholder}
+        value={value}
         name={name}
-        value={inputValue}
         onChange={handleChange}
         maxLength={maxLength}
       />
 
       <span className="text-gray-500 text-sm font-normal font-['Inter'] text-right">
-        {valueLength}/{maxLength}
+        {value.length}/{maxLength}
       </span>
     </div>
   )

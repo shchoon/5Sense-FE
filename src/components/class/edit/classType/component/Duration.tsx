@@ -21,7 +21,7 @@ export default function Duration({ classType, setClassType, valid }: ITypeProps)
   const [noticeModal, setNoticeModal] = useState(false)
   const [scheduleModal, setScheduleModal] = useState(false)
 
-  function getKoreanNumber(value: string) {
+  function geKoreanNumber(value: string) {
     const koreanNumber = ['', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구']
     const tenUnit = ['', '십', '백', '천']
     const tenThousandUnit = ['조', '억', '만', '']
@@ -84,23 +84,24 @@ export default function Duration({ classType, setClassType, valid }: ITypeProps)
           value={classType.tuitionFee}
           placeholder="0 원"
         />
-        <p className="text-gray-500 text-sm font-normal font-['Inter']">{getKoreanNumber(classType.tuitionFee)}원</p>
+        <p className="text-gray-500 text-sm font-normal font-['Inter']">{geKoreanNumber(classType.tuitionFee)}원</p>
       </div>
       <div className="w-full flex flex-col gap-2">
         <p className={`${valid?.schedule ? '' : 'text-[#EF5D5D]'} gray-800-semibold`}>일정</p>
+        {false && (
+          <button
+            className="w-full px-6 py-3.5 btn-line-purple flex items-center justify-center gap-2"
+            onClick={() => {
+              setModal(true)
+              setScheduleModal(true)
+            }}
+          >
+            <PlusIcon width={24} height={24} />
+            일정 추가
+          </button>
+        )}
 
-        <button
-          className="w-full px-6 py-3.5 btn-line-purple flex items-center justify-center gap-2"
-          onClick={() => {
-            setModal(true)
-            setScheduleModal(true)
-          }}
-        >
-          <PlusIcon width={24} height={24} />
-          일정 추가
-        </button>
-
-        <DurationScheduleCheck />
+        <DurationScheduleCheck edit={Boolean(params)} />
         {/**여기 일정 UI 들어가면 됩니다. */}
       </div>
       {noticeModal && (

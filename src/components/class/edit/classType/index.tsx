@@ -49,7 +49,7 @@ export default function ClassType({ classType, setClassType, valid }: ITypeProps
         className={`w-[290px] h-10 rounded-md flex justify-center items-center text-base leading-normal ${
           isActive ? 'bg-primary-600 text-white font-semibold' : 'text-gray-500 font-medium'
         }`}
-        onClick={() => onTabHandler(content)}
+        // onClick={() => onTabHandler(content)}
       >
         {content}
       </button>

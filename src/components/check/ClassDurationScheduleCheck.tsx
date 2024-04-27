@@ -4,6 +4,10 @@ import { durationScheduleState } from '@/lib/state/classDurationSchedule'
 
 import TrashIcon from 'public/assets/icons/trash.svg'
 
+// interface IProps {
+//   edit: boolean
+// }
+
 export default function DurationScheduleCheck() {
   const setDurationScheduleState = useSetRecoilState(durationScheduleState)
   const titleList = ['기간', '시간', '요일', '강의실']

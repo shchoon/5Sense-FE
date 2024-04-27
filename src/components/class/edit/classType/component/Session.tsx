@@ -5,10 +5,9 @@ import { ChangeEvent, useEffect } from 'react'
 import MinusIcon from 'public/assets/icons/minus_vector.svg'
 import PlusIcon from 'public/assets/icons/plus_vector.svg'
 import { ITypeProps } from '..'
-import { useParams } from 'next/navigation'
 
 export default function Session({ classType, setClassType, valid }: ITypeProps) {
-  const disabled = false
+  const disabled = true
 
   function geKoreanNumber(value: string) {
     const koreanUnits = ['조', '억', '만', '']
@@ -170,7 +169,7 @@ export default function Session({ classType, setClassType, valid }: ITypeProps) 
         <div className="text-base gray-800-semibold">최대 수업 정원</div>
         <div className="w-full flex justify-between h-16 p-3 border border-1 border-gray-300 rounded-full">
           <button
-            disabled={classType.capacity === 1}
+            disabled={disabled}
             className="w-10 h-full flex items-center justify-center rounded-full bg-primary-600 cursor-pointer disabled:bg-gray-200"
             onClick={() => {
               handleStudentCnt('minus')
