@@ -4,7 +4,8 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import ClassInfo from '@/components/class/register/classInfo'
 import ClassType from '@/components/class/register/classType'
-import TeacherInfo from '@/components/class/register/teacherInfo'
+import MemberOfCenter from '@/components/class/register/memberOfCenter'
+
 import { durationScheduleState } from '../../../../lib/state/classDurationSchedule'
 import { useRouter } from 'next/navigation'
 import { postDurationLessons, postSesstionLessons } from '@/lib/api/class'
@@ -159,13 +160,17 @@ export default function RegisterPage(props: IProps) {
         teacherId: Number(teacherInfo)
       }
 
-      console.log('session', data)
-
       // return postSesstionLessons(data).then(res => {
       //   console.log(res)
       // })
     }
   }
+
+  useEffect(() => {
+    return () => {
+      setDurationSchedule([])
+    }
+  }, [])
 
   return (
     <div className="w-[640px] flex flex-col gap-5">
@@ -180,7 +185,7 @@ export default function RegisterPage(props: IProps) {
         }}
       />
       <ClassType classType={classType} valid={typeValid} setClassType={setClassType} />
-      <TeacherInfo valid={teacherValid} onChange={(value: string) => setTeacherInfo(value)} />
+      <MemberOfCenter type="teachers" valid={teacherValid} onChange={(name: string) => setTeacherInfo(name)} />
       <div className="Button w-full btn-purple-lg" onClick={handleRegisterClass}>
         등록하기
       </div>

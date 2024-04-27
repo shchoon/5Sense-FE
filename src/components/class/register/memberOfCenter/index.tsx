@@ -15,15 +15,14 @@ import PlusIcon from 'public/assets/icons/plus.svg'
 import SearchIcon from 'public/assets/icons/search.svg'
 import UserCircle from 'public/assets/icons/user_circle.svg'
 import VecterIcon from 'public/assets/icons/vector.svg'
-import { ITeacherInfo } from '@/app/(nav)/class/edit/session/[id]/page'
 
 interface IProps {
-  teacherId?: ITeacherInfo
-  onChange: (value: string) => void
+  onChange: (name: string) => void
   valid: boolean
+  type: string
 }
 
-export default function TeacherInfo({ onChange, valid, teacherId }: IProps) {
+export default function MemberOfCenter({ onChange, valid, type }: IProps) {
   const inputClickRef = useRef<HTMLInputElement>(null)
   const autoCompleteTeacherNameRef = useRef<HTMLDivElement>(null)
 
@@ -31,83 +30,88 @@ export default function TeacherInfo({ onChange, valid, teacherId }: IProps) {
   const setModal = useSetRecoilState(modalState)
 
   const handleClickOutsideOfInput = (e: any) => {
-    if (openTeacherList && !autoCompleteTeacherNameRef.current?.contains(e.target)) {
-      setOpenTeacherList(false)
+    if (openNameList && !autoCompleteTeacherNameRef.current?.contains(e.target)) {
+      setOpenNameList(false)
     }
   }
 
   const handleClickInsideOfInput = () => {
-    setOpenTeacherList(prev => !prev)
+    setOpenNameList(prev => !prev)
   }
 
   useOnClickOutside(inputClickRef, handleClickOutsideOfInput)
 
-  let [teacherName, setTeacherName] = useState<string>('')
+  let [searchingName, setSearchingName] = useState<string>('')
   let [checkInclude, setCheckInclude] = useState<boolean>(false)
   let [isClickedAddTeacher, setIsClickedAddTeacher] = useState<boolean>(false)
-  let [newTeacherName, setNewTeacherName] = useState<string>('')
-  let [newTeacherPhoneNum, setNewTeacherPhoneNum] = useState<string>('')
-  let [openTeacherList, setOpenTeacherList] = useState<boolean>(false)
+  let [openNameList, setOpenNameList] = useState<boolean>(false)
   let [nameValue, setNameValue] = useState<string>('')
 
   const emptyInput = () => {
-    setTeacherName('')
+    setSearchingName('')
   }
 
-  const [teacherList, setTeacherList] = useState<{ id: string; name: string; phone: string }[]>([])
+  const [nameList, setNameList] = useState<{ id: string; name: string; phone: string; particulars?: string }[]>([])
   useEffect(() => {
-    instance('/teachers?searchBy=none&take=100').then(res => {
-      setTeacherList(res.data.data.teachers)
-    })
+    if (type === 'teachers') {
+      instance(`/teachers?searchBy=none&take=100`).then(res => {
+        const data = res.data.data.teachers
+        setNameList(data)
+      })
+    } else if (type === 'students') {
+      const classId = localStorage.getItem('classId')
+      if (classId !== 'null') {
+        instance(`/students/lessons/${classId}`).then(res => {
+          const data = res.data.data
+          setNameList(data)
+        })
+      }
+    }
   }, [isClickedAddTeacher])
-
-  useEffect(() => {
-    if (teacherId) setTeacherName(teacherId.name)
-  }, [teacherId])
 
   return (
     <>
       <div
-        className={`flex flex-col items-start gap-10 w-[640px] py-8 px-6 border ${
+        className={`flex flex-col items-start w-[640px] py-8 px-6 border ${
           valid ? 'border-[#E5E7EB]' : 'border-[#EF5D5D]'
         } rounded-xl bg-[#FFF]`}
       >
-        <div className={`gray-900-bold text-[20px]`}>강사 정보</div>
+        <div className="gray-900-bold text-xl pb-10">강사 정보</div>
+        {type === 'students' && <div className="w-full text-left gray-800-semibold text-base pb-2">수강생 찾기</div>}
         <div className="flex flex-start flex-col w-[100%] h-[auto] px-4 py-[14px] justify-center border border-[#E5E7EB] bg-[#F9FAFB] rounded-lg focus-within:border-[#7354E8]">
           <div className="relative flex w-[100%] items-center gap-2">
             <SearchIcon />
             <input
               ref={inputClickRef}
               className="w-[100%] text-[16px] bg-[#F9FAFB] text-[#111928] font-normal outline-none"
-              placeholder="강사 이름을 입력해주세요"
-              value={teacherName}
+              placeholder={type === 'teachers' ? '강사 이름을 입력해주세요' : '수강생 이름을 입력해주세요'}
+              value={searchingName}
               onClick={() => {
-                //clickInput
                 handleClickInsideOfInput()
               }}
               onChange={e => {
-                setTeacherName(e.target.value)
+                setSearchingName(e.target.value)
                 onChange(e.target.value)
               }}
             />
 
-            {teacherName !== '' && teacherName !== nameValue ? (
+            {searchingName !== '' && searchingName !== nameValue ? (
               <CloseCircleIcon className="text-gray-400 cursor-pointer" onClick={emptyInput} />
             ) : null}
-            {teacherName === nameValue && teacherName !== '' ? (
+            {searchingName === nameValue && searchingName !== '' ? (
               <Close_Circle_bg
                 className="absolute left-[100px] cursor-pointer"
                 width={20}
                 height={20}
                 onClick={() => {
-                  setTeacherName('')
+                  setSearchingName('')
                   setCheckInclude(prev => !prev)
                 }}
               />
             ) : null}
           </div>
         </div>
-        {openTeacherList ? (
+        {openNameList ? (
           <div
             ref={autoCompleteTeacherNameRef}
             className=" flex flex-col w-[100%] h-[auto] p-4 border rounded-lg items-center gap-3 bg-[#FFF] border-[#E5E7EB] shadow-[0px_1px_2px_0px_rgba(0, 0, 0, 0.08)]"
@@ -115,8 +119,8 @@ export default function TeacherInfo({ onChange, valid, teacherId }: IProps) {
             <div className="w-[100%] text-[14px] gray-900-semibold">강사 이름</div>
             <div className=" w-full overflow-hidden">
               <div className="max-h-[185px] overflow-y-scroll">
-                {teacherList.map((data, index) => {
-                  if (data.name.includes(teacherName)) {
+                {nameList.map((data, index) => {
+                  if (data.name.includes(searchingName)) {
                     return (
                       <div
                         data-teachername={data.name}
@@ -124,10 +128,10 @@ export default function TeacherInfo({ onChange, valid, teacherId }: IProps) {
                         className="relative flex w-full px-3 py-2 items-center gap-2 rounded-lg bg-[#F9FAFB] cursor-pointer hover:opacity-70"
                         onClick={e => {
                           const name: any = e.currentTarget.getAttribute('data-teachername')
-                          setTeacherName(name)
+                          setSearchingName(name)
                           setCheckInclude(prev => !prev)
                           setNameValue(data.name)
-                          setOpenTeacherList(prev => !prev)
+                          setOpenNameList(prev => !prev)
                           onChange(data.id)
                         }}
                       >
@@ -142,20 +146,22 @@ export default function TeacherInfo({ onChange, valid, teacherId }: IProps) {
                 })}
               </div>
             </div>
-            <div
-              className="flex w-full pt-3 border-t border-t-[#E5E7EB] gap-1 text-[14px] text-primary-600 font-semibold items-center cursor-pointer"
-              onClick={() => {
-                setIsClickedAddTeacher(true)
-                setModal(true)
-              }}
-            >
-              <PlusIcon />
-              강사 추가
-            </div>
+            {type === 'teachers' && (
+              <div
+                className="flex w-full pt-3 border-t border-t-[#E5E7EB] gap-1 text-[14px] text-primary-600 font-semibold items-center cursor-pointer"
+                onClick={() => {
+                  setIsClickedAddTeacher(true)
+                  setModal(true)
+                }}
+              >
+                <PlusIcon />
+                강사 추가
+              </div>
+            )}
           </div>
         ) : null}
       </div>
-      {isClickedAddTeacher && (
+      {type === 'teachers' && isClickedAddTeacher && (
         <Modal small>
           <RegisterModal onClose={() => setModal(false)} onCloseState={() => setIsClickedAddTeacher(false)} />
         </Modal>

@@ -15,6 +15,7 @@ interface postDataType {
 interface IProps {
   onClose: () => void
   onCloseState?: () => void
+  onRigister?: () => void
 }
 
 export default function RegisterModal(props: IProps) {
@@ -72,6 +73,9 @@ export default function RegisterModal(props: IProps) {
           props.onClose()
           if (props.onCloseState) {
             props.onCloseState()
+          }
+          if (props.onRigister) {
+            props.onRigister()
           }
         })
       }}

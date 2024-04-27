@@ -1,9 +1,9 @@
 'use client'
-import AllowLeftIcon from 'public/assets/icons/allow_left.svg'
-import AllowRightIcon from 'public/assets/icons/allow_right.svg'
-import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { useGetCalendarData } from '@/hooks/useGetCalendarData'
+
+import AllowLeftIcon from 'public/assets/icons/allow_left.svg'
+import AllowRightIcon from 'public/assets/icons/allow_right.svg'
 
 export interface dateDataType {
   year: number

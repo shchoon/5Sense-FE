@@ -15,12 +15,28 @@ interface IProps {
 
 export default function DetailStudent({ studentsId, onClose }: IProps) {
   const router = useRouter()
-
+  const [studentData, setStudentData] = useState({
+    name: '',
+    particulars: '',
+    phone: '',
+    sessionLesson: [],
+    durationLesson: []
+  })
   useEffect(() => {
     instance(`/students/${studentsId}`).then(res => {
-      console.log(res)
+      const data = res.data.data
+      setStudentData(prev => ({
+        ...prev,
+        name: data.name,
+        particulars: data.particulars,
+        phone: data.phone,
+        sessionLesson: data.sessionLessons,
+        durationLesson: data.durationLessons
+      }))
     })
   }, [])
+
+  console.log(studentData)
 
   return (
     <div className="relative w-[480px]  h-screen rounded-tr-[32px] bg-white">
@@ -34,13 +50,12 @@ export default function DetailStudent({ studentsId, onClose }: IProps) {
         {/* 수강생 이름, 번호, 메모 */}
         <div className="w-full flex flex-col gap-5">
           <div className="w-full flex items-center flex-col gap-2">
-            <div className="w-full gray-900-bold text-[26px]">엄세리</div>
-            <div className="w-full gray-800-medium text-base">010-1234-5678</div>
+            <div className="w-full gray-900-bold text-[26px]">{studentData.name}</div>
+            <div className="w-full gray-800-medium text-base">
+              {studentData.phone.slice(0, 3)}-{studentData.phone.slice(3, 7)}-{studentData.phone.slice(7, 11)}
+            </div>
           </div>
-          <div className="w-full gray-500-normal text-sm">
-            수강생 관련 간단메모가 300자까지 들어갑니다수강생 관련 간단메모가 300자까지 들어갑니다수강생 관련 간단메모가
-            300자까지 들어갑니다수강생 관련 간단메모가 300자까지 들어갑니다
-          </div>
+          <div className="w-full gray-500-normal text-sm">{studentData.particulars}</div>
           {/* 클래스 목록 */}
           <div className="w-full max-h-[760px] overflow-y-auto py-6 px-6 flex items-center flex-col gap-4 border border-1 border-gray-200 rounded-lg shadow">
             <div className="w-full gray-800-bold text-base">클래스 목록</div>
@@ -53,17 +68,44 @@ export default function DetailStudent({ studentsId, onClose }: IProps) {
               <div className="text-base font-semibold text-primary-600 font-['Pretendard']">클래스 추가</div>
             </button>
             <div className="w-full flex flex-col gap-4">
-              <StudentsDuration />
+              {studentData.sessionLesson.length !== 0 &&
+                studentData.sessionLesson.map(
+                  (
+                    data: {
+                      name: string
+                      sessionCount: number
+                      totalSessions: number
+                    },
+                    i
+                  ) => {
+                    return (
+                      <StudentsSession
+                        key={i}
+                        className={data.name}
+                        sessionCount={data.sessionCount}
+                        totalSessions={data.totalSessions}
+                        type="detail"
+                      />
+                    )
+                  }
+                )}
+              {/* <StudentsDuration />
               <StudentsSession />
               <StudentsSession />
               <StudentsSession />
-              <StudentsDuration />
+              <StudentsDuration /> */}
             </div>
           </div>
         </div>
       </div>
       <div className="absolute bottom-0 w-full px-6 pb-6">
-        <button type="button" className="w-full btn-purple-lg">
+        <button
+          type="button"
+          className="w-full btn-purple-lg"
+          onClick={() => {
+            router.push(`/student/edit/${studentsId}`)
+          }}
+        >
           수정하기
         </button>
       </div>

@@ -7,10 +7,10 @@ import { useWindowSize } from '@/hooks/useWindowSize'
 import CalendarIcon from '../../../../../public/assets/icons/calendar'
 import DateSlideTab from '@/components/main/DateSlideTab'
 import WeekDatePicker from '@/components/datePicker/weekDatePicker'
-import { dateDataType } from '@/components/datePicker/dayDatePicker'
+import { dateDataType } from '@/components/datePicker/dayDatePIcker'
 
-import chevronLeft from 'public/assets/icons/chevron/chevron-left.svg'
-import chevronRight from 'public/assets/icons/chevron/chevron-right.svg'
+import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
+import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
 
 export default function MainPageWeek() {
   const [dayData, setDayData] = useState<any>([])
@@ -26,7 +26,6 @@ export default function MainPageWeek() {
     month: currentDate.getMonth(),
     date: currentDate.getDate()
   })
-  console.log(currentDateData, dateData)
   const dayName = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일']
   const [weekData, setWeekData] = useState<number>(
     Math.ceil((dateData.date + new Date(dateData.year, dateData.month, 0).getDay() + 1) / 7)
@@ -123,8 +122,6 @@ export default function MainPageWeek() {
     setIsClickedDatePicker(false)
   }
 
-  const setActiveDayFromChild = (date: number) => {}
-
   const setWeekDataFromChild = (week: number) => {
     setWeekData(week)
   }
@@ -176,22 +173,6 @@ export default function MainPageWeek() {
     }))
     setDayData(currentWeekList)
   }, [dateData.month])
-  /* console.log(
-    Math.ceil(
-      (new Date(dateData.year, dateData.month, 1).getDay() +
-        1 +
-        new Date(dateData.year, dateData.month + 1, 0).getDate()) /
-        7
-    )
-  )
-  console.log(
-    Math.ceil(
-      (new Date(dateData.year, dateData.month - 1, 1).getDay() +
-        1 +
-        new Date(dateData.year, dateData.month, 0).getDate()) /
-        7
-    )
-  ) */
 
   /* post 할 데이터 dateData 바꾸기 */
   return (
@@ -207,7 +188,7 @@ export default function MainPageWeek() {
               className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
               onClick={moveBackWeek}
             >
-              <Image src={chevronLeft} width={24} height={24} alt=" " />
+              <ChevronLeftIcon width={24} height={24} alt=" " />
             </div>
             <div
               className="w-full px-3 py-2 flex justify-center gap-2 items-center gray-900-semibold text-base font-['Pretendard'] cursor-pointer hover:text-primary-600"
@@ -220,7 +201,7 @@ export default function MainPageWeek() {
               className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
               onClick={moveForwardWeek}
             >
-              <Image src={chevronRight} width={24} height={24} alt=" " />
+              <ChevronRightIcon width={24} height={24} alt=" " />
             </div>
           </div>
           <DateSlideTab />

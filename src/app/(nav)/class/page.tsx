@@ -128,7 +128,7 @@ export default function ClassPage() {
           classList.map((data, idx) => (
             <button
               key={idx}
-              className="h-56 px-4 py-8 flex flex-col justify-between box-border bg-white rounded-lg shadow border border-gray-200"
+              className="h-56 px-4 py-8 flex flex-col justify-between box-border bg-white rounded-lg shadow border border-gray-200 hover:border-primary-600"
               onClick={() => {
                 setProps(prev => ({
                   ...prev,

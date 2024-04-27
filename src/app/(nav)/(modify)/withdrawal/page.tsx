@@ -13,6 +13,11 @@ export default function WithDrawal() {
   })
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const maxLength = e.target.maxLength
+    const value = e.target.value
+    if (value.length > maxLength) {
+      e.target.value = e.target.value.slice(0, 2000)
+    }
     setPostData(prev => ({
       ...prev,
       detail: e.target.value
@@ -64,17 +69,23 @@ export default function WithDrawal() {
       </div>
       <div className="w-full flex flex-col gap-4">
         <div className="w-full flex flex-col gap-2">
-          <div className="w-[592px] gray-800-semibold text-base font-['Pretendard']">탈퇴 사유 및 개선점(선택)</div>
+          <div className="w-[592px] gray-800-semibold text-base font-['Pretendard']">탈퇴 사유 및 개선점</div>
           {/* <DropDown {...dropDownProps} /> */}
           <DropDown {...dropDownProps} handleChangeParentsDropdownData={handleChangeReasonFromChild} type="dropdown" />
         </div>
         {postData.reason === '기타' && (
-          <textarea
-            placeholder="탈퇴 사유 및 개선점을 적어주세요"
-            value={postData.detail}
-            onChange={onChangeHandler}
-            className="w-full h-[144px] px-4 py-3.5 border rounded-lg border-gray-200 focus:ring-0 focus:border-primary-700 focus:bg-gray-50 resize-none overflow-hidden"
-          />
+          <div className="flex flex-col gap-2">
+            <textarea
+              placeholder="탈퇴 사유 및 개선점을 적어주세요"
+              maxLength={2000}
+              value={postData.detail}
+              onChange={onChangeHandler}
+              className="w-full h-[144px] px-4 py-3.5 border rounded-lg border-gray-200 focus:outline-none focus:border-primary-700 focus:bg-gray-50 resize-none overflow-hidden"
+            />
+            <div className="w-full text-right gray-500-normal text-sm font-['Inter']">
+              {postData.detail.length}/2000
+            </div>
+          </div>
         )}
       </div>
       <button

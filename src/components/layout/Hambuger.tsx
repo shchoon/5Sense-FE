@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 import TodaySchedule from './TodaySchedule'
 
@@ -10,6 +11,7 @@ interface IProps {
 }
 
 export default function Hambuger({ onClose }: IProps) {
+  const router = useRouter()
   const currentDate = new Date()
   const currentDateData = {
     year: currentDate.getFullYear(),
@@ -36,7 +38,14 @@ export default function Hambuger({ onClose }: IProps) {
             </div>
           </div>
         </div>
-        <button type="button" className="w-[200px] h-[45px] px4 py-3 rounded-md btn-purple">
+        <button
+          type="button"
+          className="w-[200px] h-[45px] px4 py-3 rounded-md btn-purple"
+          onClick={() => {
+            onClose()
+            router.push('/centerInfo')
+          }}
+        >
           내 프로필 관리
         </button>
       </div>

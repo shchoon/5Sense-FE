@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const { color } = require('chart.js/helpers')
 const plugin = require('tailwindcss/plugin')
 
 module.exports = {
@@ -102,6 +103,7 @@ module.exports = {
           background: 'white',
           borderRadius: 8,
           textAlign: 'center',
+          alignItems: 'center',
           color: 'black',
           fontWeight: '600',
           cursor: 'pointer',
@@ -112,6 +114,40 @@ module.exports = {
           },
           '&:active': {
             outline: '3px solid #F3F4F6'
+          }
+        },
+        '.btn-white-md': {
+          boxSizing: 'content-box',
+          padding: '10px 20px',
+          background: 'white',
+          borderRadius: 8,
+          textAlign: 'center',
+          color: '#7354E8',
+          fontWeight: '600',
+          cursor: 'pointer',
+          border: '1px solid #7354E8',
+          '&:hover': {
+            backgroundColor: '#F3F4F6',
+            color: '#7354E8'
+          },
+          '&:active': {
+            outline: '3px solid #7354E8'
+          }
+        },
+        '.btn-purple-test': {
+          boxSizing: 'content-box',
+          padding: '10px 20px',
+          background: '#7354E8',
+          borderRadius: 8,
+          textAlign: 'center',
+          color: 'white',
+          fontWeight: '600',
+          cursor: 'pointer',
+          '&:hover': {
+            backgroundColor: '#563AC0'
+          },
+          '&:active': {
+            outline: '3px solid #D3C4F9'
           }
         },
         '.btn-line-purple': {

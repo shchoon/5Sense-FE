@@ -329,7 +329,7 @@ export default function ClassFilter() {
             ref={teacherNameTypeRefClick}
             className="absolute left-[120px] flex gap-[5px] w-[195px] py-4 pl-4 pr-2 border rounded-lg border-gray-300 bg-white shadow-[0_1px_2px_0_rgba(0,0,0,0.08)]"
           >
-            <FilterSearchName />
+            <FilterSearchName type="filter" target="teachers" />
           </div>
         ) : null}
         {/* 카테고리명 대분류/소분류 필터링 */}

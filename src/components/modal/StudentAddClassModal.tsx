@@ -1,6 +1,7 @@
 'use client'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 
 import DropDown from '../common/DropDown'
 import RoomReservation from '../room/RoomReservation'
@@ -12,15 +13,33 @@ interface IProps {
   onClose: () => void
 }
 
+export interface classType {
+  id: number
+  name: string
+  lessonTime: string
+}
+
 export default function StudentAddClassModal({ onClose }: IProps) {
+  const params = useParams()
+  let studentId: string = ''
+  if (params.id) {
+    studentId = params.id.toString()
+  }
+
   const [classType, setClassType] = useState<string>('duration')
-  const [selectedClass, setSelectedClass] = useState('')
+  const [selectedClass, setSelectedClass] = useState<classType>({
+    id: 0,
+    name: '',
+    lessonTime: ''
+  })
   const [isPaid, setIsPaid] = useState<boolean>(false)
   const [studentName, setStudentName] = useState('조성훈')
 
-  const handleChangeClassData = (data: string) => {
+  const handleChangeClassData = (data: classType) => {
     setSelectedClass(data)
   }
+
+  console.log(selectedClass)
 
   const handleClickPayment = () => {
     setIsPaid(prev => !prev)
@@ -32,18 +51,31 @@ export default function StudentAddClassModal({ onClose }: IProps) {
   })
 
   useEffect(() => {
-    instance(`/lessons/filters?type=${classType}&take=100`).then(res => {
-      const lessonData = res.data.data.lessons
-      console.log(lessonData)
-      let classList: string[] = []
-      lessonData.map((data: any, i: number) => {
-        classList.push(`${data.name} / ${data.teacher}`)
+    if (classType === 'duration') {
+      instance(`/duration-lessons`).then(res => {
+        console.log(res)
+        const lessonData = res.data.data
+        setDropDownProps(prev => ({
+          ...prev,
+          list: lessonData
+        }))
       })
-      setDropDownProps(prev => ({
-        ...prev,
-        list: classList
-      }))
-    })
+    } else if (classType === 'session') {
+      instance(`/session-lessons`, {
+        params: {
+          isCheckRegistrationsCount: true
+        }
+      }).then(res => {
+        console.log(res)
+        const lessonData = res.data.data
+
+        setDropDownProps(prev => ({
+          ...prev,
+          list: lessonData
+        }))
+      })
+    }
+
     return () => {
       setDropDownProps(prev => ({
         ...prev,
@@ -68,7 +100,12 @@ export default function StudentAddClassModal({ onClose }: IProps) {
             } text-base`}
             onClick={() => {
               setClassType('duration')
-              setSelectedClass('')
+              setIsPaid(false)
+              setSelectedClass({
+                id: 0,
+                name: '',
+                lessonTime: ''
+              })
             }}
           >
             기간반
@@ -80,7 +117,12 @@ export default function StudentAddClassModal({ onClose }: IProps) {
             } text-base`}
             onClick={() => {
               setClassType('session')
-              setSelectedClass('')
+              setIsPaid(false)
+              setSelectedClass({
+                id: 0,
+                name: '',
+                lessonTime: ''
+              })
             }}
           >
             회차반
@@ -92,8 +134,8 @@ export default function StudentAddClassModal({ onClose }: IProps) {
           <>
             <div className="w-full flex flex-col gap-2">
               <div className="w-full text-left gray-900-semibold text-base">클래스 선택</div>
-              <DropDown {...dropDownProps} handleChangeParentsDropdownData={handleChangeClassData} type="dropdown" />
-              {selectedClass !== '' && (
+              <DropDown {...dropDownProps} handleChangeParentsClassDropdownData={handleChangeClassData} type="class" />
+              {selectedClass !== undefined && (
                 <div className="w-full h-[69px] flex justify-between items-center px-6 py-[18px] bg-[#F8FAFD]">
                   <div className="w-[100px] h-[21px] flex items-center justify-center gray-900-semibold text-sm">
                     결제 상태
@@ -118,7 +160,7 @@ export default function StudentAddClassModal({ onClose }: IProps) {
             <button
               type="button"
               className={`w-full h-[52px] mt-[300px] rounded-lg ${
-                selectedClass !== '' ? 'bg-primary-600' : 'bg-gray-400'
+                selectedClass !== undefined ? 'bg-primary-600' : 'bg-gray-400'
               } text-white text-base font-semibold flex items-center justify-center btn-purple`}
             >
               추가하기
@@ -131,8 +173,8 @@ export default function StudentAddClassModal({ onClose }: IProps) {
           <>
             <div className="w-full flex flex-col gap-2">
               <div className="w-full text-left gray-900-semibold text-base">클래스 선택</div>
-              <DropDown {...dropDownProps} handleChangeParentsDropdownData={handleChangeClassData} type="dropdown" />
-              {selectedClass !== '' && (
+              <DropDown {...dropDownProps} handleChangeParentsClassDropdownData={handleChangeClassData} type="class" />
+              {selectedClass !== undefined && (
                 <div className="w-full h-[69px] flex justify-between items-center px-6 py-[18px] bg-[#F8FAFD]">
                   <div className="w-[100px] h-[21px] flex items-center justify-center gray-900-semibold text-sm">
                     결제 상태
@@ -156,10 +198,11 @@ export default function StudentAddClassModal({ onClose }: IProps) {
             </div>
             <RoomReservation
               class={selectedClass}
-              studentName={studentName}
               classType="session"
               viewType="modal"
+              paymentStatus={isPaid ? 'Paid' : 'Unpaid'}
               onClick={() => console.log('as')}
+              lessonTime={selectedClass.lessonTime !== '' ? selectedClass.lessonTime.toString() : ''}
             />
           </>
         )}

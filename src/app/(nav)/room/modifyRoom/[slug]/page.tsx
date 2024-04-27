@@ -1,26 +1,46 @@
 'use client'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState } from 'react'
-import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import InputForm, { InputFormProps } from '@/components/common/InputForm'
 import useInputNum from '@/hooks/useInputNum'
 import { InputNumProps } from '@/app/(nav)/student/register/page'
+import instance from '@/lib/api/axios'
 
-import ImgArrowBack from 'public/assets/icons/allowBack.svg'
-import ImgEllipsis from 'public/assets/icons/ellipsis75.svg'
-import Minus from 'public/assets/icons/minus_vector.svg'
-import Plus from 'public/assets/icons/plus_vector.svg'
+import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
+import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
+import MinusIcon from 'public/assets/icons/minus_vector.svg'
+import PlusIcon from 'public/assets/icons/plus_vector.svg'
 
 export default function ModifyRoom() {
-  const pathName = usePathname()
-  const roomName = pathName.split('/')[3]
+  const router = useRouter()
+  //const pathName = usePathname()
+  //const [inputValue, setInputValue] = useState<string>(roomName)
+  const [roomData, setRoomData] = useState<{ name: string; roomId: number; capacity: number }>({
+    name: localStorage.getItem('roomName') || '',
+    roomId: Number(localStorage.getItem('roomId')) || 0,
+    capacity: Number(localStorage.getItem('capacity')) || 0
+  })
 
-  const [permissonNum, setPermissonNum] = useState<number>(1)
-  const [inputValue, setInputValue] = useState<string>(roomName)
+  const handleChangeRoomName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value: string = e.target.value
+    const maxLength: number = e.target.maxLength
+    if (value.length > maxLength) {
+      setRoomData(prev => ({
+        ...prev,
+        name: value.slice(0, maxLength)
+      }))
+    }
 
-  const [InputValue, handleChange] = useInputNum({
+    setRoomData(prev => ({
+      ...prev,
+      name: value
+    }))
+  }
+  /* const [InputValue, handleChange] = useInputNum({
     name: 'room',
     submitData: inputValue,
     setSubmitData: setInputValue
@@ -32,14 +52,16 @@ export default function ModifyRoom() {
     maxLength: 20,
     submitData: inputValue,
     setSubmitData: setInputValue
-  }
+  } */
+
+  console.log(roomData)
 
   return (
     <>
       <div className="relative">
         <Link href={'/room'}>
-          <Image className="absolute left-[48px] top-[61px]" src={ImgEllipsis} width={28} height={28} alt="" />
-          <Image className="absolute left-[55px] top-[68px]" src={ImgArrowBack} width={14} height={14} alt="" />
+          <EllipsisIcon className="absolute left-[48px] top-[61px]" width={28} height={28} alt="" />
+          <ArrowBackIcon className="absolute left-[55px] top-[68px]" width={14} height={14} alt="" />
         </Link>
         <div className="absolute left-[92px] top-[60px] black-bold text-3xl font-['Pretendard']">강의실 수정</div>
       </div>
@@ -51,12 +73,13 @@ export default function ModifyRoom() {
               <div className="w-full text-left gray-800-semibold text-base">강의실 이름</div>
               <input
                 className="input-line-gray"
-                value={inputValue}
+                value={roomData.name}
+                maxLength={20}
                 onChange={e => {
-                  setInputValue(e.target.value)
+                  handleChangeRoomName(e)
                 }}
               />
-              <div className="w-full text-right gray-500-normal text-sm font-['Inter']">0/20</div>
+              <div className="w-full text-right gray-500-normal text-sm font-['Inter']">{roomData.name.length}/20</div>
             </div>
             <div className="w-full flex flex-col gap-2">
               <div className="w-full gray-800-semibold text-base">권장 허용 인원</div>
@@ -64,33 +87,52 @@ export default function ModifyRoom() {
                 <button
                   type="button"
                   className={`w-10 h-full flex items-center justify-center rounded-full ${
-                    permissonNum === 1 ? 'bg-gray-200' : 'bg-primary-600'
+                    roomData.capacity === 1 ? 'bg-gray-200' : 'bg-primary-600'
                   }`}
                   onClick={() => {
-                    if (permissonNum !== 1) {
-                      setPermissonNum(prev => prev - 1)
+                    if (roomData.capacity !== 1) {
+                      setRoomData(prev => ({
+                        ...prev,
+                        capacity: prev.capacity - 1
+                      }))
                     }
                   }}
                 >
-                  <Image src={Minus} width={12} height={10} alt="Minus" />
+                  <MinusIcon alt="Minus" />
                 </button>
                 <div className="w-[472px] h-full flex items-center justify-center text-lg gray-800-semibold">
-                  {permissonNum}명
+                  {roomData.capacity}명
                 </div>
                 <button
                   type="button"
                   className="w-10 h-full flex items-center justify-center rounded-full bg-primary-600"
                   onClick={() => {
-                    setPermissonNum(prev => prev + 1)
+                    setRoomData(prev => ({
+                      ...prev,
+                      capacity: prev.capacity + 1
+                    }))
                   }}
                 >
-                  <Image src={Plus} width={14} height={14} alt="Plus" />
+                  <PlusIcon alt="Plus" />
                 </button>
               </div>
             </div>
           </div>
         </div>
-        <button className="w-full h-[52px] flex justify-center items-center text-white text-base font-semibold btn-purple">
+        <button
+          className="w-full h-[52px] flex justify-center items-center text-white text-base font-semibold btn-purple"
+          onClick={() => {
+            instance
+              .put(`/lesson-rooms/${roomData.roomId}`, {
+                name: roomData.name,
+                capacity: roomData.capacity
+              })
+              .then(res => {
+                console.log(res)
+                router.push('/room')
+              })
+          }}
+        >
           수정하기
         </button>
       </div>

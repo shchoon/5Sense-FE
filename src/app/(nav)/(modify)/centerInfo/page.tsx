@@ -5,9 +5,12 @@ import Image from 'next/image'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import DropDown from '@/components/common/DropDown'
-import { centerDataType } from '@/app/myCenter/page'
+import { centerDataType } from '@/app/myCenter/rigister/page'
 import { centerInfoState } from '@/lib/state/centerInfoState'
 import instance from '@/lib/api/axios'
+import Modal from '@/components/common/modal'
+import { modalState } from '@/lib/state/modal'
+import SnsConnection from '@/components/modal/SnsConnection'
 
 import ProfileIcon from 'public/assets/images/defaultProfile.svg'
 import CameraIcon from 'public/assets/icons/camera.svg'
@@ -25,6 +28,7 @@ interface snsLinkType {
 }
 
 export default function ManageMent() {
+  const socialType = localStorage.getItem('social')
   const [postData, setPostData] = useState<centerDataType>({
     name: '',
     address: '',
@@ -34,14 +38,17 @@ export default function ManageMent() {
     profile: ''
   })
   const [snsLink, setSnsLink] = useState<snsLinkType>({
-    kakao: true,
-    naver: false,
-    google: false
+    kakao: socialType === 'kakao' ? true : false,
+    naver: socialType === 'naver' ? true : false,
+    google: socialType === 'google' ? true : false
   })
+  const [toggleStatus, setToggleStatus] = useState<boolean>(false)
   const [img, setImg] = useState<string | null>()
   const [imgFile, setImgFile] = useState<File>()
   const centerInfo = useRecoilValue(centerInfoState)
   const setCenterInfo = useSetRecoilState(centerInfoState)
+  const modal = useRecoilValue(modalState)
+  const setModal = useSetRecoilState(modalState)
 
   const onClickAddress = () => {
     new window.daum.Postcode({
@@ -155,6 +162,13 @@ export default function ManageMent() {
       })
   }
 
+  const checkSnsConnectionNum = () => {
+    let value = Object.values(snsLink)
+    console.log(value)
+    const snsConnectionNum = value.filter(data => data === true)
+    return snsConnectionNum.length
+  }
+
   useEffect(() => {
     if (centerInfo.name !== '') {
       console.log(centerInfo)
@@ -203,7 +217,7 @@ export default function ManageMent() {
                   </div>
                 ) : (
                   <div className="w-[140px] h-[140px] ">
-                    <img src={img} className="rounded-full" width={140} height={140} alt="" />
+                    <img src={img} className="rounded-full w-[140px] h-[140px]" alt="" />
                   </div>
                 )}
 
@@ -223,7 +237,7 @@ export default function ManageMent() {
                   />
                   <label htmlFor="file" className="w-full flex gap-1 items-center cursor-pointer">
                     <CameraIcon width={16} height={16} alt="" />
-                    <div className="indigo-500-semibold text-xs font-['Pretendard']">수정</div>
+                    <div className="indigo-500-semibold text-xs">수정</div>
                   </label>
                 </div>
               </div>
@@ -298,10 +312,16 @@ export default function ManageMent() {
                     width={44}
                     hiught={24}
                     onClick={() => {
-                      setSnsLink(prev => ({
-                        ...prev,
-                        kakao: false
-                      }))
+                      setModal(true)
+                      setToggleStatus(false)
+                      if (checkSnsConnectionNum() > 1) {
+                        setSnsLink(prev => ({
+                          ...prev,
+                          kakao: false
+                        }))
+                      } else {
+                        return
+                      }
                     }}
                   />
                 ) : (
@@ -310,6 +330,8 @@ export default function ManageMent() {
                     width={44}
                     hiught={24}
                     onClick={() => {
+                      setModal(true)
+                      setToggleStatus(true)
                       setSnsLink(prev => ({
                         ...prev,
                         kakao: true
@@ -349,10 +371,16 @@ export default function ManageMent() {
                     width={44}
                     heught={24}
                     onClick={() => {
-                      setSnsLink(prev => ({
-                        ...prev,
-                        naver: false
-                      }))
+                      setModal(true)
+                      setToggleStatus(false)
+                      if (checkSnsConnectionNum() > 1) {
+                        setSnsLink(prev => ({
+                          ...prev,
+                          naver: false
+                        }))
+                      } else {
+                        return
+                      }
                     }}
                   />
                 ) : (
@@ -361,6 +389,8 @@ export default function ManageMent() {
                     width={44}
                     heught={24}
                     onClick={() => {
+                      setModal(true)
+                      setToggleStatus(true)
                       setSnsLink(prev => ({
                         ...prev,
                         naver: true
@@ -383,10 +413,16 @@ export default function ManageMent() {
                     width={44}
                     height={24}
                     onClick={() => {
-                      setSnsLink(prev => ({
-                        ...prev,
-                        google: false
-                      }))
+                      setModal(true)
+                      setToggleStatus(false)
+                      if (checkSnsConnectionNum() > 1) {
+                        setSnsLink(prev => ({
+                          ...prev,
+                          google: false
+                        }))
+                      } else {
+                        return
+                      }
                     }}
                   />
                 ) : (
@@ -395,6 +431,8 @@ export default function ManageMent() {
                     width={44}
                     height={24}
                     onClick={() => {
+                      setToggleStatus(true)
+                      setModal(true)
                       setSnsLink(prev => ({
                         ...prev,
                         google: true
@@ -405,6 +443,11 @@ export default function ManageMent() {
               </div>
             </div>
           </div>
+          {modal && (
+            <Modal small>
+              <SnsConnection toggleStatus={toggleStatus} />
+            </Modal>
+          )}
         </div>
       )}
     </>

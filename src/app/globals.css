@@ -87,6 +87,10 @@
     @apply text-gray-600 font-normal;
   }
 
+  .gray-600-medium {
+    @apply text-gray-600 font-medium;
+  }
+
   .gray-500-medium {
     @apply text-gray-500 font-medium;
   }
@@ -105,6 +109,10 @@
 
   .indigo-500-semibold {
     @apply text-indigo-500 font-semibold;
+  }
+
+  .primary-600-medium {
+    @apply text-primary-600 font-medium
   }
 
   /* ... */

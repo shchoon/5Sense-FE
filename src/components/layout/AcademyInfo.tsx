@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import instance from '@/lib/api/axios'
-import { centerDataType } from '@/app/myCenter/page'
+import { centerDataType } from '@/app/myCenter/rigister/page'
 import { centerInfoState } from '@/lib/state/centerInfoState'
 import { toLocalString } from '@/utils'
 
@@ -23,19 +23,9 @@ export default function AcademyInfo(props: any) {
   const centerInfo = useRecoilValue(centerInfoState)
   const setCenterInfo = useSetRecoilState(centerInfoState)
 
-  /* const [centerInfo, setCenterInfo] = useState<centerDataType>({
-    name: '',
-    address: '',
-    mainPhone: '',
-    open: '',
-    close: ''
-  }) */
-
   useEffect(() => {
     instance('/centers/my').then(res => {
       const centerData = res.data.data
-      console.log(toLocalString(centerData.mainPhone))
-      console.log(centerData)
       setCenterInfo(prev => ({
         ...prev,
         name: centerData.name,
@@ -51,13 +41,14 @@ export default function AcademyInfo(props: any) {
   return (
     <div className="infoContent w-full flex flex-col items-center gap-7">
       <div className="relative w-full flex flex-col items-center gap-4">
-        {centerInfo.profile !== null ? (
-          <div className="absolute -top-5 w-[148px] h-[148px] flex justify-center items-center ">
-            <img width={90} height={90} src={centerInfo.profile} />
-          </div>
-        ) : (
-          <ProfileIcon width={150} className="absolute -top-5" />
-        )}
+        {centerInfo.name !== '' &&
+          (centerInfo.profile !== null ? (
+            <div className="absolute -top-5 w-[148px] h-[148px] flex justify-center items-center ">
+              <img className="rounded-full w-[90px] h-[90px]" src={centerInfo.profile} />
+            </div>
+          ) : (
+            <ProfileIcon width={150} className="absolute -top-5" />
+          ))}
 
         {centerInfo.name !== '' && (
           <div className="absolute top-[100px] w-full infoDetail flex flex-col items-center gap-2">
