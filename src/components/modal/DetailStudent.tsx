@@ -15,12 +15,22 @@ interface IProps {
 
 export default function DetailStudent({ studentsId, onClose }: IProps) {
   const router = useRouter()
-
+  const [studentData, setStudentData] = useState({
+    sessionLesson: [],
+    durationLesson: []
+  })
   useEffect(() => {
     instance(`/students/${studentsId}`).then(res => {
-      console.log(res)
+      const data = res.data.data
+      setStudentData(prev => ({
+        ...prev,
+        sessionLesson: data.sessionLessons,
+        durationLesson: data.durationLessons
+      }))
     })
   }, [])
+
+  console.log(studentData)
 
   return (
     <div className="relative w-[480px]  h-screen rounded-tr-[32px] bg-white">
@@ -53,17 +63,42 @@ export default function DetailStudent({ studentsId, onClose }: IProps) {
               <div className="text-base font-semibold text-primary-600 font-['Pretendard']">클래스 추가</div>
             </button>
             <div className="w-full flex flex-col gap-4">
-              <StudentsDuration />
+              {studentData.sessionLesson.length !== 0 &&
+                studentData.sessionLesson.map(
+                  (
+                    data: {
+                      name: string
+                      sessionCount: number
+                      totalSessions: number
+                    },
+                    i
+                  ) => {
+                    return (
+                      <StudentsSession
+                        className={data.name}
+                        sessionCount={data.sessionCount}
+                        totalSessions={data.totalSessions}
+                      />
+                    )
+                  }
+                )}
+              {/* <StudentsDuration />
               <StudentsSession />
               <StudentsSession />
               <StudentsSession />
-              <StudentsDuration />
+              <StudentsDuration /> */}
             </div>
           </div>
         </div>
       </div>
       <div className="absolute bottom-0 w-full px-6 pb-6">
-        <button type="button" className="w-full btn-purple-lg">
+        <button
+          type="button"
+          className="w-full btn-purple-lg"
+          onClick={() => {
+            router.push(`/student/edit/${studentsId}`)
+          }}
+        >
           수정하기
         </button>
       </div>

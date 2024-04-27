@@ -8,6 +8,9 @@ import DropDown from '@/components/common/DropDown'
 import { centerDataType } from '@/app/myCenter/rigister/page'
 import { centerInfoState } from '@/lib/state/centerInfoState'
 import instance from '@/lib/api/axios'
+import Modal from '@/components/common/modal'
+import { modalState } from '@/lib/state/modal'
+import SnsConnection from '@/components/modal/SnsConnection'
 
 import ProfileIcon from 'public/assets/images/defaultProfile.svg'
 import CameraIcon from 'public/assets/icons/camera.svg'
@@ -39,10 +42,13 @@ export default function ManageMent() {
     naver: socialType === 'naver' ? true : false,
     google: socialType === 'google' ? true : false
   })
+  const [toggleStatus, setToggleStatus] = useState<boolean>(false)
   const [img, setImg] = useState<string | null>()
   const [imgFile, setImgFile] = useState<File>()
   const centerInfo = useRecoilValue(centerInfoState)
   const setCenterInfo = useSetRecoilState(centerInfoState)
+  const modal = useRecoilValue(modalState)
+  const setModal = useSetRecoilState(modalState)
 
   const onClickAddress = () => {
     new window.daum.Postcode({
@@ -299,6 +305,8 @@ export default function ManageMent() {
                     width={44}
                     hiught={24}
                     onClick={() => {
+                      setModal(true)
+                      setToggleStatus(false)
                       setSnsLink(prev => ({
                         ...prev,
                         kakao: false
@@ -311,6 +319,8 @@ export default function ManageMent() {
                     width={44}
                     hiught={24}
                     onClick={() => {
+                      setModal(true)
+                      setToggleStatus(true)
                       setSnsLink(prev => ({
                         ...prev,
                         kakao: true
@@ -350,6 +360,8 @@ export default function ManageMent() {
                     width={44}
                     heught={24}
                     onClick={() => {
+                      setModal(true)
+                      setToggleStatus(false)
                       setSnsLink(prev => ({
                         ...prev,
                         naver: false
@@ -362,6 +374,8 @@ export default function ManageMent() {
                     width={44}
                     heught={24}
                     onClick={() => {
+                      setModal(true)
+                      setToggleStatus(true)
                       setSnsLink(prev => ({
                         ...prev,
                         naver: true
@@ -384,6 +398,8 @@ export default function ManageMent() {
                     width={44}
                     height={24}
                     onClick={() => {
+                      setModal(true)
+                      setToggleStatus(false)
                       setSnsLink(prev => ({
                         ...prev,
                         google: false
@@ -396,6 +412,8 @@ export default function ManageMent() {
                     width={44}
                     height={24}
                     onClick={() => {
+                      setToggleStatus(true)
+                      setModal(true)
                       setSnsLink(prev => ({
                         ...prev,
                         google: true
@@ -406,6 +424,11 @@ export default function ManageMent() {
               </div>
             </div>
           </div>
+          {modal && (
+            <Modal small>
+              <SnsConnection toggleStatus={toggleStatus} />
+            </Modal>
+          )}
         </div>
       )}
     </>

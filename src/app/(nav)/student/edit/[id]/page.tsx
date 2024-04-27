@@ -1,8 +1,8 @@
 'use client'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import { AxiosResponse } from 'axios'
-import { SetStateAction, useState } from 'react'
+import { SetStateAction, useEffect, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import InputForm, { InputFormProps } from '@/components/common/InputForm'
@@ -29,8 +29,10 @@ export interface InputNumProps {
   setSubmitData: React.Dispatch<SetStateAction<any>>
 }
 
-export default function StudentRegister() {
+export default function StudentEdit() {
   const router = useRouter()
+  const params = useParams()
+  const studentId = params.id
   const setModal = useSetRecoilState(modalState)
   const modal = useRecoilValue(modalState)
 
@@ -86,6 +88,18 @@ export default function StudentRegister() {
     setModal(false)
     setIsClickedAddClass(false)
   }
+
+  useEffect(() => {
+    instance(`/students/${studentId}`).then(res => {
+      const studentData = res.data.data
+      setStudentInfo(prev => ({
+        ...prev,
+        name: studentData.name,
+        phone: studentData.phone,
+        particulars: studentData.particulars
+      }))
+    })
+  }, [])
 
   return (
     <div className="w-full">

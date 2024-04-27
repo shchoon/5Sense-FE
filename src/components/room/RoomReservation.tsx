@@ -1,9 +1,9 @@
 'use client'
-import { ClassType, useRef, useState } from 'react'
+import { ClassType, useEffect, useRef, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRouter } from 'next/navigation'
 
 import LessonTimeModal from '../modal/RoundLessonTimeModal'
-
 import { durationScheduleState } from '@/lib/state/classDurationSchedule'
 import { lessonTimeState } from '@/lib/state/lessonTime'
 import { modalState } from '@/lib/state/modal'
@@ -16,6 +16,7 @@ import PeriodDatePicker from '../datePicker/periodDatePicker'
 import PeriodLessonTimeModal from '../modal/PeriodLessonTimeModal'
 import { centerInfoState } from '@/lib/state/centerInfoState'
 import { classType } from '../modal/StudentAddClassModal'
+import instance from '@/lib/api/axios'
 
 import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
 import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
@@ -34,13 +35,17 @@ interface RoomDataType {
 
 interface IProps {
   class?: classType
-  studentName?: string
+  studentId?: string
   classType: string
   viewType: string
   onClick?: () => void
+  lessonTime?: string
+  paymentStatus: string
 }
 
 export default function RoomReservation(props: IProps) {
+  console.log(props)
+  const router = useRouter()
   const refs = useRef<(HTMLDivElement | null)[]>([])
   const modal = useRecoilValue(modalState)
   const setModal = useSetRecoilState(modalState)
@@ -84,6 +89,7 @@ export default function RoomReservation(props: IProps) {
     lessonTime: '',
     room: ''
   })
+  const [roomData, setRoomData] = useState<any>([])
 
   const handleChangeDateDataFromChild = (data: dateDataType | any, type?: string) => {
     if (type === 'session') {
@@ -152,58 +158,83 @@ export default function RoomReservation(props: IProps) {
   }
 
   const openTimeList: string[] = []
-  const roomClickList: string[] = []
 
   if (centerInfo.name !== '') {
     const time = {
       open: Number(centerInfo.open.split(':')[0]),
       close: Number(centerInfo.close.split(':')[0])
     }
-    for (var i = time.open; i <= time.close; i++) {
+    for (var i = time.open; i < time.close; i++) {
       openTimeList.push(`${i}`)
-      roomClickList.push(' ')
-      roomClickList.push(' ')
     }
   }
 
-  const roomData: RoomDataType[] = [
-    {
-      id: 1,
-      name: 'A룸',
-      personNum: 15,
-      list: {
-        openTimeList: openTimeList,
-        roomClickList: roomClickList
+  const getRoomData = () => {
+    console.log(props.class)
+    instance('/lesson-rooms/daily', {
+      params: {
+        date: new Date(dateData.year, dateData.month, dateData.date).toISOString()
       }
-    },
-    {
-      id: 2,
-      name: 'B룸',
-      personNum: 10,
-      list: {
-        openTimeList: openTimeList,
-        roomClickList: roomClickList
+    }).then(res => {
+      const list = res.data.data
+      for (var i = 0; i < list.length; i++) {
+        const test: any = []
+        const keys = Object.keys(list[i].workTime)
+        for (var j = 0; j < keys.length; j++) {
+          const key = keys[j]
+          let value = list[i].workTime[key]
+          value.time = key
+          test.push(value)
+        }
+        list[i].workTime = test
+        /* 예약 불가인 룸 처리 */
+        const bookingFalseList = []
+        for (var k = 0; k < test.length; k++) {
+          if (test[k].lesonTime !== null && !test[k].isOpenForBooking) {
+            const range = Number(test[k].lessonTime) / 30 - 1
+            for (var n = k + 1; n <= k + range; n++) {
+              bookingFalseList.push(n)
+            }
+          }
+        }
+        if (bookingFalseList.length !== 0) {
+          for (var l = 0; l < bookingFalseList.length; l++) {
+            test[bookingFalseList[l]].isOpenForBooking = false
+          }
+        }
+        /* 선택한 클래스와 룸에 예약된 클래스가 달라서 예약 불가 처리를 하는 경우 */
       }
-    },
-    {
-      id: 3,
-      name: 'C룸',
-      personNum: 20,
-      list: {
-        openTimeList: openTimeList,
-        roomClickList: roomClickList
-      }
-    },
-    {
-      id: 4,
-      name: 'D룸',
-      personNum: 5,
-      list: {
-        openTimeList: openTimeList,
-        roomClickList: roomClickList
-      }
+
+      setRoomData(list)
+    })
+  }
+
+  const reservation = (startTime: string, endTime: string) => {
+    if (props.classType === 'session' && props.class) {
+      instance
+        .post('/session-lesson-registrations', {
+          studentId: Number(props.studentId),
+          lessonId: Number(props.class.id),
+          paymentStatus: props.paymentStatus
+        })
+        .then(res => {
+          if (props.class) {
+            instance
+              .post('/session-lesson-schedules', {
+                lessonId: Number(props.class.id),
+                studentId: Number(props.studentId),
+                sessionDate: new Date(dateData.year, dateData.month, dateData.date).toISOString(),
+                startTime: startTime,
+                endTime: endTime,
+                roomId: Number(clickedRoomData.roomId)
+              })
+              .then(res => {
+                router.push('/student')
+              })
+          }
+        })
     }
-  ]
+  }
 
   const scrollRight = (i: number) => {
     const element = refs.current[i]
@@ -267,6 +298,13 @@ export default function RoomReservation(props: IProps) {
       endTime: `${endTime.hour}:${endTime.min}`
     }
   }
+  useEffect(() => {
+    if (props.lessonTime && props.lessonTime !== '') {
+      setLessonTime(props.lessonTime)
+    }
+  }, [props.lessonTime])
+
+  console.log(reservationData)
 
   return (
     <>
@@ -346,6 +384,9 @@ export default function RoomReservation(props: IProps) {
             onClick={() => {
               if ((dateValue !== '날짜' && lessonTime !== '시간') || durationSchedules.length >= 1) {
                 setIsClickedSearch(true)
+                if (props.classType === 'session') {
+                  getRoomData()
+                }
               } else {
                 return
               }
@@ -396,184 +437,187 @@ export default function RoomReservation(props: IProps) {
         >
           {/* 룸 선택*/}
           <div className="w-full flex flex-col gap-10">
-            {roomData.map((data, i) => {
-              const roomId = data.id
-              const room = data.name
-              const timeRange: number | undefined =
-                lessonTime === '시간'
-                  ? undefined
-                  : lessonTime.length <= 3
+            {roomData.length !== 0 &&
+              roomData.map((data: any, i: number) => {
+                const roomId = data.id
+                const room = data.name
+                const timeRange: number | undefined = lessonTime === '시간' ? undefined : Number(lessonTime) / 30
+                /* : lessonTime.length <= 3
                     ? Number(lessonTime) / 30
-                    : calculatePeriodClassLessonTime() / 30
-              return (
-                <div key={i} className="relative flex flex-col gap-4">
-                  <div className="flex justify-between">
-                    <div className="flex gap-2">
-                      <div className="gray-900-semibold text-xl flex items-center">{data.name}</div>
-                      <div className="flex items-center gap-0.5">
-                        <UserIcon width={16} height={16} />
-                        <div className="gray-500-normal text-sm flex items-center">{data.personNum}인</div>
+                    : calculatePeriodClassLessonTime() / 30 */
+                return (
+                  <div key={i} className="relative flex flex-col gap-4">
+                    <div className="flex justify-between">
+                      <div className="flex gap-2">
+                        <div className="gray-900-semibold text-xl flex items-center">{data.name}</div>
+                        <div className="flex items-center gap-0.5">
+                          <UserIcon width={16} height={16} />
+                          <div className="gray-500-normal text-sm flex items-center">{data.capacity}인</div>
+                        </div>
                       </div>
-                    </div>
-                    <button
-                      className="w-[73px] h-[37px] border border-1 border-primary-600 rounded-lg flex items-center justify-center text-sm text-primary-600 font-normal"
-                      onClick={() => {
-                        if (room !== clickedRoomData.room) {
-                          return
-                        }
-                        if (props.classType === 'session' && timeRange) {
-                          const lessonTime = calculateLessonTimeOfRoom(timeRange)
-                          const day = calculateDay(new Date(dateData.year, dateData.month, dateData.date).getDay())
+                      <button
+                        className="w-[73px] h-[37px] border border-1 border-primary-600 rounded-lg flex items-center justify-center text-sm text-primary-600 font-normal"
+                        onClick={() => {
+                          if (room !== clickedRoomData.room) {
+                            return
+                          }
+                          if (props.classType === 'session' && timeRange) {
+                            const lessonTime = calculateLessonTimeOfRoom(timeRange)
+                            const day = calculateDay(new Date(dateData.year, dateData.month, dateData.date).getDay())
 
-                          setReservationData(prev => ({
-                            ...prev,
-                            className: props.class !== undefined ? props.class.name : '',
-                            studentName: props.studentName,
-                            date: dateValue + `(${day})`,
-                            lessonTime: lessonTime.startTime + '-' + lessonTime.endTime,
-                            room: clickedRoomData.room
-                          }))
-
-                          /* 예약 확인 모달 보여주기 위함 */
-                          if (props.viewType === 'page') {
-                            setModal(true)
-                          } else if (props.viewType === 'modal') {
-                            /* 예약 정보 전송 */
-                            console.log(dateValue, lessonTime)
-                            const data = {
-                              date: ''
+                            setReservationData(prev => ({
+                              ...prev,
+                              className: props.class !== undefined ? props.class.name : '',
+                              studentName: props.studentId,
+                              date: dateValue + `(${day})`,
+                              lessonTime: lessonTime.startTime + '-' + lessonTime.endTime,
+                              room: clickedRoomData.room
+                            }))
+                            reservation(lessonTime.startTime, lessonTime.endTime)
+                            /* 예약 확인 모달 보여주기 위함 */
+                            if (props.viewType === 'page') {
+                              setModal(true)
+                            } else if (props.viewType === 'modal') {
+                              /* 예약 정보 전송 */
+                              console.log(dateValue, lessonTime)
+                              const data = {
+                                date: ''
+                              }
+                            }
+                          } else if (props.classType === 'duration') {
+                            if (timeRange !== undefined && durationSchedules.length === 0) {
+                              const startDateData = dateValue.split('~')[0].split('.')
+                              const endDateData = dateValue.split('~')[1].split('.')
+                              setDurationSchedule(prev => [
+                                ...prev,
+                                {
+                                  startDate: new Date(
+                                    Number(startDateData[0]),
+                                    Number(startDateData[1]) - 1,
+                                    Number(startDateData[2])
+                                  ).toISOString(),
+                                  endDate: new Date(
+                                    Number(endDateData[0]),
+                                    Number(endDateData[1]) - 1,
+                                    Number(endDateData[2])
+                                  ).toISOString(),
+                                  startTime: calculateLessonTimeOfRoom(timeRange).startTime,
+                                  endTime: calculateLessonTimeOfRoom(timeRange).endTime,
+                                  repeatDate: lessonTime.split(',')[0].replace(' 반복', '').replace(/\s+/g, ','),
+                                  roomId: 1,
+                                  lessonTime: calculatePeriodClassLessonTime()
+                                }
+                              ])
+                            } else if (timeRange !== undefined && durationSchedules.length >= 1) {
+                              setDurationSchedule(prev => [
+                                ...prev,
+                                {
+                                  startDate: durationSchedules[0].startDate,
+                                  endDate: durationSchedules[0].endDate,
+                                  startTime: calculateLessonTimeOfRoom(timeRange).startTime,
+                                  endTime: calculateLessonTimeOfRoom(timeRange).endTime,
+                                  repeatDate: lessonTime.split(',')[0].replace(' 반복', '').replace(/\s+/g, ','),
+                                  roomId: 1,
+                                  lessonTime: calculatePeriodClassLessonTime()
+                                }
+                              ])
                             }
                           }
-                        } else if (props.classType === 'duration') {
-                          if (timeRange !== undefined && durationSchedules.length === 0) {
-                            const startDateData = dateValue.split('~')[0].split('.')
-                            const endDateData = dateValue.split('~')[1].split('.')
-                            setDurationSchedule(prev => [
-                              ...prev,
-                              {
-                                startDate: new Date(
-                                  Number(startDateData[0]),
-                                  Number(startDateData[1]) - 1,
-                                  Number(startDateData[2])
-                                ).toISOString(),
-                                endDate: new Date(
-                                  Number(endDateData[0]),
-                                  Number(endDateData[1]) - 1,
-                                  Number(endDateData[2])
-                                ).toISOString(),
-                                startTime: calculateLessonTimeOfRoom(timeRange).startTime,
-                                endTime: calculateLessonTimeOfRoom(timeRange).endTime,
-                                repeatDate: lessonTime.split(',')[0].replace(' 반복', '').replace(/\s+/g, ','),
-                                roomId: 1,
-                                lessonTime: calculatePeriodClassLessonTime()
-                              }
-                            ])
-                          } else if (timeRange !== undefined && durationSchedules.length >= 1) {
-                            setDurationSchedule(prev => [
-                              ...prev,
-                              {
-                                startDate: durationSchedules[0].startDate,
-                                endDate: durationSchedules[0].endDate,
-                                startTime: calculateLessonTimeOfRoom(timeRange).startTime,
-                                endTime: calculateLessonTimeOfRoom(timeRange).endTime,
-                                repeatDate: lessonTime.split(',')[0].replace(' 반복', '').replace(/\s+/g, ','),
-                                roomId: 1,
-                                lessonTime: calculatePeriodClassLessonTime()
-                              }
-                            ])
+                          if (props.onClick) {
+                            /* 모달 닫는 함수 */
+                            props.onClick()
                           }
-                        }
-                        if (props.onClick) {
-                          /* 모달 닫는 함수 */
-                          props.onClick()
-                        }
+                        }}
+                      >
+                        예약하기
+                      </button>
+                    </div>
+                    <button
+                      className="absolute z-10 -left-3 top-[60px] flex items-center justify-center w-6 h-6 border border-1 border-gray-200 bg-primary-50 rounded-full"
+                      onClick={() => {
+                        scrollLeft(i)
                       }}
                     >
-                      예약하기
+                      <ChevronLeftIcon className="z-10" width={16} height={16} />
                     </button>
-                  </div>
-                  <button
-                    className="absolute z-10 -left-3 top-[60px] flex items-center justify-center w-6 h-6 border border-1 border-gray-200 bg-primary-50 rounded-full"
-                    onClick={() => {
-                      scrollLeft(i)
-                    }}
-                  >
-                    <ChevronLeftIcon className="z-10" width={16} height={16} />
-                  </button>
-                  <button
-                    className="absolute z-10 -right-3 top-[60px] flex items-center justify-center w-6 h-6 border border-1 border-gray-200 bg-primary-50 rounded-full"
-                    onClick={() => {
-                      scrollRight(i)
-                    }}
-                  >
-                    <ChevronRightIcon className="z-10" width={16} height={16} />
-                  </button>
-                  <div
-                    ref={el => (refs.current[i] = el)}
-                    className="w-full grid grid-flow-col overflow-y-auto scrollbar-hide"
-                  >
-                    <div className="w-full flex flex-col">
-                      <div className="w-full flex">
-                        {data.list.openTimeList.map((time, i) => {
-                          return (
-                            <div key={i} className={`w-[54px] flex flex-col`}>
-                              <div
-                                className={`relative w-full flex flex-col h-[42px] py-[11px] ${
-                                  i === 0 ? 'border border-1' : 'border-y border-r'
-                                }  border-gray-200 flex items-center justify-center gray-800-medium text-[13px]`}
+                    <button
+                      className="absolute z-10 -right-3 top-[60px] flex items-center justify-center w-6 h-6 border border-1 border-gray-200 bg-primary-50 rounded-full"
+                      onClick={() => {
+                        scrollRight(i)
+                      }}
+                    >
+                      <ChevronRightIcon className="z-10" width={16} height={16} />
+                    </button>
+                    <div
+                      ref={el => (refs.current[i] = el)}
+                      className="w-full grid grid-flow-col overflow-y-auto scrollbar-hide"
+                    >
+                      <div className="w-full flex flex-col">
+                        <div className="w-full flex">
+                          {openTimeList.length !== 0 &&
+                            openTimeList.map((time, i: number) => {
+                              return (
+                                <div key={i} className={`w-[54px] flex flex-col`}>
+                                  <div
+                                    className={`relative w-full flex flex-col h-[42px] py-[11px] ${
+                                      i === 0 ? 'border border-1' : 'border-y border-r'
+                                    }  border-gray-200 flex items-center justify-center gray-800-medium text-[13px]`}
+                                  >
+                                    {time}
+                                  </div>
+                                </div>
+                              )
+                            })}
+                        </div>
+                        <div className="w-full flex">
+                          {data.workTime.map((data: any, i: number) => {
+                            return (
+                              <button
+                                key={i}
+                                className={`w-[27px] ${
+                                  data.isOpenForBooking
+                                    ? clickedRoomData.roomId === roomId &&
+                                      clickedRoomData.clickedTime !== undefined &&
+                                      timeRange !== undefined &&
+                                      clickedRoomData.clickedTime <= i &&
+                                      i <= clickedRoomData.clickedTime + timeRange - 1
+                                      ? 'bg-primary-300'
+                                      : 'bg-white'
+                                    : 'bg-gray-100'
+                                }`}
+                                onClick={() => {
+                                  if (timeRange === undefined) {
+                                    return
+                                  } else {
+                                    setClickedRoomData(prev => ({
+                                      ...prev,
+                                      roomId: roomId,
+                                      clickedTime: i,
+                                      room: room
+                                    }))
+                                  }
+                                }}
                               >
-                                {time}
-                              </div>
-                            </div>
-                          )
-                        })}
-                      </div>
-                      <div className="w-full flex">
-                        {data.list.roomClickList.map((data, i) => {
-                          return (
-                            <button
-                              key={i}
-                              className={`w-[27px] ${
-                                clickedRoomData.roomId === roomId &&
-                                clickedRoomData.clickedTime !== undefined &&
-                                timeRange !== undefined &&
-                                clickedRoomData.clickedTime <= i &&
-                                i <= clickedRoomData.clickedTime + timeRange - 1 &&
-                                'bg-primary-300'
-                              }`}
-                              onClick={() => {
-                                if (timeRange === undefined) {
-                                  return
-                                } else {
-                                  setClickedRoomData(prev => ({
-                                    ...prev,
-                                    roomId: roomId,
-                                    clickedTime: i,
-                                    room: room
-                                  }))
-                                }
-                              }}
-                            >
-                              <div
-                                className={`w-full h-9 ${i === 0 && 'border-l'} border-r border-b  border-gray-200`}
-                              />
-                            </button>
-                          )
-                        })}
+                                <div
+                                  className={`w-full h-9 ${i === 0 && 'border-l'} border-r border-b  border-gray-200`}
+                                />
+                              </button>
+                            )
+                          })}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              )
-            })}
+                )
+              })}
           </div>
         </div>
       )}
-      {props.viewType === 'page' && modal && (
+      {/* {props.viewType === 'page' && modal && (
         <Modal small>
           <RoomReservationCheck reservationData={reservationData} />
         </Modal>
-      )}
+      )} */}
     </>
   )
 }

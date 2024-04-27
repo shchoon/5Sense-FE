@@ -1,6 +1,7 @@
 'use client'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 
 import DropDown from '../common/DropDown'
 import RoomReservation from '../room/RoomReservation'
@@ -13,23 +14,19 @@ interface IProps {
 }
 
 export interface classType {
-  category: string
   id: number
   name: string
-  numberOfStudents: string
-  teacher: string
-  type: string
+  lessonTime: string
 }
 
 export default function StudentAddClassModal({ onClose }: IProps) {
+  const params = useParams()
+  const studentId = params.id.toString()
   const [classType, setClassType] = useState<string>('duration')
   const [selectedClass, setSelectedClass] = useState<classType>({
-    category: '',
     id: 0,
     name: '',
-    numberOfStudents: '',
-    teacher: '',
-    type: ''
+    lessonTime: ''
   })
   const [isPaid, setIsPaid] = useState<boolean>(false)
   const [studentName, setStudentName] = useState('조성훈')
@@ -37,6 +34,8 @@ export default function StudentAddClassModal({ onClose }: IProps) {
   const handleChangeClassData = (data: classType) => {
     setSelectedClass(data)
   }
+
+  console.log(selectedClass)
 
   const handleClickPayment = () => {
     setIsPaid(prev => !prev)
@@ -48,18 +47,31 @@ export default function StudentAddClassModal({ onClose }: IProps) {
   })
 
   useEffect(() => {
-    instance(`/lessons/filters?type=${classType}&take=100`).then(res => {
-      console.log(res)
-      const lessonData = res.data.data.lessons
-      let classList: string[] = []
-      /* lessonData.map((data: any, i: number) => {
-        classList.push(`${data.name} / ${data.teacher}`)
-      }) */
-      setDropDownProps(prev => ({
-        ...prev,
-        list: lessonData
-      }))
-    })
+    if (classType === 'duration') {
+      instance(`/duration-lessons`).then(res => {
+        console.log(res)
+        const lessonData = res.data.data
+        setDropDownProps(prev => ({
+          ...prev,
+          list: lessonData
+        }))
+      })
+    } else if (classType === 'session') {
+      instance(`/session-lessons`, {
+        params: {
+          isCheckRegistrationsCount: true
+        }
+      }).then(res => {
+        console.log(res)
+        const lessonData = res.data.data
+
+        setDropDownProps(prev => ({
+          ...prev,
+          list: lessonData
+        }))
+      })
+    }
+
     return () => {
       setDropDownProps(prev => ({
         ...prev,
@@ -69,7 +81,7 @@ export default function StudentAddClassModal({ onClose }: IProps) {
     }
   }, [classType])
 
-  console.log(selectedClass)
+  console.log(selectedClass, isPaid)
 
   return (
     <div className="w-[640px] border border-1 border-gray-200 rounded-xl bg-white">
@@ -86,13 +98,11 @@ export default function StudentAddClassModal({ onClose }: IProps) {
             } text-base`}
             onClick={() => {
               setClassType('duration')
+              setIsPaid(false)
               setSelectedClass({
-                category: '',
                 id: 0,
                 name: '',
-                numberOfStudents: '',
-                teacher: '',
-                type: ''
+                lessonTime: ''
               })
             }}
           >
@@ -105,13 +115,11 @@ export default function StudentAddClassModal({ onClose }: IProps) {
             } text-base`}
             onClick={() => {
               setClassType('session')
+              setIsPaid(false)
               setSelectedClass({
-                category: '',
                 id: 0,
                 name: '',
-                numberOfStudents: '',
-                teacher: '',
-                type: ''
+                lessonTime: ''
               })
             }}
           >
@@ -188,10 +196,12 @@ export default function StudentAddClassModal({ onClose }: IProps) {
             </div>
             <RoomReservation
               class={selectedClass}
-              studentName={studentName}
+              studentId={studentId}
               classType="session"
               viewType="modal"
+              paymentStatus={isPaid ? 'Paid' : 'Unpaid'}
               onClick={() => console.log('as')}
+              lessonTime={selectedClass.lessonTime !== '' ? selectedClass.lessonTime.toString() : ''}
             />
           </>
         )}

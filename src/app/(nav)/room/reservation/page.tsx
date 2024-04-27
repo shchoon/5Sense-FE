@@ -147,8 +147,9 @@ export default function Reservatoin() {
                 router.push('/room')
               })
               .catch(res => {
-                const errMessage = res.response.data.message
-                if (errMessage === '이미 해당 시간에 예약이 되어있습니다') {
+                console.log(res.response)
+                const statusCode = res.response.status
+                if (statusCode === 409) {
                   alert('선택한 수강생이 이미 예약되어있습니다.')
                 }
               })

@@ -60,10 +60,10 @@ export default function PayPage() {
   useEffect(() => {
     let requestUrl =
       inputData.value === ''
-        ? `/lesson-registrations/billing-payments?page=1&take=10&searchBy=none&PaymentStatus=${currentPaymentStatus}`
-        : `/lesson-registrations/billing-payments?page=1&take=10&searchBy=${inputData.searchBy}&${inputData.searchBy}=${inputData.value}&PaymentStatus=${currentPaymentStatus}`
+        ? `/billing-payments?page=1&take=10&searchBy=none&PaymentStatus=${currentPaymentStatus}`
+        : `/billing-payments?page=1&take=10&searchBy=${inputData.searchBy}&${inputData.searchBy}=${inputData.value}&PaymentStatus=${currentPaymentStatus}`
     instance(requestUrl).then(res => {
-      const studentsData = res.data.data.students
+      const studentsData = res.data.data.billingPayments
       const meta = res.data.data.meta
       setStudentList(studentsData)
       setMetaData(prev => ({
@@ -137,6 +137,8 @@ export default function PayPage() {
       }
     }
   }, [metaData])
+
+  console.log(studentList)
 
   return (
     <div className="w-full h-full px-6 md:px-12 lg:px-6 xl:px-12 py-[60px] box-border">
@@ -225,23 +227,23 @@ export default function PayPage() {
         </div>
         <div className="w-full flex flex-col gap-[14px]">
           {isRefresh && studentList.length === 0 ? <NoneResult /> : null}
-          {studentList?.map(({ id, studentName, name, studentPhone, type, paymentStatus }, i) => {
+          {studentList?.map((data: any, i) => {
             return (
               <button
                 key={i}
                 className="w-full flex lg:gap-8 gap-5 p-6 outline rounded-md outline-1 outline-gray-200 shadow-[0_5px_15px_0px_rgba(0,0,0,0.02)] hover:outline-primary-600"
                 onClick={() => {}}
               >
-                <div className=" lg:w-[100px] w-[70px] gray-800-semibold text-sm text-left">{studentName}</div>
+                <div className=" lg:w-[100px] w-[70px] gray-800-semibold text-sm text-left">{data.student.name}</div>
                 <div className="lg:w-[160px] w-[110px] gray-800-semibold text-sm text-left">
-                  {studentPhone.slice(0, 3)}-{studentPhone.slice(3, 7)}-{studentPhone.slice(7, 11)}
+                  {data.student.phone.slice(0, 3)}-{data.student.phone.slice(3, 7)}-{data.student.phone.slice(7, 11)}
                 </div>
-                <div className="flex-1 gray-800-semibold text-sm text-left">{name}</div>
+                <div className="flex-1 gray-800-semibold text-sm text-left">{data.lesson.name}</div>
                 <div className="lg:w-[140px] w-[110px] grsy-800-semibold text-sm text-left">1,500,000</div>
                 <div className={`lg:w-[220px] w-[148px] gray-900-normal text-base text-left`}>
                   <div className="w-full flex items-center xl:gap-2.5 gap-2">
                     <div className="text-gray-700 xl:text-base text-sm font-medium">미결제</div>
-                    {paymentStatus === 'Paid' ? (
+                    {data.paymentStatus === 'Paid' ? (
                       <ToggleOnIcon
                         onClick={() => {
                           if (confirm('결제상태를 변경하시겠습니까?')) {

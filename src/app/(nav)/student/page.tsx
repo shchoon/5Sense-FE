@@ -14,6 +14,7 @@ import SearchInput from '@/components/common/SearchInput'
 import ListInfo from '@/components/view/ListInfo'
 import { PaymentType } from '../pay/page'
 import List from '@/components/view/List'
+import { studentForClass } from '@/lib/state/studentForClass'
 
 export interface studentType {
   id: string
@@ -39,10 +40,13 @@ export default function StudentPage() {
   const target = useRef<HTMLDivElement>(null)
 
   const setModal = useSetRecoilState(modalState)
+  const setStudentForClass = useSetRecoilState(studentForClass)
   const [isClickedStudent, setIsClickedStudent] = useState<boolean>(false)
   const [clickedStudentsId, setClickedStudentsId] = useState<string>('')
 
-  const [studentList, setStudentList] = useState<studentType[]>([])
+  const [studentList, setStudentList] = useState<
+    { id: string; name: string; phone: string; className: string; particulars: string; lessons: any }[]
+  >([])
   const [metaData, setMetaData] = useState<{ page: number; hasNextPage: boolean }>({
     page: 1,
     hasNextPage: false
@@ -78,7 +82,7 @@ export default function StudentPage() {
   }
 
   useEffect(() => {
-    instance('/students?searchBy=none').then(res => {
+    instance('/students?searchBy=none&page=1&take=10').then(res => {
       const studentsData = res.data.data.students
       const meta = res.data.data.meta
       setStudentList(studentsData)
@@ -152,6 +156,8 @@ export default function StudentPage() {
     }
   }, [metaData])
 
+  console.log(studentList)
+
   return (
     <div className="w-full h-full px-6 md:px-12 lg:px-6 xl:px-12 py-[60px] box-border">
       {/* 수강생 관리 + 수강생 등록 버튼 */}
@@ -166,8 +172,8 @@ export default function StudentPage() {
         <div className="w-full flex flex-col gap-[14px]">
           {isRefresh && studentList.length === 0 ? <NoneResult /> : null}
           {/* 검색 결과 없음 */}
-          {studentList?.map(({ id, name, className, phone, particulars }) => {
-            const props = { id: id, name: name, className: className, phone: phone, particulars: particulars }
+          {studentList?.map(({ id, name, lessons, phone, particulars }) => {
+            const props = { id: id, name: name, lessons: lessons, phone: phone, particulars: particulars }
             return (
               <List
                 type="student"
@@ -176,6 +182,10 @@ export default function StudentPage() {
                   setModal(true)
                   setIsClickedStudent(true)
                   setClickedStudentsId(id)
+                  /* setStudentForClass(prev => ({
+                    ...prev,
+                    id: id
+                  })) */
                 }}
               />
             )
