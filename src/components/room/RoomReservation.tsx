@@ -17,6 +17,7 @@ import PeriodLessonTimeModal from '../modal/PeriodLessonTimeModal'
 import { centerInfoState } from '@/lib/state/centerInfoState'
 import { classType } from '../modal/StudentAddClassModal'
 import instance from '@/lib/api/axios'
+import { sessionScheduleState } from '@/lib/state/studentSessionSchedule'
 
 import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
 import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
@@ -35,7 +36,6 @@ interface RoomDataType {
 
 interface IProps {
   class?: classType
-  studentId?: string
   classType: string
   viewType: string
   onClick?: () => void
@@ -51,6 +51,7 @@ export default function RoomReservation(props: IProps) {
   const setModal = useSetRecoilState(modalState)
   const durationSchedules = useRecoilValue(durationScheduleState)
   const setDurationSchedule = useSetRecoilState(durationScheduleState)
+  const setSessionSchedule = useSetRecoilState(sessionScheduleState)
   const setLessonTimeState = useSetRecoilState(lessonTimeState)
   const centerInfo = useRecoilValue(centerInfoState)
 
@@ -209,7 +210,7 @@ export default function RoomReservation(props: IProps) {
     })
   }
 
-  const reservation = (startTime: string, endTime: string) => {
+  /* const reservation = (startTime: string, endTime: string) => {
     if (props.classType === 'session' && props.class) {
       instance
         .post('/session-lesson-registrations', {
@@ -234,7 +235,7 @@ export default function RoomReservation(props: IProps) {
           }
         })
     }
-  }
+  } */
 
   const scrollRight = (i: number) => {
     const element = refs.current[i]
@@ -276,7 +277,7 @@ export default function RoomReservation(props: IProps) {
     }.${endDate.getDate()}`
   }
 
-  const calculateLessonTimeOfRoom = (timeRange: number) => {
+  const calculateLessonTimeOfRoom = (timeRange: number): { startTime: string; endTime: string } => {
     const index = Number(clickedRoomData.clickedTime)
     let startTime = {
       hour: openTimeList[Number(Math.ceil((index + 1) / 2 - 1))],
@@ -293,6 +294,13 @@ export default function RoomReservation(props: IProps) {
       min: (index + timeRange) % 2 === 0 ? '00' : '30'
     }
 
+    if (startTime.hour.length === 1) {
+      startTime.hour = '0' + String(startTime.hour)
+    }
+    if (String(endTime.hour).length === 1) {
+      endTime.hour = '0' + String(endTime.hour)
+    }
+
     return {
       startTime: `${startTime.hour}:${startTime.min}`,
       endTime: `${endTime.hour}:${endTime.min}`
@@ -303,8 +311,6 @@ export default function RoomReservation(props: IProps) {
       setLessonTime(props.lessonTime)
     }
   }, [props.lessonTime])
-
-  console.log(reservationData)
 
   return (
     <>
@@ -465,25 +471,31 @@ export default function RoomReservation(props: IProps) {
                             const lessonTime = calculateLessonTimeOfRoom(timeRange)
                             const day = calculateDay(new Date(dateData.year, dateData.month, dateData.date).getDay())
 
-                            setReservationData(prev => ({
+                            setSessionSchedule(prev => [
                               ...prev,
-                              className: props.class !== undefined ? props.class.name : '',
-                              studentName: props.studentId,
-                              date: dateValue + `(${day})`,
-                              lessonTime: lessonTime.startTime + '-' + lessonTime.endTime,
-                              room: clickedRoomData.room
-                            }))
-                            reservation(lessonTime.startTime, lessonTime.endTime)
+                              {
+                                name: props.class !== undefined ? props.class.name : '',
+                                totalSessions: 10,
+                                lessonId: props.class !== undefined ? Number(props.class.id) : 0,
+                                sessionDate: new Date(dateData.year, dateData.month, dateData.date).toISOString(),
+                                startTime: calculateLessonTimeOfRoom(timeRange).startTime,
+                                endTime: calculateLessonTimeOfRoom(timeRange).endTime,
+                                roomId: Number(clickedRoomData.roomId),
+                                paymentStatus: props.paymentStatus
+                              }
+                            ])
+
+                            setModal(false)
+                            //reservation(lessonTime.startTime, lessonTime.endTime)
                             /* 예약 확인 모달 보여주기 위함 */
-                            if (props.viewType === 'page') {
+                            /* if (props.viewType === 'page') {
                               setModal(true)
                             } else if (props.viewType === 'modal') {
-                              /* 예약 정보 전송 */
                               console.log(dateValue, lessonTime)
                               const data = {
                                 date: ''
                               }
-                            }
+                            } */
                           } else if (props.classType === 'duration') {
                             if (timeRange !== undefined && durationSchedules.length === 0) {
                               const startDateData = dateValue.split('~')[0].split('.')
@@ -522,10 +534,6 @@ export default function RoomReservation(props: IProps) {
                                 }
                               ])
                             }
-                          }
-                          if (props.onClick) {
-                            /* 모달 닫는 함수 */
-                            props.onClick()
                           }
                         }}
                       >

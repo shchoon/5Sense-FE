@@ -21,7 +21,11 @@ export interface classType {
 
 export default function StudentAddClassModal({ onClose }: IProps) {
   const params = useParams()
-  const studentId = params.id.toString()
+  let studentId: string = ''
+  if (params.id) {
+    studentId = params.id.toString()
+  }
+
   const [classType, setClassType] = useState<string>('duration')
   const [selectedClass, setSelectedClass] = useState<classType>({
     id: 0,
@@ -80,8 +84,6 @@ export default function StudentAddClassModal({ onClose }: IProps) {
       }))
     }
   }, [classType])
-
-  console.log(selectedClass, isPaid)
 
   return (
     <div className="w-[640px] border border-1 border-gray-200 rounded-xl bg-white">
@@ -196,7 +198,6 @@ export default function StudentAddClassModal({ onClose }: IProps) {
             </div>
             <RoomReservation
               class={selectedClass}
-              studentId={studentId}
               classType="session"
               viewType="modal"
               paymentStatus={isPaid ? 'Paid' : 'Unpaid'}

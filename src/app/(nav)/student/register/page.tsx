@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { AxiosResponse } from 'axios'
-import { SetStateAction, useState } from 'react'
+import { SetStateAction, useState, useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import InputForm, { InputFormProps } from '@/components/common/InputForm'
@@ -12,6 +12,8 @@ import instance from '@/lib/api/axios'
 import StudentAddClassModal from '@/components/modal/StudentAddClassModal'
 import Modal from '@/components/common/modal'
 import { modalState } from '@/lib/state/modal'
+import { sessionScheduleState } from '@/lib/state/studentSessionSchedule'
+import StudentsSession from '@/components/studentsDetail/studentsSession'
 
 import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
 import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
@@ -31,9 +33,10 @@ export interface InputNumProps {
 
 export default function StudentRegister() {
   const router = useRouter()
+  const sessionSchedule = useRecoilValue(sessionScheduleState)
+  const setSessionSchedule = useSetRecoilState(sessionScheduleState)
   const setModal = useSetRecoilState(modalState)
   const modal = useRecoilValue(modalState)
-
   const [isClickedAddClass, setIsClickedAddClass] = useState<boolean>(false)
   const [studentInfo, setStudentInfo] = useState<studentInfo>({
     name: '',
@@ -75,10 +78,35 @@ export default function StudentRegister() {
     }))
   }
 
-  const studentRigister = (e: React.MouseEvent<HTMLFormElement>) => {
+  const studentRigister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     instance.post('/students', studentInfo).then((res: AxiosResponse) => {
-      router.push('/student')
+      const studentData = res.data.data
+      const studentId = studentData.id
+      if (sessionSchedule.length === 0) {
+        router.push('/student')
+      } else {
+        instance
+          .post('/session-lesson-registrations', {
+            studentId: Number(studentId),
+            lessonId: sessionSchedule[0].lessonId,
+            paymentStatus: sessionSchedule[0].paymentStatus
+          })
+          .then(res => {
+            instance
+              .post('/session-lesson-schedules', {
+                lessonId: sessionSchedule[0].lessonId,
+                studentId: Number(studentId),
+                sessionDate: sessionSchedule[0].sessionDate,
+                startTime: sessionSchedule[0].startTime,
+                endTime: sessionSchedule[0].endTime,
+                roomId: sessionSchedule[0].roomId
+              })
+              .then(res => {
+                router.push('/student')
+              })
+          })
+      }
     })
   }
 
@@ -86,6 +114,14 @@ export default function StudentRegister() {
     setModal(false)
     setIsClickedAddClass(false)
   }
+
+  useEffect(() => {
+    return () => {
+      setSessionSchedule([])
+    }
+  }, [])
+
+  console.log(sessionSchedule)
 
   return (
     <div className="w-full">
@@ -157,18 +193,33 @@ export default function StudentRegister() {
           </div>
           {/* 클래스 등록 */}
           <div className="flex flex-col gap-10 w-[640px] px-6 py-8 border rounded-xl border-gray-200">
-            <div className="gray-900-bold text-xl font-['Pretendard']">클래스 목록</div>
-            <button
-              type="button"
-              className="flex justify-center gap-2 w-full px-6 py-3.5 border rounded-lg border-primary-600"
-              onClick={() => {
-                setModal(true)
-                setIsClickedAddClass(true)
-              }}
-            >
-              <PlusIcon width={24} height={24} />
-              <div className="text-base font-semibold text-primary-600 font-['Pretendard']">클래스 추가</div>
-            </button>
+            <div className="gray-900-bold text-xl">클래스 목록</div>
+            <div className="w-full flex flex-col gap-4">
+              <button
+                type="button"
+                className="flex justify-center gap-2 w-full px-6 py-3.5 border rounded-lg border-primary-600"
+                onClick={() => {
+                  setModal(true)
+                  setIsClickedAddClass(true)
+                }}
+              >
+                <PlusIcon width={24} height={24} />
+                <div className="text-base font-semibold text-primary-600">클래스 추가</div>
+              </button>
+              {sessionSchedule.map((data, i) => {
+                return (
+                  <StudentsSession
+                    className={data.name}
+                    totalSessions={data.totalSessions}
+                    sessionCount={1}
+                    type="check"
+                    onDelete={() => {
+                      setSessionSchedule([...sessionSchedule.filter((data, index) => index !== i)])
+                    }}
+                  />
+                )
+              })}
+            </div>
           </div>
           {/* 등록 버튼 */}
           <button type="submit" className="w-full py-3.5 btn-purple-lg">

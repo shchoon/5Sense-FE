@@ -78,6 +78,7 @@ export default function DetailStudent({ studentsId, onClose }: IProps) {
                         className={data.name}
                         sessionCount={data.sessionCount}
                         totalSessions={data.totalSessions}
+                        type="detail"
                       />
                     )
                   }

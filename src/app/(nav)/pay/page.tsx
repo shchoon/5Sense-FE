@@ -249,7 +249,7 @@ export default function PayPage() {
                           if (confirm('결제상태를 변경하시겠습니까?')) {
                             instance
                               .patch(`/lesson-registrations/${id}`, {
-                                type: type,
+                                type: data.lesson.type,
                                 paymentStatus: 'Unpaid'
                               })
                               .then(res => {
@@ -277,7 +277,7 @@ export default function PayPage() {
                           if (confirm('결제상태를 변경하시겠습니까?')) {
                             instance
                               .patch(`/lesson-registrations/${id}`, {
-                                type: type,
+                                type: data.lesson.type,
                                 paymentStatus: 'Paid'
                               })
                               .then(res => {

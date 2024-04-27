@@ -162,6 +162,13 @@ export default function ManageMent() {
       })
   }
 
+  const checkSnsConnectionNum = () => {
+    let value = Object.values(snsLink)
+    console.log(value)
+    const snsConnectionNum = value.filter(data => data === true)
+    return snsConnectionNum.length
+  }
+
   useEffect(() => {
     if (centerInfo.name !== '') {
       console.log(centerInfo)
@@ -307,10 +314,14 @@ export default function ManageMent() {
                     onClick={() => {
                       setModal(true)
                       setToggleStatus(false)
-                      setSnsLink(prev => ({
-                        ...prev,
-                        kakao: false
-                      }))
+                      if (checkSnsConnectionNum() > 1) {
+                        setSnsLink(prev => ({
+                          ...prev,
+                          kakao: false
+                        }))
+                      } else {
+                        return
+                      }
                     }}
                   />
                 ) : (
@@ -362,10 +373,14 @@ export default function ManageMent() {
                     onClick={() => {
                       setModal(true)
                       setToggleStatus(false)
-                      setSnsLink(prev => ({
-                        ...prev,
-                        naver: false
-                      }))
+                      if (checkSnsConnectionNum() > 1) {
+                        setSnsLink(prev => ({
+                          ...prev,
+                          naver: false
+                        }))
+                      } else {
+                        return
+                      }
                     }}
                   />
                 ) : (
@@ -400,10 +415,14 @@ export default function ManageMent() {
                     onClick={() => {
                       setModal(true)
                       setToggleStatus(false)
-                      setSnsLink(prev => ({
-                        ...prev,
-                        google: false
-                      }))
+                      if (checkSnsConnectionNum() > 1) {
+                        setSnsLink(prev => ({
+                          ...prev,
+                          google: false
+                        }))
+                      } else {
+                        return
+                      }
                     }}
                   />
                 ) : (
