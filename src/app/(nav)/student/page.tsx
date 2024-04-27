@@ -176,6 +176,7 @@ export default function StudentPage() {
             const props = { id: id, name: name, lessons: lessons, phone: phone, particulars: particulars }
             return (
               <List
+                key={id}
                 type="student"
                 {...props}
                 onClick={() => {

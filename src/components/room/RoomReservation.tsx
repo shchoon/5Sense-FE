@@ -77,19 +77,6 @@ export default function RoomReservation(props: IProps) {
     clickedTime: undefined,
     room: ''
   })
-  const [reservationData, setReservationData] = useState<{
-    className: string
-    studentName?: string
-    date: string
-    lessonTime: string
-    room: string
-  }>({
-    className: '',
-    studentName: '',
-    date: '',
-    lessonTime: '',
-    room: ''
-  })
   const [roomData, setRoomData] = useState<any>([])
 
   const handleChangeDateDataFromChild = (data: dateDataType | any, type?: string) => {
@@ -172,6 +159,7 @@ export default function RoomReservation(props: IProps) {
 
   const getRoomData = () => {
     console.log(props.class)
+    console.log(props.classType)
     instance('/lesson-rooms/daily', {
       params: {
         date: new Date(dateData.year, dateData.month, dateData.date).toISOString()
@@ -188,54 +176,45 @@ export default function RoomReservation(props: IProps) {
           test.push(value)
         }
         list[i].workTime = test
-        /* 예약 불가인 룸 처리 */
-        const bookingFalseList = []
+        /* 예약 불가인 룸 처리(애초에 예약 가능 여부가 false) -> 무조건 필요한거 */
+        const absolutlyBookingFalse = []
+        const relativlyBookingFalse = []
         for (var k = 0; k < test.length; k++) {
           if (test[k].lesonTime !== null && !test[k].isOpenForBooking) {
             const range = Number(test[k].lessonTime) / 30 - 1
             for (var n = k + 1; n <= k + range; n++) {
-              bookingFalseList.push(n)
+              absolutlyBookingFalse.push(n)
+            }
+          }
+          if (
+            test[k].lesonTime !== null &&
+            test[k].isOpenForBooking &&
+            props.class &&
+            Number(props.class.id) !== test[k].id
+          ) {
+            const range = Number(test[k].lessonTime) / 30 - 1
+            for (var n = k; n <= k + range; n++) {
+              relativlyBookingFalse.push(n)
             }
           }
         }
-        if (bookingFalseList.length !== 0) {
-          for (var l = 0; l < bookingFalseList.length; l++) {
-            test[bookingFalseList[l]].isOpenForBooking = false
+        if (absolutlyBookingFalse.length !== 0) {
+          for (var l = 0; l < absolutlyBookingFalse.length; l++) {
+            test[absolutlyBookingFalse[l]].isOpenForBooking = false
           }
         }
-        /* 선택한 클래스와 룸에 예약된 클래스가 달라서 예약 불가 처리를 하는 경우 */
+        if (relativlyBookingFalse.length !== 0) {
+          for (var l = 0; l < relativlyBookingFalse.length; l++) {
+            test[relativlyBookingFalse[l]].isOpenForBooking = false
+          }
+        }
+        /* 선택한 클래스와 룸에 예약되어 있는 클래스가 다른 경우 처리 -> 룸에 에약되어있는 클래스가 있는 경우에만 처리 */
+        console.log(relativlyBookingFalse)
       }
-
+      console.log(list)
       setRoomData(list)
     })
   }
-
-  /* const reservation = (startTime: string, endTime: string) => {
-    if (props.classType === 'session' && props.class) {
-      instance
-        .post('/session-lesson-registrations', {
-          studentId: Number(props.studentId),
-          lessonId: Number(props.class.id),
-          paymentStatus: props.paymentStatus
-        })
-        .then(res => {
-          if (props.class) {
-            instance
-              .post('/session-lesson-schedules', {
-                lessonId: Number(props.class.id),
-                studentId: Number(props.studentId),
-                sessionDate: new Date(dateData.year, dateData.month, dateData.date).toISOString(),
-                startTime: startTime,
-                endTime: endTime,
-                roomId: Number(clickedRoomData.roomId)
-              })
-              .then(res => {
-                router.push('/student')
-              })
-          }
-        })
-    }
-  } */
 
   const scrollRight = (i: number) => {
     const element = refs.current[i]
@@ -309,6 +288,12 @@ export default function RoomReservation(props: IProps) {
   useEffect(() => {
     if (props.lessonTime && props.lessonTime !== '') {
       setLessonTime(props.lessonTime)
+      setClickedRoomData(prev => ({
+        ...prev,
+        roomId: undefined,
+        clickedTime: undefined,
+        room: ''
+      }))
     }
   }, [props.lessonTime])
 
@@ -594,7 +579,7 @@ export default function RoomReservation(props: IProps) {
                                     : 'bg-gray-100'
                                 }`}
                                 onClick={() => {
-                                  if (timeRange === undefined) {
+                                  if (!data.isOpenForBooking) {
                                     return
                                   } else {
                                     setClickedRoomData(prev => ({

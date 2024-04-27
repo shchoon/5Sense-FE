@@ -42,12 +42,16 @@ export default function List(props: IProps) {
               <div className="gray-800-semibold text-base">{props.lessons[0].name}</div>
             </>
           )}
-          {props.lessons.length !== 0 && props.lessons[0].type === 'session' && (
-            <>
-              <div className="text-secondary-600 text-base font-bold">회차반</div>
-              <div className="gray-800-semibold text-base">{props.lessons[0].name}</div>
-            </>
-          )}
+          {props.lessons.length !== 0 &&
+            props.lessons[0].type === 'session' &&
+            props.lessons.map((data, i) => {
+              return (
+                <>
+                  <div className="text-secondary-600 text-base font-bold">회차반</div>
+                  <div className="gray-800-semibold text-base">{data.name}</div>
+                </>
+              )
+            })}
         </div>
         <div
           className={`xl:w-[400px] w-[200px] text-ellipsis overflow-hidden hover:overflow-visible gray-900-normal text-base text-left`}
