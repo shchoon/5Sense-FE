@@ -1,11 +1,14 @@
 'use client'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
+import { useSetRecoilState } from 'recoil'
 
 import DropDown from '../common/DropDown'
 import RoomReservation from '../room/RoomReservation'
 import instance from '@/lib/api/axios'
+import { durationScheduleState } from '@/lib/state/studentDurationSchedule'
+import { modalState } from '@/lib/state/modal'
 
 import CloseIcon from 'public/assets/icons/closeCircle.svg'
 
@@ -17,20 +20,25 @@ export interface classType {
   id: number
   name: string
   lessonTime: string
+  totalSessions: string
 }
 
 export default function StudentAddClassModal({ onClose }: IProps) {
+  const router = useRouter()
   const params = useParams()
   let studentId: string = ''
   if (params.id) {
     studentId = params.id.toString()
   }
+  const setDurationSchedule = useSetRecoilState(durationScheduleState)
+  const setModal = useSetRecoilState(modalState)
 
   const [classType, setClassType] = useState<string>('duration')
   const [selectedClass, setSelectedClass] = useState<classType>({
     id: 0,
     name: '',
-    lessonTime: ''
+    lessonTime: '',
+    totalSessions: ''
   })
   const [isPaid, setIsPaid] = useState<boolean>(false)
   const [studentName, setStudentName] = useState('조성훈')
@@ -49,6 +57,28 @@ export default function StudentAddClassModal({ onClose }: IProps) {
     title: '클래스를 선택해주세요',
     list: []
   })
+
+  const durationRigister = () => {
+    instance(`/duration-lessons/${selectedClass.id}/details`).then(res => {
+      const lessonData = res.data.data
+      console.log(lessonData)
+      setDurationSchedule(prev => [
+        ...prev,
+        {
+          name: lessonData.name,
+          studentId: Number(studentId),
+          lessonId: lessonData.id,
+          paymentStatus: isPaid ? 'Paid' : 'Unpaid',
+          startTime: lessonData.schedules[0].startTime,
+          endTime: lessonData.schedules[0].endTime,
+          startDate: lessonData.schedules[0].startDate,
+          endDate: lessonData.schedules[0].endDate,
+          roomName: lessonData.schedules[0].room.name,
+          repeatDate: lessonData.schedules[0].repeatDate
+        }
+      ])
+    })
+  }
 
   useEffect(() => {
     if (classType === 'duration') {
@@ -85,6 +115,7 @@ export default function StudentAddClassModal({ onClose }: IProps) {
     }
   }, [classType])
 
+  console.log(selectedClass)
   return (
     <div className="w-[640px] border border-1 border-gray-200 rounded-xl bg-white">
       <div className="relative w-full h-[90px]">
@@ -104,7 +135,8 @@ export default function StudentAddClassModal({ onClose }: IProps) {
               setSelectedClass({
                 id: 0,
                 name: '',
-                lessonTime: ''
+                lessonTime: '',
+                totalSessions: ''
               })
             }}
           >
@@ -121,7 +153,8 @@ export default function StudentAddClassModal({ onClose }: IProps) {
               setSelectedClass({
                 id: 0,
                 name: '',
-                lessonTime: ''
+                lessonTime: '',
+                totalSessions: ''
               })
             }}
           >
@@ -162,6 +195,10 @@ export default function StudentAddClassModal({ onClose }: IProps) {
               className={`w-full h-[52px] mt-[300px] rounded-lg ${
                 selectedClass !== undefined ? 'bg-primary-600' : 'bg-gray-400'
               } text-white text-base font-semibold flex items-center justify-center btn-purple`}
+              onClick={() => {
+                durationRigister()
+                setModal(false)
+              }}
             >
               추가하기
             </button>

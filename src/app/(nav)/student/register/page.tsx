@@ -13,7 +13,9 @@ import StudentAddClassModal from '@/components/modal/StudentAddClassModal'
 import Modal from '@/components/common/modal'
 import { modalState } from '@/lib/state/modal'
 import { sessionScheduleState } from '@/lib/state/studentSessionSchedule'
+import { durationScheduleState } from '@/lib/state/studentDurationSchedule'
 import StudentsSession from '@/components/studentsDetail/studentsSession'
+import StudentsDuration from '@/components/studentsDetail/studentsDuartion'
 
 import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
 import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
@@ -33,6 +35,8 @@ export interface InputNumProps {
 
 export default function StudentRegister() {
   const router = useRouter()
+  const durationSchedule = useRecoilValue(durationScheduleState)
+  const setDurationSchedule = useSetRecoilState(durationScheduleState)
   const sessionSchedule = useRecoilValue(sessionScheduleState)
   const setSessionSchedule = useSetRecoilState(sessionScheduleState)
   const setModal = useSetRecoilState(modalState)
@@ -80,12 +84,10 @@ export default function StudentRegister() {
 
   const studentRigister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    instance.post('/students', studentInfo).then((res: AxiosResponse) => {
-      const studentData = res.data.data
-      const studentId = studentData.id
-      if (sessionSchedule.length === 0) {
-        router.push('/student')
-      } else {
+    if (sessionSchedule.length !== 0) {
+      instance.post('/students', studentInfo).then((res: AxiosResponse) => {
+        const studentData = res.data.data
+        const studentId = studentData.id
         instance
           .post('/session-lesson-registrations', {
             studentId: Number(studentId),
@@ -106,8 +108,26 @@ export default function StudentRegister() {
                 router.push('/student')
               })
           })
-      }
-    })
+      })
+    } else if (durationSchedule.length !== 0) {
+      instance.post('/students', studentInfo).then(res => {
+        const studentData = res.data.data
+        const studentId = studentData.id
+        instance
+          .post('/duration-lesson-registrations', {
+            studentId: Number(studentId),
+            lessonId: Number(durationSchedule[0].lessonId),
+            paymentStatus: durationSchedule[0].paymentStatus
+          })
+          .then(res => {
+            router.push('/student')
+          })
+      })
+    } else {
+      instance.post('/students', studentInfo).then(res => {
+        router.push('/student')
+      })
+    }
   }
 
   const onClose = () => {
@@ -118,10 +138,12 @@ export default function StudentRegister() {
   useEffect(() => {
     return () => {
       setSessionSchedule([])
+      setDurationSchedule([])
     }
   }, [])
 
   console.log(sessionSchedule)
+  console.log(durationSchedule)
 
   return (
     <div className="w-full">
@@ -215,6 +237,23 @@ export default function StudentRegister() {
                     type="check"
                     onDelete={() => {
                       setSessionSchedule([...sessionSchedule.filter((data, index) => index !== i)])
+                    }}
+                  />
+                )
+              })}
+              {durationSchedule.map((data, i) => {
+                return (
+                  <StudentsDuration
+                    className={data.name}
+                    startDate={data.startDate}
+                    endDate={data.endDate}
+                    startTime={data.startTime}
+                    endTime={data.endTime}
+                    room={data.roomName}
+                    repeatDate={data.repeatDate}
+                    type="check"
+                    onDelete={() => {
+                      setDurationSchedule([...durationSchedule.filter((data, index) => index !== i)])
                     }}
                   />
                 )

@@ -13,7 +13,9 @@ import StudentAddClassModal from '@/components/modal/StudentAddClassModal'
 import Modal from '@/components/common/modal'
 import { modalState } from '@/lib/state/modal'
 import StudentsSession from '@/components/studentsDetail/studentsSession'
+import StudentsDuration from '@/components/studentsDetail/studentsDuartion'
 import { sessionScheduleState } from '@/lib/state/studentSessionSchedule'
+import { durationScheduleState } from '@/lib/state/studentDurationSchedule'
 
 import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
 import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
@@ -37,7 +39,9 @@ export default function StudentEdit() {
   const router = useRouter()
   const params = useParams()
   const studentId = params.id
+  const durationSchedule = useRecoilValue(durationScheduleState)
   const sessionSchedule = useRecoilValue(sessionScheduleState)
+  const setDurationSchedule = useSetRecoilState(durationScheduleState)
   const setSessionSchedule = useSetRecoilState(sessionScheduleState)
   const setModal = useSetRecoilState(modalState)
   const modal = useRecoilValue(modalState)
@@ -92,26 +96,38 @@ export default function StudentEdit() {
 
   const reservation = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    instance
-      .post('/session-lesson-registrations', {
-        studentId: Number(studentId),
-        lessonId: sessionSchedule[0].lessonId,
-        paymentStatus: sessionSchedule[0].paymentStatus
-      })
-      .then(res => {
-        instance
-          .post('/session-lesson-schedules', {
-            lessonId: sessionSchedule[0].lessonId,
-            studentId: Number(studentId),
-            sessionDate: sessionSchedule[0].sessionDate,
-            startTime: sessionSchedule[0].startTime,
-            endTime: sessionSchedule[0].endTime,
-            roomId: sessionSchedule[0].roomId
-          })
-          .then(res => {
-            router.push('/student')
-          })
-      })
+    if (sessionSchedule.length !== 0) {
+      instance
+        .post('/session-lesson-registrations', {
+          studentId: Number(studentId),
+          lessonId: sessionSchedule[0].lessonId,
+          paymentStatus: sessionSchedule[0].paymentStatus
+        })
+        .then(res => {
+          instance
+            .post('/session-lesson-schedules', {
+              lessonId: sessionSchedule[0].lessonId,
+              studentId: Number(studentId),
+              sessionDate: sessionSchedule[0].sessionDate,
+              startTime: sessionSchedule[0].startTime,
+              endTime: sessionSchedule[0].endTime,
+              roomId: sessionSchedule[0].roomId
+            })
+            .then(res => {
+              router.push('/student')
+            })
+        })
+    } else if (durationSchedule.length !== 0) {
+      instance
+        .post('/duration-lesson-registrations', {
+          studentId: Number(studentId),
+          lessonId: Number(durationSchedule[0].lessonId),
+          paymentStatus: durationSchedule[0].paymentStatus
+        })
+        .then(res => {
+          router.push('/student')
+        })
+    }
   }
 
   useEffect(() => {
@@ -132,6 +148,8 @@ export default function StudentEdit() {
       setSessionSchedule([])
     }
   }, [])
+
+  console.log(sessionSchedule)
 
   return (
     <div className="w-full">
@@ -220,12 +238,26 @@ export default function StudentEdit() {
                 return (
                   <StudentsSession
                     className={data.name}
-                    totalSessions={data.totalSessions}
+                    totalSessions={String(data.totalSessions)}
                     sessionCount={1}
                     type="check"
                     onDelete={() => {
                       setSessionSchedule([...sessionSchedule.filter((data, index) => index !== i)])
                     }}
+                  />
+                )
+              })}
+              {durationSchedule.map((data, i) => {
+                return (
+                  <StudentsDuration
+                    className={data.name}
+                    startDate={data.startDate}
+                    endDate={data.endDate}
+                    startTime={data.startTime}
+                    endTime={data.endTime}
+                    room={data.roomName}
+                    repeatDate={data.repeatDate}
+                    type="check"
                   />
                 )
               })}

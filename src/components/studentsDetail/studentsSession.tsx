@@ -3,7 +3,7 @@ import TrashIcon from 'public/assets/icons/trash.svg'
 interface IProps {
   className: string
   sessionCount: number
-  totalSessions: number
+  totalSessions: string
   type: string
   onDelete?: () => void
 }

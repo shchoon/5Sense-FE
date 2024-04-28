@@ -460,7 +460,7 @@ export default function RoomReservation(props: IProps) {
                               ...prev,
                               {
                                 name: props.class !== undefined ? props.class.name : '',
-                                totalSessions: 10,
+                                totalSessions: props.class !== undefined ? props.class.totalSessions : '',
                                 lessonId: props.class !== undefined ? Number(props.class.id) : 0,
                                 sessionDate: new Date(dateData.year, dateData.month, dateData.date).toISOString(),
                                 startTime: calculateLessonTimeOfRoom(timeRange).startTime,

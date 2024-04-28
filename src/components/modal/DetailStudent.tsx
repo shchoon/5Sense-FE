@@ -83,12 +83,28 @@ export default function DetailStudent({ studentsId, onClose }: IProps) {
                         key={i}
                         className={data.name}
                         sessionCount={data.sessionCount}
-                        totalSessions={data.totalSessions}
+                        totalSessions={String(data.totalSessions)}
                         type="detail"
                       />
                     )
                   }
                 )}
+              {studentData.durationLesson.length !== 0 &&
+                studentData.durationLesson.map((data: any, i) => {
+                  return (
+                    <StudentsDuration
+                      key={i}
+                      type="detail"
+                      className={data.name}
+                      startDate={data.schedules[0].startDate}
+                      endDate={data.schedules[0].endDate}
+                      startTime={data.schedules[0].startTime}
+                      endTime={data.schedules[0].endTime}
+                      repeatDate={data.schedules[0].repeatDate}
+                      room="A 룸"
+                    />
+                  )
+                })}
               {/* <StudentsDuration />
               <StudentsSession />
               <StudentsSession />
