@@ -41,6 +41,7 @@ export default function InstructorPage() {
   const [isClickedInstructor, setIsClickedInstructor] = useState<boolean>(false)
 
   const [instructorList, setInstructorList] = useState<instructorType[]>([])
+  const [InstructorId, setInstructorId] = useState<number>(0)
   const [metaData, setMetaData] = useState<metaType>({
     page: 1,
     hasNextPage: false
@@ -203,6 +204,7 @@ export default function InstructorPage() {
                   onClick={() => {
                     setModal(true)
                     setIsClickedInstructor(true)
+                    setInstructorId(Number(id))
                   }}
                 >
                   <div className="indigo-500-semibold text-sm font-['Pretendard']">강사 정보</div>
@@ -236,7 +238,11 @@ export default function InstructorPage() {
       )}
       {isClickedInstructor && (
         <Modal>
-          <DetailInstructor onClose={() => setIsClickedInstructor(false)} onCloseState={() => setModal(false)} />
+          <DetailInstructor
+            id={InstructorId}
+            onClose={() => setIsClickedInstructor(false)}
+            onCloseState={() => setModal(false)}
+          />
         </Modal>
       )}
     </div>

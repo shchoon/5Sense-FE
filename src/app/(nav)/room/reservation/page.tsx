@@ -34,6 +34,7 @@ export default function Reservatoin() {
 
   const [selectedClass, setSelectedClass] = useState<classType>()
   const [studentName, setStudentName] = useState<string>('')
+  const [category, setCategory] = useState<string>('')
 
   const handleChangeParentsDropdownData = (data: classType) => {
     setSelectedClass(data)
@@ -55,6 +56,11 @@ export default function Reservatoin() {
           list: classData
         }))
       })
+    } else {
+      instance(`/session-lessons/${classId}/details`).then(res => {
+        const category = res.data.data.category.subName
+        setCategory(category)
+      })
     }
   }, [])
 
@@ -65,7 +71,8 @@ export default function Reservatoin() {
     roomName: localStorage.getItem('roomName'),
     classId: localStorage.getItem('classId'),
     roomId: localStorage.getItem('roomId'),
-    startTime: localStorage.getItem('reservationTime')
+    startTime: localStorage.getItem('reservationTime'),
+    category: category
   }
 
   const calculateEndTime = () => {
