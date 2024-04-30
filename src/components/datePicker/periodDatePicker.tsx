@@ -41,12 +41,8 @@ export default function PeriodDatePicker(props: IProps) {
   })
 
   let firstDateList
-  if (firstDateData.year === currentdateData.year && firstDateData.month === currentdateData.month) {
-    firstDateList = useGetCalendarData(firstDateData, 'addClass')
-  } else {
-    firstDateList = useGetCalendarData(firstDateData)
-  }
-  console.log(firstDateList)
+  firstDateList = useGetCalendarData(firstDateData, 'addClass')
+
   const secondDateList = useGetCalendarData(secondDateData)
   const [firstClickedData, setFirstClickedData] = useState<{
     year: number | undefined
