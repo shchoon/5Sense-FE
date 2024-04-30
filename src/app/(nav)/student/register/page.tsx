@@ -232,7 +232,7 @@ export default function StudentRegister() {
                 return (
                   <StudentsSession
                     className={data.name}
-                    totalSessions={data.totalSessions}
+                    restOfSessions={data.totalSessions}
                     sessionCount={1}
                     type="check"
                     onDelete={() => {

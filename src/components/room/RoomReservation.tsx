@@ -1,7 +1,7 @@
 'use client'
 import { ClassType, useEffect, useRef, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 
 import LessonTimeModal from '../modal/RoundLessonTimeModal'
 import { durationScheduleState } from '@/lib/state/classDurationSchedule'
@@ -46,6 +46,7 @@ interface IProps {
 export default function RoomReservation(props: IProps) {
   console.log(props)
   const router = useRouter()
+  const params = useParams()
   const refs = useRef<(HTMLDivElement | null)[]>([])
   const modal = useRecoilValue(modalState)
   const setModal = useSetRecoilState(modalState)
@@ -78,6 +79,7 @@ export default function RoomReservation(props: IProps) {
     room: ''
   })
   const [roomData, setRoomData] = useState<any>([])
+  const [restOfSessions, setRestOfSessions] = useState<number>(0)
 
   const handleChangeDateDataFromChild = (data: dateDataType | any, type?: string) => {
     if (type === 'session') {
@@ -295,7 +297,22 @@ export default function RoomReservation(props: IProps) {
         room: ''
       }))
     }
+    if (params.id) {
+      instance(`/students/${params.id}`).then(res => {
+        const sessionLessons = res.data.data.sessionLessons
+        console.log(sessionLessons)
+        const alreadyRigisteredLessons = sessionLessons.filter(
+          (data: any, i: number) => props.class && data.id === props.class.id
+        )
+        if (alreadyRigisteredLessons.length !== 0) {
+          console.log('alreadyRigisteredLessons', alreadyRigisteredLessons)
+          setRestOfSessions(alreadyRigisteredLessons[0].schedules[0].restOfSessions)
+        }
+      })
+    }
   }, [props.lessonTime])
+
+  console.log(roomData)
 
   return (
     <>
@@ -455,7 +472,7 @@ export default function RoomReservation(props: IProps) {
                           if (props.classType === 'session' && timeRange) {
                             const lessonTime = calculateLessonTimeOfRoom(timeRange)
                             const day = calculateDay(new Date(dateData.year, dateData.month, dateData.date).getDay())
-
+                            console.log(restOfSessions)
                             setSessionSchedule(prev => [
                               ...prev,
                               {
@@ -466,7 +483,9 @@ export default function RoomReservation(props: IProps) {
                                 startTime: calculateLessonTimeOfRoom(timeRange).startTime,
                                 endTime: calculateLessonTimeOfRoom(timeRange).endTime,
                                 roomId: Number(clickedRoomData.roomId),
-                                paymentStatus: props.paymentStatus
+                                paymentStatus: props.paymentStatus,
+                                roomName: clickedRoomData.room,
+                                restOfSessions: restOfSessions
                               }
                             ])
 

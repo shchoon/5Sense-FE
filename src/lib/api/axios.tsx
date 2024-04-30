@@ -12,7 +12,7 @@ const checkToken = (accessTokenExp: string) => {
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_IP_ADDRESS,
-  timeout: 5000,
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json'
   }

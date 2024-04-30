@@ -59,36 +59,21 @@ export default function DetailStudent({ studentsId, onClose }: IProps) {
           {/* 클래스 목록 */}
           <div className="w-full max-h-[760px] overflow-y-auto py-6 px-6 flex items-center flex-col gap-4 border border-1 border-gray-200 rounded-lg shadow">
             <div className="w-full gray-800-bold text-base">클래스 목록</div>
-            <button
-              type="button"
-              className="flex justify-center gap-2 w-full px-6 py-3.5 border rounded-lg border-primary-600"
-              onClick={() => {}}
-            >
-              <PlusIcon width={24} height={24} />
-              <div className="text-base font-semibold text-primary-600 font-['Pretendard']">클래스 추가</div>
-            </button>
+
             <div className="w-full flex flex-col gap-4">
               {studentData.sessionLesson.length !== 0 &&
-                studentData.sessionLesson.map(
-                  (
-                    data: {
-                      name: string
-                      sessionCount: number
-                      totalSessions: number
-                    },
-                    i
-                  ) => {
-                    return (
-                      <StudentsSession
-                        key={i}
-                        className={data.name}
-                        sessionCount={data.sessionCount}
-                        totalSessions={String(data.totalSessions)}
-                        type="detail"
-                      />
-                    )
-                  }
-                )}
+                studentData.sessionLesson.map((data: any, i) => {
+                  console.log(data)
+                  return (
+                    <StudentsSession
+                      key={i}
+                      className={data.name}
+                      paymentStatus={data.paymentStatus}
+                      sessionSchedule={data.schedules}
+                      type="detail"
+                    />
+                  )
+                })}
               {studentData.durationLesson.length !== 0 &&
                 studentData.durationLesson.map((data: any, i) => {
                   return (

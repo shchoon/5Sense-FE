@@ -230,7 +230,6 @@ export default function PayPage() {
               <button
                 key={i}
                 className="w-full flex lg:gap-8 gap-5 p-6 outline rounded-md outline-1 outline-gray-200 shadow-[0_5px_15px_0px_rgba(0,0,0,0.02)] hover:outline-primary-600"
-                onClick={() => {}}
               >
                 <div className=" lg:w-[100px] w-[70px] gray-800-semibold text-sm text-left">{data.student.name}</div>
                 <div className="lg:w-[160px] w-[110px] gray-800-semibold text-sm text-left">
