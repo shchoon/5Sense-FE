@@ -36,14 +36,53 @@ export default function Reservatoin() {
   const [studentName, setStudentName] = useState<string>('')
   const [category, setCategory] = useState<string>('')
   const [classId, setClassId] = useState<string | null>(null)
+  const [reservationData, setReservationData] = useState<{
+    className: string | null
+    date: string | null
+    roomName: string | null
+    lessonTime: string | null
+    classId: string | null
+    roomId: string | null
+    startTime: string | null
+    category: string
+  }>({
+    className: null,
+    date: null,
+    lessonTime: null,
+    roomName: null,
+    classId: null,
+    roomId: null,
+    startTime: null,
+    category: ''
+  })
+  /* const reservationData = {
+    className: typeof window !== undefined ? localStorage.getItem('className') : '',
+    date: typeof window !== undefined ? localStorage.getItem('reservationDate') : '',
+    lessonTime: typeof window !== undefined ? localStorage.getItem('lessonTime') : '',
+    roomName: typeof window !== undefined ? localStorage.getItem('roomName') : '',
+    classId: typeof window !== undefined ? localStorage.getItem('classId') : '',
+    roomId: typeof window !== undefined ? localStorage.getItem('roomId') : '',
+    startTime: typeof window !== undefined ? localStorage.getItem('reservationTime') : '',
+    category: category
+  } */
 
   const handleChangeParentsDropdownData = (data: classType) => {
     setSelectedClass(data)
   }
 
   useEffect(() => {
-    setClassId(localStorage.getItem('classId'))
-    if (classId === '') {
+    setReservationData(prev => ({
+      ...prev,
+      className: localStorage.getItem('className'),
+      date: localStorage.getItem('reservationDate'),
+      lessonTime: localStorage.getItem('lessonTime'),
+      roomName: localStorage.getItem('roomName'),
+      classId: localStorage.getItem('classId'),
+      roomId: localStorage.getItem('roomId'),
+      startTime: localStorage.getItem('reservationTime'),
+      category: category
+    }))
+    if (localStorage.getItem('classId') === '') {
       instance(`/session-lessons`, {
         params: {
           isCheckRegistrationsCount: true
@@ -62,17 +101,6 @@ export default function Reservatoin() {
       })
     }
   }, [])
-
-  const reservationData = {
-    className: typeof window !== undefined ? localStorage.getItem('className') : '',
-    date: typeof window !== undefined ? localStorage.getItem('reservationDate') : '',
-    lessonTime: typeof window !== undefined ? localStorage.getItem('lessonTime') : '',
-    roomName: typeof window !== undefined ? localStorage.getItem('roomName') : '',
-    classId: typeof window !== undefined ? localStorage.getItem('classId') : '',
-    roomId: typeof window !== undefined ? localStorage.getItem('roomId') : '',
-    startTime: typeof window !== undefined ? localStorage.getItem('reservationTime') : '',
-    category: category
-  }
 
   const calculateEndTime = () => {
     const startTime = {
