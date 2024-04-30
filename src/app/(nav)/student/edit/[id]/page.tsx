@@ -258,6 +258,7 @@ export default function StudentEdit() {
               {sessionSchedule.map((data, i) => {
                 return (
                   <AddSessionLessonCheck
+                    key={i}
                     className={data.name}
                     sessionDate={data.sessionDate}
                     startTime={data.startTime}
@@ -275,6 +276,7 @@ export default function StudentEdit() {
               {durationSchedule.map((data, i) => {
                 return (
                   <StudentsDuration
+                    key={i}
                     className={data.name}
                     startDate={data.startDate}
                     endDate={data.endDate}
@@ -291,6 +293,7 @@ export default function StudentEdit() {
                   console.log(data)
                   return (
                     <StudentsSession
+                      key={i}
                       className={data.name}
                       paymentStatus={data.paymentStatus}
                       sessionSchedule={data.schedules}

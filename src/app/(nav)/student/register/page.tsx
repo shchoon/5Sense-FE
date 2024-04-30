@@ -231,6 +231,7 @@ export default function StudentRegister() {
               {sessionSchedule.map((data: any, i) => {
                 return (
                   <StudentsSession
+                    key={i}
                     className={data.name}
                     paymentStatus={data.paymentStatus}
                     sessionSchedule={data.schedules}
@@ -244,6 +245,7 @@ export default function StudentRegister() {
               {durationSchedule.map((data, i) => {
                 return (
                   <StudentsDuration
+                    key={i}
                     className={data.name}
                     startDate={data.startDate}
                     endDate={data.endDate}

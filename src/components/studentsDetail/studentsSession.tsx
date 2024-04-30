@@ -13,7 +13,10 @@ export default function StudentsSession(props: IProps) {
     <div className="w-full flex flex-col gap-4">
       {props.sessionSchedule.map((data: any, i: number) => {
         return (
-          <div className="relative w-full px-4 py-3.5 flex flex-col rounded-lg border border-1 border-gray-200 bg-gray-50 ">
+          <div
+            key={i}
+            className="relative w-full px-4 py-3.5 flex flex-col rounded-lg border border-1 border-gray-200 bg-gray-50 "
+          >
             {props.type === 'check' && (
               <button
                 type="button"

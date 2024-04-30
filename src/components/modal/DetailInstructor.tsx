@@ -66,7 +66,10 @@ export default function DetailInstructor({ onClose, onCloseState, id }: IProps) 
           {instructorData.sessionLessons.length !== 0 &&
             instructorData.sessionLessons.map((data: { name: string; totalSessions: number; capacity: number }, i) => {
               return (
-                <div className="relative w-full px-4 py-3.5 flex flex-col rounded-lg border border-1 border-gray-200 bg-gray-50 ">
+                <div
+                  key={i}
+                  className="relative w-full px-4 py-3.5 flex flex-col rounded-lg border border-1 border-gray-200 bg-gray-50 "
+                >
                   <div className="w-full flex flex-col gap-6">
                     <div className="w-full flex items-center flex-col gap-px">
                       <div className="w-full text-secondary-600 text-xs font-bold">회차반</div>
@@ -93,7 +96,10 @@ export default function DetailInstructor({ onClose, onCloseState, id }: IProps) 
           {instructorData.durationLessons.length !== 0 &&
             instructorData.durationLessons.map((data: any, i) => {
               return (
-                <div className="relative w-full px-4 py-3.5 flex flex-col rounded-lg border border-1 border-gray-200 bg-gray-50 ">
+                <div
+                  key={i}
+                  className="relative w-full px-4 py-3.5 flex flex-col rounded-lg border border-1 border-gray-200 bg-gray-50 "
+                >
                   <div className="w-full flex flex-col gap-6">
                     <div className="w-full flex items-center flex-col gap-px">
                       <div className="w-full text-primary-600 text-xs font-bold">기간반</div>
@@ -101,7 +107,7 @@ export default function DetailInstructor({ onClose, onCloseState, id }: IProps) 
                     </div>
                     {data.schedules.map((scheduleData: any, i: number) => {
                       return (
-                        <div className="w-full flex flex-col items-center gap-2">
+                        <div key={i} className="w-full flex flex-col items-center gap-2">
                           <div className="w-full flex gap-2">
                             <div className="w-[70px] gray-500-medium text-sm">• 기간</div>
                             <div className="w-full flex items-center gap-px">
