@@ -20,9 +20,9 @@ export default function ModifyRoom() {
   //const pathName = usePathname()
   //const [inputValue, setInputValue] = useState<string>(roomName)
   const [roomData, setRoomData] = useState<{ name: string; roomId: number; capacity: number }>({
-    name: localStorage.getItem('roomName') || '',
-    roomId: Number(localStorage.getItem('roomId')) || 0,
-    capacity: Number(localStorage.getItem('capacity')) || 0
+    name: (typeof window !== undefined && localStorage.getItem('roomName')) || '',
+    roomId: (typeof window !== undefined && Number(localStorage.getItem('roomId'))) || 0,
+    capacity: (typeof window !== undefined && Number(localStorage.getItem('capacity'))) || 0
   })
 
   const handleChangeRoomName = (e: React.ChangeEvent<HTMLInputElement>) => {

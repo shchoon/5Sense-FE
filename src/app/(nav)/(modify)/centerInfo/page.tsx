@@ -28,7 +28,10 @@ interface snsLinkType {
 }
 
 export default function ManageMent() {
-  const socialType = localStorage.getItem('social')
+  if (typeof window !== undefined) {
+    const socialType = localStorage.getItem('social')
+  }
+
   const [postData, setPostData] = useState<centerDataType>({
     name: '',
     address: '',
@@ -38,9 +41,9 @@ export default function ManageMent() {
     profile: ''
   })
   const [snsLink, setSnsLink] = useState<snsLinkType>({
-    kakao: socialType === 'kakao' ? true : false,
-    naver: socialType === 'naver' ? true : false,
-    google: socialType === 'google' ? true : false
+    kakao: typeof window !== undefined && localStorage.getItem('social') === 'kakao' ? true : false,
+    naver: typeof window !== undefined && localStorage.getItem('social') === 'naver' ? true : false,
+    google: typeof window !== undefined && localStorage.getItem('social') === 'google' ? true : false
   })
   const [toggleStatus, setToggleStatus] = useState<boolean>(false)
   const [img, setImg] = useState<string | null>()

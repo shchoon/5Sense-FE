@@ -20,9 +20,9 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   async config => {
-    const accessToken = localStorage.getItem('accessToken')
-    const refreshToken = localStorage.getItem('refreshToken')
-    const accessTokenExp = localStorage.getItem('accessTokenExp')
+    const accessToken = typeof window !== undefined && localStorage.getItem('accessToken')
+    const refreshToken = typeof window !== undefined && localStorage.getItem('refreshToken')
+    const accessTokenExp = typeof window !== undefined && localStorage.getItem('accessTokenExp')
 
     if (accessToken) {
       if (accessTokenExp && checkToken(accessTokenExp) < 5) {
@@ -36,8 +36,8 @@ instance.interceptors.request.use(
               }
             }
           )
-          localStorage.setItem('accessToken', res.data.data.accessToken)
-          localStorage.setItem('accessTokenExp', res.data.data.accessTokenExp)
+          typeof window !== undefined && localStorage.setItem('accessToken', res.data.data.accessToken)
+          typeof window !== undefined && localStorage.setItem('accessTokenExp', res.data.data.accessTokenExp)
           config.headers.Authorization = `Bearer ${res.data.data.accessToken}`
         } catch (error) {
           console.log(error)
@@ -63,7 +63,7 @@ instance.interceptors.response.use(
   async (response: AxiosResponse) => {
     const { url } = response.config
     if (url === '/centers') {
-      const refreshToken = localStorage.getItem('refreshToken')
+      const refreshToken = typeof window !== undefined && localStorage.getItem('refreshToken')
       try {
         const res = await axios.post(
           process.env.NEXT_PUBLIC_IP_ADDRESS + '/auth/reissue',
@@ -75,9 +75,9 @@ instance.interceptors.response.use(
           }
         )
         //console.log(res)
-        localStorage.setItem('hasCenter', 'true')
-        localStorage.setItem('accessToken', res.data.data.accessToken)
-        localStorage.setItem('accessTokenExp', res.data.data.accessTokenExp)
+        typeof window !== undefined && localStorage.setItem('hasCenter', 'true')
+        typeof window !== undefined && localStorage.setItem('accessToken', res.data.data.accessToken)
+        typeof window !== undefined && localStorage.setItem('accessTokenExp', res.data.data.accessTokenExp)
       } catch (error) {
         console.log(error)
       }

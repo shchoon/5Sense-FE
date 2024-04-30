@@ -40,7 +40,7 @@ export default function Reservatoin() {
     setSelectedClass(data)
   }
 
-  const classId = localStorage.getItem('classId')
+  const classId = typeof window !== undefined && localStorage.getItem('classId')
 
   useEffect(() => {
     const classId = localStorage.getItem('classId')
@@ -65,13 +65,13 @@ export default function Reservatoin() {
   }, [])
 
   const reservationData = {
-    className: localStorage.getItem('className'),
-    date: localStorage.getItem('reservationDate'),
-    lessonTime: localStorage.getItem('lessonTime'),
-    roomName: localStorage.getItem('roomName'),
-    classId: localStorage.getItem('classId'),
-    roomId: localStorage.getItem('roomId'),
-    startTime: localStorage.getItem('reservationTime'),
+    className: typeof window !== undefined ? localStorage.getItem('className') : '',
+    date: typeof window !== undefined ? localStorage.getItem('reservationDate') : '',
+    lessonTime: typeof window !== undefined ? localStorage.getItem('lessonTime') : '',
+    roomName: typeof window !== undefined ? localStorage.getItem('roomName') : '',
+    classId: typeof window !== undefined ? localStorage.getItem('classId') : '',
+    roomId: typeof window !== undefined ? localStorage.getItem('roomId') : '',
+    startTime: typeof window !== undefined ? localStorage.getItem('reservationTime') : '',
     category: category
   }
 

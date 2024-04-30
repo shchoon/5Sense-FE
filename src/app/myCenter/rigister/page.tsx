@@ -204,7 +204,7 @@ export default function MyCenter() {
           e.preventDefault()
           console.log(postData)
           let hasCenter
-          if (localStorage.getItem('hasCenter') === 'false') {
+          if (typeof window !== undefined && localStorage.getItem('hasCenter') === 'false') {
             hasCenter = false
           } else {
             hasCenter = true
