@@ -203,7 +203,7 @@ export default function PeriodDatePicker(props: IProps) {
             {dateName.map((date, i) => {
               return (
                 <div key={i} className="px-1 py-2 ">
-                  <div className="text-xs text-center font-semibold text-gray-500 font-['Pretendard']">{date}</div>
+                  <div className="text-xs text-center font-semibold text-gray-500 ">{date}</div>
                 </div>
               )
             })}
@@ -445,7 +445,7 @@ export default function PeriodDatePicker(props: IProps) {
             {dateName.map((date, i) => {
               return (
                 <div key={i} className="px-1 py-2 ">
-                  <div className="text-xs text-center font-semibold text-gray-500 font-['Pretendard']">{date}</div>
+                  <div className="text-xs text-center font-semibold text-gray-500 ">{date}</div>
                 </div>
               )
             })}

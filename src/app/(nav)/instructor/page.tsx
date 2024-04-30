@@ -193,8 +193,8 @@ export default function InstructorPage() {
                 className="w-full h-[240px] flex flex-col justify-between px-6 pt-8 pb-6 border border-gray-200 rounded-3xl shadow-[0px_5px_15px_0px_rgba(0, 0, 0, 0.02)]"
               >
                 <div className="w-full flex flex-col gap-2">
-                  <div className="w-[307px] gray-900-semibold text-2xl font-['Pretendard']">{name}</div>
-                  <div className="w-[307px] text-gray-500 text-base font-medium font-['Pretendard']">
+                  <div className="w-[307px] gray-900-semibold text-2xl ">{name}</div>
+                  <div className="w-[307px] text-gray-500 text-base font-medium ">
                     {phone.slice(0, 3)}-{phone.slice(3, 7)}-{phone.slice(7, 11)}
                   </div>
                 </div>
@@ -207,7 +207,7 @@ export default function InstructorPage() {
                     setInstructorId(Number(id))
                   }}
                 >
-                  <div className="indigo-500-semibold text-sm font-['Pretendard']">강사 정보</div>
+                  <div className="indigo-500-semibold text-sm ">강사 정보</div>
                   <ChevronRightIcon className="text-primary-600" width={20} height={20} />
                 </button>
               </div>

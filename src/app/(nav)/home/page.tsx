@@ -110,7 +110,7 @@ export default function MainPageDay() {
             <div
               className={`w-full px-3 py-2 flex justify-center gap-2 items-center ${
                 isClickedDatePicker ? 'text-primary-600' : 'text-gray-900'
-              } font-semibold text-base font-['Pretendard'] hover:text-primary-600 cursor-pointer`}
+              } font-semibold text-base  hover:text-primary-600 cursor-pointer`}
               onClick={onClickDatePickerHandler}
             >
               <CalendarIcon width="18" height="18" color={isClickedDatePicker ? '#7354E8' : '#6B7280'} />

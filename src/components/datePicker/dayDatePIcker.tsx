@@ -88,7 +88,7 @@ export default function DayDatePicker(props: IProps) {
     <div className="flex flex-col bg-white gap-2 w-[283px] p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
       <div className="w-full flex justify-between">
         <AllowLeftIcon width={20} height={20} className="cursor-pointer" onClick={onClickMonthBackHandler} />
-        <div className="w-[126px] text-center gray-900-bold text-xs font-['Pretendard']">
+        <div className="w-[126px] text-center gray-900-bold text-xs ">
           {dateData.year}년 {dateData.month + 1}월
         </div>
         <AllowRightIcon width={20} height={20} className="cursor-pointer" onClick={onClickMonthForwardHandler} />
@@ -99,7 +99,7 @@ export default function DayDatePicker(props: IProps) {
           {dateName.map((date, i) => {
             return (
               <div key={i} className="px-1 py-2 ">
-                <div className="text-xs text-center font-semibold text-gray-500 font-['Pretendard']">{date}</div>
+                <div className="text-xs text-center font-semibold text-gray-500 ">{date}</div>
               </div>
             )
           })}
@@ -126,7 +126,7 @@ export default function DayDatePicker(props: IProps) {
                         dateData.date !== undefined && clickedDate === dateData.date.toString() && dateData.clickable
                           ? 'text-white font-bold'
                           : `${dateData.textColor}`
-                      } font-['Pretendard']`}
+                      } `}
                     >
                       {dateData.date}
                     </div>

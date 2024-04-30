@@ -34,7 +34,7 @@ export default function AddRoom() {
           <EllipsisIcon className="absolute left-[48px] top-[61px]" width={28} height={28} alt="" />
           <ArrowBackIcon className="absolute left-[55px] top-[68px]" width={14} height={14} alt="" />
         </Link>
-        <div className="absolute left-[92px] top-[60px] black-bold text-3xl font-['Pretendard']">강의실 추가</div>
+        <div className="absolute left-[92px] top-[60px] black-bold text-3xl ">강의실 추가</div>
       </div>
       <form
         className="w-[640px] pt-[120px] flex flex-col gap-[34px] mx-auto"

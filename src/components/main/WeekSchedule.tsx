@@ -204,13 +204,13 @@ export default function WeekSchedule({ dateData, week }: IProps) {
                                         data.type == 'duration' ? 'bg-primary-600' : 'bg-orange-500'
                                       }`}
                                     >
-                                      <span className="h-4 text-white text-[13px] font-bold font-['Pretendard']">
+                                      <span className="h-4 text-white text-[13px] font-bold ">
                                         {data.startTime.split(':')[0]}:{data.startTime.split(':')[1]}
                                       </span>
                                       <span
                                         className={`w-full h-[15px] ${
                                           data.type === 'duration' ? 'text-primary-200' : 'text-orange-400'
-                                        } text-xs font-semibold font-['Pretendard']`}
+                                        } text-xs font-semibold `}
                                       >
                                         {data.lessonTime}분
                                       </span>
@@ -219,7 +219,7 @@ export default function WeekSchedule({ dateData, week }: IProps) {
                                       <span
                                         className={`w-full ${
                                           data.type === 'duration' ? 'text-primary-500' : 'text-orange-400'
-                                        } text-[14px] font-bold font-['Pretendard']`}
+                                        } text-[14px] font-bold `}
                                       >
                                         {data.name}
                                       </span>
@@ -227,14 +227,14 @@ export default function WeekSchedule({ dateData, week }: IProps) {
                                         <span
                                           className={`w-full ${
                                             data.type === 'duration' ? 'text-primary-600' : 'text-orange-500'
-                                          } text-xs font-bold font-['Pretendard']`}
+                                          } text-xs font-bold `}
                                         >
                                           {data.teacher}
                                         </span>
                                         <span
                                           className={`w-full ${
                                             data.type === 'duration' ? 'text-primary-600' : 'text-orange-500'
-                                          } text-xs font-bold font-['Pretendard']`}
+                                          } text-xs font-bold `}
                                         >
                                           {data.studentNum}명
                                         </span>

@@ -365,7 +365,7 @@ export default function MyCenter() {
                 handleChangeParentsOpenTimeData={handleChangeStartTimeFromChild}
                 type="open"
               />
-              <div className="flex items-center gray-800-semibold text-base font-['Pretendard']">-</div>
+              <div className="flex items-center gray-800-semibold text-base ">-</div>
               <DropDown
                 {...DropDownProps2}
                 handleChangeParentsCloseTimeData={handleChangeCloseTimeFromChild}

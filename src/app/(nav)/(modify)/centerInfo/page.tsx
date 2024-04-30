@@ -208,7 +208,7 @@ export default function ManageMent() {
               handleClickPatch()
             }}
           >
-            <div className="gray-900-bold text-xl font-['Pretendard']">센터 정보</div>
+            <div className="gray-900-bold text-xl ">센터 정보</div>
             <div className="w-full flex flex-col items-center gap-10">
               <div className="relative w-[140px] flex flex-col items-center">
                 {img === null ? (
@@ -292,7 +292,7 @@ export default function ManageMent() {
           </form>
           {/* 계정 연결 */}
           <div className="w-full px-6 py-8 flex flex-col gap-10 border rounded-xl border-gray-200">
-            <div className="gray-900-bold text-xl font-['Pretendard']">SNS 연결 설정</div>
+            <div className="gray-900-bold text-xl ">SNS 연결 설정</div>
             <div className="w-full flex flex-col gap-[14px]">
               <div
                 className={`relative w-full h-16 flex items-center ${
@@ -300,12 +300,8 @@ export default function ManageMent() {
                 } rounded-md `}
               >
                 <KakaoIcon className="absolute left-2" width={48} height={48} alt="" />
-                <div className="absolute left-[68px] text-stone-800 text-base font-semibold font-['Pretendard']">
-                  카카오 계정 연결
-                </div>
-                <div className="absolute left-[200px] text-stone-800 text-sm font-medium font-['Pretendard']">
-                  2024.01.07
-                </div>
+                <div className="absolute left-[68px] text-stone-800 text-base font-semibold ">카카오 계정 연결</div>
+                <div className="absolute left-[200px] text-stone-800 text-sm font-medium ">2024.01.07</div>
                 {snsLink.kakao ? (
                   <ToggleOn
                     className="absolute right-6 cursor-pointer"
@@ -401,12 +397,8 @@ export default function ManageMent() {
               </div>
               <div className="relative w-full h-16 flex items-center border border-gray-600 rounded-md ">
                 <GoogleIcon className="absolute left-2 p-[15px]" width={48} height={48} alt="" />
-                <div className="absolute left-[68px] text-stone-800 text-base font-semibold font-['Pretendard']">
-                  구글 계정 연결
-                </div>
-                <div className="absolute left-[200px] text-stone-800 text-sm font-medium font-['Pretendard']">
-                  2024.01.07
-                </div>
+                <div className="absolute left-[68px] text-stone-800 text-base font-semibold ">구글 계정 연결</div>
+                <div className="absolute left-[200px] text-stone-800 text-sm font-medium ">2024.01.07</div>
                 {snsLink.google ? (
                   <ToggleOn
                     className="absolute right-6 cursor-pointer"

@@ -52,15 +52,15 @@ export default function WithDrawal() {
         e.preventDefault()
       }}
     >
-      <div className="gray-900-bold text-xl font-['Pretendard']">회원 탈퇴</div>
+      <div className="gray-900-bold text-xl ">회원 탈퇴</div>
       <div className="w-full p-4 flex flex-col gap-10 rounded-lg bg-primary-50">
-        <div className="w-[560px] text-black text-base font-semibold font-['Pretendard']">탈퇴유의사항</div>
+        <div className="w-[560px] text-black text-base font-semibold ">탈퇴유의사항</div>
         <div className="w-[560px]">
-          <span className="gray-500-normal text-sm font-['Pretendard']">
+          <span className="gray-500-normal text-sm ">
             회원 재가입 제한
             <br />
           </span>
-          <span className="gray-500-normal text-sm font-['Pretendard']">
+          <span className="gray-500-normal text-sm ">
             • 회원탈퇴 후 재가입 시 신규회원으로 가입되며, 탈퇴 전의 회원정보, 주문정보, 마일리지, 쿠폰은 복원되지
             않습니다.
             <br />• 사이트 정책에 따라 최대 30일 동안 회원 재가입이 불가능합니다.
@@ -69,7 +69,7 @@ export default function WithDrawal() {
       </div>
       <div className="w-full flex flex-col gap-4">
         <div className="w-full flex flex-col gap-2">
-          <div className="w-[592px] gray-800-semibold text-base font-['Pretendard']">탈퇴 사유 및 개선점</div>
+          <div className="w-[592px] gray-800-semibold text-base ">탈퇴 사유 및 개선점</div>
           {/* <DropDown {...dropDownProps} /> */}
           <DropDown {...dropDownProps} handleChangeParentsDropdownData={handleChangeReasonFromChild} type="dropdown" />
         </div>
