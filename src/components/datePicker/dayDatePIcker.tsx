@@ -23,11 +23,7 @@ export default function DayDatePicker(props: IProps) {
   const [clickedDate, setClickedDate] = useState<string>(`${dateData.date}`)
 
   let dateList
-  if (props.type === 'addClass') {
-    dateList = useGetCalendarData(dateData, props.type)
-  } else {
-    dateList = useGetCalendarData(dateData)
-  }
+  dateList = useGetCalendarData(dateData, props.type)
 
   const onClickDateHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     setClickedDate(e.currentTarget.id)
