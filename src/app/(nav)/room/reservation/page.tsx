@@ -35,16 +35,15 @@ export default function Reservatoin() {
   const [selectedClass, setSelectedClass] = useState<classType>()
   const [studentName, setStudentName] = useState<string>('')
   const [category, setCategory] = useState<string>('')
+  const [classId, setClassId] = useState<string | null>(null)
 
   const handleChangeParentsDropdownData = (data: classType) => {
     setSelectedClass(data)
   }
 
-  const classId = typeof window !== undefined && localStorage.getItem('classId')
-
   useEffect(() => {
-    const classId = localStorage.getItem('classId')
-    if (classId === 'null') {
+    setClassId(localStorage.getItem('classId'))
+    if (classId === '') {
       instance(`/session-lessons`, {
         params: {
           isCheckRegistrationsCount: true
