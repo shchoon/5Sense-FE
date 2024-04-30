@@ -156,8 +156,7 @@ export default function StudentPage() {
     }
   }, [metaData])
 
-  console.log(studentList)
-
+  console.log(infiniteScrollCount)
   return (
     <div className="w-full h-full px-6 md:px-12 lg:px-6 xl:px-12 py-[60px] box-border">
       {/* 수강생 관리 + 수강생 등록 버튼 */}
