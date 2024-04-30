@@ -101,7 +101,7 @@ export default function Duration({ classType, setClassType, valid }: ITypeProps)
           </button>
         )}
 
-        <DurationScheduleCheck edit={Boolean(params)} />
+        <DurationScheduleCheck /* edit={Boolean(params)} */ />
         {/**여기 일정 UI 들어가면 됩니다. */}
       </div>
       {noticeModal && (
