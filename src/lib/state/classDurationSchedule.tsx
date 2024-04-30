@@ -1,5 +1,4 @@
 import { atom } from 'recoil'
-import Schedule from '../../app/(nav)/room/schedule/page'
 
 interface DurationScheduleType {
   startDate: string
@@ -11,7 +10,7 @@ interface DurationScheduleType {
   lessonTime: number
 }
 
-export const durationScheduleState = atom<DurationScheduleType[]>({
+export const durationClassScheduleState = atom<DurationScheduleType[]>({
   key: 'durationScheduleState',
   default: []
 })

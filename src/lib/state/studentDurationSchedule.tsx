@@ -13,7 +13,7 @@ interface DurationScheduleType {
   repeatDate: string
 }
 
-export const durationScheduleState = atom<DurationScheduleType[]>({
-  key: 'durationScheduleState',
+export const studentDurationScheduleState = atom<DurationScheduleType[]>({
+  key: 'durationS',
   default: []
 })

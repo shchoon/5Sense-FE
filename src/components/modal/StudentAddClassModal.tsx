@@ -7,7 +7,7 @@ import { useSetRecoilState } from 'recoil'
 import DropDown from '../common/DropDown'
 import RoomReservation from '../room/RoomReservation'
 import instance from '@/lib/api/axios'
-import { durationScheduleState } from '@/lib/state/studentDurationSchedule'
+import { studentDurationScheduleState } from '@/lib/state/studentDurationSchedule'
 import { modalState } from '@/lib/state/modal'
 
 import CloseIcon from 'public/assets/icons/closeCircle.svg'
@@ -30,7 +30,7 @@ export default function StudentAddClassModal({ onClose }: IProps) {
   if (params.id) {
     studentId = params.id.toString()
   }
-  const setDurationSchedule = useSetRecoilState(durationScheduleState)
+  const setDurationSchedule = useSetRecoilState(studentDurationScheduleState)
   const setModal = useSetRecoilState(modalState)
 
   const [classType, setClassType] = useState<string>('duration')

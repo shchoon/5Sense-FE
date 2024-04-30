@@ -4,7 +4,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { useRouter, useParams } from 'next/navigation'
 
 import LessonTimeModal from '../modal/RoundLessonTimeModal'
-import { durationScheduleState } from '@/lib/state/classDurationSchedule'
+import { durationClassScheduleState } from '@/lib/state/classDurationSchedule'
 import { lessonTimeState } from '@/lib/state/lessonTime'
 import { modalState } from '@/lib/state/modal'
 import CalendarIcon from '../../../public/assets/icons/calendar'
@@ -50,8 +50,8 @@ export default function RoomReservation(props: IProps) {
   const refs = useRef<(HTMLDivElement | null)[]>([])
   const modal = useRecoilValue(modalState)
   const setModal = useSetRecoilState(modalState)
-  const durationSchedules = useRecoilValue(durationScheduleState)
-  const setDurationSchedule = useSetRecoilState(durationScheduleState)
+  const durationSchedules = useRecoilValue(durationClassScheduleState)
+  const setDurationSchedule = useSetRecoilState(durationClassScheduleState)
   const setSessionSchedule = useSetRecoilState(sessionScheduleState)
   const setLessonTimeState = useSetRecoilState(lessonTimeState)
   const centerInfo = useRecoilValue(centerInfoState)

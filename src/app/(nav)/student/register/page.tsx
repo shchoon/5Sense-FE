@@ -13,7 +13,7 @@ import StudentAddClassModal from '@/components/modal/StudentAddClassModal'
 import Modal from '@/components/common/modal'
 import { modalState } from '@/lib/state/modal'
 import { sessionScheduleState } from '@/lib/state/studentSessionSchedule'
-import { durationScheduleState } from '@/lib/state/studentDurationSchedule'
+import { studentDurationScheduleState } from '@/lib/state/studentDurationSchedule'
 import StudentsSession from '@/components/studentsDetail/studentsSession'
 import StudentsDuration from '@/components/studentsDetail/studentsDuartion'
 
@@ -35,8 +35,8 @@ export interface InputNumProps {
 
 export default function StudentRegister() {
   const router = useRouter()
-  const durationSchedule = useRecoilValue(durationScheduleState)
-  const setDurationSchedule = useSetRecoilState(durationScheduleState)
+  const durationSchedule = useRecoilValue(studentDurationScheduleState)
+  const setDurationSchedule = useSetRecoilState(studentDurationScheduleState)
   const sessionSchedule = useRecoilValue(sessionScheduleState)
   const setSessionSchedule = useSetRecoilState(sessionScheduleState)
   const setModal = useSetRecoilState(modalState)

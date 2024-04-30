@@ -15,7 +15,7 @@ import { modalState } from '@/lib/state/modal'
 import StudentsSession from '@/components/studentsDetail/studentsSession'
 import StudentsDuration from '@/components/studentsDetail/studentsDuartion'
 import { sessionScheduleState } from '@/lib/state/studentSessionSchedule'
-import { durationScheduleState } from '@/lib/state/studentDurationSchedule'
+import { studentDurationScheduleState } from '@/lib/state/studentDurationSchedule'
 import { AddSessionLessonCheck } from '@/components/student/addSessionLessonCheck'
 
 import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
@@ -40,9 +40,9 @@ export default function StudentEdit() {
   const router = useRouter()
   const params = useParams()
   const studentId = params.id
-  const durationSchedule = useRecoilValue(durationScheduleState)
+  const durationSchedule = useRecoilValue(studentDurationScheduleState)
   const sessionSchedule = useRecoilValue(sessionScheduleState)
-  const setDurationSchedule = useSetRecoilState(durationScheduleState)
+  const setDurationSchedule = useSetRecoilState(studentDurationScheduleState)
   const setSessionSchedule = useSetRecoilState(sessionScheduleState)
   const setModal = useSetRecoilState(modalState)
   const modal = useRecoilValue(modalState)
