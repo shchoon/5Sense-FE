@@ -37,9 +37,9 @@ export default function ManageMent() {
     profile: ''
   })
   const [snsLink, setSnsLink] = useState<snsLinkType>({
-    kakao: typeof window !== undefined && localStorage.getItem('social') === 'kakao' ? true : false,
-    naver: typeof window !== undefined && localStorage.getItem('social') === 'naver' ? true : false,
-    google: typeof window !== undefined && localStorage.getItem('social') === 'google' ? true : false
+    kakao: false,
+    naver: false,
+    google: false
   })
   const [toggleStatus, setToggleStatus] = useState<boolean>(false)
   const [img, setImg] = useState<string | null>()
@@ -194,6 +194,15 @@ export default function ManageMent() {
       setImg(centerInfo.profile)
     }
   }, [centerInfo])
+
+  useEffect(() => {
+    setSnsLink(prev => ({
+      ...prev,
+      kakao: localStorage.getItem('social') === 'kakao' ? true : false,
+      naver: localStorage.getItem('social') === 'naver' ? true : false,
+      google: localStorage.getItem('social') === 'google' ? true : false
+    }))
+  }, [])
 
   return (
     <>
