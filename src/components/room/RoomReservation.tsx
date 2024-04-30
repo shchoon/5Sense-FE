@@ -40,7 +40,7 @@ interface IProps {
   viewType: string
   onClick?: () => void
   lessonTime?: string
-  paymentStatus: string
+  paymentStatus?: string
 }
 
 export default function RoomReservation(props: IProps) {
@@ -483,7 +483,7 @@ export default function RoomReservation(props: IProps) {
                                 startTime: calculateLessonTimeOfRoom(timeRange).startTime,
                                 endTime: calculateLessonTimeOfRoom(timeRange).endTime,
                                 roomId: Number(clickedRoomData.roomId),
-                                paymentStatus: props.paymentStatus,
+                                paymentStatus: props.paymentStatus !== undefined ? props.paymentStatus : '',
                                 roomName: clickedRoomData.room,
                                 restOfSessions: restOfSessions
                               }

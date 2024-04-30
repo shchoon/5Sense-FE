@@ -228,12 +228,12 @@ export default function StudentRegister() {
                 <PlusIcon width={24} height={24} />
                 <div className="text-base font-semibold text-primary-600">클래스 추가</div>
               </button>
-              {sessionSchedule.map((data, i) => {
+              {sessionSchedule.map((data: any, i) => {
                 return (
                   <StudentsSession
                     className={data.name}
-                    restOfSessions={data.totalSessions}
-                    sessionCount={1}
+                    paymentStatus={data.paymentStatus}
+                    sessionSchedule={data.schedules}
                     type="check"
                     onDelete={() => {
                       setSessionSchedule([...sessionSchedule.filter((data, index) => index !== i)])

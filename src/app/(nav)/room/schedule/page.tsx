@@ -89,9 +89,9 @@ export default function Schedule() {
           </div>
         )}
 
-        {selectedClass !== undefined && (
+        {/* {selectedClass !== undefined && (
           <RoomReservation class={selectedClass} studentId={studentName} classType="session" viewType="page" />
-        )}
+        )} */}
       </div>
     </>
   )

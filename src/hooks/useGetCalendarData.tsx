@@ -1,4 +1,4 @@
-import { dateDataType } from '@/components/datePicker/dayDatePicker'
+import { dateDataType } from '@/components/datePicker/dayDatePIcker'
 import useGetHolidayData from './useGetHolidayData'
 
 export function useGetCalendarData(dateData: dateDataType, type?: string) {

@@ -16,25 +16,25 @@ export type SideProps = {
 export default function SideModal({ id, type }: SideProps) {
   const [Modal, setModal] = useRecoilState(modalState)
 
-  const handleModal = () => {
+  /* const handleModal = () => {
     setModal(prevModal => ({
       ...prevModal,
       active: false
     }))
-  }
+  } */
 
   const render = () => {
-    if (type === 'student') {
+    /* if (type === 'student') {
       return <DetailStudent id={id} />
     }
     if (type === 'instructorDetail') {
       return <DetailInstructor id={id} />
-    }
+    } */
   }
-  return (
-    <div className="relative top-0 left-0 w-[480px] h-full bg-white rounded-tr-[32px] shadow p-6 flex flex-col items-end">
+  return {
+    /* <div className="relative top-0 left-0 w-[480px] h-full bg-white rounded-tr-[32px] shadow p-6 flex flex-col items-end">
       <Image src={close_Circle_bg} alt="버튼" className="cursor-pointer" onClick={handleModal} />
       {render()}
-    </div>
-  )
+    </div> */
+  }
 }

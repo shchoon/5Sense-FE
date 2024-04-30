@@ -11,9 +11,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useRecoilState } from 'recoil'
 import InputForm, { InputFormProps } from '@/components/common/InputForm'
-import TextareaForm, {
-  TextareaFormProps
-} from '@/components/common/TextareaForm'
+import TextareaForm, { TextareaFormProps } from '@/components/common/TextareaForm'
 import { modalState } from '@/lib/state/modal'
 
 type studentInfo = {
@@ -41,34 +39,34 @@ export default function StudentRegister() {
     submitData: teacher,
     setSubmitData: setTeacher
   })
-  const studentNameProps: InputFormProps = {
+  /* const studentNameProps: InputFormProps = {
     title: '이름',
     placeholder: '이름을 입력해 주세요',
     name: 'name',
     maxLength: 20,
     submitData: teacher,
     setSubmitData: setTeacher
-  }
+  } */
 
-  const studentMemoProps: TextareaFormProps = {
+  /* const studentMemoProps: TextareaFormProps = {
     title: '특이사항',
     placeholder: '수강생 특이사항을 적어주세요.',
     name: 'particulars',
     maxLength: 300,
     submitData: teacher,
     setSubmitData: setTeacher
-  }
+  } */
 
   const [Modal, setModal] = useRecoilState(modalState)
 
-  const handleModal = () => {
+  /* const handleModal = () => {
     setModal(prevModal => ({
       ...prevModal,
       active: !Modal.active
     }))
-  }
+  } */
 
-  const editInstructorInfo = (e: React.MouseEvent<HTMLFormElement>) => {
+  /* const editInstructorInfo = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault()
     instance
       .put(`/teachers/${Modal.id}`, teacher)
@@ -76,9 +74,9 @@ export default function StudentRegister() {
         router.push('/instructor')
         handleModal()
       })
-  }
+  } */
 
-  const getInstructorInfo = () => {
+  /* const getInstructorInfo = () => {
     instance.get(`/teachers/${Modal.id}`).then(res => {
       setTeacher({
         ...teacher,
@@ -86,44 +84,30 @@ export default function StudentRegister() {
         phone: res.data.data.phone
       })
     })
-  }
+  } */
 
-  useEffect(() => {
+  /* useEffect(() => {
     getInstructorInfo()
-  }, [])
+  }, []) */
 
   return (
     <div className="w-full">
       <div className="relative">
         <Link href={'/student'}>
-          <Image
-            className="absolute left-[48px] top-[61px]"
-            src={Ellipsis}
-            width={28}
-            height={28}
-            alt=""
-          />
-          <Image
-            className="absolute left-[55px] top-[68px]"
-            src={ArrowBack}
-            width={14}
-            height={14}
-            alt=""
-          />
+          <Image className="absolute left-[48px] top-[61px]" src={Ellipsis} width={28} height={28} alt="" />
+          <Image className="absolute left-[55px] top-[68px]" src={ArrowBack} width={14} height={14} alt="" />
         </Link>
         <div className="absolute left-[92px] top-[60px] black-bold text-3xl font-['Pretendard'] leading-[30px]">
           강사 정보수정
         </div>
       </div>
       <div className="w-full pt-[120px] flex justify-center">
-        <form className="flex flex-col gap-5" onSubmit={editInstructorInfo}>
-          {/* 수강생 정보 등록 */}
+        <form className="flex flex-col gap-5" /* onSubmit={editInstructorInfo} */>
+          {/* 강사 정보 등록 */}
           <div className="flex flex-col gap-10 w-[640px] px-6 py-8 border rounded-xl border-gray-200">
-            <div className="gray-900-bold text-xl font-['Pretendard'] leading-tight">
-              강사 정보
-            </div>
+            <div className="gray-900-bold text-xl font-['Pretendard'] leading-tight">강사 정보</div>
             <div className="flex flex-col gap-4 w-full">
-              <InputForm {...studentNameProps} />
+              {/* <InputForm {...studentNameProps} /> */}
               <div className="flex flex-col gap-2">
                 <div className="gray-800-semibold">전화번호</div>
                 <input
@@ -141,18 +125,11 @@ export default function StudentRegister() {
           </div>
           {/* 클래스 등록 */}
           <div className="flex flex-col gap-10 w-[640px] px-6 py-8 border rounded-xl border-gray-200">
-            <div className="gray-900-bold text-xl font-['Pretendard'] leading-tight">
-              클래스 목록
-            </div>
+            <div className="gray-900-bold text-xl font-['Pretendard'] leading-tight">클래스 목록</div>
           </div>
           {/* 등록 버튼 */}
-          <button
-            type="submit"
-            className="w-full py-3.5 px-6 btn-purple focus:ring-1 focus:ring-primary-200"
-          >
-            <div className="text-white text-base font-semibold font-['Pretendard'] leading-normal">
-              수정하기
-            </div>
+          <button type="submit" className="w-full py-3.5 px-6 btn-purple focus:ring-1 focus:ring-primary-200">
+            <div className="text-white text-base font-semibold font-['Pretendard'] leading-normal">수정하기</div>
           </button>
         </form>
       </div>

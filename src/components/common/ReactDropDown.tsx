@@ -1,7 +1,6 @@
 'use client'
 
-import { Dropdown } from 'flowbite-react'
-import type { CustomFlowbiteTheme } from 'flowbite-react'
+//import { Dropdown } from 'flowbite-react'
 import Image from 'next/image'
 import chevronDown from 'public/assets/icons/chevron_down_gray.svg'
 import React, { useState } from 'react'
@@ -59,8 +58,8 @@ function ReactDropDown({ title, list }: DropDownPropsType) {
   const test = document.getElementById(':r0')
 
   console.log(test)
-  return (
-    <Dropdown
+  return {
+    /* <Dropdown
       label="선택해주세요"
       //theme={customTheme}
       className="max-h-[174px] overflow-y-scroll border-primary-600"
@@ -86,8 +85,8 @@ function ReactDropDown({ title, list }: DropDownPropsType) {
           </Dropdown.Item>
         )
       })}
-    </Dropdown>
-  )
+    </Dropdown> */
+  }
 }
 
 export default ReactDropDown

@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import instance from '@/lib/api/axios'
-import { dateDataType } from '../datePicker/dayDatePicker'
+import { dateDataType } from '../datePicker/dayDatePIcker'
 
 interface IProps {
   dateData: dateDataType
