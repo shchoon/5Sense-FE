@@ -50,7 +50,7 @@ interface IProps {
   type: string
 }
 
-export default function RegisterPage(props: IProps) {
+export default function RegisterPage() {
   const router = useRouter()
 
   const [classInfo, setClassInfo] = useState({
