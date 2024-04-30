@@ -28,10 +28,6 @@ interface snsLinkType {
 }
 
 export default function ManageMent() {
-  if (typeof window !== undefined) {
-    const socialType = localStorage.getItem('social')
-  }
-
   const [postData, setPostData] = useState<centerDataType>({
     name: '',
     address: '',

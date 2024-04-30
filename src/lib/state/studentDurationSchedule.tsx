@@ -14,6 +14,6 @@ interface DurationScheduleType {
 }
 
 export const studentDurationScheduleState = atom<DurationScheduleType[]>({
-  key: 'durationS',
+  key: 'studentDurationScheduleState',
   default: []
 })
