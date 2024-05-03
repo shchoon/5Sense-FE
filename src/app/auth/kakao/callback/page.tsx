@@ -28,10 +28,10 @@ export default function KakaoCallback() {
         localStorage.setItem('hasCenter', res.data.data.hasCenter)
         localStorage.setItem('isNew', res.data.data.isNew)
         localStorage.setItem('social', res.data.data.type)
-        if (!res.data.data.isNew) {
-          router.push('/home')
+        if (res.data.data.isNew) {
+          router.push('/myCenter/agreement')
         } else {
-          router.push('/myCenter')
+          router.push('/home')
         }
       })
       .catch(error => {
