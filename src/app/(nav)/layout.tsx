@@ -49,7 +49,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             />
             <div className="logoBox flex gap-[10px]">
               <Image src={mainLogo} alt="로고" />
-              <span className=" text-slate-50 text-xl font-bold leading-[52px]">5Sense</span>
+              <span className=" text-slate-50 text-xl font-bold leading-[52px]">Sense</span>
             </div>
           </div>
           <div className="iconBox lg:absolute lg:top-[37px] lg:right-6 flex items-center gap-[27px]">
