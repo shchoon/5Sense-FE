@@ -1,9 +1,11 @@
+const API_ADDRESS = process.env.NEXT_PUBLIC_IP_ADDRESS
+
 const nextConfig = {
   rewrites: async () => {
     return [
       {
         source: '/:path*',
-        destination: 'http://3.39.24.91:3000/:path*'
+        destination: `${API_ADDRESS}/:path*`
       }
     ]
   },
