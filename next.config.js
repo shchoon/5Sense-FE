@@ -2,8 +2,8 @@ const nextConfig = {
   rewrites: async () => {
     return [
       {
-        source: '/student',
-        destination: 'https://www.naver.com'
+        source: '/:path*',
+        destination: 'http://3.39.24.91:3000/:path*'
       }
     ]
   },
