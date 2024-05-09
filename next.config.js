@@ -1,7 +1,7 @@
 const API_ADDRESS = process.env.NEXT_PUBLIC_IP_ADDRESS
 
 const nextConfig = {
-  rewrites: async () => {
+  async rewrites() {
     return [
       {
         source: '/:path*',
