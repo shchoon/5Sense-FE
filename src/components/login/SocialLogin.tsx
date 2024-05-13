@@ -25,7 +25,6 @@ export default function SocialLoginBtn() {
 
   const router = useRouter()
 
-  console.log(window.location)
   const loginBtnData: {
     title: string
     logo: any
