@@ -18,9 +18,8 @@ export default function SocialLoginBtn() {
   }
   const state = generateState()
   const KAKAO_AUTH_URL = process.env.NEXT_PUBLIC_KAKAO_AUTH_URL + state
-  const KAKAO_BETA_AUTH_URL = process.env.NEXT_BETA_KAKAO_AUTH_URL + state
+  const KAKAO_BETA_AUTH_URL = process.env.NEXT_PUBLIC_BETA_KAKAO_AUTH_URL + state
   const NAVER_AUTH_URL = process.env.NEXT_PUBLIC_NAVER_AUTH_URL + state
-  const NAVER_BETA_AUTH_URL = process.env.NEXT_BETA_NAVER_AUTH_URL + state
   const GOOGLE_AUTH_URL = process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL + state
 
   const router = useRouter()
