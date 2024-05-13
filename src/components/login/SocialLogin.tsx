@@ -43,7 +43,7 @@ export default function SocialLoginBtn() {
       textColor: 'text-[#374151]',
       alt: 'kakao',
       login: async function kakaoLogin() {
-        if (window.location.port === '3000') {
+        if (typeof window !== undefined && window.location.port === '3000') {
           window.location.href = KAKAO_AUTH_URL
         } else {
           window.location.href = KAKAO_BETA_AUTH_URL
