@@ -66,7 +66,7 @@ instance.interceptors.response.use(
       const refreshToken = typeof window !== undefined && localStorage.getItem('refreshToken')
       try {
         const res = await axios.post(
-          process.env.NEXT_PUBLIC_IP_ADDRESS + '/auth/reissue',
+          '/auth/reissue',
           {},
           {
             headers: {
