@@ -21,7 +21,7 @@ export default function SocialLoginBtn() {
   const KAKAO_BETA_AUTH_URL = process.env.NEXT_PUBLIC_BETA_KAKAO_AUTH_URL + state
   const NAVER_AUTH_URL = process.env.NEXT_PUBLIC_NAVER_AUTH_URL + state
   const GOOGLE_AUTH_URL = process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL + state
-
+  console.log(KAKAO_AUTH_URL)
   const router = useRouter()
 
   const loginBtnData: {
