@@ -27,8 +27,10 @@ instance.interceptors.request.use(
     if (accessToken) {
       if (accessTokenExp && checkToken(accessTokenExp) < 5) {
         try {
+          const postURL: string =
+            window.location.port === '3000' ? process.env.NEXT_PUBLIC_IP_ADDRESS + '/auth/reissue' : '/auth/reissue'
           const res = await axios.post(
-            process.env.NEXT_PUBLIC_IP_ADDRESS + '/auth/reissue',
+            postURL,
             {},
             {
               headers: {
@@ -65,8 +67,10 @@ instance.interceptors.response.use(
     if (url === '/centers') {
       const refreshToken = typeof window !== undefined && localStorage.getItem('refreshToken')
       try {
+        const postURL: string =
+          window.location.port === '3000' ? process.env.NEXT_PUBLIC_IP_ADDRESS + '/auth/reissue' : '/auth/reissue'
         const res = await axios.post(
-          '/auth/reissue',
+          postURL,
           {},
           {
             headers: {
