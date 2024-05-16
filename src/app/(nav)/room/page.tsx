@@ -328,6 +328,7 @@ export default function Room() {
         <div className="w-full grid grid-cols-4 gap-2">
           {room.length !== 0 &&
             room[roomListNum].map((data: any, i: number) => {
+              console.log(data)
               return (
                 <div
                   key={i}
@@ -384,9 +385,8 @@ export default function Room() {
                         className="w-full flex items-center justify-between px-2 py-1 rounded-[3px] hover:bg-primary-100"
                         onClick={() => {
                           localStorage.setItem('roomName', data.name)
-                          localStorage.setItem('roomId', data.id)
                           localStorage.setItem('capacity', data.capacity)
-                          router.push('/room/modifyRoom/' + `${data.name}`)
+                          router.push('/room/modifyRoom/' + `${data.id}`)
                         }}
                       >
                         <div className="w-[98px] gray-500-medium text-sm">수정하기</div>

@@ -15,8 +15,10 @@ import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
 import MinusIcon from 'public/assets/icons/minus_vector.svg'
 import PlusIcon from 'public/assets/icons/plus_vector.svg'
 
-export default function ModifyRoom() {
+export default function ModifyRoom({ params }: { params: { id: number } }) {
   const router = useRouter()
+  const roomId = params.id
+  console.log(roomId)
   //const pathName = usePathname()
   //const [inputValue, setInputValue] = useState<string>(roomName)
   const [roomData, setRoomData] = useState<{ name: string; roomId: number; capacity: number }>({
@@ -123,7 +125,7 @@ export default function ModifyRoom() {
           className="w-full h-[52px] flex justify-center items-center text-white text-base font-semibold btn-purple"
           onClick={() => {
             instance
-              .put(`/lesson-rooms/${roomData.roomId}`, {
+              .put(`/lesson-rooms/${roomId}`, {
                 name: roomData.name,
                 capacity: roomData.capacity
               })
