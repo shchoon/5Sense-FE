@@ -15,7 +15,7 @@ import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
 import MinusIcon from 'public/assets/icons/minus_vector.svg'
 import PlusIcon from 'public/assets/icons/plus_vector.svg'
 
-export default function ({ id }: any) {
+export default function Test({ id }: any) {
   const roomId = id
   console.log(id)
   const router = useRouter()
