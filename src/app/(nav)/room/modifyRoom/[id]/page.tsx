@@ -1,7 +1,7 @@
 import Test from '@/components/room/Test'
 
 export function generateStaticParams() {
-  return [{ id: '1' }, { id: '2' }]
+  return [{ id: '3' }, { id: '4' }]
 }
 
 export default function ModifyRoom({ params }: { params: { id: string } }) {
