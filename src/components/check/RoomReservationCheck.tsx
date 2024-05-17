@@ -9,6 +9,7 @@ interface IProps {
   classId: string | null
   roomId: string | null
   startTime: string | null
+  category?: string
 }
 
 export default function RoomReservationCheck(props: IProps) {
@@ -32,7 +33,7 @@ export default function RoomReservationCheck(props: IProps) {
   return (
     <div className="w-full px-6 py-8 flex flex-col gap-4 border border-1 border-gray-200 rounded-xl">
       <div className="w-[72px] h-7 flex items-center justify-center rounded bg-secondary-100 text-secondary-600 text-xs font-bold">
-        회차반
+        {props.category}
       </div>
       <div className="w-full gray-900-bold text-xl">{props.className}</div>
       <div className="w-full flex flex-col gap-1/2">

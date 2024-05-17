@@ -20,9 +20,9 @@ export default function ModifyRoom() {
   //const pathName = usePathname()
   //const [inputValue, setInputValue] = useState<string>(roomName)
   const [roomData, setRoomData] = useState<{ name: string; roomId: number; capacity: number }>({
-    name: localStorage.getItem('roomName') || '',
-    roomId: Number(localStorage.getItem('roomId')) || 0,
-    capacity: Number(localStorage.getItem('capacity')) || 0
+    name: (typeof window !== undefined && localStorage.getItem('roomName')) || '',
+    roomId: (typeof window !== undefined && Number(localStorage.getItem('roomId'))) || 0,
+    capacity: (typeof window !== undefined && Number(localStorage.getItem('capacity'))) || 0
   })
 
   const handleChangeRoomName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +63,7 @@ export default function ModifyRoom() {
           <EllipsisIcon className="absolute left-[48px] top-[61px]" width={28} height={28} alt="" />
           <ArrowBackIcon className="absolute left-[55px] top-[68px]" width={14} height={14} alt="" />
         </Link>
-        <div className="absolute left-[92px] top-[60px] black-bold text-3xl font-['Pretendard']">강의실 수정</div>
+        <div className="absolute left-[92px] top-[60px] black-bold text-3xl ">강의실 수정</div>
       </div>
       <div className="w-[640px] pt-[120px] flex flex-col gap-[34px] mx-auto ">
         <div className="w-full px-6 py-8 flex flex-col gap-10 border rounded-xl border-1 border-gray-200">

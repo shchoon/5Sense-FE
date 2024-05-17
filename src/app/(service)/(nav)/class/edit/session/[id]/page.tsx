@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { useParams, useRouter } from 'next/navigation'
-import { durationScheduleState } from '@/lib/state/classDurationSchedule'
+import { durationClassScheduleState } from '@/lib/state/classDurationSchedule'
 import ClassInfo from '@/components/class/edit/classInfo'
 import ClassType from '@/components/class/edit/classType'
 import TeacherInfo from '@/components/class/edit/teacherInfo'
@@ -76,8 +76,8 @@ export default function EditPage() {
     name: ''
   })
 
-  const durationSchedule = useRecoilValue(durationScheduleState)
-  const setDurationSchedule = useSetRecoilState(durationScheduleState)
+  const durationSchedule = useRecoilValue(durationClassScheduleState)
+  const setDurationSchedule = useSetRecoilState(durationClassScheduleState)
 
   const [infoValid, setInfoValid] = useState({
     valid: true,

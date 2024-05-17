@@ -108,7 +108,7 @@ export default function MainPageDay() {
               <ChevronLeftIcon width={24} height={24} alt=" " />
             </div>
             <div
-              className="w-full px-3 py-2 flex justify-center gap-2 items-center gray-900-semibold text-base font-['Pretendard'] hover:text-primary-600 cursor-pointer"
+              className="w-full px-3 py-2 flex justify-center gap-2 items-center gray-900-semibold text-base  hover:text-primary-600 cursor-pointer"
               onClick={onClickDatePickerHandler}
             >
               <CalendarIcon width="18" height="18" color={isClickedDatePicker ? '#7354E8' : '#6B7280'} />

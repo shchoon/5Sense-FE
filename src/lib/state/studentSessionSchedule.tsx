@@ -2,7 +2,7 @@ import { atom } from 'recoil'
 
 interface SessionScheduleType {
   name: string
-  totalSessions: number
+  totalSessions: string
   studentId?: number
   lessonId: number
   paymentStatus: string
@@ -10,6 +10,8 @@ interface SessionScheduleType {
   startTime: string
   endTime: string
   roomId: number
+  roomName: string
+  restOfSessions: number
 }
 
 export const sessionScheduleState = atom<SessionScheduleType[]>({

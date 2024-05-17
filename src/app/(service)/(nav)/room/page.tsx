@@ -268,7 +268,7 @@ export default function RoomPage() {
           <ChevronLeftIcon width={24} height={24} />
         </div>
         <div
-          className="w-full px-3 py-2 flex justify-center gap-2 items-center gray-900-semibold text-base font-['Pretendard'] hover:text-primary-600 cursor-pointer"
+          className="w-full px-3 py-2 flex justify-center gap-2 items-center gray-900-semibold text-base  hover:text-primary-600 cursor-pointer"
           onClick={onClickDatePickerHandler}
         >
           <CalendarIcon width="18" height="18" color="#6B7280" />

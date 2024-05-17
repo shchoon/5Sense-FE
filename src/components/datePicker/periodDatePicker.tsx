@@ -41,12 +41,8 @@ export default function PeriodDatePicker(props: IProps) {
   })
 
   let firstDateList
-  if (firstDateData.year === currentdateData.year && firstDateData.month === currentdateData.month) {
-    firstDateList = useGetCalendarData(firstDateData, 'addClass')
-  } else {
-    firstDateList = useGetCalendarData(firstDateData)
-  }
-  console.log(firstDateList)
+  firstDateList = useGetCalendarData(firstDateData, 'addClass')
+
   const secondDateList = useGetCalendarData(secondDateData)
   const [firstClickedData, setFirstClickedData] = useState<{
     year: number | undefined
@@ -203,7 +199,7 @@ export default function PeriodDatePicker(props: IProps) {
             {dateName.map((date, i) => {
               return (
                 <div key={i} className="px-1 py-2 ">
-                  <div className="text-xs text-center font-semibold text-gray-500 font-['Pretendard']">{date}</div>
+                  <div className="text-xs text-center font-semibold text-gray-500 ">{date}</div>
                 </div>
               )
             })}
@@ -445,7 +441,7 @@ export default function PeriodDatePicker(props: IProps) {
             {dateName.map((date, i) => {
               return (
                 <div key={i} className="px-1 py-2 ">
-                  <div className="text-xs text-center font-semibold text-gray-500 font-['Pretendard']">{date}</div>
+                  <div className="text-xs text-center font-semibold text-gray-500 ">{date}</div>
                 </div>
               )
             })}

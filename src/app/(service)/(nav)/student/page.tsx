@@ -67,7 +67,7 @@ export default function StudentPage() {
     setIsClickedStudent(false)
   }
 
-  const getInputDataFromChild = (data: { value: string; searchBy: string; list: studentType[]; meta: metaType }) => {
+  const getInputDataFromChild = (data: { value: string; searchBy: string; list: any; meta: metaType }) => {
     setInputData(prev => ({
       ...prev,
       value: data.value,

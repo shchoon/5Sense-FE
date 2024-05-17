@@ -75,7 +75,7 @@ export default function FilterSearchName(props: IProps) {
             console.log(e.target)
             setIsFocusInput(false)
           }} */
-          className="w-full h-full bg-gray-50 focus:outline-none text-gray-500 text-sm font-normal font-['Pretendard'] leading-[17.50px]"
+          className="w-full h-full bg-gray-50 focus:outline-none text-gray-500 text-sm font-normal  leading-[17.50px]"
           onChange={event => {
             SearchName(event)
           }}

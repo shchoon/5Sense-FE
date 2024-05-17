@@ -13,7 +13,10 @@ import StudentAddClassModal from '@/components/modal/StudentAddClassModal'
 import Modal from '@/components/common/modal'
 import { modalState } from '@/lib/state/modal'
 import StudentsSession from '@/components/studentsDetail/studentsSession'
+import StudentsDuration from '@/components/studentsDetail/studentsDuartion'
 import { sessionScheduleState } from '@/lib/state/studentSessionSchedule'
+import { studentDurationScheduleState } from '@/lib/state/studentDurationSchedule'
+import { AddSessionLessonCheck } from '@/components/student/addSessionLessonCheck'
 
 import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
 import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
@@ -37,7 +40,9 @@ export default function StudentEdit() {
   const router = useRouter()
   const params = useParams()
   const studentId = params.id
+  const durationSchedule = useRecoilValue(studentDurationScheduleState)
   const sessionSchedule = useRecoilValue(sessionScheduleState)
+  const setDurationSchedule = useSetRecoilState(studentDurationScheduleState)
   const setSessionSchedule = useSetRecoilState(sessionScheduleState)
   const setModal = useSetRecoilState(modalState)
   const modal = useRecoilValue(modalState)
@@ -92,13 +97,34 @@ export default function StudentEdit() {
 
   const reservation = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    instance
-      .post('/session-lesson-registrations', {
-        studentId: Number(studentId),
-        lessonId: sessionSchedule[0].lessonId,
-        paymentStatus: sessionSchedule[0].paymentStatus
-      })
-      .then(res => {
+    if (sessionSchedule.length !== 0) {
+      if (
+        studentInfo.sessionLessons.filter((data: any, i: number) => data.id === sessionSchedule[0].lessonId).length ===
+        0
+      ) {
+        /* 수강생 정보 수정에서 새로운 회차반 클래스 추가하고 일정추가를 하는 경우 */
+        instance
+          .post('/session-lesson-registrations', {
+            studentId: Number(studentId),
+            lessonId: sessionSchedule[0].lessonId,
+            paymentStatus: sessionSchedule[0].paymentStatus
+          })
+          .then(res => {
+            instance
+              .post('/session-lesson-schedules', {
+                lessonId: sessionSchedule[0].lessonId,
+                studentId: Number(studentId),
+                sessionDate: sessionSchedule[0].sessionDate,
+                startTime: sessionSchedule[0].startTime,
+                endTime: sessionSchedule[0].endTime,
+                roomId: sessionSchedule[0].roomId
+              })
+              .then(res => {
+                router.push('/student')
+              })
+          })
+      } else {
+        /* 이미 추가된 회차반에 대해 일정 추가를 하는 경우 */
         instance
           .post('/session-lesson-schedules', {
             lessonId: sessionSchedule[0].lessonId,
@@ -111,7 +137,18 @@ export default function StudentEdit() {
           .then(res => {
             router.push('/student')
           })
-      })
+      }
+    } else if (durationSchedule.length !== 0) {
+      instance
+        .post('/duration-lesson-registrations', {
+          studentId: Number(studentId),
+          lessonId: Number(durationSchedule[0].lessonId),
+          paymentStatus: durationSchedule[0].paymentStatus
+        })
+        .then(res => {
+          router.push('/student')
+        })
+    }
   }
 
   useEffect(() => {
@@ -133,6 +170,8 @@ export default function StudentEdit() {
     }
   }, [])
 
+  console.log(sessionSchedule)
+
   return (
     <div className="w-full">
       <div className="relative">
@@ -140,13 +179,13 @@ export default function StudentEdit() {
           <EllipsisIcon className="absolute left-[48px] top-[61px]" width={28} height={28} />
           <ArrowBackIcon className="absolute left-[55px] top-[68px]" width={14} height={14} />
         </Link>
-        <div className="absolute left-[92px] top-[60px] black-bold text-3xl font-['Pretendard']">수강생 정보수정</div>
+        <div className="absolute left-[92px] top-[60px] black-bold text-3xl ">수강생 정보수정</div>
       </div>
       <div className="w-full pt-[120px] flex justify-center">
         <form className="flex flex-col gap-5 pb-[60px]" onSubmit={e => reservation(e)}>
           {/* 수강생 정보 등록 */}
           <div className="flex flex-col gap-10 w-[640px] px-6 py-8 border rounded-xl border-gray-200">
-            <div className="gray-900-bold text-xl font-['Pretendard']">수강생 정보</div>
+            <div className="gray-900-bold text-xl ">수강생 정보</div>
             <div className="flex flex-col gap-4 w-full">
               <div className="flex flex-col gap-2">
                 <div className="gray-800-semibold">이름</div>
@@ -218,24 +257,46 @@ export default function StudentEdit() {
               </button>
               {sessionSchedule.map((data, i) => {
                 return (
-                  <StudentsSession
+                  <AddSessionLessonCheck
+                    key={i}
                     className={data.name}
+                    sessionDate={data.sessionDate}
+                    startTime={data.startTime}
+                    endTime={data.endTime}
+                    roomName={data.roomName}
+                    restOfSessions={data.restOfSessions}
                     totalSessions={data.totalSessions}
-                    sessionCount={1}
-                    type="check"
                     onDelete={() => {
                       setSessionSchedule([...sessionSchedule.filter((data, index) => index !== i)])
                     }}
                   />
                 )
               })}
+
+              {durationSchedule.map((data, i) => {
+                return (
+                  <StudentsDuration
+                    key={i}
+                    className={data.name}
+                    startDate={data.startDate}
+                    endDate={data.endDate}
+                    startTime={data.startTime}
+                    endTime={data.endTime}
+                    room={data.roomName}
+                    repeatDate={data.repeatDate}
+                    type="check"
+                  />
+                )
+              })}
               {studentInfo.sessionLessons.length !== 0 &&
                 studentInfo.sessionLessons.map((data: any, i: number) => {
+                  console.log(data)
                   return (
                     <StudentsSession
+                      key={i}
                       className={data.name}
-                      totalSessions={data.totalSessions}
-                      sessionCount={1}
+                      paymentStatus={data.paymentStatus}
+                      sessionSchedule={data.schedules}
                       type="check"
                       /* onDelete={() => {
                       setSessionSchedule([...sessionSchedule.filter((data, index) => index !== i)])

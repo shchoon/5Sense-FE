@@ -36,18 +36,17 @@ export default function List(props: IProps) {
           {props.phone.slice(0, 3)}-{props.phone.slice(3, 7)}-{props.phone.slice(7, 11)}
         </div>
         <div className="flex-1 flex-col gap-1/2 min-w-[100px] text-left">
-          {props.lessons.length !== 0 && props.lessons[0].type === 'duration' && (
-            <>
-              <div className="text-primary-600 text-base font-bold">기간반</div>
-              <div className="gray-800-semibold text-base">{props.lessons[0].name}</div>
-            </>
-          )}
           {props.lessons.length !== 0 &&
-            props.lessons[0].type === 'session' &&
             props.lessons.map((data, i) => {
               return (
                 <>
-                  <div className="text-secondary-600 text-base font-bold">회차반</div>
+                  <div
+                    className={`${
+                      data.type === 'duration' ? 'text-primary-600' : 'text-secondary-600'
+                    } text-base font-bold`}
+                  >
+                    {data.type === 'duration' ? '기간반' : '회차반'}
+                  </div>
                   <div className="gray-800-semibold text-base">{data.name}</div>
                 </>
               )

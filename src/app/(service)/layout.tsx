@@ -57,7 +57,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             <LogoutIcon
               className="w-7 h-7 text-primary-200 cursor-pointer"
               onClick={() => {
-                localStorage.clear()
+                typeof window !== undefined && localStorage.clear()
                 router.push('/login')
               }}
             />

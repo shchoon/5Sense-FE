@@ -34,12 +34,13 @@ export default function Reservatoin() {
 
   const [selectedClass, setSelectedClass] = useState<classType>()
   const [studentName, setStudentName] = useState<string>('')
+  const [category, setCategory] = useState<string>('')
 
   const handleChangeParentsDropdownData = (data: classType) => {
     setSelectedClass(data)
   }
 
-  const classId = localStorage.getItem('classId')
+  const classId = typeof window !== undefined && localStorage.getItem('classId')
 
   useEffect(() => {
     const classId = localStorage.getItem('classId')
@@ -55,17 +56,23 @@ export default function Reservatoin() {
           list: classData
         }))
       })
+    } else {
+      instance(`/session-lessons/${classId}/details`).then(res => {
+        const category = res.data.data.category.subName
+        setCategory(category)
+      })
     }
   }, [])
 
   const reservationData = {
-    className: localStorage.getItem('className'),
-    date: localStorage.getItem('reservationDate'),
-    lessonTime: localStorage.getItem('lessonTime'),
-    roomName: localStorage.getItem('roomName'),
-    classId: localStorage.getItem('classId'),
-    roomId: localStorage.getItem('roomId'),
-    startTime: localStorage.getItem('reservationTime')
+    className: typeof window !== undefined ? localStorage.getItem('className') : '',
+    date: typeof window !== undefined ? localStorage.getItem('reservationDate') : '',
+    lessonTime: typeof window !== undefined ? localStorage.getItem('lessonTime') : '',
+    roomName: typeof window !== undefined ? localStorage.getItem('roomName') : '',
+    classId: typeof window !== undefined ? localStorage.getItem('classId') : '',
+    roomId: typeof window !== undefined ? localStorage.getItem('roomId') : '',
+    startTime: typeof window !== undefined ? localStorage.getItem('reservationTime') : '',
+    category: category
   }
 
   const calculateEndTime = () => {
@@ -93,7 +100,7 @@ export default function Reservatoin() {
           <EllipsisIcon className="absolute left-[48px] top-[61px]" width={28} height={28} alt="" />
           <ArrowBackIcon className="absolute left-[55px] top-[68px]" width={14} height={14} alt="" />
         </Link>
-        <div className="absolute left-[92px] top-[60px] black-bold text-3xl font-['Pretendard']">예약하기</div>
+        <div className="absolute left-[92px] top-[60px] black-bold text-3xl ">예약하기</div>
       </div>
       <div className="w-[640px] pt-[120px] flex flex-col items-center gap-5 mx-auto">
         {classId === 'null' ? (

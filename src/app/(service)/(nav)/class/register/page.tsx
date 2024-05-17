@@ -6,7 +6,6 @@ import ClassInfo from '@/components/class/register/classInfo'
 import ClassType from '@/components/class/register/classType'
 import MemberOfCenter from '@/components/class/register/memberOfCenter'
 
-import { durationScheduleState } from '../../../../../lib/state/classDurationSchedule'
 import { useRouter } from 'next/navigation'
 import { postDurationLessons, postSesstionLessons } from '@/lib/api/class'
 import ContentHeader from '@/components/common/ContentHeader'
@@ -52,7 +51,7 @@ interface IProps {
   type: string
 }
 
-export default function RegisterPage(props: IProps) {
+export default function RegisterPage() {
   const router = useRouter()
 
   const [classInfo, setClassInfo] = useState({
@@ -76,8 +75,8 @@ export default function RegisterPage(props: IProps) {
 
   const [teacherInfo, setTeacherInfo] = useState('')
 
-  const durationSchedule = useRecoilValue(durationScheduleState)
-  const setDurationSchedule = useSetRecoilState(durationScheduleState)
+  const durationSchedule = useRecoilValue(durationClassScheduleState)
+  const setDurationSchedule = useSetRecoilState(durationClassScheduleState)
 
   const [infoValid, setInfoValid] = useState({
     valid: true,

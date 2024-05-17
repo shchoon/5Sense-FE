@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import instance from '@/lib/api/axios'
-import { dateDataType } from '../datePicker/dayDatePicker'
+import { dateDataType } from '../datePicker/dayDatePIcker'
 
 interface IProps {
   dateData: dateDataType
@@ -124,7 +124,7 @@ export default function DaySchedule({ dateData }: IProps) {
                   <div
                     className={`w-[51px] text-right ${
                       checkCurrentDate(data.startTime.split(':')[0]) ? 'text-indigo-500' : 'text-black'
-                    }  text-base font-semibold font-['Pretendard']`}
+                    }  text-base font-semibold `}
                   >
                     {data.startTime.split(':')[0]}:{data.startTime.split(':')[1]}
                   </div>
@@ -173,7 +173,7 @@ export default function DaySchedule({ dateData }: IProps) {
                           <div
                             className={`${
                               checkCurrentDate(startTime) ? 'text-gray-800' : 'text-gray-400'
-                            }  text-base font-semibold font-['Pretendard'] truncate`}
+                            }  text-base font-semibold  truncate`}
                           >
                             {data.name}
                           </div>
@@ -217,7 +217,7 @@ export default function DaySchedule({ dateData }: IProps) {
                           <div
                             className={`${
                               currentHour === Number(data.hour) ? data.textColorOn : data.textColorOff
-                            }  text-base font-semibold font-['Pretendard'] truncate`}
+                            }  text-base font-semibold  truncate`}
                           >
                             {data.className}
                           </div>

@@ -204,7 +204,7 @@ export default function MyCenter() {
           e.preventDefault()
           console.log(postData)
           let hasCenter
-          if (localStorage.getItem('hasCenter') === 'false') {
+          if (typeof window !== undefined && localStorage.getItem('hasCenter') === 'false') {
             hasCenter = false
           } else {
             hasCenter = true
@@ -365,7 +365,7 @@ export default function MyCenter() {
                 handleChangeParentsOpenTimeData={handleChangeStartTimeFromChild}
                 type="open"
               />
-              <div className="flex items-center gray-800-semibold text-base font-['Pretendard']">-</div>
+              <div className="flex items-center gray-800-semibold text-base ">-</div>
               <DropDown
                 {...DropDownProps2}
                 handleChangeParentsCloseTimeData={handleChangeCloseTimeFromChild}

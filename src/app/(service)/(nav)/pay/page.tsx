@@ -86,10 +86,8 @@ export default function PayPage() {
 
       const getData = () => {
         if (inputData.value === '') {
-          instance(
-            `/lesson-registrations/billing-payments?searchBy=none&page=${metaData.page + 1}&PaymentStatus=All`
-          ).then(res => {
-            const studentsData = res.data.data.students
+          instance(`/billing-payments?searchBy=none&page=${metaData.page + 1}&PaymentStatus=All`).then(res => {
+            const studentsData = res.data.data.billingPayments
             const meta = res.data.data.meta
             setStudentList(prev => [...prev, ...studentsData])
             setMetaData(prev => ({
@@ -101,11 +99,11 @@ export default function PayPage() {
           })
         } else {
           instance(
-            `/lesson-registrations/billing-payments?searchBy=${inputData.searchBy}&${inputData.searchBy}=${
-              inputData.value
-            }&page=${metaData.page + 1}&PaymentStatus=${currentPaymentStatus}`
+            `/billing-payments?searchBy=${inputData.searchBy}&${inputData.searchBy}=${inputData.value}&page=${
+              metaData.page + 1
+            }&PaymentStatus=${currentPaymentStatus}`
           ).then(res => {
-            const studentsData = res.data.data.students
+            const studentsData = res.data.data.billingPayments
             const meta = res.data.data.meta
             setStudentList(prev => [...prev, ...studentsData])
             setMetaData(prev => ({
@@ -231,7 +229,6 @@ export default function PayPage() {
               <button
                 key={i}
                 className="w-full flex lg:gap-8 gap-5 p-6 outline rounded-md outline-1 outline-gray-200 shadow-[0_5px_15px_0px_rgba(0,0,0,0.02)] hover:outline-primary-600"
-                onClick={() => {}}
               >
                 <div className=" lg:w-[100px] w-[70px] gray-800-semibold text-sm text-left">{data.student.name}</div>
                 <div className="lg:w-[160px] w-[110px] gray-800-semibold text-sm text-left">
@@ -247,15 +244,14 @@ export default function PayPage() {
                         onClick={() => {
                           if (confirm('결제상태를 변경하시겠습니까?')) {
                             instance
-                              .patch(`/lesson-registrations/${id}`, {
-                                type: data.lesson.type,
+                              .patch(`/billing-payments/${data.id}`, {
                                 paymentStatus: 'Unpaid'
                               })
                               .then(res => {
                                 instance(
-                                  `/lesson-registrations/billing-payments?page=1&take=10&searchBy=none&PaymentStatus=${currentPaymentStatus}`
+                                  `/billing-payments?page=1&take=10&searchBy=none&PaymentStatus=${currentPaymentStatus}`
                                 ).then(res => {
-                                  const studentsData = res.data.data.students
+                                  const studentsData = res.data.data.billingPayments
                                   const meta = res.data.data.meta
                                   setStudentList(studentsData)
                                   setMetaData(prev => ({
@@ -275,15 +271,14 @@ export default function PayPage() {
                         onClick={() => {
                           if (confirm('결제상태를 변경하시겠습니까?')) {
                             instance
-                              .patch(`/lesson-registrations/${id}`, {
-                                type: data.lesson.type,
+                              .patch(`/billing-payments/${data.id}`, {
                                 paymentStatus: 'Paid'
                               })
                               .then(res => {
                                 instance(
-                                  `/lesson-registrations/billing-payments?page=1&take=10&searchBy=none&PaymentStatus=${currentPaymentStatus}`
+                                  `/billing-payments?page=1&take=10&searchBy=none&PaymentStatus=${currentPaymentStatus}`
                                 ).then(res => {
-                                  const studentsData = res.data.data.students
+                                  const studentsData = res.data.data.billingPayments
                                   const meta = res.data.data.meta
                                   setStudentList(studentsData)
                                   setMetaData(prev => ({

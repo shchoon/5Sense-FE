@@ -1,10 +1,10 @@
 'use client'
 import { ClassType, useEffect, useRef, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 
 import LessonTimeModal from '../modal/RoundLessonTimeModal'
-import { durationScheduleState } from '@/lib/state/classDurationSchedule'
+import { durationClassScheduleState } from '@/lib/state/classDurationSchedule'
 import { lessonTimeState } from '@/lib/state/lessonTime'
 import { modalState } from '@/lib/state/modal'
 // import CalendarIcon from '../../../public/assets/icons/calendar'
@@ -40,17 +40,18 @@ interface IProps {
   viewType: string
   onClick?: () => void
   lessonTime?: string
-  paymentStatus: string
+  paymentStatus?: string
 }
 
 export default function RoomReservation(props: IProps) {
   console.log(props)
   const router = useRouter()
+  const params = useParams()
   const refs = useRef<(HTMLDivElement | null)[]>([])
   const modal = useRecoilValue(modalState)
   const setModal = useSetRecoilState(modalState)
-  const durationSchedules = useRecoilValue(durationScheduleState)
-  const setDurationSchedule = useSetRecoilState(durationScheduleState)
+  const durationSchedules = useRecoilValue(durationClassScheduleState)
+  const setDurationSchedule = useSetRecoilState(durationClassScheduleState)
   const setSessionSchedule = useSetRecoilState(sessionScheduleState)
   const setLessonTimeState = useSetRecoilState(lessonTimeState)
   const centerInfo = useRecoilValue(centerInfoState)
@@ -78,6 +79,7 @@ export default function RoomReservation(props: IProps) {
     room: ''
   })
   const [roomData, setRoomData] = useState<any>([])
+  const [restOfSessions, setRestOfSessions] = useState<number>(0)
 
   const handleChangeDateDataFromChild = (data: dateDataType | any, type?: string) => {
     if (type === 'session') {
@@ -295,7 +297,22 @@ export default function RoomReservation(props: IProps) {
         room: ''
       }))
     }
+    if (params.id) {
+      instance(`/students/${params.id}`).then(res => {
+        const sessionLessons = res.data.data.sessionLessons
+        console.log(sessionLessons)
+        const alreadyRigisteredLessons = sessionLessons.filter(
+          (data: any, i: number) => props.class && data.id === props.class.id
+        )
+        if (alreadyRigisteredLessons.length !== 0) {
+          console.log('alreadyRigisteredLessons', alreadyRigisteredLessons)
+          setRestOfSessions(alreadyRigisteredLessons[0].schedules[0].restOfSessions)
+        }
+      })
+    }
   }, [props.lessonTime])
+
+  console.log(roomData)
 
   return (
     <>
@@ -455,18 +472,20 @@ export default function RoomReservation(props: IProps) {
                           if (props.classType === 'session' && timeRange) {
                             const lessonTime = calculateLessonTimeOfRoom(timeRange)
                             const day = calculateDay(new Date(dateData.year, dateData.month, dateData.date).getDay())
-
+                            console.log(restOfSessions)
                             setSessionSchedule(prev => [
                               ...prev,
                               {
                                 name: props.class !== undefined ? props.class.name : '',
-                                totalSessions: 10,
+                                totalSessions: props.class !== undefined ? props.class.totalSessions : '',
                                 lessonId: props.class !== undefined ? Number(props.class.id) : 0,
                                 sessionDate: new Date(dateData.year, dateData.month, dateData.date).toISOString(),
                                 startTime: calculateLessonTimeOfRoom(timeRange).startTime,
                                 endTime: calculateLessonTimeOfRoom(timeRange).endTime,
                                 roomId: Number(clickedRoomData.roomId),
-                                paymentStatus: props.paymentStatus
+                                paymentStatus: props.paymentStatus !== undefined ? props.paymentStatus : '',
+                                roomName: clickedRoomData.room,
+                                restOfSessions: restOfSessions
                               }
                             ])
 

@@ -2,7 +2,7 @@ import { ChangeEvent, useEffect, useState } from 'react'
 
 import Modal from '@/components/common/modal'
 import AddClassModal from '@/components/modal/AddClassModal'
-import { durationScheduleState } from '@/lib/state/classDurationSchedule'
+import { durationClassScheduleState } from '@/lib/state/classDurationSchedule'
 import { modalState } from '@/lib/state/modal'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
@@ -17,7 +17,7 @@ export default function Duration({ classType, setClassType, valid }: ITypeProps)
   console.log(Boolean(params))
 
   const setModal = useSetRecoilState(modalState)
-  const duarationSchedule = useRecoilValue(durationScheduleState)
+  const duarationSchedule = useRecoilValue(durationClassScheduleState)
   const [noticeModal, setNoticeModal] = useState(false)
   const [scheduleModal, setScheduleModal] = useState(false)
 

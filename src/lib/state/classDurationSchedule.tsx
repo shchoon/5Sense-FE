@@ -11,7 +11,7 @@ interface DurationScheduleType {
   lessonTime: number
 }
 
-export const durationScheduleState = atom<DurationScheduleType[]>({
-  key: 'durationScheduleState',
+export const durationClassScheduleState = atom<DurationScheduleType[]>({
+  key: 'durationClassScheduleState',
   default: []
 })

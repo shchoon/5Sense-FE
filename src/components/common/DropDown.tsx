@@ -198,7 +198,7 @@ export default function DropDown(props: IProps) {
           {props.type === 'checkbox' &&
             props.list.map((item: string, i: number) => {
               return (
-                <div className="flex w-full h-[42px] px-3 py-2.5 items-center gap-2">
+                <div key={i} className="flex w-full h-[42px] px-3 py-2.5 items-center gap-2">
                   <input
                     type="checkbox"
                     className="w-[14px] h-[14px] cursor-pointer"

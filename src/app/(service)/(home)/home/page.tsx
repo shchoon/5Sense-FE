@@ -6,8 +6,8 @@ import DaySchedule from '@/components/main/DaySchedule'
 import { useWindowSize } from '@/hooks/useWindowSize'
 import CalendarIcon from '../../../../../public/assets/icons/calendar'
 import DateSlideTab from '@/components/main/DateSlideTab'
-import { dateDataType } from '@/components/datePicker/dayDatePicker'
-import DayDatePicker from '@/components/datePicker/dayDatePicker'
+import { dateDataType } from '@/components/datePicker/dayDatePIcker'
+import DayDatePicker from '@/components/datePicker/dayDatePIcker'
 
 import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
 import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
@@ -110,7 +110,7 @@ export default function MainPageDay() {
             <div
               className={`w-full px-3 py-2 flex justify-center gap-2 items-center ${
                 isClickedDatePicker ? 'text-primary-600' : 'text-gray-900'
-              } font-semibold text-base font-['Pretendard'] hover:text-primary-600 cursor-pointer`}
+              } font-semibold text-base  hover:text-primary-600 cursor-pointer`}
               onClick={onClickDatePickerHandler}
             >
               <CalendarIcon width="18" height="18" color={isClickedDatePicker ? '#7354E8' : '#6B7280'} />

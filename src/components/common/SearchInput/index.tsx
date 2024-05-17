@@ -33,9 +33,9 @@ export default function SearchInput(props: IProps) {
     }
     if (props.type === 'payment') {
       instance(
-        `/lesson-registrations/billing-payments?searchBy=${searchBy}&${searchBy}=${inputValue}&PaymentStatus=${props.paymentStatus}`
+        `/billing-payments?searchBy=${searchBy}&${searchBy}=${inputValue}&PaymentStatus=${props.paymentStatus}`
       ).then(res => {
-        const data = res.data.data.students
+        const data = res.data.data.billingPayments
         const meta = res.data.data.meta
 
         props.passInputData({ value: inputValue, searchBy: searchBy, list: data, meta: meta })

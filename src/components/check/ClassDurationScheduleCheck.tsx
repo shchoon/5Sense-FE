@@ -1,6 +1,6 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import { durationScheduleState } from '@/lib/state/classDurationSchedule'
+import { durationClassScheduleState } from '@/lib/state/classDurationSchedule'
 
 import TrashIcon from 'public/assets/icons/trash.svg'
 
@@ -9,10 +9,10 @@ import TrashIcon from 'public/assets/icons/trash.svg'
 // }
 
 export default function DurationScheduleCheck() {
-  const setDurationScheduleState = useSetRecoilState(durationScheduleState)
+  const setDurationScheduleState = useSetRecoilState(durationClassScheduleState)
   const titleList = ['기간', '시간', '요일', '강의실']
 
-  const durationSchedules = useRecoilValue(durationScheduleState)
+  const durationSchedules = useRecoilValue(durationClassScheduleState)
 
   const deleteDurationSchedule = (index: number) => {
     setDurationScheduleState(durationSchedules.filter((schedule, i) => index !== i))
