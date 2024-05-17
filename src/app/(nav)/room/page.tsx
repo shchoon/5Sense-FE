@@ -170,18 +170,6 @@ export default function Room() {
     setIsClickedDatePicker(false)
   }
 
-  const a = async () => {
-    const res = instance('lesson-rooms/daily', {
-      params: {
-        date: new Date().toISOString()
-      }
-    }).then(res => {
-      return res
-    })
-  }
-
-  console.log(a())
-
   useEffect(() => {
     if (!modal) {
       if (roomOption.isClicked) {
