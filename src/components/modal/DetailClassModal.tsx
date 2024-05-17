@@ -3,9 +3,8 @@ import Image from 'next/image'
 
 import instance from '@/lib/api/axios'
 
-import CloseCircleIcon from 'public/assets/icons/closeCircle.svg'
 import { useEffect, useState } from 'react'
-import { getDurationLessons, getSesstionLessons, patchClassData } from '@/lib/api/class'
+import { getDurationLessons, getSesstionLessons, patchSesstionLessons, patchDurationLessons } from '@/lib/api/class'
 import { useRouter } from 'next/navigation'
 
 interface IProps {
@@ -46,9 +45,16 @@ export default function DetailClassModal({ id, type, onClose }: IProps) {
       lessonId: id,
       type: type
     }
-    patchClassData(data).then(res => {
-      console.log(res.data)
-    })
+    if (type === 'duration') {
+      patchDurationLessons(data).then(res => {
+        console.log(res.data)
+      })
+    } else {
+      patchSesstionLessons(data).then(res => {
+        console.log(res.data)
+      })
+    }
+    onClose()
   }
 
   useEffect(() => {
@@ -70,6 +76,7 @@ export default function DetailClassModal({ id, type, onClose }: IProps) {
     } else {
       getSesstionLessons({ id: id }).then(res => {
         result = res.data.data
+        console.log(result)
         setClassDetail(prev => ({
           ...prev,
           type: result.type,
@@ -88,12 +95,12 @@ export default function DetailClassModal({ id, type, onClose }: IProps) {
 
   return (
     <div className="relative w-[480px] h-screen rounded-tr-[32px] bg-white">
-      <CloseCircleIcon
+      {/* <CloseCircleIcon
         className="absolute right-6 top-6 cursor-pointer"
         width={35}
         height={35}
         onClick={() => onClose()}
-      />
+      /> */}
       <div className="absolute top-[72px] w-full px-6 flex flex-col gap-6">
         <div className="w-full flex flex-col gap-6">
           {/* 카테고리, 클래스 명 */}
@@ -204,7 +211,7 @@ export default function DetailClassModal({ id, type, onClose }: IProps) {
                     <div className="gray-800-medium text-sm">{data.name}</div>
                     <div className="gray-500-normal text-sm">{data.phone}</div>
                     {classDetail.type === 'session' && (
-                      <div className="text-primary-600 text-xs font-semibold">(잔여회차 : {data.sessionCount}/)</div>
+                      <div className="text-primary-600 text-xs font-semibold">(잔여회차 : {data.sessionCount})</div>
                     )}
                   </div>
                 </div>

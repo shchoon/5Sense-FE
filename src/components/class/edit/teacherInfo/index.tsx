@@ -9,13 +9,12 @@ import instance from '@/lib/api/axios'
 import { modalState } from '@/lib/state/modal'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import CloseCircleIcon from 'public/assets/icons/circle/close.svg'
 import Close_Circle_bg from 'public/assets/icons/close_circle_bg_pri_600.svg'
 import PlusIcon from 'public/assets/icons/plus.svg'
 import SearchIcon from 'public/assets/icons/search.svg'
 import UserCircle from 'public/assets/icons/user_circle.svg'
 import VecterIcon from 'public/assets/icons/vector.svg'
-import { ITeacherInfo } from '@/app/(nav)/class/edit/session/[id]/page'
+import { ITeacherInfo } from '@/app/(service)/(nav)/class/edit/session/[id]/page'
 
 interface IProps {
   teacherInfo?: ITeacherInfo
@@ -94,9 +93,9 @@ export default function TeacherInfo({ onChange, valid, teacherInfo }: IProps) {
               }}
             />
 
-            {teacherName !== '' && teacherName !== nameValue ? (
-              <CloseCircleIcon className="text-gray-400 cursor-pointer" onClick={emptyInput} />
-            ) : null}
+            {/* {teacherName !== '' && teacherName !== nameValue ? (
+              // <CloseCircleIcon className="text-gray-400 cursor-pointer" onClick={emptyInput} />
+            ) : null} */}
             {teacherName === nameValue && teacherName !== '' ? (
               <Close_Circle_bg
                 className="absolute left-[100px] cursor-pointer"

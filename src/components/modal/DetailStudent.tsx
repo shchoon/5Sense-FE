@@ -5,7 +5,7 @@ import instance from '@/lib/api/axios'
 import StudentsDuration from '../studentsDetail/studentsDuartion'
 import StudentsSession from '../studentsDetail/studentsSession'
 
-import CloseCircleIcon from 'public/assets/icons/closeCircle.svg'
+// import CloseCircleIcon from 'public/assets/icons/closeCircle.svg'
 import PlusIcon from 'public/assets/icons/plus_circle_bg_pri_600.svg'
 
 interface IProps {
@@ -40,12 +40,12 @@ export default function DetailStudent({ studentsId, onClose }: IProps) {
 
   return (
     <div className="relative w-[480px]  h-screen rounded-tr-[32px] bg-white">
-      <CloseCircleIcon
+      {/* <CloseCircleIcon
         className="absolute right-6 top-6 cursor-pointer"
         width={35}
         height={35}
         onClick={() => onClose()}
-      />
+      /> */}
       <div className="absolute top-[72px] w-full px-6 flex flex-col gap-6">
         {/* 수강생 이름, 번호, 메모 */}
         <div className="w-full flex flex-col gap-5">

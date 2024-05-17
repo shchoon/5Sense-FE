@@ -3,7 +3,6 @@ import { useRouter } from 'next/navigation'
 
 import TodaySchedule from './TodaySchedule'
 
-import CloseCircleIcon from 'public/assets/icons/closeCircle.svg'
 import Profile from 'public/assets/images/profile.png'
 
 interface IProps {
@@ -21,12 +20,6 @@ export default function Hambuger({ onClose }: IProps) {
 
   return (
     <div className="relative w-[480px] h-screen rounded-tr-[32px] bg-white">
-      <CloseCircleIcon
-        className="absolute right-6 top-6 cursor-pointer"
-        width={35}
-        height={35}
-        onClick={() => onClose()}
-      />
       <div className="absolute top-[72px] left-[48px] w-[384px] flex flex-col items-center gap-7">
         <div className="w-[212px] h-[179px] flex items-center flex-col gap-4">
           <Image src={Profile} className="w-[88px] h-[88px]" alt="Propfile" />

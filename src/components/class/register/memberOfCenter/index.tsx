@@ -9,7 +9,6 @@ import instance from '@/lib/api/axios'
 import { modalState } from '@/lib/state/modal'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import CloseCircleIcon from 'public/assets/icons/circle/close.svg'
 import Close_Circle_bg from 'public/assets/icons/close_circle_bg_pri_600.svg'
 import PlusIcon from 'public/assets/icons/plus.svg'
 import SearchIcon from 'public/assets/icons/search.svg'
@@ -94,10 +93,10 @@ export default function MemberOfCenter({ onChange, valid, type }: IProps) {
                 onChange(e.target.value)
               }}
             />
-
+            {/* 
             {searchingName !== '' && searchingName !== nameValue ? (
               <CloseCircleIcon className="text-gray-400 cursor-pointer" onClick={emptyInput} />
-            ) : null}
+            ) : null} */}
             {searchingName === nameValue && searchingName !== '' ? (
               <Close_Circle_bg
                 className="absolute left-[100px] cursor-pointer"

@@ -1,4 +1,4 @@
-import { IClassInfo } from '@/app/(nav)/class/register/page'
+import { IClassInfo } from '@/app/(service)/(nav)/class/register/page'
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 interface IProps {

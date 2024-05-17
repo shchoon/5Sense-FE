@@ -1,4 +1,4 @@
-import { IClassInfo } from '@/app/(nav)/class/register/page'
+import { IClassInfo } from '@/app/(service)/(nav)/class/register/page'
 
 export interface InputFormProps {
   valid?: boolean

@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 const { color } = require('chart.js/helpers')
 const plugin = require('tailwindcss/plugin')
+const flowbite = require('flowbite-react/tailwind')
 
 module.exports = {
   content: [
@@ -8,18 +9,11 @@ module.exports = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/**/*.{js,jsx,ts,tsx}'
+    './src/**/*.{js,jsx,ts,tsx}',
+    flowbite.content()
   ],
   plugins: [
-    // plugin(function ({ addUtilities }) {
-    //   addUtilities({
-    //     '.scrollbar-hide': {
-    //       '&::-webkit-scrollbar': {
-    //         display: 'none'
-    //       }
-    //     }
-    //   })
-    // }),
+    flowbite.plugin(),
     plugin(function ({ addComponents }) {
       addComponents({
         '.btn-purple-sm': {

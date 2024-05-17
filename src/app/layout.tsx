@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 import RecoilContextProvider from './recoilContextProvider'
 import localFont from 'next/font/local'
+import { Flowbite } from 'flowbite-react'
+import customTheme from '@/theme/customTheme'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -15,7 +17,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       {/* 처음 화면에 보이는 크기로만 가져가는것이 아닌 안에 내용물이 채워지는 값을 가져가기 위해 크기값을 설정하지 않음 */}
       <body id="root" className={`${myFont.className} bg-gray-50`}>
-        <RecoilContextProvider>{children}</RecoilContextProvider>
+        <RecoilContextProvider>
+          <Flowbite theme={{ theme: customTheme }}>{children}</Flowbite>
+        </RecoilContextProvider>
       </body>
     </html>
   )

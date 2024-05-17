@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import InputForm, { InputFormProps } from '@/components/common/InputForm'
 import TextareaForm, { TextareaFormProps } from '@/components/common/TextareaForm'
 import Category from './Category'
-import { IClassInfo, IInfoValid } from '@/app/(nav)/class/register/page'
+import { IClassInfo, IInfoValid } from '@/app/(service)/(nav)/class/register/page'
 import CustomInput from '@/components/common/InputForm'
 
 interface IProps {

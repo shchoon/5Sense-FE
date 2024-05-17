@@ -2,17 +2,22 @@ import instance from '../axios'
 
 export const postDurationLessons = async (requestData: any) => {
   console.log(requestData)
-  return instance.post(`/duration-lessons`, requestData).then
+  return instance.post(`/duration-lessons`, requestData)
 }
 
 export const postSesstionLessons = async (requestData: any) => {
   console.log(requestData)
   return instance.post(`/session-lessons`, requestData)
 }
-export const patchClassData = async (requestData: any) => {
-  const lessonId = requestData.lessonId
-  const lessonType = requestData.type
-  return instance.patch(`/lessons/${lessonId}/close?type=${lessonType}`)
+
+export const patchDurationLessons = async (requestData: any) => {
+  const lessonId = Number(requestData.id)
+  return instance.patch(`/duration-lessons/${lessonId}/close`)
+}
+
+export const patchSesstionLessons = async (requestData: any) => {
+  const lessonId = Number(requestData.id)
+  return instance.patch(`/session-lessons/${lessonId}/close`)
 }
 
 export const getDurationLessons = async (requestData: any) => {
@@ -25,7 +30,13 @@ export const getSesstionLessons = async (requestData: any) => {
   return instance.get(`/session-lessons/${lessonId}/details`)
 }
 
-export const putClassData = async (requestParam: any, requestData: any) => {
-  const lessonId = String(requestParam)
-  return instance.put(`/lessons/${lessonId}`, requestData)
+export const putDurationLessons = async (id: string, requestData: any) => {
+  const lessonId = Number(id)
+  return instance.put(`/duration-lessons/${lessonId}`, requestData)
+}
+
+export const putSesstionLessons = async (id: string, requestData: any) => {
+  const lessonId = Number(id)
+  console.log('hih', requestData)
+  return instance.put(`/session-lessons/${lessonId}`, requestData)
 }

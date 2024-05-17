@@ -1,11 +1,7 @@
-import { InputNumProps } from '@/app/(nav)/student/register/page'
+import { InputNumProps } from '@/app/(service)/(nav)/student/register/page'
 import { ChangeEvent, useEffect, useState } from 'react'
 
-export default function useInputNum({
-  name,
-  submitData,
-  setSubmitData
-}: InputNumProps): any {
+export default function useInputNum({ name, submitData, setSubmitData }: InputNumProps): any {
   const [inputValue, setInputValue] = useState<string>('')
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

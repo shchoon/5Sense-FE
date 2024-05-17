@@ -1,7 +1,7 @@
 'use client'
 import instance from '@/lib/api/axios'
 import { useState } from 'react'
-import { metaType } from '@/app/(nav)/student/page'
+import { metaType } from '@/app/(service)/(nav)/student/page'
 
 export async function useGetData(type: string, page: number, take: number, searchBy?: string, inputValue?: string) {
   if (searchBy) {

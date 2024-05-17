@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import InputForm, { InputFormProps } from '@/components/common/InputForm'
 import TextareaForm, { TextareaFormProps } from '@/components/common/TextareaForm'
 import Category from './Category'
-import { IClassInfo, IInfoValid } from '@/app/(nav)/class/register/page'
+import { IClassInfo, IInfoValid } from '@/app/(service)/(nav)/class/register/page'
 import CustomInput from '@/components/common/InputForm'
 
 interface IProps {
@@ -26,7 +26,7 @@ export default function ClassInfo({ classInfo, vaild, checkValid, onChange }: IP
     <div className={`${vaild.valid ? '' : 'border-[#EF5D5D]'} class-box`}>
       <div className={`gray-900-bold text-xl`}>클래스 정보</div>
       <div className="info-detail flex flex-col gap-2">
-      <CustomInput
+        <CustomInput
           valid={vaild.name}
           checkValid={checkValid}
           label="클래스 명"

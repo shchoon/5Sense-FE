@@ -5,11 +5,11 @@ import AddClassModal from '@/components/modal/AddClassModal'
 import { durationScheduleState } from '@/lib/state/classDurationSchedule'
 import { modalState } from '@/lib/state/modal'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import DurationScheduleCheck from '../../../../check/ClassDurationScheduleCheck'
 
 import PlusIcon from 'public/assets/icons/circle/plus.svg'
 import { ITypeProps } from '..'
 import { useParams } from 'next/navigation'
+import EditDurationScheduleCheck from '../../../../check/EditClassDurationScheduleCheck'
 
 export default function Duration({ classType, setClassType, valid }: ITypeProps) {
   const params = useParams<{ type: string; id: string }>()
@@ -88,20 +88,7 @@ export default function Duration({ classType, setClassType, valid }: ITypeProps)
       </div>
       <div className="w-full flex flex-col gap-2">
         <p className={`${valid?.schedule ? '' : 'text-[#EF5D5D]'} gray-800-semibold`}>일정</p>
-        {false && (
-          <button
-            className="w-full px-6 py-3.5 btn-line-purple flex items-center justify-center gap-2"
-            onClick={() => {
-              setModal(true)
-              setScheduleModal(true)
-            }}
-          >
-            <PlusIcon width={24} height={24} />
-            일정 추가
-          </button>
-        )}
-
-        <DurationScheduleCheck edit={Boolean(params)} />
+        <EditDurationScheduleCheck />
         {/**여기 일정 UI 들어가면 됩니다. */}
       </div>
       {noticeModal && (

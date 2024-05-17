@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import Image from 'next/image'
 
-import { IClassInfo, IInfoValid } from '@/app/(nav)/class/register/page'
+import { IClassInfo, IInfoValid } from '@/app/(service)/(nav)/class/register/page'
 import CheckIcon from 'public/assets/icons/circle/check.svg'
 import InputForm from '@/components/common/InputForm'
 
@@ -38,76 +38,76 @@ const categorydata: category[] = [
     ]
   },
   {
-    id: 8,
+    id: 2,
     name: '연기',
     imgUrl: '/assets/icons/category/show.svg',
     options: []
   },
   {
-    id: 7,
+    id: 3,
     name: '공연',
     imgUrl: '/assets/icons/category/performance.svg',
     options: []
   },
   {
-    id: 5,
+    id: 4,
     name: '체육',
     imgUrl: '/assets/icons/category/sports.svg',
     options: [
-      { id: 30, name: '클라이밍' },
-      { id: 31, name: '실내다이빙' },
-      { id: 32, name: '라켓스포츠' },
-      { id: 33, name: '구기스포츠' },
-      { id: 34, name: '무도' },
-      { id: 35, name: '수영' },
-      { id: 36, name: '겨울스포츠' },
-      { id: 37, name: '이색스포츠' }
+      { id: 16, name: '클라이밍' },
+      { id: 17, name: '실내다이빙' },
+      { id: 18, name: '라켓스포츠' },
+      { id: 19, name: '구기스포츠' },
+      { id: 20, name: '무도' },
+      { id: 21, name: '수영' },
+      { id: 22, name: '겨울스포츠' },
+      { id: 23, name: '이색스포츠' }
     ]
   },
   {
-    id: 3,
+    id: 5,
     name: '댄스',
     imgUrl: '/assets/icons/category/dance.svg',
     options: [
-      { id: 19, name: '방송댄스' },
-      { id: 20, name: '발레' },
-      { id: 21, name: '폴댄스' },
-      { id: 22, name: '스윙댄스' },
-      { id: 23, name: '이색댄스' }
-    ]
-  },
-  {
-    id: 2,
-    name: '보컬',
-    imgUrl: '/assets/icons/category/vocal.svg',
-    options: [
-      { id: 16, name: '재즈' },
-      { id: 17, name: '실용음악' },
-      { id: 18, name: '뮤지컬' }
-      // { id: '4', name: '기타 작곡' }
+      { id: 24, name: '방송댄스' },
+      { id: 25, name: '발레' },
+      { id: 26, name: '폴댄스' },
+      { id: 27, name: '스윙댄스' },
+      { id: 28, name: '이색댄스' }
     ]
   },
   {
     id: 6,
-    name: '프로듀싱',
-    imgUrl: '/assets/icons/category/produce.svg',
+    name: '보컬',
+    imgUrl: '/assets/icons/category/vocal.svg',
     options: [
-      { id: 38, name: '프로듀싱' },
-      { id: 39, name: '작곡·작사' },
-      { id: 40, name: '디제잉악기' }
+      { id: 29, name: '재즈' },
+      { id: 30, name: '실용음악' },
+      { id: 31, name: '뮤지컬' },
+      { id: 32, name: '기타 작곡' }
     ]
   },
   {
-    id: 4,
+    id: 7,
+    name: '프로듀싱',
+    imgUrl: '/assets/icons/category/produce.svg',
+    options: [
+      { id: 33, name: '프로듀싱' },
+      { id: 34, name: '작곡·작사' },
+      { id: 35, name: '디제잉악기' }
+    ]
+  },
+  {
+    id: 8,
     name: '연주',
     imgUrl: '/assets/icons/category/play.svg',
     options: [
-      { id: 25, name: '피아노' },
-      { id: 26, name: '현악기' },
-      { id: 27, name: '국악기' },
-      { id: 28, name: '드럼' },
-      { id: 29, name: '이색 악기' },
-      { id: 24, name: 'guitar' }
+      { id: 36, name: '피아노' },
+      { id: 37, name: '현악기' },
+      { id: 38, name: '국악기' },
+      { id: 39, name: '드럼' },
+      { id: 40, name: '이색 악기' },
+      { id: 41, name: 'guitar' }
     ]
   },
   {
@@ -130,6 +130,9 @@ export default function Category({ classInfo, valid, checkValid, onChange }: IPr
   })
 
   const handleGroupChange = (groupId: number, groupName: string, optionList: any) => {
+    if (optionList.length === 0) {
+      return setCategory({ id: groupId, name: groupName, subId: groupId, subName: groupName })
+    }
     setCategory(prev => ({ ...prev, id: groupId, name: groupName }))
     setSelectedOptionList(optionList)
   }
@@ -138,14 +141,6 @@ export default function Category({ classInfo, valid, checkValid, onChange }: IPr
   }
 
   const renderOptionsList = () => {
-    const optionProps = {
-      title: '기타',
-      placeholder: '직접 입력',
-      name: 'options',
-      maxLength: 10,
-      submitData: classInfo,
-      onChange: (value: string) => setOption(value)
-    }
     return (
       <>
         {category.id === 9 ? (
@@ -158,7 +153,7 @@ export default function Category({ classInfo, valid, checkValid, onChange }: IPr
               value={option}
               onChange={e => {
                 setOption(e.target.value)
-                handleOptionChange(99, option)
+                handleOptionChange(0, option)
               }}
               maxLength={10}
             />

@@ -2,11 +2,11 @@ import { useRef, useState } from 'react'
 
 import instance from '@/lib/api/axios'
 
-import { studentType, metaType } from '@/app/(nav)/student/page'
-import { PaymentType } from '@/app/(nav)/pay/page'
+import { studentType, metaType } from '@/app/(service)/(nav)/student/page'
+import { PaymentType } from '@/app/(service)/(nav)/pay/page'
 
 import SearchIconWhite from 'public/assets/icons/search_white.svg'
-import CloseIcon from 'public/assets/icons/close.svg'
+
 import SearchIconGray from 'public/assets/icons/search.svg'
 
 interface IProps {
@@ -73,12 +73,12 @@ export default function SearchInput(props: IProps) {
           onChange={handleChangeInput}
           onKeyDown={e => clickEnter(e)}
         />
-        <CloseIcon
+        {/* <CloseIcon
           className="absolute xl:right-4 right-2 cursor-pointer"
           width={12}
           height={12}
           onClick={() => handleClickInputRefresh()}
-        />
+        /> */}
       </div>
       <div
         className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer"

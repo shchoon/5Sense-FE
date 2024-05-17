@@ -1,11 +1,6 @@
-import Image from 'next/image'
-import CloseIcon from 'public/assets/icons/closeCircle.svg'
-
-import { useRecoilState, useSetRecoilState } from 'recoil'
-import React, { useState } from 'react'
 import instance from '@/lib/api/axios'
 import { AxiosResponse } from 'axios'
-import { modalState } from '@/lib/state/modal'
+import React, { useState } from 'react'
 
 interface postDataType {
   name: string
@@ -81,7 +76,7 @@ export default function RegisterModal(props: IProps) {
       }}
     >
       <div className="absolute left-6 top-10 gray-900-bold text-[22px]">강사 등록</div>
-      <CloseIcon
+      {/* <CloseIcon
         className="absolute right-4 top-4 cursor-pointer"
         width={35}
         height={35}
@@ -91,7 +86,7 @@ export default function RegisterModal(props: IProps) {
             props.onCloseState()
           }
         }}
-      />
+      /> */}
       <div className="absolute top-[90px] w-[376px] flex flex-col gap-7">
         <div className="w-full flex flex-col gap-4">
           <input

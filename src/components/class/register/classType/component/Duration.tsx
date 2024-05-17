@@ -7,49 +7,16 @@ import { modalState } from '@/lib/state/modal'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import DurationScheduleCheck from '../../../../check/ClassDurationScheduleCheck'
 
-import PlusIcon from 'public/assets/icons/circle/plus.svg'
+import PlusIcon from '@/icons/icon/plus.svg'
 import { ITypeProps } from '..'
-import { useParams } from 'next/navigation'
+import { getKoreanNumber } from '@/utils'
+import { Button } from 'flowbite-react'
 
 export default function Duration({ classType, setClassType, valid }: ITypeProps) {
-  const params = useParams<{ type: string; id: string }>()
-
-  console.log(Boolean(params))
-
   const setModal = useSetRecoilState(modalState)
   const duarationSchedule = useRecoilValue(durationScheduleState)
   const [noticeModal, setNoticeModal] = useState(false)
   const [scheduleModal, setScheduleModal] = useState(false)
-
-  function getKoreanNumber(value: string) {
-    const koreanNumber = ['', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구']
-    const tenUnit = ['', '십', '백', '천']
-    const tenThousandUnit = ['조', '억', '만', '']
-    const unit = 10000
-
-    let number = Number(value.replaceAll(',', ''))
-
-    let answer = ''
-
-    while (number > 0) {
-      const mod = number % unit
-      const modToArray = mod.toString().split('')
-      const length = modToArray.length - 1
-
-      const modToKorean = modToArray.reduce((acc, value, index) => {
-        const valueToNumber = +value
-        if (!valueToNumber) return acc
-        // 단위가 십 이상인 '일'글자는 출력하지 않는다. ex) 일십 -> 십
-        const numberToKorean = index < length && valueToNumber === 1 ? '' : koreanNumber[valueToNumber]
-        return `${acc}${numberToKorean}${tenUnit[length - index]}`
-      }, '')
-
-      answer = `${modToKorean}${tenThousandUnit.pop()} ${answer}`
-      number = Math.floor(number / unit)
-    }
-
-    return answer
-  }
 
   const changeTuitionFee = (e: ChangeEvent<HTMLInputElement>) => {
     const value: string = e.target.value
@@ -88,17 +55,10 @@ export default function Duration({ classType, setClassType, valid }: ITypeProps)
       </div>
       <div className="w-full flex flex-col gap-2">
         <p className={`${valid?.schedule ? '' : 'text-[#EF5D5D]'} gray-800-semibold`}>일정</p>
-
-        <button
-          className="w-full px-6 py-3.5 btn-line-purple flex items-center justify-center gap-2"
-          onClick={() => {
-            setModal(true)
-            setScheduleModal(true)
-          }}
-        >
-          <PlusIcon width={24} height={24} />
+        <Button color="outline" fullSized>
+          <PlusIcon className="mr-2" />
           일정 추가
-        </button>
+        </Button>
 
         <DurationScheduleCheck />
         {/**여기 일정 UI 들어가면 됩니다. */}

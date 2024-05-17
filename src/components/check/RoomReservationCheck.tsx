@@ -1,6 +1,5 @@
 import local from 'next/font/local'
 import Image from 'next/image'
-import CloseIcon from 'public/assets/icons/closeCircle.svg'
 
 interface IProps {
   className: string | null
