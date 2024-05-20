@@ -20,8 +20,9 @@ export default function SocialLoginBtn() {
   const KAKAO_AUTH_URL = process.env.NEXT_PUBLIC_KAKAO_AUTH_URL + state
   const KAKAO_BETA_AUTH_URL = process.env.NEXT_PUBLIC_BETA_KAKAO_AUTH_URL + state
   const NAVER_AUTH_URL = process.env.NEXT_PUBLIC_NAVER_AUTH_URL + state
+  const NAVER_BETA_AUTH_URL = process.env.NEXT_PUBLIC_BETA_NAVER_AUTH_URL + state
   const GOOGLE_AUTH_URL = process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL + state
-  console.log(KAKAO_AUTH_URL)
+  const GOOGLE_BETA_AUTH_URL = process.env.NEXT_PUBLIC_BETA_GOOGLE_AUTH_URL + state
   const router = useRouter()
 
   const loginBtnData: {
@@ -56,7 +57,11 @@ export default function SocialLoginBtn() {
       textColor: 'text-[#2BB500]',
       alt: 'naver',
       login: function naverLogin() {
-        window.location.href = NAVER_AUTH_URL
+        if (typeof window !== undefined && window.location.port === '3000') {
+          window.location.href = NAVER_AUTH_URL
+        } else {
+          window.location.href = NAVER_BETA_AUTH_URL
+        }
       }
     },
     {
@@ -67,7 +72,11 @@ export default function SocialLoginBtn() {
       textColor: 'text-[#374151]',
       alt: 'google',
       login: function googleLogin() {
-        window.location.href = GOOGLE_AUTH_URL
+        if (typeof window !== undefined && window.location.port === '3000') {
+          window.location.href = GOOGLE_AUTH_URL
+        } else {
+          window.location.href = GOOGLE_BETA_AUTH_URL
+        }
       }
     }
   ]
