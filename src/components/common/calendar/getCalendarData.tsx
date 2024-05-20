@@ -1,5 +1,5 @@
-import { dateDataType } from '@/components/datePicker/dayDatePIcker'
-import useGetHolidayData from './useGetHolidayData'
+import { dateDataType } from '@/components/common/calendar/datePicker/dayDatePIcker'
+import useGetHolidayData from '../../../hooks/useGetHolidayData'
 
 export function useGetCalendarData(dateData: dateDataType, type?: string) {
   const getHoliData = useGetHolidayData(dateData.year)

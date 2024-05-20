@@ -1,7 +1,10 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { useRecoilValue } from 'recoil'
+
+import { calendarDateState } from '@/lib/state/calendarDateState'
 import instance from '@/lib/api/axios'
-import { dateDataType } from '../datePicker/dayDatePIcker'
+import { dateDataType } from '../common/calendar/datePicker/dayDatePIcker'
 
 interface IProps {
   dateData: dateDataType
@@ -17,6 +20,7 @@ interface getClassDataType {
 }
 
 export default function DaySchedule({ dateData }: IProps) {
+  const calendarDate = useRecoilValue(calendarDateState)
   const date = new Date()
   const currentHour = date.getHours()
 
@@ -74,29 +78,11 @@ export default function DaySchedule({ dateData }: IProps) {
       }
       setLessonData(returnData)
     })
-  }, [dateData.month])
 
-  /* useEffect(() => {
-    if (lessonData.length !== 0) {
-      let currentTimeClassIndex = lessonData[dateData.date - 1].findIndex(
-        data => data.startTime.split(':')[0] == String(currentHour)
-      )
-
-      if (currentTimeClassIndex == -1) {
-        for (var i = 0; i < lessonData[dateData.date - 1].length; i++) {
-          if (lessonData[dateData.date - 1][i].startTime.split(':')[0] > String(currentHour)) {
-            currentTimeClassIndex = i
-            break
-          }
-        }
-      }
-      let targetRef = document.getElementById(`ref${currentTimeClassIndex}`)
-      console.log(targetRef)
-      let position = targetRef?.offsetTop
-      const classSchedule = document.getElementById('classSchedule')
-      classSchedule?.scrollTo(0, Number(position))
+    return () => {
+      setLessonData([])
     }
-  }, []) */
+  }, [dateData.month])
 
   return (
     <div className="flex flex-col gap-4 mx-auto xl:max-w-[1016px] pt-8 pb-[80px]">
@@ -116,7 +102,8 @@ export default function DaySchedule({ dateData }: IProps) {
       {/* 일 시간표 */}
       <div id="classSchedule" className="relative flex flex-col gap-7 w-full max-h-[800px] p-2 overflow-y-auto">
         {lessonData.length !== 0 &&
-          lessonData[dateData.date - 1].map((data: any, i: number) => {
+          lessonData[calendarDate.date - 1] &&
+          lessonData[calendarDate.date - 1].map((data: any, i: number) => {
             const startTime = data.startTime.split(':')[0]
             return (
               <div key={i} className="w-full flex xl:gap-[60px] md:gap-12 gap-6">

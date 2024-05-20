@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 import { useEffect, useState } from 'react'
 import { dateDataType } from './dayDatePIcker'
-import { useGetCalendarData } from '@/hooks/useGetCalendarData'
+import { useGetCalendarData } from '@/components/common/calendar/useGetCalendarData'
 
 import AllowLeftIcon from 'public/assets/icons/allow_left.svg'
 import AllowRightIcon from 'public/assets/icons/allow_right.svg'
