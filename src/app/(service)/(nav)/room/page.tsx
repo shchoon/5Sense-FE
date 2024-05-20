@@ -1,22 +1,19 @@
 'use client'
-import Image from 'next/image'
-import Link from 'next/link'
 import { useState, useRef, useEffect } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { useRouter } from 'next/navigation'
 
+import { calendarDateState } from '@/lib/state/calendarDateState'
 import { useWindowSize } from '@/hooks/useWindowSize'
-import DayDatePicker from '@/components/common/calendar/datePicker/dayDatePIcker'
-import CalendarIcon from '../../../../../public/assets/icons/calendar'
 import { dateDataType } from '@/components/common/calendar/datePicker/dayDatePIcker'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
 import { modalState } from '@/lib/state/modal'
 import DeleteModal from '@/components/modal/DeleteModal'
-// import PlusCircleIcon from '../../../../../public/assets/icons/plus-circle'
 import Modal from '@/components/common/modal'
 import { centerInfoState } from '@/lib/state/centerInfoState'
 import instance from '@/lib/api/axios'
-import Calendar from '@/components/common/Calendar'
+import Calendar from '@/components/common/calendar/Calendar'
+import RoomDataFormatter from '@/components/room/roomDataFormatter'
 
 import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
 import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
@@ -28,20 +25,13 @@ import DeleteIcon from 'public/assets/icons/trash.svg'
 import ContentHeader from '@/components/common/ContentHeader'
 
 export default function RoomPage() {
+  const calendarDate = useRecoilValue(calendarDateState)
+  console.log(calendarDate)
   const { width, height } = useWindowSize()
   const centerInfo = useRecoilValue(centerInfoState)
   const router = useRouter()
   const optionRef = useRef<HTMLButtonElement>(null)
-  const whitePlusCircleProps = {
-    width: '20',
-    height: '20',
-    color: '#FFF'
-  }
-  const grayPlusCircleProps = {
-    width: '24',
-    height: '24',
-    color: '#9CA3AF'
-  }
+
   const modal = useRecoilValue(modalState) // 상태의 값을 가져옴
   const setModal = useSetRecoilState(modalState)
 
@@ -114,11 +104,14 @@ export default function RoomPage() {
       setTimeList(createTimeList())
       instance('lesson-rooms/daily', {
         params: {
-          date: new Date(dateData.year, dateData.month, dateData.date).toISOString()
+          date: new Date(calendarDate.year, calendarDate.month, calendarDate.date).toISOString()
         }
       }).then(res => {
         const list = res.data.data
-        for (var i = 0; i < list.length; i++) {
+        const formatData = RoomDataFormatter(list)
+        console.log(formatData)
+        setRoom(formatData)
+        /* for (var i = 0; i < list.length; i++) {
           const test: any = []
           const keys = Object.keys(list[i].workTime)
           for (var j = 0; j < keys.length; j++) {
@@ -155,10 +148,10 @@ export default function RoomPage() {
             list.push({})
           }
           setRoom([list])
-        }
+        } */
       })
     }
-  }, [dateData, modal])
+  }, [calendarDate, modal])
 
   const test = (lessonTime: number) => {
     if (lessonTime === 30 || lessonTime === null) {
