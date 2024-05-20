@@ -112,7 +112,7 @@
   }
 
   .primary-600-medium {
-    @apply text-primary-600 font-medium
+    @apply text-primary-600 font-medium;
   }
 
   /* ... */
