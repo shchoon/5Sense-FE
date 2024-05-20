@@ -5,6 +5,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 import ClassInfo from '@/components/class/register/classInfo'
 import ClassType from '@/components/class/register/classType'
 import MemberOfCenter from '@/components/class/register/memberOfCenter'
+import { durationClassScheduleState } from '@/lib/state/classDurationSchedule'
 
 import { useRouter } from 'next/navigation'
 import { postDurationLessons, postSesstionLessons } from '@/lib/api/class'

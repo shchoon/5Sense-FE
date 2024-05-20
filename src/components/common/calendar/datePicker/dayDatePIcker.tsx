@@ -1,9 +1,12 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { useGetCalendarData } from '@/hooks/useGetCalendarData'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+
+import { useGetCalendarData } from '@/components/common/calendar/getCalendarData'
 
 import AllowLeftIcon from 'public/assets/icons/allow_left.svg'
 import AllowRightIcon from 'public/assets/icons/allow_right.svg'
+import { calendarDateState } from '@/lib/state/calendarDateState'
 
 export interface dateDataType {
   year: number
@@ -13,11 +16,14 @@ export interface dateDataType {
 
 interface IProps {
   parentsDateData: dateDataType
-  changeParentsDateData: (data: dateDataType, type?: string) => void
+  changeParentsDateData?: (data: dateDataType, type?: string) => void
   type?: string
+  onClose: () => void
 }
 
 export default function DayDatePicker(props: IProps) {
+  const setCalendarDate = useSetRecoilState(calendarDateState)
+
   const dateName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const [dateData, setDateData] = useState<dateDataType>(props.parentsDateData)
   const [clickedDate, setClickedDate] = useState<string>(`${dateData.date}`)
@@ -70,14 +76,21 @@ export default function DayDatePicker(props: IProps) {
   }
 
   const onClickCheckHandler = () => {
-    props.changeParentsDateData(
+    /* props.changeParentsDateData(
       {
         year: dateData.year,
         month: dateData.month,
         date: Number(clickedDate)
       },
       'session'
-    )
+    ) */
+    setCalendarDate(prev => ({
+      ...prev,
+      year: dateData.year,
+      month: dateData.month,
+      date: Number(clickedDate)
+    }))
+    props.onClose()
   }
 
   return (

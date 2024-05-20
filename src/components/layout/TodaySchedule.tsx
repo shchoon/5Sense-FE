@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 
 import instance from '@/lib/api/axios'
-import { dateDataType } from '../datePicker/dayDatePIcker'
+import { dateDataType } from '../common/calendar/datePicker/dayDatePIcker'
 
 interface getLessonDataType {
   id: number
