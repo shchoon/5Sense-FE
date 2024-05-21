@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import AcademyInfo from '@/components/layout/AcademyInfo'
-import Navbar from '@/components/layout/Navbar'
+import Navbar from '@/components/common/Navbar'
 import TodaySchedule from '@/components/layout/TodaySchedule'
 import { modalState } from '@/lib/state/modal'
 import Hambuger from '@/components/layout/Hambuger'
@@ -34,9 +34,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <div className={`min-w-[768px] max-w-[2560px]`}>
-      <div
-        className={`w-full h-full ${modal ? 'fixed' : ''} px-6 2md:px-12 box-border lg:pl-0 lg:pr-4 xl:pr-8 2xl:pr-12`}
-      >
+      <div className={`w-full h-full px-6 2md:px-12 box-border lg:pl-0 lg:pr-4 xl:pr-8 2xl:pr-12`}>
         {/* 상위 relative가 없기때문에 body를 부모로 잡음 */}
         <div className="header w-full h-[124px] flex justify-between items-center lg:flex-none lg:h-[66px]">
           <div className="rightBox flex gap-5 lg:flex-none lg:relative lg:top-12 lg:left-6">
@@ -53,14 +51,14 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             </div>
           </div>
           <div className="iconBox lg:absolute lg:top-[37px] lg:right-6 flex items-center gap-[27px]">
-            <NoticeActiveIcon className="w-[30px] h-[30px] text-primary-200" />
+            {/* <NoticeActiveIcon className="w-[30px] h-[30px] text-primary-200" />
             <LogoutIcon
               className="w-7 h-7 text-primary-200 cursor-pointer"
               onClick={() => {
                 typeof window !== undefined && localStorage.clear()
                 router.push('/login')
               }}
-            />
+            /> */}
           </div>
         </div>
         <div className="content w-full h-full lg:flex">
@@ -68,9 +66,11 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             <AcademyInfo color="text-white" btnColor="bg-slate-50 bg-opacity-20" />
             <TodaySchedule />
           </div>
-          <div className="service flex-grow 3xl:flex-grow-0 3xl:basis-[1576px] lg:translate-y-[-16px]">
+          <div className="service w-full flex-grow 3xl:flex-grow-0 3xl:basis-[1576px] lg:translate-y-[-16px]">
             <Navbar />
-            <div className="relative w-full min-h-[864px] lg:min-h-[854px] bg-white rounded-2xl">{children}</div>
+            <div className="relative w-full flex flex-shrink min-h-[864px] lg:min-h-[854px] bg-white rounded-2xl">
+              {children}
+            </div>
             <div className="footer flex w-full h-[52px] mt-12 justify-between">
               <div className="right flex items-center gap-[56px]">
                 <span className="text-gray-300 text-xl font-bold font-['Poppins']">5sense</span>
@@ -99,7 +99,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         </Modal>
       )}
       {/* static은 레이어 계층에 들어가지 않기때문에 purplebox에 인덱스값을 -로 설정함*/}
-      <div className="purplebox absolute top-0 left-0 w-full h-[601px] lg:h-[469px] bg-gradient-to-b from-[#6F53DB] to-[#875EDC] z-[-10]" />
+      <div className="purplebox absolute top-0 left-0 md:w-screen min-w-[768px] h-[601px] lg:h-[469px] bg-gradient-to-b from-[#6F53DB] to-[#875EDC] z-[-10]" />
     </div>
   )
 }
