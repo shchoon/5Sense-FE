@@ -1,19 +1,17 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { useRouter } from 'next/navigation'
 
 import { modalState } from '@/lib/state/modal'
 import DeleteModal from '@/components/modal/DeleteModal'
 import Modal from '@/components/common/modal'
-import { centerInfoState } from '@/lib/state/centerInfoState'
 
 import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
 import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
 import UserIcon from 'public/assets/icons/user_icon.svg'
 import DotsIcon from 'public/assets/icons/dotsVertical.svg'
 import ModifyIcon from 'public/assets/icons/modify.svg'
-import DeleteIcon from 'public/assets/icons/trash.svg'
 import Plus from '@/icons/icon/plus.svg'
 import Trash from '@/icons/icon/trash.svg'
 
@@ -144,7 +142,6 @@ export default function RoomList({ roomData, onChangeRoomList, indexOfRoomList }
                     >
                       <div className="w-[98px] gray-500-medium text-sm">삭제하기</div>
                       <Trash className="text-gray-400" />
-                      {/* <DeleteIcon className="text-gray-400" width={16} height={16} alt="modify" /> */}
                     </button>
                   </div>
                 )}
