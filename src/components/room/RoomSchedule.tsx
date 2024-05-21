@@ -8,25 +8,14 @@ import { centerInfoState } from '@/lib/state/centerInfoState'
 import { calendarDateState } from '@/lib/state/calendarDateState'
 
 interface IProps {
-  id: number
-  name: string
-  capacity: number
-  workTime: any
+  roomScheduleData: { id: number; name: string; capacity: number; workTime: any }[][]
+  indexOfRoomList: number
 }
 
-export default function RoomSchedule({ roomScheduleData }: { roomScheduleData: IProps[][] }) {
-  console.log(roomScheduleData)
+export default function RoomSchedule({ roomScheduleData, indexOfRoomList }: IProps) {
   const centerInfo = useRecoilValue(centerInfoState)
   const calendarDate = useRecoilValue(calendarDateState)
   const router = useRouter()
-  console.log(calendarDate)
-  const [roomListNum, setRoomListNum] = useState<number>(0)
-  const currentDate = new Date()
-  const [dateData, setDateData] = useState<dateDataType>({
-    year: currentDate.getFullYear(),
-    month: currentDate.getMonth(),
-    date: currentDate.getDate()
-  })
 
   const createTimeList = () => {
     const openTime: string = centerInfo.open
@@ -109,7 +98,7 @@ export default function RoomSchedule({ roomScheduleData }: { roomScheduleData: I
         {/* 수업 일정 */}
         <div className="w-full grid grid-cols-4">
           {roomScheduleData.length !== 0 &&
-            roomScheduleData[roomListNum].map((data: any, i: number) => {
+            roomScheduleData[indexOfRoomList].map((data: any, i: number) => {
               const roomId = data.id,
                 roomName = data.name
               return (
@@ -191,7 +180,7 @@ export default function RoomSchedule({ roomScheduleData }: { roomScheduleData: I
                                           localStorage.setItem('reservationTime', data.time)
                                           localStorage.setItem(
                                             'reservationDate',
-                                            `${dateData.year}.${dateData.month + 1}.${dateData.date}`
+                                            `${calendarDate.year}.${calendarDate.month + 1}.${calendarDate.date}`
                                           )
                                           localStorage.setItem('classId', data.id)
                                           localStorage.setItem('lessonTime', data.lessonTime)
@@ -216,7 +205,7 @@ export default function RoomSchedule({ roomScheduleData }: { roomScheduleData: I
                                 localStorage.setItem('reservationTime', data.time)
                                 localStorage.setItem(
                                   'reservationDate',
-                                  `${dateData.year}.${dateData.month + 1}.${dateData.date}`
+                                  `${calendarDate.year}.${calendarDate.month + 1}.${calendarDate.date}`
                                 )
                                 localStorage.setItem('classId', data.id)
                                 localStorage.setItem('lessonTime', data.lessonTime)

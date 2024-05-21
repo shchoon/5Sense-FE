@@ -22,11 +22,10 @@ export default function RoomPage() {
   const optionRef = useRef<HTMLButtonElement>(null)
 
   const modal = useRecoilValue(modalState) // 상태의 값을 가져옴
-  const setModal = useSetRecoilState(modalState)
 
-  const [roomListNum, setRoomListNum] = useState<number>(0)
+  const [indexOfRoomList, setIndexOfRoomList] = useState<number>(0)
   const [room, setRoom] = useState<any>([])
-  const [roomOption, setRoomOption] = useState<{
+  /* const [roomOption, setRoomOption] = useState<{
     isClicked: boolean
     id: undefined | number
     roomId: number
@@ -34,17 +33,21 @@ export default function RoomPage() {
     isClicked: false,
     id: undefined,
     roomId: 0
-  })
+  }) */
+
+  const onChangeRoomList = (num: number) => {
+    setIndexOfRoomList(num)
+  }
 
   useEffect(() => {
     if (!modal) {
-      if (roomOption.isClicked) {
+      /* if (roomOption.isClicked) {
         setRoomOption({
           isClicked: false,
           id: undefined,
           roomId: 0
         })
-      }
+      } */
       instance('lesson-rooms/daily', {
         params: {
           date: new Date(calendarDate.year, calendarDate.month, calendarDate.date).toISOString()
@@ -74,13 +77,13 @@ export default function RoomPage() {
       <Calendar page="room" />
 
       {/* 룸 리스트 */}
-      <RoomList roomData={room} />
-      <RoomSchedule roomScheduleData={room} />
-      {modal && (
+      <RoomList roomData={room} onChangeRoomList={onChangeRoomList} indexOfRoomList={indexOfRoomList} />
+      <RoomSchedule roomScheduleData={room} indexOfRoomList={indexOfRoomList} />
+      {/* {modal && (
         <Modal small>
           <DeleteModal onClose={() => setModal(false)} roomId={roomOption.roomId} />
         </Modal>
-      )}
+      )} */}
     </div>
   )
 }

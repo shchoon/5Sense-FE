@@ -15,15 +15,15 @@ import DotsIcon from 'public/assets/icons/dotsVertical.svg'
 import ModifyIcon from 'public/assets/icons/modify.svg'
 import DeleteIcon from 'public/assets/icons/trash.svg'
 import Plus from '@/icons/icon/plus.svg'
+import Trash from '@/icons/icon/trash.svg'
 
 interface IProps {
-  id: number
-  name: string
-  capacity: number
-  workTime: any
+  roomData: { id: number; name: string; capacity: number; workTime: any }[][]
+  onChangeRoomList: (num: number) => void
+  indexOfRoomList: number
 }
 
-export default function RoomList({ roomData }: { roomData: IProps[][] }) {
+export default function RoomList({ roomData, onChangeRoomList, indexOfRoomList }: IProps) {
   const router = useRouter()
   const optionRef = useRef<HTMLButtonElement>(null)
 
@@ -32,41 +32,36 @@ export default function RoomList({ roomData }: { roomData: IProps[][] }) {
 
   const [roomOption, setRoomOption] = useState<{
     isClicked: boolean
-    id: undefined | number
     roomId: number
   }>({
     isClicked: false,
-    id: undefined,
     roomId: 0
   })
 
-  const [roomListNum, setRoomListNum] = useState<number>(0)
-  const [room, setRoom] = useState<any>([])
-
   return (
     <div className="relative mt-[32px] w-full pl-[84px]">
-      {roomListNum !== 0 && (
+      {indexOfRoomList !== 0 && (
         <span
           className="absolute z-10 w-6 h-6 left-[72px] top-7 bg-white flex items-center justify-center border border-1 border-gray-200 rounded-full cursor-pointer"
           onClick={() => {
-            if (roomListNum === 0) {
+            if (indexOfRoomList === 0) {
               return
             } else {
-              setRoomListNum(roomListNum - 1)
+              onChangeRoomList(indexOfRoomList - 1)
             }
           }}
         >
           <ChevronLeftIcon width={16} height={16} alt="chevronLeft" />
         </span>
       )}
-      {roomListNum !== roomData.length - 1 && (
+      {indexOfRoomList !== roomData.length - 1 && (
         <span
           className="absolute z-10 w-6 h-6 -right-3 top-7 bg-white flex items-center justify-center border border-1 border-gray-200 rounded-full cursor-pointer"
           onClick={() => {
-            if (roomListNum === room.length - 1) {
+            if (indexOfRoomList === roomData.length - 1) {
               return
             } else {
-              setRoomListNum(roomListNum + 1)
+              onChangeRoomList(indexOfRoomList + 1)
             }
           }}
         >
@@ -76,7 +71,7 @@ export default function RoomList({ roomData }: { roomData: IProps[][] }) {
 
       <div className="w-full grid grid-cols-4 gap-2">
         {roomData.length !== 0 &&
-          roomData[roomListNum].map((data: any, i: number) => {
+          roomData[indexOfRoomList].map((data: any, i: number) => {
             return (
               <div
                 key={i}
@@ -101,7 +96,6 @@ export default function RoomList({ roomData }: { roomData: IProps[][] }) {
                           setRoomOption(prev => ({
                             ...prev,
                             isClicked: false,
-                            id: undefined,
                             roomId: 0
                           }))
                         }
@@ -149,7 +143,8 @@ export default function RoomList({ roomData }: { roomData: IProps[][] }) {
                       }}
                     >
                       <div className="w-[98px] gray-500-medium text-sm">삭제하기</div>
-                      <DeleteIcon className="text-gray-400" width={16} height={16} alt="modify" />
+                      <Trash className="text-gray-400" />
+                      {/* <DeleteIcon className="text-gray-400" width={16} height={16} alt="modify" /> */}
                     </button>
                   </div>
                 )}
@@ -157,6 +152,12 @@ export default function RoomList({ roomData }: { roomData: IProps[][] }) {
             )
           })}
       </div>
+      {/* 룸 삭제 모달 */}
+      {modal && (
+        <Modal small>
+          <DeleteModal onClose={() => setModal(false)} roomId={roomOption.roomId} />
+        </Modal>
+      )}
     </div>
   )
 }
