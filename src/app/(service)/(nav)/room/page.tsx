@@ -56,6 +56,7 @@ export default function RoomPage() {
       <Calendar page="room" />
       {/* 룸 리스트 */}
       <RoomList roomData={room} onChangeRoomList={onChangeRoomList} indexOfRoomList={indexOfRoomList} />
+      {/* 룸 시간표 */}
       <RoomSchedule roomScheduleData={room} indexOfRoomList={indexOfRoomList} />
     </div>
   )

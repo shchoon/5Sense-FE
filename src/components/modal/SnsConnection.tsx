@@ -4,9 +4,9 @@ import { modalState } from '@/lib/state/modal'
 
 interface IProps {
   toggleStatus: boolean
+  onCloseSnsModal: () => void
 }
-export default function SnsConnection({ toggleStatus }: IProps) {
-  console.log(toggleStatus)
+export default function SnsConnection({ toggleStatus, onCloseSnsModal }: IProps) {
   const setModal = useSetRecoilState(modalState)
   return (
     <div className="w-[424px] flex flex-col gap-[53px] px-6 pt-[82px] pb-6 border border-1 border-gray-900 rounded-xl bg-[#fff]">
@@ -22,6 +22,7 @@ export default function SnsConnection({ toggleStatus }: IProps) {
         className="w-full h-[52px] btn-purple"
         onClick={() => {
           setModal(false)
+          onCloseSnsModal()
         }}
       >
         확인

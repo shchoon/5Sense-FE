@@ -10,6 +10,18 @@ export function toLocalString(number: string) {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
+export function changePhoneNUmberToString(phoneNumber: string) {
+  if (phoneNumber.slice(0, 2) === '02') {
+    if (phoneNumber.length === 9) {
+      return phoneNumber.slice(0, 2) + '-' + phoneNumber.slice(2, 5) + '-' + phoneNumber.slice(5, 9)
+    } else {
+      return phoneNumber.slice(0, 2) + '-' + phoneNumber.slice(2, 6) + '-' + phoneNumber.slice(6, 10)
+    }
+  } else if (phoneNumber.slice(0, 3) === '010') {
+    return phoneNumber.slice(0, 3) + '-' + phoneNumber.slice(3, 7) + '-' + phoneNumber.slice(7, 11)
+  }
+}
+
 export function getKoreanNumber(value: string) {
   const koreanNumber = ['', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구']
   const tenUnit = ['', '십', '백', '천']
