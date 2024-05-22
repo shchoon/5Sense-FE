@@ -37,7 +37,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <div className={`w-full h-full px-6 2md:px-12 box-border lg:pl-0 lg:pr-4 xl:pr-8 2xl:pr-12`}>
         {/* 상위 relative가 없기때문에 body를 부모로 잡음 */}
         <div className="header w-full h-[124px] flex justify-between items-center lg:flex-none lg:h-[66px]">
-          <div className="rightBox flex gap-5 lg:flex-none lg:relative lg:top-12 lg:left-6">
+          <div className="rightBox flex items-center gap-5 lg:flex-none lg:relative lg:top-12 lg:left-6">
             <MenuIcon
               className="menu lg:hidden cursor-pointer"
               onClick={() => {

@@ -10,7 +10,7 @@ import { centerInfoState } from '@/lib/state/centerInfoState'
 import { toLocalString } from '@/utils'
 
 import profile from 'public/assets/images/profile.png'
-import ProfileIcon from 'public/assets/images/defaultProfile.svg'
+import ProfileIcon from '@/icons/icon/defaultProfile.svg'
 import { useEffect } from 'react'
 
 export default function AcademyInfo(props: any) {

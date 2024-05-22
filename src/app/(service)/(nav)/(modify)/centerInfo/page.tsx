@@ -12,7 +12,7 @@ import Modal from '@/components/common/modal'
 import { modalState } from '@/lib/state/modal'
 import SnsConnection from '@/components/modal/SnsConnection'
 
-import ProfileIcon from 'public/assets/images/defaultProfile.svg'
+import ProfileIcon from '@/icons/icon/defaultProfile.svg'
 import CameraIcon from 'public/assets/icons/camera.svg'
 import KakaoIcon from 'public/assets/logo/kakaoLogo.svg'
 import ToggleOn from 'public/assets/icons/toggle_on.svg'
@@ -41,6 +41,7 @@ export default function ManageMent() {
     naver: typeof window !== undefined && localStorage.getItem('social') === 'naver' ? true : false,
     google: typeof window !== undefined && localStorage.getItem('social') === 'google' ? true : false
   })
+  const [snsModal, setSnsModal] = useState<boolean>(false)
   const [toggleStatus, setToggleStatus] = useState<boolean>(false)
   const [img, setImg] = useState<string | null>()
   const [imgFile, setImgFile] = useState<File>()
@@ -137,12 +138,6 @@ export default function ManageMent() {
   }
 
   const handleClickPatch = () => {
-    //console.log(checkDiff())
-    /* let formData = new FormData()
-      formData.append('profile', imgFile)
-      for (const [key, value] of formData.entries()) {
-        console.log(key, value)
-      } */
     instance
       .patch(
         '/centers',
@@ -166,6 +161,10 @@ export default function ManageMent() {
     console.log(value)
     const snsConnectionNum = value.filter(data => data === true)
     return snsConnectionNum.length
+  }
+
+  const onCloseSnsModal = () => {
+    setSnsModal(false)
   }
 
   useEffect(() => {
@@ -275,7 +274,6 @@ export default function ManageMent() {
                     handleChangeParentsOpenTimeData={handleChangeDropwdownFromChild}
                     type="open"
                   />
-
                   <span className="flex items-center">-</span>
                   <DropDown
                     {...dropDownProps.close}
@@ -308,6 +306,7 @@ export default function ManageMent() {
                     hiught={24}
                     onClick={() => {
                       setModal(true)
+                      setSnsModal(true)
                       setToggleStatus(false)
                       if (checkSnsConnectionNum() > 1) {
                         setSnsLink(prev => ({
@@ -326,6 +325,7 @@ export default function ManageMent() {
                     hiught={24}
                     onClick={() => {
                       setModal(true)
+                      setSnsModal(true)
                       setToggleStatus(true)
                       setSnsLink(prev => ({
                         ...prev,
@@ -367,6 +367,7 @@ export default function ManageMent() {
                     heught={24}
                     onClick={() => {
                       setModal(true)
+                      setSnsModal(true)
                       setToggleStatus(false)
                       if (checkSnsConnectionNum() > 1) {
                         setSnsLink(prev => ({
@@ -385,6 +386,7 @@ export default function ManageMent() {
                     heught={24}
                     onClick={() => {
                       setModal(true)
+                      setSnsModal(true)
                       setToggleStatus(true)
                       setSnsLink(prev => ({
                         ...prev,
@@ -405,6 +407,7 @@ export default function ManageMent() {
                     height={24}
                     onClick={() => {
                       setModal(true)
+                      setSnsModal(true)
                       setToggleStatus(false)
                       if (checkSnsConnectionNum() > 1) {
                         setSnsLink(prev => ({
@@ -424,6 +427,7 @@ export default function ManageMent() {
                     onClick={() => {
                       setToggleStatus(true)
                       setModal(true)
+                      setSnsModal(true)
                       setSnsLink(prev => ({
                         ...prev,
                         google: true
@@ -434,9 +438,9 @@ export default function ManageMent() {
               </div>
             </div>
           </div>
-          {modal && (
+          {modal && snsModal && (
             <Modal small>
-              <SnsConnection toggleStatus={toggleStatus} />
+              <SnsConnection toggleStatus={toggleStatus} onCloseSnsModal={onCloseSnsModal} />
             </Modal>
           )}
         </div>
