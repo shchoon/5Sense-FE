@@ -9,7 +9,7 @@ interface IProps {
     state: string
 }
 
-export default function Login({social, code, state}: IProps) {
+export default function AuthLogin({social, code, state}: IProps) {
     
     const router = useRouter()
 

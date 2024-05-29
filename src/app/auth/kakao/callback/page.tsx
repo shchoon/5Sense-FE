@@ -1,7 +1,7 @@
 'use client'
 import { useSearchParams } from 'next/navigation'
 
-import Login from '@/utils/login'
+import AuthLogin from '@/components/login/AuthLogin'
 
 interface data {
   code: string | null
@@ -14,5 +14,5 @@ export default function KakaoCallback() {
   const code = searchParams.get('code') as string
   const state = searchParams.get('state') as string
 
-  return <Login social='kakao' code={code} state={state} />
+  return <AuthLogin social='kakao' code={code} state={state} />
 }

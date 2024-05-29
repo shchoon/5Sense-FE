@@ -1,7 +1,7 @@
 'use client'
 import { useSearchParams } from 'next/navigation'
 
-import Login from '@/utils/login'
+import AuthLogin from '@/components/login/AuthLogin'
 
 export default function NaverCallback() {
   const searchParams = useSearchParams()
@@ -9,5 +9,5 @@ export default function NaverCallback() {
   const code = searchParams.get('code') as string
   const state = searchParams.get('state') as string
 
-  return <Login social='naver' code={code} state={state} />  
+  return <AuthLogin social='naver' code={code} state={state} />  
 }
