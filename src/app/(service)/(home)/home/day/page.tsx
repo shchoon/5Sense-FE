@@ -92,6 +92,7 @@ export default function MainPageDay() {
     })
     setIsClickedDatePicker(false)
   }
+
   return (
     <>
       <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
@@ -124,7 +125,7 @@ export default function MainPageDay() {
           <DateSlideTab />
           {isClickedDatePicker && (
             <div className="absolute w-[283px] z-10 right-0 left-0 mx-auto top-[60px]">
-              <DayDatePicker changeParentsDateData={setDateDataFromChild} parentsDateData={dateData} />
+              <DayDatePicker onClose={() =>} changeParentsDateData={setDateDataFromChild} parentsDateData={dateData} />
             </div>
           )}
         </div>

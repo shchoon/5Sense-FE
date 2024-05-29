@@ -1,7 +1,7 @@
 import { dateDataType } from '@/components/common/calendar/datePicker/dayDatePIcker'
 import useGetHolidayData from '../../../hooks/useGetHolidayData'
 
-export function useGetCalendarData(dateData: dateDataType, type?: string) {
+export function getCalendarData(dateData: dateDataType, type?: string) {
   const getHoliData = useGetHolidayData(dateData.year)
   const lastDateOfLastMonthData = new Date(dateData.year, dateData.month, 0)
   const firstDateOfCurrentMonthData = new Date(dateData.year, dateData.month)
