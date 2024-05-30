@@ -6,7 +6,7 @@ import { useRecoilValue } from 'recoil'
 import { dateDataType } from '@/components/common/calendar/datePicker/dayDatePIcker'
 import MonthSchedule from '@/components/main/MonthSchedule'
 import MonthCalendar from '@/components/common/calendar/MonthCalendar'
-import { MonthCalendarDateState } from '@/lib/state/calendar/MonthCalendarState'
+import { MonthCalendarDateState } from '@/lib/state/calendar/MonthCalendarDateState'
 
 export default function MonthDateTab() {
   const dateData = useRecoilValue(MonthCalendarDateState)

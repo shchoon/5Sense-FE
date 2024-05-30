@@ -9,7 +9,7 @@ import MonthDatePicker from '@/components/common/calendar/datePicker/monthDatePi
 import { dateDataType } from '@/components/common/calendar/datePicker/dayDatePIcker'
 import MonthSchedule from '@/components/main/MonthSchedule'
 import Calendar from '@/components/common/calendar/DayCalendar'
-import { MonthCalendarDateState } from '@/lib/state/calendar/MonthCalendarState'
+import { MonthCalendarDateState } from '@/lib/state/calendar/MonthCalendarDateState'
 
 import ChevronLeft from '@/icons/icon/chevronLefyt.svg'
 import ChevronRight from '@/icons/icon/chevronRight.svg'

@@ -1,7 +1,7 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
 
-import { MonthDateType } from '@/lib/state/calendar/MonthCalendarState'
+import { MonthDateType } from '@/lib/state/calendar/MonthCalendarDateState'
 import instance from '@/lib/api/axios'
 
 interface IProps {

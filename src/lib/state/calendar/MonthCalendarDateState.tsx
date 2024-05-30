@@ -1,5 +1,4 @@
 import { atom } from 'recoil'
-import { dateDataType } from '@/components/common/calendar/datePicker/dayDatePIcker'
 
 export interface MonthDateType {
     year: number;
