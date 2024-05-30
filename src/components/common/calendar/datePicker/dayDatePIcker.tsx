@@ -6,7 +6,7 @@ import { getCalendarData } from '@/components/common/calendar/getCalendarData'
 
 import AllowLeftIcon from 'public/assets/icons/allow_left.svg'
 import AllowRightIcon from 'public/assets/icons/allow_right.svg'
-import { calendarDateState } from '@/lib/state/calendarDateState'
+import { DayCalendarDateState } from '@/lib/state/calendar/DayCalendarDateState'
 
 export interface dateDataType {
   year: number
@@ -22,7 +22,7 @@ interface IProps {
 }
 
 export default function DayDatePicker(props: IProps) {
-  const setCalendarDate = useSetRecoilState(calendarDateState)
+  const setCalendarDate = useSetRecoilState(DayCalendarDateState)
 
   const dateName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const [dateData, setDateData] = useState<dateDataType>(props.parentsDateData)

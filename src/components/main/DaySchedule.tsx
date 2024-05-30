@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 
-import { calendarDateState } from '@/lib/state/calendarDateState'
+import { DayCalendarDateState } from '@/lib/state/calendar/DayCalendarDateState'
 import instance from '@/lib/api/axios'
 import { dateDataType } from '../common/calendar/datePicker/dayDatePIcker'
 
@@ -20,7 +20,7 @@ interface getClassDataType {
 }
 
 export default function DaySchedule({ dateData }: IProps) {
-  const calendarDate = useRecoilValue(calendarDateState)
+  const calendarDate = useRecoilValue(DayCalendarDateState)
   const date = new Date()
   const currentHour = date.getHours()
 

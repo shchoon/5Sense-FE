@@ -3,19 +3,19 @@ import { useState, useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { useRouter } from 'next/navigation'
 
-import { calendarDateState } from '@/lib/state/calendarDateState'
+import { DayCalendarDateState } from '@/lib/state/calendar/DayCalendarDateState'
 import { modalState } from '@/lib/state/modal'
 import instance from '@/lib/api/axios'
-import Calendar from '@/components/common/calendar/Calendar'
-import RoomDataFormatter from '@/components/room/RoomDataFormatter'
+import DayCalendar from '@/components/common/calendar/DayCalendar'
+import RoomDataFormatter from '@/components/room/roomDataFormatter'
 import ContentHeader from '@/components/common/ContentHeader'
-import RoomList from '@/components/room/RoomList'
+import RoomList from '@/components/room/roomList'
 import RoomSchedule from '@/components/room/RoomSchedule'
 
 export default function RoomPage() {
   const currentDate = new Date()
-  const calendarDate = useRecoilValue(calendarDateState)
-  const setCalendarDate = useSetRecoilState(calendarDateState)
+  const calendarDate = useRecoilValue(DayCalendarDateState)
+  const setCalendarDate = useSetRecoilState(DayCalendarDateState)
   const router = useRouter()
   const modal = useRecoilValue(modalState) // 상태의 값을 가져옴
   const [indexOfRoomList, setIndexOfRoomList] = useState<number>(0)
@@ -53,7 +53,7 @@ export default function RoomPage() {
     <div>
       <ContentHeader title="강의실 관리" btnName="강의실 추가" onClick={() => router.push('room/register')} />
       {/* 캘린더 */}
-      <Calendar page="room" />
+      <DayCalendar page="room" />
       {/* 룸 리스트 */}
       <RoomList roomData={room} onChangeRoomList={onChangeRoomList} indexOfRoomList={indexOfRoomList} />
       {/* 룸 시간표 */}

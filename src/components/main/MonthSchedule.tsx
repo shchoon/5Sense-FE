@@ -1,10 +1,11 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
-import { dateDataType } from '../common/calendar/datePicker/dayDatePIcker'
+
+import { MonthDateType } from '@/lib/state/calendar/MonthCalendarState'
 import instance from '@/lib/api/axios'
 
 interface IProps {
-  dateData: dateDataType
+  dateData: MonthDateType
 }
 
 export default function MonthSchedule({ dateData }: IProps) {
