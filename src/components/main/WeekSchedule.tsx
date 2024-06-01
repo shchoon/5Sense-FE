@@ -47,8 +47,6 @@ export default function WeekSchedule() {
     })
   }, [weekData.month])
 
-  console.log(lessonData)
-
   return (
     <>
       {/* 회차반 / 기간반 */}
