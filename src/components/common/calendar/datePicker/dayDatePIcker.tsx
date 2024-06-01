@@ -2,11 +2,11 @@
 import { useState, useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import { useGetCalendarData } from '@/components/common/calendar/getCalendarData'
+import { getCalendarData } from '@/components/common/calendar/getCalendarData'
+import { DayCalendarDateState } from '@/lib/state/calendar/DayCalendarDateState'
 
-import AllowLeftIcon from 'public/assets/icons/allow_left.svg'
-import AllowRightIcon from 'public/assets/icons/allow_right.svg'
-import { calendarDateState } from '@/lib/state/calendarDateState'
+import AllowRight from '@/icons/icon/datePicker/allowRight.svg'
+import AllowLeft from '@/icons/icon/datePicker/allowLeft.svg'
 
 export interface dateDataType {
   year: number
@@ -22,14 +22,14 @@ interface IProps {
 }
 
 export default function DayDatePicker(props: IProps) {
-  const setCalendarDate = useSetRecoilState(calendarDateState)
+  const setCalendarDate = useSetRecoilState(DayCalendarDateState)
 
   const dateName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const [dateData, setDateData] = useState<dateDataType>(props.parentsDateData)
   const [clickedDate, setClickedDate] = useState<string>(`${dateData.date}`)
 
   let dateList
-  dateList = useGetCalendarData(dateData, props.type)
+  dateList = getCalendarData(dateData, props.type)
 
   const onClickDateHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     setClickedDate(e.currentTarget.id)
@@ -95,12 +95,12 @@ export default function DayDatePicker(props: IProps) {
 
   return (
     <div className="flex flex-col bg-white gap-2 w-[283px] p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
-      <div className="w-full flex justify-between">
-        <AllowLeftIcon width={20} height={20} className="cursor-pointer" onClick={onClickMonthBackHandler} />
+      <div className="w-full flex justify-between items-center">
+        <AllowLeft className="cursor-pointer" onClick={onClickMonthBackHandler} />
         <div className="w-[126px] text-center gray-900-bold text-xs ">
           {dateData.year}년 {dateData.month + 1}월
         </div>
-        <AllowRightIcon width={20} height={20} className="cursor-pointer" onClick={onClickMonthForwardHandler} />
+        <AllowRight className="cursor-pointer" onClick={onClickMonthForwardHandler} />
       </div>
       {/* 달력 */}
       <div className="w-[252px]">

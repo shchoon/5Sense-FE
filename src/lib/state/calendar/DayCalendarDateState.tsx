@@ -3,8 +3,8 @@ import { dateDataType } from '@/components/common/calendar/datePicker/dayDatePIc
 
 const date = new Date()
 
-export const calendarDateState = atom<dateDataType>({
-  key: 'calendarDate',
+export const DayCalendarDateState = atom<dateDataType>({
+  key: 'dayCalendarDate',
   default: {
     year: date.getFullYear(),
     month: date.getMonth(),

@@ -3,8 +3,7 @@ import Image from 'next/image'
 
 import { useEffect, useState } from 'react'
 import { dateDataType } from './dayDatePIcker'
-import { useGetCalendarData } from '@/components/common/calendar/useGetCalendarData'
-
+import { getCalendarData } from '../getCalendarData'
 import AllowLeftIcon from 'public/assets/icons/allow_left.svg'
 import AllowRightIcon from 'public/assets/icons/allow_right.svg'
 
@@ -41,9 +40,9 @@ export default function PeriodDatePicker(props: IProps) {
   })
 
   let firstDateList
-  firstDateList = useGetCalendarData(firstDateData, 'addClass')
+  firstDateList = getCalendarData(firstDateData, 'addClass')
 
-  const secondDateList = useGetCalendarData(secondDateData)
+  const secondDateList = getCalendarData(secondDateData)
   const [firstClickedData, setFirstClickedData] = useState<{
     year: number | undefined
     month: number | undefined

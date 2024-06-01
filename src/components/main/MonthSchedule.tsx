@@ -1,10 +1,11 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
-import { dateDataType } from '../common/calendar/datePicker/dayDatePIcker'
+
+import { MonthDateType } from '@/lib/state/calendar/MonthCalendarDateState'
 import instance from '@/lib/api/axios'
 
 interface IProps {
-  dateData: dateDataType
+  dateData: MonthDateType
 }
 
 export default function MonthSchedule({ dateData }: IProps) {
@@ -16,7 +17,6 @@ export default function MonthSchedule({ dateData }: IProps) {
   useEffect(() => {
     const startDay = new Date(dateData.year, dateData.month, 0).getDay()
     instance(`/lessons/${dateData.year}/${dateData.month + 1}`).then(res => {
-      console.log(res)
       const data = res.data.data
       let returnData = []
       for (var i = 0; i <= startDay; i++) {

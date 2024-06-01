@@ -1,17 +1,15 @@
 'use client'
-import { useEffect, useState } from 'react'
-import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
+import { useEffect } from 'react'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import DaySchedule from '@/components/main/DaySchedule'
-import { calendarDateState } from '@/lib/state/calendarDateState'
-import { useWindowSize } from '@/hooks/useWindowSize'
-import Calendar from '@/components/common/calendar/Calendar'
+import { DayCalendarDateState } from '@/lib/state/calendar/DayCalendarDateState'
+import DayCalendar from '@/components/common/calendar/DayCalendar'
 
 export default function MainPageDay() {
-  const { width, height } = useWindowSize()
   const currentDate = new Date()
-  const setCalendarDate = useSetRecoilState(calendarDateState)
-  const calendarDate = useRecoilValue(calendarDateState)
+  const setCalendarDate = useSetRecoilState(DayCalendarDateState)
+  const calendarDate = useRecoilValue(DayCalendarDateState)
 
   useEffect(() => {
     return () => {
@@ -25,7 +23,7 @@ export default function MainPageDay() {
 
   return (
     <>
-      <Calendar page="main" />
+      <DayCalendar page="main" />
       <DaySchedule dateData={calendarDate} />
     </>
   )
