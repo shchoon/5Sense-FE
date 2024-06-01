@@ -13,9 +13,9 @@ import { modalState } from '@/lib/state/modal'
 import Modal from '@/components/common/modal'
 import DetailClassModal from '@/components/modal/DetailClassModal'
 
-import ChevronLeft from '@/icons/icon/chevronLefyt.svg'
-import ChevronRight from '@/icons/icon/chevronRight.svg'
-import CalendarIcon from '@/icons/icon/calendar.svg'
+import ChevronLeft from '@/icons/icon/datePicker/chevronLeft.svg'
+import ChevronRight from '@/icons/icon/datePicker/chevronRight.svg'
+import CalendarIcon from '@/icons/icon/datePicker/calendar.svg'
 
 export default function WeekCalendar() {
   const modal = useRecoilValue(modalState)
@@ -137,6 +137,7 @@ export default function WeekCalendar() {
             </div>
           </div>
           <DateSlideTab />
+          {/* 주 단위 달력 */}
           {isClickedDatePicker && (
             <div className="absolute w-[255px] z-10 right-0 left-0 mx-auto top-[60px]">
               <WeekDatePicker handleChangeIsClickedDatePicker={handleChangeIsClickedDatePicker} />
@@ -144,7 +145,7 @@ export default function WeekCalendar() {
           )}
         </div>
       </div>
-      {/* 요일 선택 탭 */}
+      {/* 요일 탭 */}
       <div className="w-full flex max-w-[1016px] mx-auto justify-end pt-[32px]">
         <div className="w-[51px] xl:mr-5 lg:mr-4"></div>
         <div className="w-full grid grid-cols-7 gap-[7px]">
@@ -158,32 +159,12 @@ export default function WeekCalendar() {
                   currentDateData.year === weekData.year &&
                   currentDateData.month === weekData.month &&
                   currentDateData.date === Number(data.date)
-                    ? 'border-primary-600'
-                    : 'border-gray-200'
+                    ? 'text-primary-600 border-primary-600'
+                    : 'text-gray-400 border-gray-200'
                 }`}
               >
-                <div
-                  className={`text-center text-sm font-medium ${
-                    currentDateData.year === weekData.year &&
-                    currentDateData.month === weekData.month &&
-                    currentDateData.date === Number(data.date)
-                      ? 'text-primary-600'
-                      : 'text-gray-400'
-                  }`}
-                >
-                  {dayName[i]}
-                </div>
-                <div
-                  className={`text-center text-xl font-bold ${
-                    currentDateData.year === weekData.year &&
-                    currentDateData.month === weekData.month &&
-                    currentDateData.date === Number(data.date)
-                      ? 'text-primary-600'
-                      : 'text-gray-400'
-                  }`}
-                >
-                  {data.date}
-                </div>
+                <div className={`text-center text-sm font-medium `}>{dayName[i]}</div>
+                <div className={`text-center text-xl font-bold`}>{data.date}</div>
               </div>
             )
           })}

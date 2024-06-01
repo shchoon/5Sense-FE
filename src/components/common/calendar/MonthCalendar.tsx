@@ -11,9 +11,9 @@ import MonthSchedule from '@/components/main/MonthSchedule'
 import Calendar from '@/components/common/calendar/DayCalendar'
 import { MonthCalendarDateState } from '@/lib/state/calendar/MonthCalendarDateState'
 
-import ChevronLeft from '@/icons/icon/chevronLefyt.svg'
-import ChevronRight from '@/icons/icon/chevronRight.svg'
-import CalendarIcon from '@/icons/icon/calendar.svg'
+import ChevronLeft from '@/icons/icon/datePicker/chevronLeft.svg'
+import ChevronRight from '@/icons/icon/datePicker/chevronRight.svg'
+import CalendarIcon from '@/icons/icon/datePicker/calendar.svg'
 
 export default function MonthCalendar() {
   const dateData = useRecoilValue(MonthCalendarDateState)
@@ -74,13 +74,11 @@ export default function MonthCalendar() {
     }
   }
 
-    return (
-        <>
-        <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
+  return (
+    <>
+      <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
         <div className="relative mx-auto flex gap-[138px] items-center w-full  h-[52px]  md:w-full ">
-          <div
-            className={`flex mx-auto w-[420px] h-full p-1.5 border rounded-md border-gray-100 bg-[#F8FAFD]`}
-          >
+          <div className={`flex mx-auto w-[420px] h-full p-1.5 border rounded-md border-gray-100 bg-[#F8FAFD]`}>
             <div
               className="h-full w-10 border p-1 rounded border-gray-200 bg-white flex items-center cursor-pointer"
               onClick={moveBackMonth}
@@ -109,6 +107,6 @@ export default function MonthCalendar() {
           )}
         </div>
       </div>
-        </>
-    )
+    </>
+  )
 }

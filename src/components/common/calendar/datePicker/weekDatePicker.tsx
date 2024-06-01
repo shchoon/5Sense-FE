@@ -5,8 +5,8 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { WeekCalendarDateState } from '@/lib/state/calendar/WeekCalendarDateState'
 import GetWeekList from '../getWeekList'
 
-import AllowLeftIcon from 'public/assets/icons/allow_left.svg'
-import AllowRightIcon from 'public/assets/icons/allow_right.svg'
+import AllowRight from '@/icons/icon/datePicker/allowRight.svg'
+import AllowLeft from '@/icons/icon/datePicker/allowLeft.svg'
 
 interface currentMonthdDataType {
   year: number
@@ -21,6 +21,7 @@ interface IProps {
 export default function WeekDatePicker(props: IProps) {
   const weekData = useRecoilValue(WeekCalendarDateState)
   const setWeekData = useSetRecoilState(WeekCalendarDateState)
+  /* calendar 컴포넌트에서는 날짜 값 지역 관리 후 확인 버튼 누르면 recoil을 통해 값 변경 */
   const [dateList, setDateList] = useState(GetWeekList(weekData.year, weekData.month))
 
   const [currentMonthData, setCurrentMonthData] = useState<currentMonthdDataType>({
@@ -88,24 +89,12 @@ export default function WeekDatePicker(props: IProps) {
 
   return (
     <div className="flex flex-col z-10 bg-white gap-2 w-[283px] p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
-      <div className="w-full flex justify-between">
-        <AllowLeftIcon
-          width={20}
-          height={20}
-          alt="allowLeft"
-          className="cursor-pointer"
-          onClick={onClickMonthBackHandler}
-        />
+      <div className="w-full flex justify-between items-center">
+        <AllowLeft className="cursor-pointer" onClick={onClickMonthBackHandler} />
         <div className="w-[126px] text-center gray-900-bold text-xs ">
           {currentMonthData.year}년 {currentMonthData.month + 1}월
         </div>
-        <AllowRightIcon
-          width={20}
-          height={20}
-          alt="allowRight"
-          className="cursor-pointer"
-          onClick={onClickMonthForwardHandler}
-        />
+        <AllowRight className="cursor-pointer" onClick={onClickMonthForwardHandler} />
       </div>
       {/* 달력 */}
       <div className="w-[252px]">

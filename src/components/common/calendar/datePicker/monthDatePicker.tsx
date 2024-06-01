@@ -1,8 +1,8 @@
 'use client'
 import { useState } from 'react'
 
-import AllowLeftIcon from 'public/assets/icons/allow_left.svg'
-import AllowRightIcon from 'public/assets/icons/allow_right.svg'
+import AllowRight from '@/icons/icon/datePicker/allowRight.svg'
+import AllowLeft from '@/icons/icon/datePicker/allowLeft.svg'
 
 interface dateType {
   year: number
@@ -75,22 +75,10 @@ export default function MonthDatePicker(props: any) {
 
   return (
     <div className="flex flex-col gap-2 w-[255px] bg-white p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
-      <div className="w-full flex justify-between">
-        <AllowLeftIcon
-          width={20}
-          height={20}
-          alt="allowLeft"
-          className="cursor-pointer"
-          onClick={onClickYearBackHandler}
-        />
+      <div className="w-full flex justify-between items-center">
+        <AllowLeft className="cursor-pointer" onClick={onClickYearBackHandler} />
         <div className="w-[126px] text-center gray-900-bold text-xs">{dateData.year}년</div>
-        <AllowRightIcon
-          width={20}
-          height={20}
-          alt="allowRight"
-          className="cursor-pointer"
-          onClick={onClickYearForwardHandler}
-        />
+        <AllowRight className="cursor-pointer" onClick={onClickYearForwardHandler} />
       </div>
       {/* 달력 */}
       <div className="w-full grid grid-cols-3 gap-4">

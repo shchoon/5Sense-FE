@@ -7,9 +7,9 @@ import { dateDataType } from '@/components/common/calendar/datePicker/dayDatePIc
 import DayDatePicker from '@/components/common/calendar/datePicker/dayDatePIcker'
 import { DayCalendarDateState } from '@/lib/state/calendar/DayCalendarDateState'
 
-import ChevronLeft from '@/icons/icon/chevronLefyt.svg'
-import ChevronRight from '@/icons/icon/chevronRight.svg'
-import CalendarIcon from '@/icons/icon/calendar.svg'
+import ChevronLeft from '@/icons/icon/datePicker/chevronLeft.svg'
+import ChevronRight from '@/icons/icon/datePicker/chevronRight.svg'
+import CalendarIcon from '@/icons/icon/datePicker/calendar.svg'
 
 export default function Calendar({ page }: { page: string }) {
   const calendarDate = useRecoilValue(DayCalendarDateState)
