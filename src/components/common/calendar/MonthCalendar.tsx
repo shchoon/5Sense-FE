@@ -1,14 +1,10 @@
 'use client'
-import Image from 'next/image'
 import { useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import { useWindowSize } from '@/hooks/useWindowSize'
 import DateSlideTab from '@/components/main/DateSlideTab'
 import MonthDatePicker from '@/components/common/calendar/datePicker/monthDatePicker'
 import { dateDataType } from '@/components/common/calendar/datePicker/dayDatePIcker'
-import MonthSchedule from '@/components/main/MonthSchedule'
-import Calendar from '@/components/common/calendar/DayCalendar'
 import { MonthCalendarDateState } from '@/lib/state/calendar/MonthCalendarDateState'
 
 import ChevronLeft from '@/icons/icon/datePicker/chevronLeft.svg'

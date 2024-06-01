@@ -147,6 +147,5 @@ export function getCalendarData(dateData: dateDataType, type?: string) {
   for (var i = 0; i < list.length; i += 7) {
     result.push(list.slice(i, i + 7))
   }
-  console.log(result)
   return result
 }
