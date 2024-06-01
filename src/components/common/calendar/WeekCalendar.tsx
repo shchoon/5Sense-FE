@@ -5,6 +5,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { useWindowSize } from '@/hooks/useWindowSize'
 import DateSlideTab from '@/components/main/DateSlideTab'
 import WeekDatePicker from '@/components/common/calendar/datePicker/weekDatePicker'
+import GetWeekList from './getWeekList'
 import { dateDataType } from '@/components/common/calendar/datePicker/dayDatePIcker'
 import { WeekDateType } from '@/lib/state/calendar/WeekCalendarDateState'
 import { WeekCalendarDateState } from '@/lib/state/calendar/WeekCalendarDateState'
@@ -16,43 +17,29 @@ import ChevronLeft from '@/icons/icon/chevronLefyt.svg'
 import ChevronRight from '@/icons/icon/chevronRight.svg'
 import CalendarIcon from '@/icons/icon/calendar.svg'
 
-
 export default function WeekCalendar() {
-    const modal = useRecoilValue(modalState)
-    const setModal = useSetRecoilState(modalState)
-    const weekData = useRecoilValue(WeekCalendarDateState)
-    const setWeekData = useSetRecoilState(WeekCalendarDateState)
-
+  const modal = useRecoilValue(modalState)
+  const setModal = useSetRecoilState(modalState)
+  const weekData = useRecoilValue(WeekCalendarDateState)
+  const setWeekData = useSetRecoilState(WeekCalendarDateState)
+  const dateTabData = GetWeekList(weekData.year, weekData.month)
   const [props, setProps] = useState<{ id: number; type: string }>({
     id: 0,
     type: ''
   })
 
-  const [dayData, setDayData] = useState<any>([])
-  const { width, height } = useWindowSize()
-  const currentDate = new Date()
-  const currentDateData = {
-    year: currentDate.getFullYear(),
-    month: currentDate.getMonth(),
-    date: currentDate.getDate()
+  const weekLength = {
+    currentMonth: GetWeekList(weekData.year, weekData.month).length,
+    lastMonth: GetWeekList(weekData.year, weekData.month - 1).length
   }
-  /* const [dateData, setDateData] = useState({
-    year: currentDate.getFullYear(),
-    month: currentDate.getMonth(),
-    date: currentDate.getDate()
-  }) */
+  const { width, height } = useWindowSize()
+  const currentDateData = {
+    year: new Date().getFullYear(),
+    month: new Date().getMonth(),
+    date: new Date().getDate()
+  }
   const dayName = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일']
-  /* const [weekData, setWeekData] = useState<number>(
-    Math.ceil((dateData.date + new Date(dateData.year, dateData.month, 0).getDay() + 1) / 7)
-  ) */
 
-  const [weekLength, setWeekLength] = useState<{
-    lastMonthLength: number
-    currentMonthLength: number
-  }>({
-    lastMonthLength: 0,
-    currentMonthLength: 0
-  })
   const [isClickedDatePicker, setIsClickedDatePicker] = useState<boolean>(false)
   const [isClickedArrow, setIsClickedArrow] = useState<boolean>(false)
   const [clickArrowCount, setClickArrowCount] = useState(0)
@@ -61,18 +48,10 @@ export default function WeekCalendar() {
     setIsClickedDatePicker(prev => !prev)
   }
 
-  /* function clickDayTab(e: any) {
-    const date = Number(e.currentTarget.id)
-    setDateData(prevDateData => ({
-      ...prevDateData,
-      date: date
-    }))
-  } */
-
   const moveForwardWeek = () => {
-    const maxWeek = weekLength.currentMonthLength
+    const lastWeekOfMonth = weekLength.currentMonth
     setClickArrowCount(clickArrowCount => (clickArrowCount += 1))
-    if (weekData.week === maxWeek) {
+    if (weekData.week === lastWeekOfMonth) {
       if (weekData.month === 11) {
         setWeekData(prev => ({
           ...prev,
@@ -90,8 +69,7 @@ export default function WeekCalendar() {
     } else {
       setWeekData(prev => ({
         ...prev,
-        week: prev.week + 1,
-        date: Number(dayData[weekData.week].date[0].date)
+        week: prev.week + 1
       }))
     }
     setIsClickedArrow(true)
@@ -101,31 +79,24 @@ export default function WeekCalendar() {
   const moveBackWeek = () => {
     setClickArrowCount(clickArrowCount => (clickArrowCount += 1))
     if (weekData.week === 1) {
-      setWeekData(prev => ({
-        ...prev,
-        week: weekLength.lastMonthLength
-      }))
       if (weekData.month === 0) {
         setWeekData(prev => ({
           ...prev,
           year: weekData.year - 1,
           month: 11,
-          week: prev.week - 1,
-          date: 31
+          week: weekLength.lastMonth
         }))
       } else {
         setWeekData(prev => ({
           ...prev,
           month: weekData.month - 1,
-          week: prev.week - 1,
-          date: new Date(weekData.year, weekData.month, 0).getDate()
+          week: weekLength.lastMonth
         }))
       }
     } else {
       setWeekData(prev => ({
         ...prev,
-        week: prev.week - 1,
-        date: Number(dayData[weekData.week - 2].date[6].date)
+        week: prev.week - 1
       }))
     }
     setIsClickedArrow(true)
@@ -136,58 +107,9 @@ export default function WeekCalendar() {
     setIsClickedDatePicker(false)
   }
 
-  const getCalanderData = (monthData: number) => {
-    const lastDateOfLastMonthData = new Date(weekData.year, monthData, 0)
-    const firstDateOfCurrentMonthData = new Date(weekData.year, monthData)
-    const lastDateOfCurrnetMonthData = new Date(weekData.year, monthData + 1, 0)
-    const firstDateOfNextMonthData = new Date(weekData.year, monthData + 1)
-
-    let list = []
-    if (firstDateOfCurrentMonthData.getDay() !== 0) {
-      for (var i = lastDateOfLastMonthData.getDay(); i >= 0; i--) {
-        list.push({
-          date: `${lastDateOfLastMonthData.getDate() - i}`
-        })
-      }
-    }
-
-    for (var i = 1; i <= lastDateOfCurrnetMonthData.getDate(); i++) {
-      list.push({ date: `${i}` })
-    }
-
-    if (lastDateOfCurrnetMonthData.getDay() !== 6) {
-      for (var i = 1; i <= 7 - firstDateOfNextMonthData.getDay(); i++) {
-        list.push({
-          date: `${i}`
-        })
-      }
-    }
-
-    let result = []
-    let weekNumber = 1
-    for (var i = 0; i < list.length; i += 7) {
-      result.push({ date: list.slice(i, i + 7), week: weekNumber })
-      weekNumber++
-    }
-
-    return result
-  }
-
-  /* useEffect(() => {
-    const lastWeekList = getCalanderData(weekData.month - 1)
-    const currentWeekList = getCalanderData(weekData.month)
-    setWeekLength(prev => ({
-      ...prev,
-      lastMonthLength: lastWeekList.length,
-      currentMonthLength: currentWeekList.length
-    }))
-    setDayData(currentWeekList)
-  }, [weekData.month]) */
-
-
-    return (
-        <>
-        <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
+  return (
+    <>
+      <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
         <div className="relative mx-auto flex gap-[138px] items-center w-full  h-[52px]  md:w-full ">
           <div
             className={`flex mx-auto ${
@@ -217,13 +139,7 @@ export default function WeekCalendar() {
           <DateSlideTab />
           {isClickedDatePicker && (
             <div className="absolute w-[255px] z-10 right-0 left-0 mx-auto top-[60px]">
-              <WeekDatePicker
-              handleChangeIsClickedDatePicker={handleChangeIsClickedDatePicker}
-                //changeParentsDateData={setDateDataFromChild}
-                //changeParentsWeekData={setWeekDataFromChild}
-                //parentsDateData={dateData}
-                //parentsWeekData={weekData}
-              />
+              <WeekDatePicker handleChangeIsClickedDatePicker={handleChangeIsClickedDatePicker} />
             </div>
           )}
         </div>
@@ -232,12 +148,12 @@ export default function WeekCalendar() {
       <div className="w-full flex max-w-[1016px] mx-auto justify-end pt-[32px]">
         <div className="w-[51px] xl:mr-5 lg:mr-4"></div>
         <div className="w-full grid grid-cols-7 gap-[7px]">
-          {dayData[weekData.week - 1]?.date.map((data: any, i: number) => {
+          {dateTabData[weekData.week - 1]?.date.map((data: any, i: number) => {
             return (
               <div
                 key={i}
                 id={data.date}
-                className={`xl:max-w-[129px] lg:max-w-[119px] h-full px-3 py-2 flex flex-col border rounded-lg bg-white cursor-pointer
+                className={`xl:max-w-[129px] lg:max-w-[119px] h-full px-3 py-2 flex flex-col border rounded-lg bg-white
                 ${
                   currentDateData.year === weekData.year &&
                   currentDateData.month === weekData.month &&
@@ -245,7 +161,6 @@ export default function WeekCalendar() {
                     ? 'border-primary-600'
                     : 'border-gray-200'
                 }`}
-                //onClick={clickDayTab}
               >
                 <div
                   className={`text-center text-sm font-medium ${
@@ -274,6 +189,6 @@ export default function WeekCalendar() {
           })}
         </div>
       </div>
-        </>
-    )
+    </>
+  )
 }

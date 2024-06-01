@@ -3,14 +3,15 @@ import { useEffect, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { WeekCalendarDateState } from '@/lib/state/calendar/WeekCalendarDateState'
+import GetWeekList from '../getWeekList'
 
 import AllowLeftIcon from 'public/assets/icons/allow_left.svg'
 import AllowRightIcon from 'public/assets/icons/allow_right.svg'
 
-interface dateType {
+interface currentMonthdDataType {
   year: number
   month: number
-  date: number
+  week: number
 }
 
 interface IProps {
@@ -20,70 +21,31 @@ interface IProps {
 export default function WeekDatePicker(props: IProps) {
   const weekData = useRecoilValue(WeekCalendarDateState)
   const setWeekData = useSetRecoilState(WeekCalendarDateState)
+  const [dateList, setDateList] = useState(GetWeekList(weekData.year, weekData.month))
+
+  const [currentMonthData, setCurrentMonthData] = useState<currentMonthdDataType>({
+    year: weekData.year,
+    month: weekData.month,
+    week: weekData.week
+  })
   const dateName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-  //const [dateData, setDateData] = useState<dateType>(props.parentsDateData)
-  //const [week, setWeek] = useState<number>(props.parentsWeekData)
-  //const [clickedDate, setClickedDate] = useState<string>(weekData.date.toString())
-  //const [isClickedDate, setIsClickedDate] = useState<boolean>(false)
-
-  const getCalanderData = () => {
-    const lastDateOfLastMonthData = new Date(weekData.year, weekData.month, 0)
-    const firstDateOfCurrentMonthData = new Date(weekData.year, weekData.month)
-    const lastDateOfCurrnetMonthData = new Date(weekData.year, weekData.month + 1, 0)
-    const firstDateOfNextMonthData = new Date(weekData.year, weekData.month + 1)
-
-    let list = []
-    if (firstDateOfCurrentMonthData.getDay() !== 0) {
-      for (var i = lastDateOfLastMonthData.getDay(); i >= 0; i--) {
-        list.push({
-          date: `${lastDateOfLastMonthData.getDate() - i}`,
-          textColor: 'font-semibold text-gray-500',
-          clickable: false
-        })
-      }
-    }
-
-    for (var i = 1; i <= lastDateOfCurrnetMonthData.getDate(); i++) {
-      list.push({ date: `${i}`, textColor: 'gray-900-bold', clickable: true })
-    }
-
-    if (lastDateOfCurrnetMonthData.getDay() !== 6) {
-      for (var i = 1; i <= 7 - firstDateOfNextMonthData.getDay(); i++) {
-        list.push({
-          date: `${i}`,
-          textColor: 'font-semibold text-gray-500',
-          clickable: false
-        })
-      }
-    }
-
-    let result = []
-    let weekNumber = 1
-    for (var i = 0; i < list.length; i += 7) {
-      result.push({ date: list.slice(i, i + 7), week: weekNumber })
-      weekNumber++
-    }
-
-    return result
-  }
 
   const onClickDateHandler = (week: number) => {
-    setWeekData(prev => ({
+    setCurrentMonthData(prev => ({
       ...prev,
       week: week
     }))
-
   }
 
   const onClickMonthForwardHandler = () => {
     if (weekData.month === 11) {
-      setWeekData(prev => ({
+      setCurrentMonthData(prev => ({
         ...prev,
         year: prev.year + 1,
         month: 0
       }))
     } else {
-      setWeekData(prev => ({
+      setCurrentMonthData(prev => ({
         ...prev,
         month: prev.month + 1
       }))
@@ -92,13 +54,13 @@ export default function WeekDatePicker(props: IProps) {
 
   const onClickMonthBackHandler = () => {
     if (weekData.month === 0) {
-      setWeekData(prev => ({
+      setCurrentMonthData(prev => ({
         ...prev,
         year: prev.year - 1,
         month: 11
       }))
     } else {
-      setWeekData(prev => ({
+      setCurrentMonthData(prev => ({
         ...prev,
         month: prev.month - 1
       }))
@@ -110,10 +72,19 @@ export default function WeekDatePicker(props: IProps) {
   }
 
   const onClickCheckHandler = () => {
+    setWeekData(prev => ({
+      ...prev,
+      year: currentMonthData.year,
+      month: currentMonthData.month,
+      week: currentMonthData.week
+    }))
     props.handleChangeIsClickedDatePicker()
   }
 
-  const dateList = getCalanderData()
+  useEffect(() => {
+    const nextMonthData = GetWeekList(currentMonthData.year, currentMonthData.month)
+    setDateList(nextMonthData)
+  }, [currentMonthData.month])
 
   return (
     <div className="flex flex-col z-10 bg-white gap-2 w-[283px] p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
@@ -126,7 +97,7 @@ export default function WeekDatePicker(props: IProps) {
           onClick={onClickMonthBackHandler}
         />
         <div className="w-[126px] text-center gray-900-bold text-xs ">
-          {weekData.year}년 {weekData.month + 1}월
+          {currentMonthData.year}년 {currentMonthData.month + 1}월
         </div>
         <AllowRightIcon
           width={20}
@@ -156,10 +127,12 @@ export default function WeekDatePicker(props: IProps) {
                     key={i}
                     id={dateData.date}
                     className={`px-1 py-2 cursor-pointer ${dateData.textColor} ${
-                      data.week === weekData.week && i !== 0 && i !== 6 ? 'bg-primary-50' : ''
-                    } ${data.week === weekData.week && i === 0 ? 'bg-primary-700 rounded-l-lg text-white font-bold' : ''} 
+                      data.week === currentMonthData.week && i !== 0 && i !== 6 ? 'bg-primary-50' : ''
+                    } ${data.week === currentMonthData.week && i === 0 ? 'bg-primary-700 rounded-l-lg text-white font-bold' : ''} 
                         ${
-                          data.week === weekData.week && i === 6 ? 'bg-primary-700 rounded-r-lg text-white font-bold' : ''
+                          data.week === currentMonthData.week && i === 6
+                            ? 'bg-primary-700 rounded-r-lg text-white font-bold'
+                            : ''
                         } text-xs text-center`}
                     onClick={() => {
                       dateData.clickable && onClickDateHandler(data.week)

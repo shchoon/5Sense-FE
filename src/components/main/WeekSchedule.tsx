@@ -1,6 +1,10 @@
 'use client'
 import { useState, useRef, useEffect, useLayoutEffect } from 'react'
+import { useRecoilValue } from 'recoil'
+
 import { dateDataType } from '../common/calendar/datePicker/dayDatePIcker'
+import WeekDataFormatter from '../common/calendar/WeekDataFormatter'
+import { WeekCalendarDateState } from '@/lib/state/calendar/WeekCalendarDateState'
 import instance from '@/lib/api/axios'
 
 interface IProps {
@@ -8,7 +12,8 @@ interface IProps {
   week: number
 }
 
-export default function WeekSchedule({ dateData, week }: IProps) {
+export default function WeekSchedule() {
+  const weekData = useRecoilValue(WeekCalendarDateState)
   const [cursorPosition, setCursorPosition] = useState<{
     x: number
     y: number
@@ -36,116 +41,13 @@ export default function WeekSchedule({ dateData, week }: IProps) {
   const [lessonData, setLessonData] = useState<any>([])
 
   useEffect(() => {
-    instance(`/lessons/${dateData.year}/${dateData.month + 1}`).then(res => {
+    instance(`/lessons/${weekData.year}/${weekData.month + 1}`).then(res => {
       const data = res.data.data
-      console.log(data)
-      let returnData = []
-      for (var i = 0; i < data.length; i++) {
-        data[i].sort((a: any, b: any) => a.startTime.split(':')[0] - b.startTime.split(':')[0])
-      }
-      const startDay = new Date(dateData.year, dateData.month, 0).getDay()
-      for (var i = 0; i <= startDay; i++) {
-        returnData.push({})
-      }
-      for (var i = 0; i < data.length; i++) {
-        returnData.push(data[i])
-      }
-      console.log(returnData)
-      let result: any = []
-      for (var i = 0; i < returnData.length; i += 7) {
-        result.push(returnData.slice(i, i + 7))
-      }
-
-      let resultList: {
-        time: string
-        classData: {
-          index: number
-          data: {
-            id: string
-            lessonTime: number
-            name: string
-            startTime: string
-            type: string
-            teacher: string
-            studentNum: string
-          }[]
-        }[]
-      }[][] = []
-
-      for (var k = 0; k < result.length; k++) {
-        let list: {
-          time: string
-          classData: {
-            index: number
-            data: {
-              id: string
-              lessonTime: number
-              name: string
-              startTime: string
-              type: string
-              teacher: string
-              studentNum: '5'
-            }[]
-          }[]
-        }[] = []
-
-        for (var i = 0; i < result[k].length; i++) {
-          for (var j = 0; j < result[k][i].length; j++) {
-            if (list.filter(item => item.time === result[k][i][j].startTime).length === 0) {
-              list.push({ time: result[k][i][j].startTime, classData: [] })
-            }
-            const timeIndex = list.findIndex(item => item.time === result[k][i][j].startTime)
-            if (list[timeIndex].classData.filter(item => item.index === i).length !== 0) {
-              list[timeIndex].classData[list[timeIndex].classData.length - 1].data.push({
-                id: result[k][i][j].id,
-                lessonTime: result[k][i][j].lessonTime,
-                name: result[k][i][j].name,
-                startTime: result[k][i][j].startTime,
-                type: result[k][i][j].type,
-                teacher: result[k][i][j].teacher,
-                studentNum: '5'
-              })
-            } else {
-              list[timeIndex].classData.push({
-                index: i,
-                data: [
-                  {
-                    id: result[k][i][j].id,
-                    lessonTime: result[k][i][j].lessonTime,
-                    name: result[k][i][j].name,
-                    startTime: result[k][i][j].startTime,
-                    type: result[k][i][j].type,
-                    teacher: result[k][i][j].teacher,
-                    studentNum: '5'
-                  }
-                ]
-              })
-            }
-          }
-        }
-        resultList.push(list)
-      }
-
-      for (var i = 0; i < resultList.length; i++) {
-        resultList[i].sort(
-          (a: { time: string }, b: { time: string }) => Number(a.time.split(':')[0]) - Number(b.time.split(':')[0])
-        )
-      }
-
-      for (var k = 0; k < resultList.length; k++) {
-        for (var i = 0; i < resultList[k].length; i++) {
-          for (var j = 0; j < 7; j++) {
-            if (resultList[k][i].classData.filter(item => item.index === j).length === 0) {
-              resultList[k][i].classData.push({ index: j, data: [] })
-            }
-          }
-          resultList[k][i].classData.sort((a: any, b: any) => a.index - b.index)
-        }
-      }
-
-      setLessonData(resultList)
+      setLessonData(WeekDataFormatter(data, weekData))
     })
-  }, [dateData.month])
+  }, [weekData.month])
+
+  console.log(lessonData)
 
   return (
     <>
@@ -166,8 +68,8 @@ export default function WeekSchedule({ dateData, week }: IProps) {
         {/* 시간표 */}
         <div className="flex flex-col w-full">
           {lessonData.length !== 0 &&
-            lessonData[week - 1] &&
-            lessonData[week - 1].map((data1: any, pI: number) => {
+            lessonData[weekData.week - 1] &&
+            lessonData[weekData.week - 1].map((data1: any, pI: number) => {
               return (
                 <div key={pI} className="w-full flex xl:gap-5 lg:gap-4 md:gap-[14px] gap-3.5">
                   <div className="w-[50px] text-right gray-800-semibold text-base">

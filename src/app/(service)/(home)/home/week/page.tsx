@@ -1,8 +1,9 @@
 'use client'
-import { useRecoilValue } from "recoil"
+import { useRecoilValue } from 'recoil'
 
-import WeekCalendar from "@/components/common/calendar/WeekCalendar"
-import { WeekCalendarDateState } from "@/lib/state/calendar/WeekCalendarDateState"
+import WeekCalendar from '@/components/common/calendar/WeekCalendar'
+import WeekSchedule from '@/components/main/WeekSchedule'
+import { WeekCalendarDateState } from '@/lib/state/calendar/WeekCalendarDateState'
 
 export default function MainPageWeek() {
   const weekdata = useRecoilValue(WeekCalendarDateState)
@@ -10,6 +11,7 @@ export default function MainPageWeek() {
   return (
     <>
       <WeekCalendar />
+      <WeekSchedule />
       {/* <WeekSchedule dateData={dateData} week={weekData} /> */}
       {/* {modal && (
         <Modal>
