@@ -15,6 +15,7 @@ import DeleteModal from '@/components/modal/DeleteModal'
 import PlusCircleIcon from '../../../../public/assets/icons/plus-circle'
 import Modal from '@/components/common/modal'
 import { centerInfoState } from '@/lib/state/centerInfoState'
+import { RoomDetailsState } from '@/lib/state/roomDetails'
 import instance from '@/lib/api/axios'
 
 import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
@@ -42,6 +43,7 @@ export default function Room() {
   }
   const modal = useRecoilValue(modalState) // 상태의 값을 가져옴
   const setModal = useSetRecoilState(modalState)
+  const setRoomDetails = useSetRecoilState(RoomDetailsState)
 
   const [roomListNum, setRoomListNum] = useState<number>(0)
   const [room, setRoom] = useState<any>([])
@@ -249,8 +251,6 @@ export default function Room() {
     } */
   }
 
-  console.log(room)
-  console.log(roomOption)
   return (
     <div className="w-full 2xl:px-12 xl:px-12 lg:px-6 md:px-12 px-6 pb-[60px]">
       <div className="flex w-full pt-12 mb-[30px] justify-between">
@@ -384,9 +384,14 @@ export default function Room() {
                         type="button"
                         className="w-full flex items-center justify-between px-2 py-1 rounded-[3px] hover:bg-primary-100"
                         onClick={() => {
-                          localStorage.setItem('roomName', data.name)
-                          localStorage.setItem('capacity', data.capacity)
-                          router.push('/room/modifyRoom/' + `${data.id}`)
+                          setRoomDetails(prev => ({
+                            ...prev,
+                            id: data.id,
+                            name: data.name,
+                            capacity: data.capacity
+                          }))
+                          localStorage.setItem('roomId', data.id)
+                          router.push('/room/modifyRoom')
                         }}
                       >
                         <div className="w-[98px] gray-500-medium text-sm">수정하기</div>
