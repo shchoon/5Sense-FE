@@ -23,6 +23,7 @@ import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
 import PlusIcon from 'public/assets/icons/plus_circle_bg_pri_600.svg'
 
 interface studentInfo {
+  id: number
   name: string
   phone: string
   particulars: string
@@ -38,8 +39,6 @@ export interface InputNumProps {
 
 export default function StudentEdit() {
   const router = useRouter()
-  const params = useParams()
-  const studentId = params.id
   const durationSchedule = useRecoilValue(studentDurationScheduleState)
   const sessionSchedule = useRecoilValue(sessionScheduleState)
   const setDurationSchedule = useSetRecoilState(studentDurationScheduleState)
@@ -49,6 +48,7 @@ export default function StudentEdit() {
 
   const [isClickedAddClass, setIsClickedAddClass] = useState<boolean>(false)
   const [studentInfo, setStudentInfo] = useState<studentInfo>({
+    id: 0,
     name: '',
     phone: '',
     particulars: '',
@@ -105,7 +105,7 @@ export default function StudentEdit() {
         /* 수강생 정보 수정에서 새로운 회차반 클래스 추가하고 일정추가를 하는 경우 */
         instance
           .post('/session-lesson-registrations', {
-            studentId: Number(studentId),
+            studentId: studentInfo.id,
             lessonId: sessionSchedule[0].lessonId,
             paymentStatus: sessionSchedule[0].paymentStatus
           })
@@ -113,7 +113,7 @@ export default function StudentEdit() {
             instance
               .post('/session-lesson-schedules', {
                 lessonId: sessionSchedule[0].lessonId,
-                studentId: Number(studentId),
+                studentId: studentInfo.id,
                 sessionDate: sessionSchedule[0].sessionDate,
                 startTime: sessionSchedule[0].startTime,
                 endTime: sessionSchedule[0].endTime,
@@ -128,7 +128,7 @@ export default function StudentEdit() {
         instance
           .post('/session-lesson-schedules', {
             lessonId: sessionSchedule[0].lessonId,
-            studentId: Number(studentId),
+            studentId: studentInfo.id,
             sessionDate: sessionSchedule[0].sessionDate,
             startTime: sessionSchedule[0].startTime,
             endTime: sessionSchedule[0].endTime,
@@ -141,7 +141,7 @@ export default function StudentEdit() {
     } else if (durationSchedule.length !== 0) {
       instance
         .post('/duration-lesson-registrations', {
-          studentId: Number(studentId),
+          studentId: studentInfo.id,
           lessonId: Number(durationSchedule[0].lessonId),
           paymentStatus: durationSchedule[0].paymentStatus
         })
@@ -152,11 +152,13 @@ export default function StudentEdit() {
   }
 
   useEffect(() => {
+    const studentId = localStorage.getItem('studentId') as string
     instance(`/students/${studentId}`).then(res => {
       const studentData = res.data.data
       console.log(studentData)
       setStudentInfo(prev => ({
         ...prev,
+        id: Number(studentId),
         name: studentData.name,
         phone: studentData.phone,
         particulars: studentData.particulars,

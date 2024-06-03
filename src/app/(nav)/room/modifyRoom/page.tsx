@@ -22,23 +22,18 @@ export default function ModifyRoom() {
   const router = useRouter()
   //const roomId = id
   //const [inputValue, setInputValue] = useState<string>(roomName)
-  const [roomData, setRoomData] = useState<{ name: string; roomId: number; capacity: number }>({
-    name: '',
-    roomId: 0,
-    capacity: 0
-  })
 
   const handleChangeRoomName = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value: string = e.target.value
     const maxLength: number = e.target.maxLength
     if (value.length > maxLength) {
-      setRoomData(prev => ({
+      setRoomDetails(prev => ({
         ...prev,
         name: value.slice(0, maxLength)
       }))
     }
 
-    setRoomData(prev => ({
+    setRoomDetails(prev => ({
       ...prev,
       name: value
     }))
@@ -109,11 +104,11 @@ export default function ModifyRoom() {
                 <button
                   type="button"
                   className={`w-10 h-full flex items-center justify-center rounded-full ${
-                    roomData.capacity === 1 ? 'bg-gray-200' : 'bg-primary-600'
+                    roomDetails.capacity === 1 ? 'bg-gray-200' : 'bg-primary-600'
                   }`}
                   onClick={() => {
-                    if (roomData.capacity !== 1) {
-                      setRoomData(prev => ({
+                    if (roomDetails.capacity !== 1) {
+                      setRoomDetails(prev => ({
                         ...prev,
                         capacity: prev.capacity - 1
                       }))
@@ -129,7 +124,7 @@ export default function ModifyRoom() {
                   type="button"
                   className="w-10 h-full flex items-center justify-center rounded-full bg-primary-600"
                   onClick={() => {
-                    setRoomData(prev => ({
+                    setRoomDetails(prev => ({
                       ...prev,
                       capacity: prev.capacity + 1
                     }))
@@ -144,15 +139,14 @@ export default function ModifyRoom() {
         <button
           className="w-full h-[52px] flex justify-center items-center text-white text-base font-semibold btn-purple"
           onClick={() => {
-            /* instance
-              .put(`/lesson-rooms/${roomId}`, {
-                name: roomData.name,
-                capacity: roomData.capacity
+            instance
+              .put(`/lesson-rooms/${roomDetails.id}`, {
+                name: roomDetails.name,
+                capacity: roomDetails.capacity
               })
               .then(res => {
-                console.log(res)
                 router.push('/room')
-              }) */
+              })
           }}
         >
           수정하기

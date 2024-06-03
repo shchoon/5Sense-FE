@@ -185,6 +185,7 @@ export default function StudentPage() {
                     ...prev,
                     id: id
                   })) */
+                  localStorage.setItem('studentId', id)
                 }}
               />
             )
