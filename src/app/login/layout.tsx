@@ -5,7 +5,7 @@ export default function loginLayout({ children }: { children: React.ReactNode })
   return (
     <>
       <div className="flex justify-center w-screen h-screen items-center">
-        <div className="flex flex-col w-[478px] h-[470px] gap-14 px-6 pt-12 pb-8 outline rounded-2xl outline-[#E5E7EB] bg-[#FFF] shadow-[-3px_5px_20px_0px_rgba(0,0,0,0.03)]">
+        <div className="flex flex-col w-[480px] h-[470px] gap-14 px-6 pt-12 pb-8 border rounded-2xl border-[#E5E7EB] bg-[#FFF] shadow-[-3px_5px_20px_0px_rgba(0,0,0,0.03)]">
           {/* <div className="flex flex-col items-center gap-[56px] mx-auto">
             <div className="flex items-center flex-col w-[383px] h-[150px] gap-[30px]">
               <MainLogoIcon width={60} height={60} className="p-[5px]" />
