@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import DropDown from '@/components/common/DropDown'
-import { centerDataType } from '@/app/myCenter/rigister/page'
+import { centerDataType } from '@/app/myCenter/register/page'
 import { centerInfoState } from '@/lib/state/centerInfoState'
 import instance from '@/lib/api/axios'
 import Modal from '@/components/common/modal'
