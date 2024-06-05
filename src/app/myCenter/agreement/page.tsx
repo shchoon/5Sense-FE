@@ -3,8 +3,8 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import Checked from '@/icons/icon/checked.svg'
-import ChevronDownIcon from 'public/assets/icons/chevron/chevron_down_gray.svg'
-import ChevronUpIcon from 'public/assets/icons/chevron/chevron_up_gray.svg'
+import ChevronDown from '@/icons/icon/chevronDown.svg'
+import ChevronUp from '@/icons/icon/chevronUp.svg'
 
 export default function Agreement() {
   const router = useRouter()
@@ -80,6 +80,7 @@ export default function Agreement() {
       }
     }
   }
+  console.log(isClickedAccessTerm)
   return (
     <form
       className="w-full flex flex-col gap-16"
@@ -87,6 +88,7 @@ export default function Agreement() {
         e.preventDefault()
         const isClickedAccessTermValue = Object.keys(isClickedAccessTerm).every(type => isClickedAccessTerm[type])
         if (isClickedAccessTermValue) {
+          /* all true */
           router.push('/myCenter/rigister')
         } else {
           alert('이용약관을 모두 동의해주세요')
@@ -97,31 +99,49 @@ export default function Agreement() {
         <div className="w-full gray-900-bold text-[20px] h-5 leading-5">약관에 동의해 주세요</div>
         {/* 체크 박스 */}
         <div className="w-full flex flex-col gap-6">
-          <div
-            className="w-full h-[60px] pl-6 flex items-center gap-[165px] border border-1 border-primary-200 rounded cursor-pointer"
+          {/* 전체 동의 */}
+          <input
+            className="w-full h-[60px] pl-6 flex items-center focus:outline-none gap-[165px] border border-1 border-primary-200 rounded cursor-pointer"
             onClick={() => {
               handleClickAccessTerm('all')
             }}
           >
-            <input type="checkbox" id="all" checked={isClickedAccessTerm.all} className="w-4 h-4 rounded border border-gray-300 bg-gray-50 cursor-pointer" />
-            <span className="w-full h-4 text-left gray-800-semibold text-[16px] leading-4">전체 약관에 모두 동의합니다.</span>
-          </div>
+            <div className="w-4 h-4 rounded border border-gray-300 bg-gray-50 cursor-pointer" />
+            <span className="w-full h-4 text-left gray-800-semibold text-[16px] leading-4">
+              전체 약관에 모두 동의합니다.
+            </span>
+          </input>
           <div className="w-full flex flex-col gap-5">
-            <div className="w-full flex cursor-pointer">
-              <div
-                className="w-[113px] flex gap-2.5"
-                onClick={() => {
-                  handleClickAccessTerm('first')
-                }}
-              >
-                <input type="checkbox" checked={isClickedAccessTerm.first} id="firstAgree" className="w-4 h-4 rounded border border-gray-300 bg-gray-50 cursor-pointer" />
-                <div className="h-4 flex items-center gap-1.5">
-                  <span className="w-[87px] gray-600-medium text-base">이용약관 동의</span>
-                  <span className="flex-1 text-left primary-600-medium">(필수)</span>
+            {/* 동의 1 */}
+            <div className="w-full h-5 flex gap-6 items-start">
+              <div className="flex gap-[5px] h-4">
+                <div className="w-[113px] h-full flex gap-2.5">
+                  {isClickedAccessTerm.first ? (
+                    <div
+                      className="w-4 h-4 rounded bg-primary-600 flex justify-center items-center"
+                      onClick={() => {
+                        handleClickAccessTerm('first')
+                      }}
+                    >
+                      <Checked />
+                    </div>
+                  ) : (
+                    <input
+                      type="checkbox"
+                      checked={isClickedAccessTerm.first}
+                      id="firstAgree"
+                      className="w-4 h-4 rounded border border-gray-300 bg-gray-50 cursor-pointer"
+                      onClick={() => {
+                        handleClickAccessTerm('first')
+                      }}
+                    />
+                  )}
+                  <span className="h-4 gray-800-medium text-[16px] leading-4">이용약관 동의</span>
                 </div>
+                <div className="w-10 h-4 text-[16px] text-primary-600 leading-4">(필수)</div>
               </div>
               <div
-                className="flex-1 flex justify-end"
+                className="w-full h-full flex justify-end"
                 onClick={() => {
                   if (isShownAccessTerm.first) {
                     setIsShownAccessTerm(prev => ({
@@ -137,7 +157,11 @@ export default function Agreement() {
                   }
                 }}
               >
-                {isShownAccessTerm.first ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                {isShownAccessTerm.first ? (
+                  <ChevronUp className="text-gray-500" />
+                ) : (
+                  <ChevronDown className="text-gray-500" />
+                )}
               </div>
             </div>
             {isShownAccessTerm.first && (
@@ -206,23 +230,37 @@ export default function Agreement() {
                 </div>
               </div>
             )}
+            {/* 동의 2 */}
+            <div className="w-full h-5 flex gap-6 items-start">
+              <div className="flex gap-[5px] h-4">
+                <div className="w-[113px] h-full flex gap-2.5">
+                  {isClickedAccessTerm.second ? (
+                    <div
+                      className="w-4 h-4 rounded bg-primary-600 flex justify-center items-center"
+                      onClick={() => {
+                        handleClickAccessTerm('second')
+                      }}
+                    >
+                      <Checked />
+                    </div>
+                  ) : (
+                    <input
+                      type="checkbox"
+                      checked={isClickedAccessTerm.second}
+                      id="secondAgree"
+                      className="w-4 h-4 rounded border border-gray-300 bg-gray-50 cursor-pointer"
+                      onClick={() => {
+                        handleClickAccessTerm('second')
+                      }}
+                    />
+                  )}
 
-            <div className="w-full flex gap-2.5 cursor-pointer">
-              <div
-                className="w-[160px] flex gap-2.5"
-                onClick={() => {
-                  handleClickAccessTerm('second')
-                }}
-              >
-                <input type="checkbox" checked={isClickedAccessTerm.second} id="secondAgree" className="w-4 h-4 rounded border border-gray-300 bg-gray-50 cursor-pointer" />
-                <div className="w-[135px] h-4 flex items-center gap-1.5">
-                  <span className="w-[87px] gray-600-medium text-base">이용약관 동의</span>
-                  <span className="flex-1 text-left primary-600-medium">(필수)</span>
+                  <span className="h-4 gray-800-medium text-[16px] leading-4">이용약관 동의</span>
                 </div>
+                <div className="w-10 h-4 text-[16px] text-primary-600 leading-4">(필수)</div>
               </div>
-
               <div
-                className="flex-1 flex justify-end"
+                className="w-full h-full flex justify-end"
                 onClick={() => {
                   if (isShownAccessTerm.second) {
                     setIsShownAccessTerm(prev => ({
@@ -238,7 +276,11 @@ export default function Agreement() {
                   }
                 }}
               >
-                {isShownAccessTerm.second ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                {isShownAccessTerm.second ? (
+                  <ChevronUp className="text-gray-500" />
+                ) : (
+                  <ChevronDown className="text-gray-500" />
+                )}
               </div>
             </div>
             {isShownAccessTerm.second && (
