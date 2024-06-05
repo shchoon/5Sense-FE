@@ -101,7 +101,7 @@ export default function Agreement() {
         <div className="w-full flex flex-col gap-6">
           {/* 전체 동의 */}
           <input
-            className="w-full h-[60px] pl-6 flex items-center focus:outline-none gap-[165px] border border-1 border-primary-200 rounded cursor-pointer"
+            className="w-full h-[60px] pl-6 flex items-center gap-[165px] border border-1 border-primary-200 rounded cursor-pointer"
             onClick={() => {
               handleClickAccessTerm('all')
             }}
