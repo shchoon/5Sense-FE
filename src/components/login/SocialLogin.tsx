@@ -35,8 +35,8 @@ export default function SocialLoginBtn() {
       title: '카카오 계정으로 로그인',
       logo: KakaoIcon,
       bgColor: 'bg-[#FFE812]',
-      borderColor: 'border-[#FFE812]',
-      textColor: 'text-[#374151]',
+      borderColor: 'none',
+      textColor: 'text-[#381F1F]',
       alt: 'kakao',
       login: async function kakaoLogin() {
         window.location.href = KAKAO_AUTH_URL
@@ -57,7 +57,7 @@ export default function SocialLoginBtn() {
       title: '구글 계정으로 로그인',
       logo: GoogleIcon,
       bgColor: 'bg-[#FFF]',
-      borderColor: 'border-[#6B7280]',
+      borderColor: 'border-gray-500',
       textColor: 'text-[#374151]',
       alt: 'google',
       login: function googleLogin() {
@@ -78,16 +78,16 @@ export default function SocialLoginBtn() {
         const Logo = data.logo
         return (
           <div
-            className={`flex w-[430px] h-[52px] rounded-md ${data.bgColor} border ${data.borderColor} cursor-pointer`}
+            className={`flex relative items-center justify-center w-full h-[52px] rounded-md ${data.bgColor} border ${data.borderColor} cursor-pointer`}
             key={i}
             onClick={data.login}
           >
             {data.alt === 'google' ? (
-              <Logo className="p-[15px]" width={48} height={48} />
+              <Logo className="absolute left-2 p-[15px]" width={48} height={48} />
             ) : (
-              <Logo src={data.logo} width={48} height={48} />
+              <Logo className='absolute left-2' src={data.logo} width={48} height={48} />
             )}
-            <div className={`font-semibold w-[190px] h-[16px] mt-[18px] mx-auto leading-4 ${data.textColor}`}>
+            <div className={`font-semibold text-base leading-none h-4 ${data.textColor}`}>
               {data.title}
             </div>
           </div>
