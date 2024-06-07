@@ -1,4 +1,4 @@
-name: Synchronize to forked repo - test
+name: Synchronize to forked repo - beta-test
 on:
   push:
     branches:
@@ -10,12 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout test
+      - name: Checkout beta-test
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.FORKED_REPO_TOKEN }}
           fetch-depth: 0
-          ref: test
+          ref: beta-test
 
       - name: Add remote-url
         run: |
@@ -25,7 +25,7 @@ jobs:
 
       - name: Push changes to forked-repo
         run: |
-          git push -f forked-repo test
+          git push -f forked-repo beta-test
 
       - name: Clean up
         run: |
