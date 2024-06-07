@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 
-import BackIcon from 'public/assets/icons/circle/back.svg'
+import BackIcon from '@/icons/icon/back.svg'
 
 export default function ClassEditLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
