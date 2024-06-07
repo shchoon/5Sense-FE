@@ -124,7 +124,7 @@ export default function Agreement() {
                 type="checkbox"
                 id="all"
                 checked={isClickedAccessTerm.all}
-                className="w-4 h-4 rounded border border-gray-300 bg-gray-50 cursor-pointer focus:ring-0"
+                className="w-4 h-4 rounded border border-gray-300 bg-gray-50 cursor-pointer focus:ring-offset-0 focus:ring-0"
               />}
               <span className="h-4 text-left gray-800-semibold text-[16px] leading-4">
                 전체 약관에 모두 동의합니다.
@@ -149,7 +149,7 @@ export default function Agreement() {
                         type="checkbox"
                         checked={isClickedAccessTerm.first}
                         id="firstAgree"
-                        className="w-4 h-4 rounded border border-gray-300 bg-gray-50 cursor-pointer focus:outline-none"
+                        className="w-4 h-4 rounded border border-gray-300 bg-gray-50 cursor-pointer focus:ring-offset-0 focus:ring-0"
                         onClick={() => {
                           handleClickAccessTerm('first')
                         }}
@@ -267,7 +267,7 @@ export default function Agreement() {
                         type="checkbox"
                         checked={isClickedAccessTerm.second}
                         id="secondAgree"
-                        className="w-4 h-4 rounded border border-gray-300 bg-gray-50 cursor-pointer"
+                        className="w-4 h-4 rounded border border-gray-300 bg-gray-50 cursor-pointer focus:ring-offset-0 focus:ring-0"
                         onClick={() => {
                           handleClickAccessTerm('second')
                         }}

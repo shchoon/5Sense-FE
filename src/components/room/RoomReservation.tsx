@@ -410,9 +410,7 @@ export default function RoomReservation(props: IProps) {
               parentsDateData={dateData}
               changeParentsDateData={handleChangeDateDataFromChild}
               type="addClass"
-              onClose={() => {
-                console.log('asd')
-              }}
+              onClose={() => {}}
             />
           )}
           {props.classType === 'duration' && isClickedTab.date && (
