@@ -113,7 +113,6 @@ export default function Agreement() {
                 handleClickAccessTerm('all')
               }}
             >
-              {/* test */}
               {isClickedAccessTerm.all ? <div
                         className="w-4 h-4 rounded bg-primary-600 flex justify-center items-center"
                         onClick={() => {
