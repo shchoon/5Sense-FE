@@ -166,11 +166,11 @@ export default function ClassPage() {
           </div>
         </div>
       )}
-      {modal && (
+      {/* {modal && (
         <Modal>
           <DetailClassModal {...props} onClose={() => setModal(false)} />
         </Modal>
-      )}
+      )} */}
       {isRefresh && classList.length === 0 && <NoneResult />}
     </div>
   )

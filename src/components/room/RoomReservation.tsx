@@ -23,6 +23,7 @@ import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
 import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
 import SearchIcon from 'public/assets/icons/search_white.svg'
 import UserIcon from 'public/assets/icons/user.svg'
+import Calendar from '@/icons/icon/datePicker/calendar.svg'
 
 interface RoomDataType {
   id: number
@@ -342,7 +343,7 @@ export default function RoomReservation(props: IProps) {
             }}
           >
             <div className={`w-[18px] mt-1/2 flex items-start`}>
-              <CalendarIcon width="18" height="18" color={isClickedTab.date ? '#7354E8' : '#6B7280'} />
+              <Calendar />
             </div>
             <div className="w-full h-full flex flex-col">
               <div className="w-full h-full text-left text-gray-700 font-medium text-sm">날짜</div>

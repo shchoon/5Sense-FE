@@ -195,11 +195,11 @@ export default function StudentPage() {
       </div>
       {!isLoading && <div ref={target}></div>}
       {isLoading && <Loading />}
-      {isClickedStudent && (
+      {/* {isClickedStudent && (
         <Modal>
           <DetailStudent studentsId={clickedStudentsId} onClose={onClose} />
         </Modal>
-      )}
+      )} */}
     </div>
   )
 }

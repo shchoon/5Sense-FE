@@ -160,11 +160,11 @@ export default function MemberOfCenter({ onChange, valid, type }: IProps) {
           </div>
         ) : null}
       </div>
-      {type === 'teachers' && isClickedAddTeacher && (
+      {/* {type === 'teachers' && isClickedAddTeacher && (
         <Modal small>
           <RegisterModal onClose={() => setModal(false)} onCloseState={() => setIsClickedAddTeacher(false)} />
         </Modal>
-      )}
+      )} */}
     </>
   )
 }

@@ -197,7 +197,7 @@ export default function InstructorPage() {
                   className="w-full px-5 py-2.5 flex gap-2 justify-center border border-primary-600 rounded-lg"
                   onClick={() => {
                     setModal(true)
-                    setIsClickedInstructor(true)
+                    //setIsClickedInstructor(true)
                     setInstructorId(Number(id))
                   }}
                 >

@@ -5,9 +5,7 @@ import { useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import instance from '@/lib/api/axios'
-import { centerDataType } from '@/app/myCenter/register/page'
 import { centerInfoState } from '@/lib/state/centerInfoState'
-import { toLocalString } from '@/utils'
 
 import profile from 'public/assets/images/profile.png'
 import ProfileIcon from '@/icons/icon/defaultProfile.svg'

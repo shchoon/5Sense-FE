@@ -157,11 +157,11 @@ export default function TeacherInfo({ onChange, valid, teacherInfo }: IProps) {
           </div>
         ) : null}
       </div>
-      {isClickedAddTeacher && (
+      {/* {isClickedAddTeacher && (
         <Modal small>
           <RegisterModal onClose={() => setModal(false)} onCloseState={() => setIsClickedAddTeacher(false)} />
         </Modal>
-      )}
+      )} */}
     </>
   )
 }

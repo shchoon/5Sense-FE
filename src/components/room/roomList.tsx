@@ -150,11 +150,11 @@ export default function RoomList({ roomData, onChangeRoomList, indexOfRoomList }
           })}
       </div>
       {/* 룸 삭제 모달 */}
-      {modal && (
+      {/* {modal && (
         <Modal small>
           <DeleteModal onClose={() => setModal(false)} roomId={roomOption.roomId} />
         </Modal>
-      )}
+      )} */}
     </div>
   )
 }

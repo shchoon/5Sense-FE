@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import DropDown from '@/components/common/DropDown'
-import { centerDataType } from '@/app/myCenter/register/page'
+import { centerDataType } from '@/app/(center)/mycenter/register/page'
 import { centerInfoState } from '@/lib/state/centerInfoState'
 import instance from '@/lib/api/axios'
 import Modal from '@/components/common/modal'
@@ -438,11 +438,11 @@ export default function ManageMent() {
               </div>
             </div>
           </div>
-          {modal && snsModal && (
+          {/* {modal && snsModal && (
             <Modal small>
               <SnsConnection toggleStatus={toggleStatus} onCloseSnsModal={onCloseSnsModal} />
             </Modal>
-          )}
+          )} */}
         </div>
       )}
     </>

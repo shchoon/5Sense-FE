@@ -267,11 +267,11 @@ export default function StudentRegister() {
             <div className="text-white text-base font-semibold">등록하기</div>
           </button>
         </form>
-        {isClickedAddClass && modal && (
+        {/* {isClickedAddClass && modal && (
           <Modal small>
             <StudentAddClassModal onClose={onClose} />
           </Modal>
-        )}
+        )} */}
       </div>
     </div>
   )

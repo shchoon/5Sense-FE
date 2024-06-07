@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 
 import { dateDataType } from '@/components/common/calendar/datePicker/dayDatePIcker'
 import { centerInfoState } from '@/lib/state/centerInfoState'
-import { calendarDateState } from '@/lib/state/calendarDateState'
+import { DayCalendarDateState } from '@/lib/state/calendar/DayCalendarDateState'
 
 interface IProps {
   roomScheduleData: { id: number; name: string; capacity: number; workTime: any }[][]
@@ -14,7 +14,7 @@ interface IProps {
 
 export default function RoomSchedule({ roomScheduleData, indexOfRoomList }: IProps) {
   const centerInfo = useRecoilValue(centerInfoState)
-  const calendarDate = useRecoilValue(calendarDateState)
+  const calendarDate = useRecoilValue(DayCalendarDateState)
   const router = useRouter()
 
   const createTimeList = () => {
