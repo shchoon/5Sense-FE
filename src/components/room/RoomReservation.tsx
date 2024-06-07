@@ -565,7 +565,7 @@ export default function RoomReservation(props: IProps) {
                       <ChevronRightIcon className="z-10" width={16} height={16} />
                     </button>
                     <div
-                      ref={el => (refs.current[i] = el)}
+                      //ref={el => (refs.current[i] = el)}
                       className="w-full grid grid-flow-col overflow-y-auto scrollbar-hide"
                     >
                       <div className="w-full flex flex-col">
