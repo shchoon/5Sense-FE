@@ -373,7 +373,7 @@ export default function RoomReservation(props: IProps) {
             }}
           >
             <div className="w-[18px] mt-1/2 flex items-start">
-              <ClockIcon width="18" height="18" color={isClickedTab.time ? '#7354E8' : '#6B7280'} />
+              {/* <ClockIcon width="18" height="18" color={isClickedTab.time ? '#7354E8' : '#6B7280'} /> */}
             </div>
             <div className="w-full h-full flex flex-col">
               <div className="w-full h-full text-left text-gray-700 font-medium text-sm">
@@ -410,6 +410,9 @@ export default function RoomReservation(props: IProps) {
               parentsDateData={dateData}
               changeParentsDateData={handleChangeDateDataFromChild}
               type="addClass"
+              onClose={() => {
+                console.log('asd')
+              }}
             />
           )}
           {props.classType === 'duration' && isClickedTab.date && (
