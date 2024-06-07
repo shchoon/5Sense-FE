@@ -14,7 +14,7 @@ import Modal from '@/components/common/modal'
 import LogoutIcon from 'public/assets/icons/logout.svg'
 import MenuIcon from 'public/assets/icons/menu.svg'
 import NoticeActiveIcon from 'public/assets/icons/notice-active.svg'
-import mainLogo from 'public/assets/logo/mainLogo.png'
+import mainLogo from 'public/assets/logo/Logo.png'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -93,11 +93,11 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         </div>
       </div>
       {/* <SideModal /> */}
-      {isClickedMenu && (
+      {/* {isClickedMenu && (
         <Modal>
           <Hambuger onClose={onClose} />
         </Modal>
-      )}
+      )} */}
       {/* static은 레이어 계층에 들어가지 않기때문에 purplebox에 인덱스값을 -로 설정함*/}
       <div className="purplebox absolute top-0 left-0 md:w-screen min-w-[768px] h-[601px] lg:h-[469px] bg-gradient-to-b from-[#6F53DB] to-[#875EDC] z-[-10]" />
     </div>

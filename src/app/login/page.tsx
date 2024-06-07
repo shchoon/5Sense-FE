@@ -1,6 +1,7 @@
 'use client'
 import Script from 'next/script'
 import SocialLogin from '@/components/login/SocialLogin'
+import LoginHeader from '@/components/common/LoginHeader'
 
 /* declare global { // Kakao 함수를 전역에서 사용할 수 있도록 선언
     interface Window {
@@ -28,6 +29,10 @@ export default function Login() {
         crossOrigin="anonymous" onLoad={kakaoInit}>
         </Script> */}
       <div className="w-full flex flex-col items-start gap-3.5">
+        <LoginHeader
+          title="센스있는 매니저, 오센스"
+          subTitle="오감을 깨우는 클래스 관리, 센스 만점 오센스에서 시작하세요!"
+        />
         <SocialLogin />
       </div>
     </>

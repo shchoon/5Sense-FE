@@ -67,7 +67,7 @@ export default function SocialLoginBtn() {
   ]
 
   return (
-    <>
+    <div className="w-full mt-14 flex flex-col gap-3.5">
       <Script
         type="text/javascript"
         src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js"
@@ -85,14 +85,12 @@ export default function SocialLoginBtn() {
             {data.alt === 'google' ? (
               <Logo className="absolute left-2 p-[15px]" width={48} height={48} />
             ) : (
-              <Logo className='absolute left-2' src={data.logo} width={48} height={48} />
+              <Logo className="absolute left-2" src={data.logo} width={48} height={48} />
             )}
-            <div className={`font-semibold text-base leading-none h-4 ${data.textColor}`}>
-              {data.title}
-            </div>
+            <div className={`font-semibold text-base leading-none h-4 ${data.textColor}`}>{data.title}</div>
           </div>
         )
       })}
-    </>
+    </div>
   )
 }
