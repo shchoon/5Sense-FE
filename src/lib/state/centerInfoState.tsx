@@ -1,5 +1,5 @@
 import { atom } from 'recoil'
-import { centerDataType } from '@/app/myCenter/rigister/page'
+import { centerDataType } from '@/app/myCenter/register/page'
 
 export const centerInfoState = atom<centerDataType>({
   key: 'centerInfo',

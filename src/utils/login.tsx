@@ -36,7 +36,7 @@ export default function Login({ social, code, state }: IProps) {
         if (!res.data.data.isNew) {
           router.push('/home')
         } else {
-          router.push('/myCenter')
+          router.push('/mycenter/agreement')
         }
       })
       .catch(err => {
