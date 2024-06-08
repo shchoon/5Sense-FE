@@ -2,7 +2,7 @@
 import { useEffect,useState } from "react"
 import {useRouter} from "next/navigation"
 
-export default function myCenterLayout({ children }: { children: React.ReactNode }) {
+export default function MyCenterLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const [isLogin, setisLogin] = useState<boolean>(false)
 
