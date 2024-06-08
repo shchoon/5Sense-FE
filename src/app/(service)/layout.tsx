@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
 import { useSetRecoilState, useRecoilValue } from 'recoil'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import AcademyInfo from '@/components/layout/AcademyInfo'
@@ -18,6 +18,8 @@ import mainLogo from 'public/assets/logo/Logo.png'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
+  const [isLogin, setisLogin] = useState<boolean>(false)
+
   const footer = [
     { id: 1, name: '개인정보처리방침' },
     { id: 2, name: '이용약관' },
@@ -32,8 +34,19 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     setIsClickedMenu(false)
   }
 
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken')
+    setisLogin(prev => accessToken !== null ? true : false)
+    if(accessToken === null){
+      alert('서비스를 이용하려면 로그인을 해주세요.')
+      router.replace('/login')
+    }
+  }, [])
+
   return (
-    <div className={`min-w-[768px] max-w-[2560px]`}>
+    <>
+    {isLogin && 
+      <div className={`min-w-[768px] max-w-[2560px]`}>
       <div className={`w-full h-full px-6 2md:px-12 box-border lg:pl-0 lg:pr-4 xl:pr-8 2xl:pr-12`}>
         {/* 상위 relative가 없기때문에 body를 부모로 잡음 */}
         <div className="header w-full h-[124px] flex justify-between items-center lg:flex-none lg:h-[66px]">
@@ -101,5 +114,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       {/* static은 레이어 계층에 들어가지 않기때문에 purplebox에 인덱스값을 -로 설정함*/}
       <div className="purplebox absolute top-0 left-0 md:w-screen min-w-[768px] h-[601px] lg:h-[469px] bg-gradient-to-b from-[#6F53DB] to-[#875EDC] z-[-10]" />
     </div>
+    }
+    </>
   )
 }
