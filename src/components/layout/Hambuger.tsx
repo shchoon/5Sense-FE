@@ -3,7 +3,7 @@ import { useRecoilValue } from 'recoil'
 
 import TodaySchedule from './TodaySchedule'
 import { centerInfoState } from '@/lib/state/centerInfoState'
-import { changePhoneNUmberToString } from '@/utils'
+import { revertPhoneNumberToString } from '@/utils'
 
 import Profile from 'public/assets/images/profile.png'
 import ModalClose from '@/icons/icon/modalClose.svg'
@@ -47,7 +47,7 @@ export default function Hambuger({ onClose }: IProps) {
               <div className="w-full text-center gray-800-bold text-[22px]">{centerInfo.name}</div>
               <div className="h-[34px] flex-col gap-2">
                 <div className="text-center text-gray-600 text-base font-medium">
-                  {changePhoneNUmberToString(centerInfo.mainPhone)}
+                  {revertPhoneNumberToString(centerInfo.mainPhone)}
                 </div>
                 <div className="text-center text-gray-600 text-sm font-medium">{centerInfo.address}</div>
               </div>
