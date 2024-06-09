@@ -10,7 +10,7 @@ export function toLocalString(number: string) {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
-export function changePhoneNUmberToString(phoneNumber: string) {
+export function revertPhoneNumberToString(phoneNumber: string) {
   if (phoneNumber.slice(0, 2) === '02') {
     if (phoneNumber.length === 9) {
       return phoneNumber.slice(0, 2) + '-' + phoneNumber.slice(2, 5) + '-' + phoneNumber.slice(5, 9)
@@ -19,6 +19,12 @@ export function changePhoneNUmberToString(phoneNumber: string) {
     }
   } else if (phoneNumber.slice(0, 3) === '010') {
     return phoneNumber.slice(0, 3) + '-' + phoneNumber.slice(3, 7) + '-' + phoneNumber.slice(7, 11)
+  } else {
+    if (phoneNumber.length === 10) {
+      return phoneNumber.slice(0, 3) + '-' + phoneNumber.slice(3, 6) + '-' + phoneNumber.slice(6, 10)
+    } else {
+      return phoneNumber.slice(0, 3) + '-' + phoneNumber.slice(3, 7) + '-' + phoneNumber.slice(7, 11)
+    }
   }
 }
 

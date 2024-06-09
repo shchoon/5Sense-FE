@@ -23,7 +23,8 @@ import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
 import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
 import SearchIcon from 'public/assets/icons/search_white.svg'
 import UserIcon from 'public/assets/icons/user.svg'
-import Calendar from '@/icons/icon/datePicker/calendar.svg'
+import CalendarIcon from '@/icons/icon/datePicker/calendar.svg'
+import ClockIcon from '@/icons/icon/clock.svg'
 
 interface RoomDataType {
   id: number
@@ -343,7 +344,7 @@ export default function RoomReservation(props: IProps) {
             }}
           >
             <div className={`w-[18px] mt-1/2 flex items-start`}>
-              <Calendar />
+              <CalendarIcon />
             </div>
             <div className="w-full h-full flex flex-col">
               <div className="w-full h-full text-left text-gray-700 font-medium text-sm">날짜</div>
@@ -373,7 +374,7 @@ export default function RoomReservation(props: IProps) {
             }}
           >
             <div className="w-[18px] mt-1/2 flex items-start">
-              {/* <ClockIcon width="18" height="18" color={isClickedTab.time ? '#7354E8' : '#6B7280'} /> */}
+              <ClockIcon className={`${isClickedTab.time ? '#7354E8' : '#6B7280'}`} />
             </div>
             <div className="w-full h-full flex flex-col">
               <div className="w-full h-full text-left text-gray-700 font-medium text-sm">
@@ -563,7 +564,7 @@ export default function RoomReservation(props: IProps) {
                       <ChevronRightIcon className="z-10" width={16} height={16} />
                     </button>
                     <div
-                      //ref={el => (refs.current[i] = el)}
+                      ref={el => {refs.current[i] = el}}
                       className="w-full grid grid-flow-col overflow-y-auto scrollbar-hide"
                     >
                       <div className="w-full flex flex-col">

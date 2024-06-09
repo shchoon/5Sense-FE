@@ -1,15 +1,15 @@
 'use client'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import instance from '@/lib/api/axios'
 import { centerInfoState } from '@/lib/state/centerInfoState'
+import { revertPhoneNumberToString } from '@/utils'
 
 import profile from 'public/assets/images/profile.png'
 import ProfileIcon from '@/icons/icon/defaultProfile.svg'
-import { useEffect } from 'react'
 
 export default function AcademyInfo(props: any) {
   const router = useRouter()
@@ -52,7 +52,7 @@ export default function AcademyInfo(props: any) {
           <div className="absolute top-[100px] w-full infoDetail flex flex-col items-center gap-2">
             <p className={`${props.color} text-[21px] font-bold`}>{centerInfo.name}</p>
             <p className={`${props.color} h-[14px] text-sm font-medium`}>
-              {centerInfo.mainPhone.slice(0, 3)}-{centerInfo.mainPhone.slice(3, 7)}-{centerInfo.mainPhone.slice(7, 11)}
+              {revertPhoneNumberToString(centerInfo.mainPhone)}
             </p>
             <p className={`${props.color} h-3 text-xs font-medium `}>{centerInfo.address}</p>
           </div>
