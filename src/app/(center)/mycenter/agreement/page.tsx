@@ -6,7 +6,7 @@ import Checked from '@/icons/icon/checked.svg'
 import ChevronDownIcon from 'public/assets/icons/chevron/chevron_down_gray.svg'
 import ChevronUpIcon from 'public/assets/icons/chevron/chevron_up_gray.svg'
 import { Button } from 'flowbite-react'
-import LoginHeader from '@/components/common/LoginHeader'
+import LoginHeader from '@/components/login/LoginHeader'
 
 export default function Agreement() {
   const router = useRouter()

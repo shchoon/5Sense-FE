@@ -2,7 +2,7 @@ import { CustomFlowbiteTheme } from 'flowbite-react'
 
 const customTheme: CustomFlowbiteTheme = {
   button: {
-    base: 'rounded-lg cursor-pointer font-["Pretendard"] flex items-center justify-center align-middle',
+    base: 'rounded-lg cursor-pointer font-pretendard flex items-center justify-center align-middle',
     fullSized: 'w-full',
     color: {
       primary: 'text-white bg-[#7253E7] hover:bg-[#5539C0] focus:ring-2 focus:ring-purple-300',

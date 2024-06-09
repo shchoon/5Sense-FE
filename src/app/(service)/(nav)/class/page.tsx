@@ -120,10 +120,10 @@ export default function ClassPage() {
   }, [metaData])
 
   return (
-    <div>
+    <div className="w-full overflow-x-hidden">
       <ContentHeader title="클래스 관리" btnName="클래스 등록" onClick={() => router.push('class/register')} />
       <ClassFilter />
-      <div className="container w-full max-w-[1872px] grid grid-cols-2 2xl:grid-cols-3 gap-[20px] mt-5">
+      <div className="container w-full grid grid-cols-2 2xl:grid-cols-3 gap-[20px] mt-5">
         {classList.length !== 0 &&
           classList.map((data, idx) => (
             <button
@@ -153,7 +153,7 @@ export default function ClassPage() {
             </button>
           ))}
       </div>
-      {!isLoading && <div ref={target}></div>}
+      {/* {!isLoading && <div ref={target}></div>}
       {isLoading && (
         <div className="w-full h-[70px] pt-[50px] flex justify-center items-center">
           <div
@@ -171,7 +171,7 @@ export default function ClassPage() {
           <DetailClassModal {...props} onClose={() => setModal(false)} />
         </Modal>
       )}
-      {isRefresh && classList.length === 0 && <NoneResult />}
+      {isRefresh && classList.length === 0 && <NoneResult />} */}
     </div>
   )
 }
