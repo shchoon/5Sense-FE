@@ -97,7 +97,7 @@ export default function MainBox() {
 
   return (
     <div
-      className={`w-full items-start ${width > 1180 ? 'flex' : 'flex-col'} ${
+      className={`w-full items-start ${width > 1180 ? 'flex' : ' flex flex-col'} ${
         width > 1180 ? 'gap-6' : 'gap-4'
       }`}
     >
