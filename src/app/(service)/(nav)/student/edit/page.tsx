@@ -17,12 +17,14 @@ import StudentsDuration from '@/components/studentsDetail/studentsDuartion'
 import { sessionScheduleState } from '@/lib/state/studentSessionSchedule'
 import { studentDurationScheduleState } from '@/lib/state/studentDurationSchedule'
 import { AddSessionLessonCheck } from '@/components/student/addSessionLessonCheck'
+import ContentHeader from '@/components/common/ContentHeader'
 
 import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
 import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
 import PlusIcon from 'public/assets/icons/plus_circle_bg_pri_600.svg'
 
 interface studentInfo {
+  id: number
   name: string
   phone: string
   particulars: string
@@ -39,7 +41,6 @@ export interface InputNumProps {
 export default function StudentEdit() {
   const router = useRouter()
   const params = useParams()
-  const studentId = params.id
   const durationSchedule = useRecoilValue(studentDurationScheduleState)
   const sessionSchedule = useRecoilValue(sessionScheduleState)
   const setDurationSchedule = useSetRecoilState(studentDurationScheduleState)
@@ -49,6 +50,7 @@ export default function StudentEdit() {
 
   const [isClickedAddClass, setIsClickedAddClass] = useState<boolean>(false)
   const [studentInfo, setStudentInfo] = useState<studentInfo>({
+    id: 0,
     name: '',
     phone: '',
     particulars: '',
@@ -105,7 +107,7 @@ export default function StudentEdit() {
         /* 수강생 정보 수정에서 새로운 회차반 클래스 추가하고 일정추가를 하는 경우 */
         instance
           .post('/session-lesson-registrations', {
-            studentId: Number(studentId),
+            studentId: studentInfo.id,
             lessonId: sessionSchedule[0].lessonId,
             paymentStatus: sessionSchedule[0].paymentStatus
           })
@@ -113,7 +115,7 @@ export default function StudentEdit() {
             instance
               .post('/session-lesson-schedules', {
                 lessonId: sessionSchedule[0].lessonId,
-                studentId: Number(studentId),
+                studentId: studentInfo.id,
                 sessionDate: sessionSchedule[0].sessionDate,
                 startTime: sessionSchedule[0].startTime,
                 endTime: sessionSchedule[0].endTime,
@@ -128,7 +130,7 @@ export default function StudentEdit() {
         instance
           .post('/session-lesson-schedules', {
             lessonId: sessionSchedule[0].lessonId,
-            studentId: Number(studentId),
+            studentId: studentInfo.id,
             sessionDate: sessionSchedule[0].sessionDate,
             startTime: sessionSchedule[0].startTime,
             endTime: sessionSchedule[0].endTime,
@@ -141,17 +143,24 @@ export default function StudentEdit() {
     } else if (durationSchedule.length !== 0) {
       instance
         .post('/duration-lesson-registrations', {
-          studentId: Number(studentId),
+          studentId: studentInfo.id,
           lessonId: Number(durationSchedule[0].lessonId),
           paymentStatus: durationSchedule[0].paymentStatus
         })
         .then(res => {
           router.push('/student')
         })
+    } else if( sessionSchedule.length === 0 && durationSchedule.length === 0){
+      /* 단순 수강생 정보 수정 */
     }
   }
 
   useEffect(() => {
+    const studentId = localStorage.getItem('studentId') !== null ? Number(localStorage.getItem('studentId')) : 0
+    setStudentInfo(prev => ({
+      ...prev,
+      id: studentId
+    }))
     instance(`/students/${studentId}`).then(res => {
       const studentData = res.data.data
       console.log(studentData)
@@ -173,15 +182,9 @@ export default function StudentEdit() {
   console.log(sessionSchedule)
 
   return (
-    <div className="w-full">
-      <div className="relative">
-        <Link href={'/student'}>
-          <EllipsisIcon className="absolute left-[48px] top-[61px]" width={28} height={28} />
-          <ArrowBackIcon className="absolute left-[55px] top-[68px]" width={14} height={14} />
-        </Link>
-        <div className="absolute left-[92px] top-[60px] black-bold text-3xl ">수강생 정보수정</div>
-      </div>
-      <div className="w-full pt-[120px] flex justify-center">
+    <div className="w-full flex flex-col items-center pb-[60px]">
+      <ContentHeader title='수강생 정보수정' back onClick={() => router.push('/student')} />
+      <div className="w-[640px] ">
         <form className="flex flex-col gap-5 pb-[60px]" onSubmit={e => reservation(e)}>
           {/* 수강생 정보 등록 */}
           <div className="flex flex-col gap-10 w-[640px] px-6 py-8 border rounded-xl border-gray-200">
@@ -311,11 +314,11 @@ export default function StudentEdit() {
             <div className="text-white text-base font-semibold">등록하기</div>
           </button>
         </form>
-        {isClickedAddClass && modal && (
+        {/* {isClickedAddClass && modal && (
           <Modal small>
             <StudentAddClassModal onClose={onClose} />
           </Modal>
-        )}
+        )} */}
       </div>
     </div>
   )
