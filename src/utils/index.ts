@@ -51,3 +51,11 @@ export function getKoreanNumber(value: string) {
 
   return answer
 }
+
+export const formatPhoneNum = (phoneNumber: string) => {
+  const part1 = phoneNumber.slice(0, 3)
+  const part2 = phoneNumber.slice(3, 7)
+  const part3 = phoneNumber.slice(7, 11)
+
+  return `${part1}-${part2}-${part3}`
+}
