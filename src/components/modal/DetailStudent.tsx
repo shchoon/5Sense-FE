@@ -104,7 +104,7 @@ export default function DetailStudent({ studentsId, onClose }: IProps) {
           type="button"
           className="w-full btn-purple-lg"
           onClick={() => {
-            router.push(`/student/edit/${studentsId}`)
+            router.push(`/student/edit`)
           }}
         >
           수정하기
