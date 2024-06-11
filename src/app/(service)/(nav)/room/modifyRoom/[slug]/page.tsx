@@ -9,6 +9,7 @@ import InputForm, { InputFormProps } from '@/components/common/InputForm'
 import useInputNum from '@/hooks/useInputNum'
 import { InputNumProps } from '@/app/(service)/(nav)/student/register/page'
 import instance from '@/lib/api/axios'
+import ContentHeader from '@/components/common/ContentHeader'
 
 import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
 import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
@@ -54,18 +55,10 @@ export default function ModifyRoom() {
     setSubmitData: setInputValue
   } */
 
-  console.log(roomData)
-
   return (
-    <>
-      <div className="relative">
-        <Link href={'/room'}>
-          <EllipsisIcon className="absolute left-[48px] top-[61px]" width={28} height={28} alt="" />
-          <ArrowBackIcon className="absolute left-[55px] top-[68px]" width={14} height={14} alt="" />
-        </Link>
-        <div className="absolute left-[92px] top-[60px] black-bold text-3xl ">강의실 수정</div>
-      </div>
-      <div className="w-[640px] pt-[120px] flex flex-col gap-[34px] mx-auto ">
+    <div className='w-full flex flex-col items-center pb-[60px]'>
+      <ContentHeader title='강의실 수정' back onClick={() => router.push('/room')} />
+      <div className="w-[640px] flex flex-col gap-[34px]">
         <div className="w-full px-6 py-8 flex flex-col gap-10 border rounded-xl border-1 border-gray-200">
           <div className="gray-900-bold text-xl">강의실 정보</div>
           <div className="w-full flex flex-col gap-4">
@@ -136,6 +129,6 @@ export default function ModifyRoom() {
           수정하기
         </button>
       </div>
-    </>
+    </div>
   )
 }

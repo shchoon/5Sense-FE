@@ -6,6 +6,7 @@ import Image from 'next/image'
 
 import instance from '@/lib/api/axios'
 import InputForm, { InputFormProps } from '@/components/common/InputForm'
+import ContentHeader from '@/components/common/ContentHeader'
 
 import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
 import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
@@ -28,16 +29,10 @@ export default function AddRoom() {
   }
 
   return (
-    <>
-      <div className="relative">
-        <Link href={'/room'}>
-          <EllipsisIcon className="absolute left-[48px] top-[61px]" width={28} height={28} alt="" />
-          <ArrowBackIcon className="absolute left-[55px] top-[68px]" width={14} height={14} alt="" />
-        </Link>
-        <div className="absolute left-[92px] top-[60px] black-bold text-3xl ">강의실 추가</div>
-      </div>
+    <div className='w-full flex flex-col items-center pb-[60px]'>
+      <ContentHeader title='강의실 추가' back onClick={() => router.push('/room')} />
       <form
-        className="w-[640px] pt-[120px] flex flex-col gap-[34px] mx-auto"
+        className="w-[640px] flex flex-col gap-[34px]"
         onSubmit={e => {
           e.preventDefault()
           instance
@@ -105,6 +100,6 @@ export default function AddRoom() {
           추가하기
         </button>
       </form>
-    </>
+    </div>
   )
 }
