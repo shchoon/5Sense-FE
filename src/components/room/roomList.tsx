@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { modalState } from '@/lib/state/modal'
 import DeleteModal from '@/components/modal/DeleteModal'
 import Modal from '@/components/common/modal'
+import { RoomDetailsState } from '@/lib/state/roomDetails'
 
 import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
 import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
@@ -27,6 +28,7 @@ export default function RoomList({ roomData, onChangeRoomList, indexOfRoomList }
 
   const modal = useRecoilValue(modalState) // 상태의 값을 가져옴
   const setModal = useSetRecoilState(modalState)
+  const setRoomDetailsState = useSetRecoilState(RoomDetailsState)
 
   const [roomOption, setRoomOption] = useState<{
     isClicked: boolean
@@ -124,10 +126,14 @@ export default function RoomList({ roomData, onChangeRoomList, indexOfRoomList }
                       type="button"
                       className="w-full flex items-center justify-between px-2 py-1 rounded-[3px] hover:bg-primary-100"
                       onClick={() => {
-                        localStorage.setItem('roomName', data.name)
+                        setRoomDetailsState(prev => ({
+                          ...prev,
+                          id: data.id,
+                          name: data.name,
+                          capacity: data.capacity
+                        }))
                         localStorage.setItem('roomId', data.id)
-                        localStorage.setItem('capacity', data.capacity)
-                        router.push('/room/modifyRoom/' + `${data.name}`)
+                        router.push('/room/modifyRoom')
                       }}
                     >
                       <div className="w-[98px] gray-500-medium text-sm">수정하기</div>
@@ -150,11 +156,11 @@ export default function RoomList({ roomData, onChangeRoomList, indexOfRoomList }
           })}
       </div>
       {/* 룸 삭제 모달 */}
-      {modal && (
+      {/* {modal && (
         <Modal small>
           <DeleteModal onClose={() => setModal(false)} roomId={roomOption.roomId} />
         </Modal>
-      )}
+      )} */}
     </div>
   )
 }
