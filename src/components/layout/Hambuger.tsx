@@ -1,7 +1,7 @@
 import { useRouter } from 'next/navigation'
 import { useRecoilValue } from 'recoil'
 
-import TodaySchedule from './TodaySchedule'
+import TodaySchedule from './CenterInfo/TodaySchedule'
 import { centerInfoState } from '@/lib/state/centerInfoState'
 import { changePhoneNUmberToString } from '@/utils'
 

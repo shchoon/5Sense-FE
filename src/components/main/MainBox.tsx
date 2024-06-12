@@ -97,7 +97,7 @@ export default function MainBox() {
 
   return (
     <div
-      className={`w-full items-start mb-[80px] ${width > 1180 ? 'flex' : 'flex-col'} ${
+      className={`w-full items-start ${width > 1180 ? 'flex' : ' flex flex-col'} ${
         width > 1180 ? 'gap-6' : 'gap-4'
       }`}
     >
@@ -108,25 +108,27 @@ export default function MainBox() {
               key={i}
               className={`w-1/2 p-6 flex flex-col gap-5 outline outline-1 ${data.rounded} outline-gray-200 h-full`}
             >
-              <div className="w-full flex flex-col gap-2">
-                <div className="text-gray-600 text-base font-semibold">{data.title}</div>
-                <span className="w-full h-[33px] text-black text-[28px] font-bold  ">{data.income}</span>
+              <div className="w-full flex flex-col items-start gap-2">
+                <span className="text-gray-600 text-base font-semibold">{data.title}</span>
+                <span className="h-[33px] text-black text-[28px] font-bold leading-[33px]">{data.income}</span>
               </div>
-              <div className="w-full h-[114px] flex items-end gap-6 ">
+              <div className="w-full flex items-end gap-6 ">
                 <div className="flex w-full flex-col gap-[6px]">
                   {data.statistics.map((data, i) => {
                     return (
                       <div key={i} className="w-full flex gap-1 items-center">
                         <span className={`w-3 h-[9px] rounded-[3px] ${data.bg_color}`}></span>
-                        <span className="w-8 h-[18px] text-gray-800 text-xs font-bold  ">{data.percentage}</span>
-                        <span className="text-gray-400 flex-1 w-1 min-w-8 truncate h-[18px] text-xs font-medium   ">
+                        <span className="w-8 h-[18px] text-gray-800 text-xs font-bold leading-[18px]">{data.percentage}</span>
+                        <span className="text-gray-400 flex-1 w-1 min-w-8 truncate h-[18px] text-xs font-medium leading-[18px]">
                           {data.className}
                         </span>
                       </div>
                     )
                   })}
                 </div>
-                <IncomeStatistics props={incomeData} />
+                <div className='w-[110px] h-[110px]'>
+                <IncomeStatistics props={incomeData} />  
+                </div>
               </div>
             </div>
           )
@@ -138,8 +140,8 @@ export default function MainBox() {
         } outline outline-1 rounded-xl outline-gray-200`}
       >
         <div className="w-full flex flex-col gap-2 ">
-          <div className="text-gray-600 text-base font-semibold">전체 등록 학생 수</div>
-          <div className="w-full h-[33px] text-black text-[28px] font-bold  ">513명</div>
+          <span className="text-gray-600 text-base font-semibold">전체 등록 학생 수</span>
+          <span className="w-full h-[33px] text-black text-[28px] font-bold leading-[33px]">513명</span>
         </div>
         <div className="w-full h-[114px] flex items-end gap-6">
           <div className="flex w-full flex-col gap-[6px]">
@@ -147,15 +149,17 @@ export default function MainBox() {
               return (
                 <div key={i} className="flex w-full h-[18px] gap-1 items-center">
                   <span className={`w-3 min-w-3 h-[9px] rounded-[3px] ${data.bg_color}`}></span>
-                  <div className="w-8 h-[18px] text-gray-800 text-xs font-bold   ">40%</div>
-                  <div className="text-gray-400 h-[18px] max-w-[182px] flex-1 w-1 truncate text-xs font-medium   ">
+                  <div className="w-8 h-[18px] text-gray-800 text-xs font-bold leading-[18px]">40%</div>
+                  <div className="text-gray-400 h-[18px] max-w-[182px] flex-1 w-1 truncate text-xs font-medium leading-[18px]">
                     {data.className}
                   </div>
                 </div>
               )
             })}
           </div>
+          <div className='w-[110px] h-[110px]'>
           <StudentStatistics />
+          </div>
         </div>
       </div>
     </div>

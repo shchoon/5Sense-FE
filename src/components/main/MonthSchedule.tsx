@@ -37,7 +37,7 @@ export default function MonthSchedule({ dateData }: IProps) {
   }, [dateData.month])
 
   return (
-    <div className="flex flex-col gap-4 mx-auto xl:max-w-[1016px] pt-8 pb-[80px]">
+    <div className="w-full flex flex-col gap-4 mx-auto xl:max-w-[1016px] pt-8">
       {/* 회차반 / 기간반 */}
       <div className="w-full h-4 flex justify-end">
         <div className="w-[164px] h-4 flex gap-6 ">
@@ -60,7 +60,7 @@ export default function MonthSchedule({ dateData }: IProps) {
                 key={i}
                 className="w-full h-[43px] px-[10px] py-3 flex items-center outline outline-1 outline-gray-200"
               >
-                <span className=" gray-500-medium text-base">{day}</span>
+                <span className="h-[19px] gray-500-medium text-base">{day}</span>
               </div>
             )
           })}
@@ -82,14 +82,14 @@ export default function MonthSchedule({ dateData }: IProps) {
                   </div>
                 )}
                 {data.day && (
-                  <div className="w-full h-[62px] flex flex-col gap-1.5 border border-1 border-primary-200">
-                    <div className={`w-full flex gap-1 h-7 px-2 py-[6px]`}>
+                  <div className="w-full h-14 flex flex-col border border-1 border-primary-200">
+                    <div className={`w-full flex items-center gap-1 h-7 px-2 py-[6px]`}>
                       <div className={`w-[14px] h-[14px] bg-primary-500 rounded`}></div>
-                      <div className={`flex-1 text-right text-indigo-500 text-[13px] font-bold`}>{data.duration}개</div>
+                      <div className={`flex-1 text-right text-primary-600 text-[13px] font-bold`}>{data.duration}개</div>
                     </div>
                     <div className={`w-full flex gap-1 h-7 px-2 py-[6px]`}>
-                      <div className={`w-[14px] h-[14px] bg-orange-500  rounded`}></div>
-                      <div className={`flex-1 text-right text-orange-500 text-[13px] font-bold`}>{data.session}개</div>
+                      <div className={`w-[14px] h-[14px] bg-secondary-500  rounded`}></div>
+                      <div className={`flex-1 text-right text-secondary-600 text-[13px] font-bold`}>{data.session}개</div>
                     </div>
                   </div>
                 )}

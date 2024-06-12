@@ -7,11 +7,10 @@ import LessonTimeModal from '../modal/RoundLessonTimeModal'
 import { durationClassScheduleState } from '@/lib/state/classDurationSchedule'
 import { lessonTimeState } from '@/lib/state/lessonTime'
 import { modalState } from '@/lib/state/modal'
-// import CalendarIcon from '../../../public/assets/icons/calendar'
-// import ClockIcon from '../../../public/assets/icons/clock'
 import RoomReservationCheck from '../check/RoomReservationCheck'
 import Modal from '../common/modal'
-import DayDatePicker, { dateDataType } from '../common/calendar/datePicker/dayDatePIcker'
+import { dateDataType } from '../common/calendar/datePicker/dayDatePIcker'
+import DayDatePicker from '../common/calendar/datePicker/dayDatePIcker'
 import PeriodDatePicker from '../common/calendar/datePicker/periodDatePicker'
 import PeriodLessonTimeModal from '../modal/PeriodLessonTimeModal'
 import { centerInfoState } from '@/lib/state/centerInfoState'
@@ -23,6 +22,8 @@ import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
 import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
 import SearchIcon from 'public/assets/icons/search_white.svg'
 import UserIcon from 'public/assets/icons/user.svg'
+import CalendarIcon from '@/icons/icon/datePicker/calendar.svg'
+import ClockIcon from '@/icons/icon/clock.svg'
 
 interface RoomDataType {
   id: number
@@ -409,6 +410,7 @@ export default function RoomReservation(props: IProps) {
               parentsDateData={dateData}
               changeParentsDateData={handleChangeDateDataFromChild}
               type="addClass"
+              onClose={() => {}}
             />
           )}
           {props.classType === 'duration' && isClickedTab.date && (
@@ -561,7 +563,7 @@ export default function RoomReservation(props: IProps) {
                       <ChevronRightIcon className="z-10" width={16} height={16} />
                     </button>
                     <div
-                      ref={el => (refs.current[i] = el)}
+                      ref={el => {refs.current[i] = el}}
                       className="w-full grid grid-flow-col overflow-y-auto scrollbar-hide"
                     >
                       <div className="w-full flex flex-col">

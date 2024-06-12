@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import instance from '@/lib/api/axios'
 import DropDown from '@/components/common/DropDown'
 import { Button } from 'flowbite-react'
-import LoginHeader from '@/components/common/LoginHeader'
+import LoginHeader from '@/components/login/LoginHeader'
 import TextInput from '@/components/common/TextInput'
 
 declare global {

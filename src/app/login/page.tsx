@@ -1,7 +1,7 @@
 'use client'
 import Script from 'next/script'
 import SocialLogin from '@/components/login/SocialLogin'
-import LoginHeader from '@/components/common/LoginHeader'
+import LoginHeader from '@/components/login/LoginHeader'
 
 /* declare global { // Kakao 함수를 전역에서 사용할 수 있도록 선언
     interface Window {

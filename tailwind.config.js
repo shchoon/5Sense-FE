@@ -202,12 +202,10 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        md: '769px',
-        '2md': '817px',
-        lg: '1025px',
-        xl: '1281px',
-        '2xl': '1441px',
-        '3xl': '1921px'
+        md: { min: '769px' },
+        lg: { min: '1025px' }, // ~1025
+        xl: { min: '1281px' }, // ~1281
+        '2xl': { min: '1441px' } // ~1441
       },
       colors: {
         current: 'currentColor',
@@ -234,11 +232,15 @@ module.exports = {
           100: '#FFF0E3',
           200: '#FCD9BD',
           400: '#FF8240',
+          500: '#FF7749',
           600: '#FF5A1F'
         }
       },
       boxShadow: {
         mainPage: '-3px 0px 20px 0px rgba(139, 140, 165, 0.03)'
+      },
+      fontFamily: {
+        pretendard: ['var(--font-pretendard)']
       }
     }
   }

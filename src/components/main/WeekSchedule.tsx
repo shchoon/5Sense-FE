@@ -50,7 +50,7 @@ export default function WeekSchedule() {
   return (
     <>
       {/* 회차반 / 기간반 */}
-      <div className="flex flex-col gap-4 mx-auto xl:max-w-[1016px] pt-8 pb-[80px]">
+      <div className="w-full flex flex-col gap-4 mx-auto xl:max-w-[1016px] pt-8">
         <div className="w-full h-4 flex justify-end">
           <div className="w-[164px] h-4 flex gap-6 ">
             <div className="w-[70px] h-full flex gap-2 items-center justify-end">
@@ -83,8 +83,8 @@ export default function WeekSchedule() {
                                 id={`${pI}` + `${cI}` + i.toString()}
                                 key={i}
                                 className={`relative flex flex-col p-[5px] gap-2 outline outline-1 rounded ${
-                                  data.type === 'duration' ? 'outline-primary-200' : 'outline-orange-200'
-                                } bg-[#FDFCF8] cursor-pointer`}
+                                  data.type === 'duration' ? 'outline-primary-200 bg-primary-50' : 'outline-orange-200 bg-secondary-50'
+                                }  cursor-pointer`}
                                 onMouseMove={handleMouseMove}
                                 onMouseEnter={handleMouseEnter}
                                 onMouseLeave={handelMouseLeave}
@@ -145,19 +145,19 @@ export default function WeekSchedule() {
 
                                 <div
                                   className={`flex flex-col gap-[2px] px-1 py-[5px] rounded ${
-                                    data.type === 'duration' ? 'bg-[#F0EFFF]' : 'bg-[#FFF0E3]'
+                                    data.type === 'duration' ? 'bg-primary-100' : 'bg-secondary-100'
                                   }`}
                                 >
                                   <span
                                     className={`h-4 ${
-                                      data.type === 'duration' ? 'text-primary-600' : 'text-orange-500'
+                                      data.type === 'duration' ? 'text-primary-600' : 'text-secondary-600'
                                     } text-[13px] font-bold`}
                                   >
                                     {data.startTime.split(':')[0]}:{data.startTime.split(':')[1]}
                                   </span>
                                   <span
                                     className={`w-full h-[15px] ${
-                                      data.type === 'duration' ? 'text-[#9B81FE]' : 'text-orange-400'
+                                      data.type === 'duration' ? 'text-[#9B81FE]' : 'text-secondary-400'
                                     } text-xs font-semibold`}
                                   >
                                     {data.lessonTime}분
@@ -166,14 +166,14 @@ export default function WeekSchedule() {
                                 <div className="flex flex-col gap-[2px]">
                                   <div
                                     className={`w-full max-h-[42px] overflow-hidden text-ellipsis line-clamp-2 ${
-                                      data.type === 'duration' ? 'text-primary-500' : 'text-orange-400'
+                                      data.type === 'duration' ? 'text-primary-500' : 'text-secondary-500'
                                     } text-[14px] font-bold`}
                                   >
                                     {data.name}
                                   </div>
                                   <span
                                     className={`w-full ${
-                                      data.type === 'duration' ? 'text-primary-600' : 'text-orange-500'
+                                      data.type === 'duration' ? 'text-primary-600' : 'text-secondary-400'
                                     } text-xs font-bold`}
                                   >
                                     {data.teacher}

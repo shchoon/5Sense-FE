@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
 
 @layer components {
   input:-webkit-autofill {
@@ -22,14 +21,6 @@
   .box-flex {
     @apply flex flex-col justify-center items-center;
   }
-
-  .side-info {
-    @apply mt-[130px] w-[296px] max-w-[504px] h-full box-border lg:px-4 xl:px-6 3xl:px-0 3xl:flex-grow flex-shrink-0 flex flex-col items-center gap-16;
-  }
-
-  /* .m-placeholder {
-    @apply text-gray-300 text-2xl font-semibold;
-  } */
 
   .class-box {
     @apply w-full flex flex-col gap-[40px] px-6 py-8 bg-white rounded-xl border border-gray-200;
@@ -121,6 +112,6 @@
 @layer base {
   body {
     min-width: 100vw;
-    /* font-family: Pretendard; */
+    font-smooth: always;
   }
 }
