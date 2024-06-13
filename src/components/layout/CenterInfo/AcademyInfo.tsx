@@ -9,6 +9,7 @@ import DefaultProfile from './DefualtProfile'
 import { formatPhoneNum } from '@/utils'
 
 export interface CenterInfo {
+  status: string
   name: string
   address: string
   mainPhone: string
@@ -25,21 +26,14 @@ export default function AcademyInfo() {
   const getCenterInfoData = async () => {
     try {
       const result = await getCenterInfo()
-      setCenterInfo({ ...result.data.data })
+      setCenterInfo(() => ({ ...result.data.data, status: 'success' }))
     } catch (err) {
-      console.log(err)
       throw err
     }
   }
-  useEffect(() => {
-    getCenterInfoData()
-  }, [])
-
-  return (
-    <div className="w-full flex flex-col items-center gap-7">
-      {centerInfo === undefined ? (
-        <DefaultProfile />
-      ) : (
+  const renderProfile = () => {
+    if (centerInfo) {
+      return centerInfo.status !== undefined ? (
         <div className="w-full flex flex-col items-center gap-4">
           <Image className="rounded-full" src={centerInfo.profile} alt="profile" width={90} height={90} />
           <div className="w-full flex flex-col items-center gap-2">
@@ -48,7 +42,18 @@ export default function AcademyInfo() {
             <p className={`text-white h-3 text-xs font-medium`}>{centerInfo.address}</p>
           </div>
         </div>
-      )}
+      ) : (
+        <DefaultProfile />
+      )
+    }
+  }
+  useEffect(() => {
+    getCenterInfoData()
+  }, [])
+
+  return (
+    <div className="w-full flex flex-col items-center gap-7">
+      {renderProfile()}
       <button
         className="max-w-[200px] w-full px-4 py-3 bg-slate-50 opacity-20 rounded-md text-center text-sm font-bold leading-[21px] cursor-pointer"
         onClick={() => router.push('/centerInfo')}
