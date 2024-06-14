@@ -101,7 +101,7 @@ export default function Calendar({ page }: { page: string }) {
             onClick={onClickDatePickerHandler}
           >
             <CalendarIcon className='text-gray-500' />
-            <span className='w-[117px] h-6 flex items-center font-semibold text-[16px]'>{calendarDate.year}년 {calendarDate.month + 1}월 {calendarDate.date}일</span>
+            <span className='h-6 flex items-center font-semibold text-[16px]'>{calendarDate.year}년 {calendarDate.month + 1}월 {calendarDate.date}일</span>
           </div>
           <div
             className="h-10 w-10 border p-2 rounded border-gray-200 bg-white flex items-center cursor-pointer"
