@@ -52,6 +52,34 @@ const customTheme: CustomFlowbiteTheme = {
       base: 'flex h-fit items-center px-2 py-1 rounded',
       color: {}
     }
+  },
+  drawer: {
+    root: {
+      base: 'fixed z-40 overflow-y-hidden bg-white px-6 transition-transform dark:bg-gray-800',
+      backdrop: 'fixed inset-0 z-30 bg-gray-900/50 dark:bg-gray-900/80',
+      edge: 'bottom-16',
+      position: {
+        left: {
+          on: 'left-0 top-0 h-screen w-[480px] rounded-tr-[32px] transform-none',
+          off: 'hidden'
+        }
+      }
+    },
+    header: {
+      inner: {
+        closeButton:
+          'absolute end-6 top-6 flex h-[35px] w-[35px] items-center justify-center rounded-full bg-[#F0EFFF] text-sm text-[#7354E8] ',
+        closeIcon: 'h-5 w-5',
+        titleIcon: 'hidden'
+      },
+      collapsed: {
+        on: 'hidden',
+        off: 'block'
+      }
+    },
+    items: {
+      base: 'mt-12 overflow-y-auto h-screen-minus-72'
+    }
   }
 }
 

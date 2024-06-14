@@ -201,6 +201,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      height: {
+        'screen-minus-72': 'calc(100vh - 72px)'
+      },
       screens: {
         md: { min: '769px' },
         lg: { min: '1025px' }, // ~1025
