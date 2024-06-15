@@ -124,7 +124,7 @@ export default function WeekCalendar() {
               className="w-full px-3 py-2 flex justify-center gap-2 items-center gray-900-semibold text-base  cursor-pointer hover:text-primary-600"
               onClick={onClickDatePickerHandler}
             >
-              <CalendarIcon />
+              <CalendarIcon className='text-gray-500' />
               {weekData.year}년 {weekData.month + 1}월 {weekData.week}주차
             </div>
             <div

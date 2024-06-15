@@ -13,6 +13,7 @@ import { modalState } from '@/lib/state/modal'
 import DetailClassModal from '@/components/modal/DetailClassModal'
 import NoneResult from '@/components/common/NoneResult'
 import ContentHeader from '@/components/common/ContentHeader'
+import { Drawer } from 'flowbite-react'
 
 interface classType {
   category: string
@@ -30,6 +31,10 @@ export default function ClassPage() {
   const filterValue = useRecoilValue(filterState)
   const modal = useRecoilValue(modalState)
   const setModal = useSetRecoilState(modalState)
+
+  const [isOpen, setIsOpen] = useState(true)
+
+  const handleClose = () => setIsOpen(false)
 
   const [classList, setClassList] = useState<classType[]>([])
   const [props, setProps] = useState<{ id: number; type: string }>({
@@ -172,6 +177,15 @@ export default function ClassPage() {
         </Modal>
       )}
       {isRefresh && classList.length === 0 && <NoneResult />} */}
+      <Drawer open={isOpen} onClose={handleClose}>
+        <Drawer.Header />
+        <Drawer.Items>
+          <div className=" bg-red-50">
+            <div className="h-[700px]">byebye</div>
+            <div className="h-[600px]">byebye</div>
+          </div>
+        </Drawer.Items>
+      </Drawer>
     </div>
   )
 }
