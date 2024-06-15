@@ -53,9 +53,5 @@ export function getKoreanNumber(value: string) {
 }
 
 export const formatPhoneNum = (phoneNumber: string) => {
-  const part1 = phoneNumber.slice(0, 3)
-  const part2 = phoneNumber.slice(3, 7)
-  const part3 = phoneNumber.slice(7, 11)
-
-  return `${part1}-${part2}-${part3}`
+  return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
 }

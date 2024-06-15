@@ -125,7 +125,7 @@ export default function ClassPage() {
   }, [metaData])
 
   return (
-    <div className="w-full overflow-x-hidden">
+    <div className="w-full">
       <ContentHeader title="클래스 관리" btnName="클래스 등록" onClick={() => router.push('class/register')} />
       <ClassFilter />
       <div className="container w-full grid grid-cols-2 2xl:grid-cols-3 gap-[20px] mt-5">

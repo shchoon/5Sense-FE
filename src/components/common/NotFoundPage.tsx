@@ -7,7 +7,7 @@ interface IProps {
 }
 export default function NotFoundPage({ title, subTitle, button }: IProps) {
   return (
-    <div className="relative w-full lg:h-[832px] h-[658px] bg-white rounded-2xl lg:bottom-[22px] bottom-4">
+    <div className="relative flex-1 bg-white rounded-2xl lg:bottom-[22px] bottom-4">
       <div className="w-full h-full flex justify-center items-center">
         <div className="flex flex-col items-center ">
           <Image src="/assets/images/notFound.svg" alt="not-Found" width={148} height={148} />

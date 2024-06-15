@@ -15,6 +15,7 @@ import { getCenterInfo } from '@/lib/api/center'
 import NotFoundPage from '@/components/common/NotFoundPage'
 
 import PlusIcon from '@/icons/icon/plus.svg'
+import { centerInfoState } from '@/lib/state/centerInfoState'
 
 export interface CenterInfo {
   name: string
@@ -37,7 +38,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     setIsClickedMenu(false)
   }
 
-  const [centerInfo, setCenterInfo] = useState<CenterInfo>()
+  const centerInfo = useRecoilValue(centerInfoState)
+  const setCenterInfo = useSetRecoilState(centerInfoState)
 
   const [isExistCenter, setIsExistCenter] = useState<boolean>()
 
@@ -55,11 +57,11 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   const renderContents = () => {
     if (isExistCenter === undefined) {
       return (
-        <div className="relative w-full lg:h-[832px] h-[658px] bg-white rounded-2xl lg:bottom-[22px] bottom-4"></div>
+        <div className="relative flex-1 lg:h-[832px] h-[658px] bg-white rounded-2xl lg:bottom-[22px] bottom-4"></div>
       )
     }
     if (isExistCenter) {
-      return <div className="relative w-full bg-white rounded-2xl lg:bottom-[22px] bottom-4">{children}</div>
+      return <div className="relative flex-1 w-full bg-white rounded-2xl lg:bottom-[22px] bottom-4">{children}</div>
     }
     return (
       <NotFoundPage
@@ -87,16 +89,16 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   }, [])
 
   return (
-    <div className={`w-screen min-h-screen h-full`}>
+    <div className={`w-screen h-screen`}>
       <div className={`w-full h-full`}>
         <MobileHeader />
         <PcHeader />
-        <div className="w-full flex lg:pl-0 2xl:pr-12 xl:pr-8 lg:pr-4 md:px-12 px-6">
+        <div className="w-full h-full flex lg:pl-0 2xl:pr-12 xl:pr-8 lg:pr-4 md:px-12 px-6">
           <div className="w-full box-content mt-[180px] max-w-[248px] xl:px-6 lg:px-4 lg:block hidden">
             <AcademyInfo centerInfo={centerInfo} isExistCenter={isExistCenter} />
             <TodaySchedule />
           </div>
-          <div className="w-full lg:pt-[66px]">
+          <div className="flex-1 flex flex-col lg:pt-[66px]">
             <Navbar />
             {renderContents()}
             <Footer />

@@ -28,14 +28,16 @@ interface snsLinkType {
 }
 
 export default function ManageMent() {
-  const [centerInfo, setCenterinfo] = useState({
+  /* const [centerInfo, setCenterinfo] = useState({
     name: '',
     address: '',
     mainPhone: '',
     open: '',
     close: '',
     profile: ''
-  })
+  }) */
+ const centerInfo = useRecoilValue(centerInfoState)
+ const setCenterInfo = useSetRecoilState(centerInfoState)
   const [patchData, setPatchData] = useState({
     name: '',
     address: '',
@@ -171,6 +173,27 @@ export default function ManageMent() {
     setSnsModal(false)
   }
 
+  const inputList = [
+    {
+      title: '센터명',
+      name: 'name',
+      value: patchData.name,
+      placeholder: '센터명을 입력해주세요.'
+    },
+    {
+      title: '주소',
+      name: 'address',
+      value: patchData.address,
+      placeholder: '주소를 입력해주세요.'
+    },
+    {
+      title: '대표번호',
+      name: 'mainPhone',
+      value: patchData.mainPhone,
+      placeholder: '대표번호를 입력해주세요.'
+    }
+  ]
+
   useEffect(() => {
     instance.get('/centers/my').then((res) => {
       const centerData = res.data.data
@@ -185,29 +208,29 @@ export default function ManageMent() {
           title: centerData.close
         }
       }))
-      setCenterinfo(prev => ({...centerData}))
+      setCenterInfo(prev => ({...centerData}))
       setPatchData(prev => ({...centerData}))
     })
   }, [])
-console.log(patchData)
+
   return (
     <>
        {patchData.name !== '' &&  <div className="w-[640px] flex flex-col gap-5 justify-center">
           <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></Script>
           <form
-            className="w-full px-6 py-8 flex flex-col rounded-xl border border-gray-200 justify-center gap-10"
+            className="w-full px-6 py-8 flex flex-col rounded-xl border border-gray-200 items-start gap-10"
             onSubmit={e => {
               e.preventDefault()
               handleClickPatch()
             }}
           >
-            <div className="gray-900-bold text-xl ">센터 정보</div>
+            <div className="gray-900-bold text-xl h-5 leading-5">센터 정보</div>
             <div className="w-full flex flex-col items-center gap-10">
-              <div className="relative w-[140px] flex flex-col items-center">
+              <div className="w-[140px] h-[156px] flex flex-col items-center gap-[-18px]">
                 <div className="w-[140px] h-[140px] ">
                     <Image src={patchData.profile} className="rounded-full" width={140} height={140} alt="profile" />
-                  </div>
-                <div className="absolute left-[35px] top-[124px] bg-white w-[70px] h-[34px] pl-2.5 pr-3 py-2 flex justify-center rounded-lg border border-primary-600">
+                </div>
+                <div className="bg-white w-[70px] h-[34px] pl-2.5 pr-3 py-2 flex justify-center rounded-lg border border-primary-600">
                   <input
                     id="file"
                     type="file"
@@ -231,44 +254,44 @@ console.log(patchData)
                 </div>
               </div>
               <div className="w-full flex flex-col gap-4">
+                {inputList.map((data,i) => {
+                  return (
+                    <div className='w-full flex flex-col gap-2' key={i}>
+                  <span className='text-base gray-800-semibold'>{data.title}</span>
                 <input
-                  name="name"
-                  value={patchData.name}
+                  name={data.name}
+                  value={data.value}
                   onChange={e => {
                     onChangeHandler(e)
                   }}
-                  className="w-full h-[60px] px-4 border rounded-lg border-gray-200 focus:outline-none focus:border-primary-700 focus:bg-gray-50"
-                  placeholder="센터명을 입력해주세요."
+                  className="w-full h-[52px] px-4 border rounded-lg border-gray-200 focus:outline-none focus:border-primary-700 focus:bg-gray-50"
+                  placeholder={data.placeholder}
                 />
-                <input
-                  name="address"
-                  value={patchData.address}
-                  onClick={onClickAddress}
-                  className="w-full h-[60px] px-4 border rounded-lg border-gray-200 focus:outline-none focus:border-primary-700 focus:bg-gray-50"
-                  placeholder="주소를 입력해주세요"
-                />
-                <input
-                  name="mainPhone"
-                  value={patchData.mainPhone}
-                  onChange={e => {
-                    onChangeHandler(e)
-                  }}
-                  className="w-full h-[60px] px-4 border rounded-lg border-gray-200 focus:outline-none focus:border-primary-700 focus:bg-gray-50"
-                  placeholder="대표번호를 입력해주세요"
-                />
-                <div className="flex gap-2">
-                  <DropDown
-                    {...dropDownProps.open}
-                    handleChangeParentsOpenTimeData={handleChangeDropwdownFromChild}
-                    type="open"
-                  />
-                  <span className="flex items-center">-</span>
-                  <DropDown
-                    {...dropDownProps.close}
-                    handleChangeParentsCloseTimeData={handleChangeCloseTimeFromChild}
-                    type="close"
-                  />
                 </div>
+                  )
+                })}
+                <div className='w-full flex flex-col gap-2'>
+                <span className='text-base gray-800-semibold'>영업시간</span>
+                  <div className="flex gap-3">
+                    <div className='w-full flex gap-2 items-center'>
+                    <DropDown
+                      {...dropDownProps.open}
+                      handleChangeParentsOpenTimeData={handleChangeDropwdownFromChild}
+                      type="open"
+                    />
+                    <span className='text-[14px] gray-800-normal'>부터</span>
+                    </div>
+                    <div className='w-full flex gap-2 items-center'>
+                    <DropDown
+                      {...dropDownProps.close}
+                      handleChangeParentsCloseTimeData={handleChangeCloseTimeFromChild}
+                      type="close"
+                    />
+                    <span className='text-[14px] gray-800-normal'>까지</span>
+                    </div>
+                  </div>
+                </div>
+                
               </div>
               <button type="submit" className="w-full h-[52px] btn-purple">
                 수정하기
