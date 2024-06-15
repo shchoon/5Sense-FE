@@ -108,7 +108,7 @@ export default function DropDown(props: IProps) {
   useOnClickOutside(dropdownRef, handleClickOutsideOfDropdown)
 
   return (
-    <div ref={dropdownRef} className="w-full relative">
+    <div ref={dropdownRef} className="flex-1 relative">
       <div className="relative w-full flex items-center">
         <button
           type="button"
