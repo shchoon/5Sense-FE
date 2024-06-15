@@ -1,9 +1,10 @@
 import { atom } from 'recoil'
-import { centerDataType } from '@/app/myCenter/register/page'
+import { CenterInfo } from '@/components/layout/CenterInfo/AcademyInfo'
 
-export const centerInfoState = atom<centerDataType>({
+export const centerInfoState = atom<CenterInfo>({
   key: 'centerInfo',
   default: {
+    status: '',
     name: '',
     address: '',
     mainPhone: '',

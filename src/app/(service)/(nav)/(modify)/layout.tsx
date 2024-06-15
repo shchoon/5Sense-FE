@@ -25,14 +25,16 @@ export default function ModifyPage({ children }: { children: React.ReactNode }) 
       title: '회원 탈퇴'
     }
   ]
+
   return (
     <div className="w-full flex flex-col items-center pb-[60px]">
       <ContentHeader title='내 프로필 관리' back onClick={() => router.push('/home')} />
-      <div className="w-full flex justify-center pb-6">
-        <div className="w-[384px] h-6 flex gap-3.5">
+      <div className="w-[640px] flex pb-6">
+        <div className="h-6 flex gap-4">
           {linkList.map((data, i) => {
             return (
-              <div
+              <div className='flex items-center gap-4'>
+                <div
                 key={i}
                 className={`${
                   pathName === data.url ? 'text-indigo-500' : 'text-gray-400'
@@ -40,6 +42,8 @@ export default function ModifyPage({ children }: { children: React.ReactNode }) 
                 onClick={() => router.push(data.url)}
               >
                 {data.title}
+              </div>
+              {i !== 3 && <span className='w-px h-[14px] bg-gray-300'/>}
               </div>
             )
           })}

@@ -2,8 +2,10 @@
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Image from 'next/image'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { getCenterInfo } from '@/lib/api/center'
+import { centerInfoState } from '@/lib/state/centerInfoState'
 import { useEffect } from 'react'
 import DefaultProfile from './DefualtProfile'
 import { formatPhoneNum } from '@/utils'
@@ -21,7 +23,9 @@ export interface CenterInfo {
 export default function AcademyInfo() {
   const router = useRouter()
 
-  const [centerInfo, setCenterInfo] = useState<CenterInfo>()
+  const centerInfo = useRecoilValue(centerInfoState)
+  const setCenterInfo = useSetRecoilState(centerInfoState)
+  //const [centerInfo, setCenterInfo] = useState<CenterInfo>()
 
   const getCenterInfoData = async () => {
     try {
@@ -33,7 +37,7 @@ export default function AcademyInfo() {
   }
   const renderProfile = () => {
     if (centerInfo) {
-      return centerInfo.status !== undefined ? (
+      return centerInfo.status !== '' ? (
         <div className="w-full flex flex-col items-center gap-4">
           <Image className="rounded-full" src={centerInfo.profile} alt='profile' width={90} height={90} />
           <div className="w-full flex flex-col items-center gap-2">
@@ -49,7 +53,7 @@ export default function AcademyInfo() {
   }
   useEffect(() => {
     getCenterInfoData()
-  }, [])
+  }, [centerInfo])
 
   return (
     <div className="w-full flex flex-col items-center gap-7">
