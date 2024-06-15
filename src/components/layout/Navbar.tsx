@@ -65,8 +65,6 @@ const menu: Menu[] = [
 export default function Navbar() {
   const pathname = usePathname()
 
-  console.log(pathname)
-
   const router = useRouter()
 
   return (

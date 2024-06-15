@@ -39,7 +39,7 @@ export default function AcademyInfo() {
     if (centerInfo) {
       return centerInfo.status !== '' ? (
         <div className="w-full flex flex-col items-center gap-4">
-          <Image className="rounded-full" src={centerInfo.profile} alt='profile' width={90} height={90} />
+          <Image className="rounded-full" src={centerInfo.profile} alt="profile" width={90} height={90} />
           <div className="w-full flex flex-col items-center gap-2">
             <p className={`text-white text-[21px] font-bold`}>{centerInfo.name}</p>
             <p className={`text-white h-[14px] text-sm font-medium`}>{formatPhoneNum(centerInfo.mainPhone)}</p>
@@ -53,7 +53,7 @@ export default function AcademyInfo() {
   }
   useEffect(() => {
     getCenterInfoData()
-  }, [centerInfo])
+  }, [])
 
   return (
     <div className="w-full flex flex-col items-center gap-7">
