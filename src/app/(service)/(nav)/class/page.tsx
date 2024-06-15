@@ -11,7 +11,7 @@ import { filterStateType } from '@/lib/filter/filterState'
 import Modal from '@/components/common/modal'
 import { modalState } from '@/lib/state/modal'
 import DetailClassModal from '@/components/modal/DetailClassModal'
-import NoneResult from '@/components/common/NoneResult'
+
 import ContentHeader from '@/components/common/ContentHeader'
 import { Drawer } from 'flowbite-react'
 
