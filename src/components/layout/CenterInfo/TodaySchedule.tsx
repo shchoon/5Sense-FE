@@ -18,12 +18,13 @@ interface getLessonDataType {
 
 // 메인에서 스케줄 받아오고 저장해서 모달에서도 햄버거 버튼때도 사용해야함
 export default function TodaySchedule() {
-  const currentDate = new Date()
-  const currentDateData: dateDataType = {
-    year: currentDate.getFullYear(),
-    month: currentDate.getMonth() + 1,
-    date: currentDate.getDate()
+  const Today = new Date()
+  const formattedToday: dateDataType = {
+    year: Today.getFullYear(),
+    month: Today.getMonth() + 1,
+    date: Today.getDate()
   }
+
   const [todayLessonData, setTodayLessonData] = useState<{ startTime: string; endTime: string; className: string }[][]>(
     []
   )
@@ -33,8 +34,8 @@ export default function TodaySchedule() {
   })
 
   useEffect(() => {
-    instance(`/lessons/${currentDateData.year}/${currentDateData.month}`).then(res => {
-      const classData: getLessonDataType[] = res.data.data[currentDateData.date - 1]
+    instance(`/lessons/${formattedToday.year}/${formattedToday.month}`).then(res => {
+      const classData: getLessonDataType[] = res.data.data[formattedToday.date - 1]
       setPageData(prev => ({
         ...prev,
         wholePage: Math.ceil(classData.length / 5)
@@ -76,7 +77,7 @@ export default function TodaySchedule() {
           <div className="today flex w-fit h-[29px] items-center box-border px-2 py-1 gap-[6px] bg-primary-100 rounded">
             <span className="bold-500 text-sm leading-[21px]">TODAY</span>
             <span className="medium-500 text-sm leading-[21px]">
-              {currentDateData.year}/{currentDateData.month}/{currentDateData.date}
+              {formattedToday.year}/{formattedToday.month}/{formattedToday.date}
             </span>
           </div>
           <div className="w-full flex flex-col gap-1.5">

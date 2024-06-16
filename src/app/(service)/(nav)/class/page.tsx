@@ -177,7 +177,7 @@ export default function ClassPage() {
         </Modal>
       )}
       {isRefresh && classList.length === 0 && <NoneResult />} */}
-      <Drawer open={isOpen} onClose={handleClose}>
+      {/* <Drawer open={isOpen} onClose={handleClose}>
         <Drawer.Header />
         <Drawer.Items>
           <div className=" bg-red-50">
@@ -185,7 +185,7 @@ export default function ClassPage() {
             <div className="h-[600px]">byebye</div>
           </div>
         </Drawer.Items>
-      </Drawer>
+      </Drawer> */}
     </div>
   )
 }
