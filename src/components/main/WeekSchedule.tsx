@@ -3,10 +3,10 @@ import { useState, useRef, useEffect, useLayoutEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { dateDataType } from '../common/calendar/datePicker/dayDatePIcker'
-import WeekDataFormatter from '../common/calendar/WeekDataFormatter'
+import WeekDataFormatter from './DataFormatter/WeekDataFormatter'
 import { WeekCalendarDateState } from '@/lib/state/calendar/WeekCalendarDateState'
 import instance from '@/lib/api/axios'
-import { DetailClassState } from '@/lib/state/detailClassState'
+import { WeekDetailClassState } from '@/lib/state/weekDetailClassState'
 import { getSesstionLessons } from '@/lib/api/class'
 
 interface IProps {
@@ -15,7 +15,7 @@ interface IProps {
 }
 
 export default function WeekSchedule() {
-  const setDetailClassState = useSetRecoilState(DetailClassState)
+  const setDetailClassState = useSetRecoilState(WeekDetailClassState)
   const weekData = useRecoilValue(WeekCalendarDateState)
   const [cursorPosition, setCursorPosition] = useState<{
     x: number

@@ -1,4 +1,5 @@
-import { dateDataType } from './datePicker/dayDatePIcker'
+import { dateDataType } from "@/components/common/calendar/datePicker/dayDatePIcker"
+
 
 export default function WeekDataFormatter(data: any, dateData: dateDataType) {
   const formatData = []

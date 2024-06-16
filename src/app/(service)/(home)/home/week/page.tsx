@@ -6,13 +6,13 @@ import WeekCalendar from '@/components/common/calendar/WeekCalendar'
 import WeekSchedule from '@/components/main/WeekSchedule'
 import { WeekCalendarDateState } from '@/lib/state/calendar/WeekCalendarDateState'
 import { Drawer } from 'flowbite-react'
-import { DetailClassState } from '@/lib/state/detailClassState'
+import { WeekDetailClassState } from '@/lib/state/weekDetailClassState'
 import instance from '@/lib/api/axios'
 import { changePhoneNUmberToString } from '@/utils'
 
 export default function MainPageWeek() {
-  const detailClassState = useRecoilValue(DetailClassState)
-  const setDetailClassState = useSetRecoilState(DetailClassState)
+  const detailClassState = useRecoilValue(WeekDetailClassState)
+  const setDetailClassState = useSetRecoilState(WeekDetailClassState)
   const weekdata = useRecoilValue(WeekCalendarDateState)
   const [isOpen, setIsOpen] = useState(false)
 
@@ -20,7 +20,7 @@ export default function MainPageWeek() {
 
   const [classDetail,setClassDetail] = useState({
     type: '',
-    categoryName: '수영',
+    categoryName: '',
     className: '',
     capacity: 0,
     teacher: '',

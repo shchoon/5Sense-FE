@@ -22,6 +22,10 @@ export function changePhoneNUmberToString(phoneNumber: string) {
   }
 }
 
+export function formatClassTime(classTime: string) {
+  return classTime.slice(0, 5)
+}
+
 export function getKoreanNumber(value: string) {
   const koreanNumber = ['', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구']
   const tenUnit = ['', '십', '백', '천']

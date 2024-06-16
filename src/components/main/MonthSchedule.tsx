@@ -1,8 +1,11 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
+import { useSetRecoilState } from 'recoil'
 
 import { MonthDateType } from '@/lib/state/calendar/MonthCalendarDateState'
 import instance from '@/lib/api/axios'
+import FormatDayData from './DataFormatter/FormatDayData'
+import { MonthDetailClassState } from '@/lib/state/monthDetailClassState'
 
 interface IProps {
   dateData: MonthDateType
@@ -12,29 +15,54 @@ export default function MonthSchedule({ dateData }: IProps) {
   const currentDay = new Date().getDate()
   const dayOfTheWeek = ['SUN', 'MON', 'TUE', 'WED', 'THUR', 'FRI', 'SAT']
 
-  const [classData, setClassData] = useState<{ day?: number; duration?: number; session?: number }[]>([])
+  const setClassDetails = useSetRecoilState(MonthDetailClassState)
 
+  const [classData, setClassData] = useState<any>([])
   useEffect(() => {
     const startDay = new Date(dateData.year, dateData.month, 0).getDay()
     instance(`/lessons/${dateData.year}/${dateData.month + 1}`).then(res => {
       const data = res.data.data
       let returnData = []
       for (var i = 0; i <= startDay; i++) {
-        returnData.push({})
+        returnData.push({day: null})
       }
-      for (var i = 0; i < data.length; i++) {
+      /* for (var i = 0; i < data.length; i++) {
         let day = i + 1
-        let duration = data[i].filter((data: any) => data.type == 'duration').length
-        let session = data[i].length - duration
+        const sortedData = data[i].sort(
+          (a: any, b: any) => Number(a.startTime.split(':')[0]) - Number(b.startTime.split(':')[0])
+        )
+        const filterData = []
+        if(sortedData.length !== 0) {
+          filterData.push(sortedData[0])
+          for (var j = 1; j < sortedData.length; j++) {
+            const target = filterData[filterData.length - 1]
+            if (target.id !== sortedData[j].id || target.startTime !== sortedData[j].startTime) {
+              filterData.push(sortedData[j])
+            }
+          }
+          let duration = filterData.filter((data: any) => data.type == 'duration').length
+        let session = filterData.length - duration
         returnData.push({
           day: day,
           duration: duration,
           session: session
         })
-      }
-      setClassData(returnData)
+        } else {
+        returnData.push({
+          day: day,
+          duration: 0,
+          session: 0
+        })
+        }
+        
+      } */
+     const formatData = FormatDayData(data)
+     console.log(formatData)
+      setClassData([...returnData, ...FormatDayData(data)])
     })
   }, [dateData.month])
+
+  console.log(classData)
 
   return (
     <div className="w-full flex flex-col gap-4 mx-auto xl:max-w-[1016px] pt-8">
@@ -66,30 +94,50 @@ export default function MonthSchedule({ dateData }: IProps) {
           })}
         </div>
         <div className="w-full grid grid-cols-7">
-          {classData.map((data, i) => {
+          {classData.map((data: any, i: number) => {
+            const startDay = new Date(dateData.year, dateData.month, 0).getDay()
+            let day = 0
+            if(data.day === undefined){
+              day = i + - startDay
+            }
+            let durations = 0
+            let sessions = 0
+            if(data.length !== 0) {
+              for(var i=0; i<data.length; i++){
+                const numOfDurations = data[i].data.filter(el => el.type === 'duration')
+                const numofSessions = data[i].data.length - numOfDurations
+                durations += numOfDurations
+                sessions += numofSessions
+              }
+              /* durations =  data.filter(el => el.data.type === 'duration').length
+              sessions = data.length - durations */
+            }
             return (
               <div
                 key={i}
                 className="w-full h-[180px] px-[10px] pt-[10px] pb-3 flex flex-col justify-between outline outline-1 outline-gray-200"
+                onClick={() => {
+                  setClassDetails(data)
+                }}
               >
-                {currentDay === data.day ? (
+                {currentDay === day ? (
                   <div className="w-7 h-7 flex items-center justify-center rounded-full bg-primary-600 text-white text-lg font-medium">
-                    {data.day}
+                    {day}
                   </div>
                 ) : (
                   <div className="w-7 h-[21px] flex items-center justify-center gray-500-medium text-lg">
-                    {data.day}
+                    {day}
                   </div>
                 )}
-                {data.day && (
+                {day !== 0 && (
                   <div className="w-full h-14 flex flex-col border border-1 border-primary-200">
                     <div className={`w-full flex items-center gap-1 h-7 px-2 py-[6px]`}>
                       <div className={`w-[14px] h-[14px] bg-primary-500 rounded`}></div>
-                      <div className={`flex-1 text-right text-primary-600 text-[13px] font-bold`}>{data.duration}개</div>
+                      <div className={`flex-1 text-right text-primary-600 text-[13px] font-bold`}>{durations}개</div>
                     </div>
                     <div className={`w-full flex gap-1 h-7 px-2 py-[6px]`}>
                       <div className={`w-[14px] h-[14px] bg-secondary-500  rounded`}></div>
-                      <div className={`flex-1 text-right text-secondary-600 text-[13px] font-bold`}>{data.session}개</div>
+                      <div className={`flex-1 text-right text-secondary-600 text-[13px] font-bold`}>{sessions}개</div>
                     </div>
                   </div>
                 )}
