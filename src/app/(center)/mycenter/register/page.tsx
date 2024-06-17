@@ -213,18 +213,23 @@ export default function MyCenter() {
             </div>
             <div className={inputBox}>
               <span className={label}>영업시간</span>
-              <div className="w-full flex gap-2">
-                <DropDown
-                  {...DropDownProps1}
-                  handleChangeParentsOpenTimeData={handleChangeStartTimeFromChild}
-                  type="open"
-                />
-                <div className="flex items-center gray-800-semibold text-base ">-</div>
-                <DropDown
-                  {...DropDownProps2}
-                  handleChangeParentsCloseTimeData={handleChangeCloseTimeFromChild}
-                  type="close"
-                />
+              <div className="w-full flex gap-3">
+                <div className="w-full flex gap-2 items-center">
+                  <DropDown
+                    {...DropDownProps1}
+                    handleChangeParentsOpenTimeData={handleChangeStartTimeFromChild}
+                    type="open"
+                  />
+                  <span className="gray-800-normal text-[14px]">부터</span>
+                </div>
+                <div className="w-full flex gap-2 items-center">
+                  <DropDown
+                    {...DropDownProps2}
+                    handleChangeParentsCloseTimeData={handleChangeCloseTimeFromChild}
+                    type="close"
+                  />
+                  <span className="gray-800-normal text-[14px]">까지</span>
+                </div>
               </div>
             </div>
           </div>
