@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import instance from '@/lib/api/axios'
 import { dateDataType } from '../../common/calendar/datePicker/dayDatePIcker'
 import FormatDayData from '@/components/main/DataFormatter/FormatDayData'
+import { calculateEndTime, formatStartTime } from '@/utils'
 
 interface getLessonDataType {
   id: number
@@ -25,9 +26,7 @@ export default function TodaySchedule() {
     month: currentDate.getMonth() + 1,
     date: currentDate.getDate()
   }
-  const [todayLessonData, setTodayLessonData] = useState<{ startTime: string; endTime: string; className: string }[][]>(
-    []
-  )
+  const [todayLessonData, setTodayLessonData] = useState<{ startTime: string; lessonTime: number; name: string }[]>([])
   const [pageData, setPageData] = useState<{ wholePage: undefined | number; currentPage: number }>({
     wholePage: undefined,
     currentPage: 0
@@ -42,13 +41,13 @@ export default function TodaySchedule() {
       const formatData = []
       console.log(data)
       formatData.push(sortedData[0])
-      for(var i=1; i<sortedData.length; i++){
+      for (var i = 1; i < sortedData.length; i++) {
         const target = sortedData[i - 1]
-        if(sortedData[i].startTime !== target.startTime || sortedData[i].id !== target.id){
+        if (sortedData[i].startTime !== target.startTime || sortedData[i].id !== target.id) {
           formatData.push(sortedData[i])
         }
       }
-      console.log(formatData)
+      setTodayLessonData(formatData)
       /* const classData: getLessonDataType[] = res.data.data[currentDateData.date - 1]
       setPageData(prev => ({
         ...prev,
@@ -84,6 +83,7 @@ export default function TodaySchedule() {
       setTodayLessonData(result) */
     })
   }, [])
+
   return (
     <>
       {todayLessonData.length !== 0 && (
@@ -96,16 +96,18 @@ export default function TodaySchedule() {
           </div>
           <div className="w-full flex flex-col gap-1.5">
             {todayLessonData.length !== 0 &&
-              todayLessonData[pageData.currentPage].map((item, idx) => (
-                <div key={idx} className="flex flex-col">
+              todayLessonData.map((data, i) => (
+                <div key={i} className="flex flex-col">
                   <div className="before:inline-block before:w-[6px] before:h-[6px] before:rounded-full before:bg-primary-500 before:mr-2">
-                    <span className="text-gray-500 text-xs font-semibold   leading-[18px]">{item.startTime}</span>
+                    <span className="text-gray-500 text-xs font-semibold   leading-[18px]">
+                      {formatStartTime(data.startTime)}
+                    </span>
                     <span className="text-gray-500 text-xs font-semibold   leading-[18px] before:content-['-'] before:px-1">
-                      {item.endTime}
+                      {calculateEndTime(data.startTime, data.lessonTime)}
                     </span>
                   </div>
                   <div className="pl-4 mr-0 text-['#1F2A37'] text-[13px] font-semibold   leading-tight">
-                    {item.className}
+                    {data.name}
                   </div>
                 </div>
               ))}

@@ -22,13 +22,31 @@ export function changePhoneNumberToString(phoneNumber: string) {
   }
 }
 
-export function formatClassTime(classTime: string) {
+export function formatStartTime(classTime: string) {
   return classTime.slice(0, 5)
 }
 
+export function calculateEndTime(startTime: string, lessonTime: number) {
+  const divisionLessonTime = {
+    hour: Math.floor(lessonTime / 60),
+    min: lessonTime % 60
+  }
+
+  let endTime = {
+    hour: Number(startTime.split(':')[0]) + divisionLessonTime.hour,
+    min: Number(startTime.split(':')[1]) + divisionLessonTime.min
+  }
+
+  if (endTime.min === 60) {
+    return endTime.hour + 1 + ':00'
+  } else {
+    return endTime.hour + ':' + endTime.min
+  }
+}
+
 export function formatLessonDate(date: string) {
-    const formatDate = date.slice(0, 10).split('-')
-    return formatDate[0] + '.' + formatDate[1] + '.' + formatDate[2]
+  const formatDate = date.slice(0, 10).split('-')
+  return formatDate[0] + '.' + formatDate[1] + '.' + formatDate[2]
 }
 
 export function getKoreanNumber(value: string) {
