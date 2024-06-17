@@ -10,7 +10,7 @@ export function toLocalString(number: string) {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
-export function changePhoneNUmberToString(phoneNumber: string) {
+export function changePhoneNumberToString(phoneNumber: string) {
   if (phoneNumber.slice(0, 2) === '02') {
     if (phoneNumber.length === 9) {
       return phoneNumber.slice(0, 2) + '-' + phoneNumber.slice(2, 5) + '-' + phoneNumber.slice(5, 9)
@@ -24,6 +24,11 @@ export function changePhoneNUmberToString(phoneNumber: string) {
 
 export function formatClassTime(classTime: string) {
   return classTime.slice(0, 5)
+}
+
+export function formatLessonDate(date: string) {
+    const formatDate = date.slice(0, 10).split('-')
+    return formatDate[0] + '.' + formatDate[1] + '.' + formatDate[2]
 }
 
 export function getKoreanNumber(value: string) {

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 
 import instance from '@/lib/api/axios'
 import { dateDataType } from '../../common/calendar/datePicker/dayDatePIcker'
+import FormatDayData from '@/components/main/DataFormatter/FormatDayData'
 
 interface getLessonDataType {
   id: number
@@ -34,7 +35,21 @@ export default function TodaySchedule() {
 
   useEffect(() => {
     instance(`/lessons/${currentDateData.year}/${currentDateData.month}`).then(res => {
-      const classData: getLessonDataType[] = res.data.data[currentDateData.date - 1]
+      const data = res.data.data[currentDateData.date - 1]
+      const sortedData = data.sort(
+        (a: any, b: any) => Number(a.startTime.split(':')[0]) - Number(b.startTime.split(':')[0])
+      )
+      const formatData = []
+      console.log(data)
+      formatData.push(sortedData[0])
+      for(var i=1; i<sortedData.length; i++){
+        const target = sortedData[i - 1]
+        if(sortedData[i].startTime !== target.startTime || sortedData[i].id !== target.id){
+          formatData.push(sortedData[i])
+        }
+      }
+      console.log(formatData)
+      /* const classData: getLessonDataType[] = res.data.data[currentDateData.date - 1]
       setPageData(prev => ({
         ...prev,
         wholePage: Math.ceil(classData.length / 5)
@@ -66,7 +81,7 @@ export default function TodaySchedule() {
       for (var i = 0; i < list.length; i += 5) {
         result.push(list.slice(i, i + 5))
       }
-      setTodayLessonData(result)
+      setTodayLessonData(result) */
     })
   }, [])
   return (

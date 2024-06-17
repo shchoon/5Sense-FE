@@ -8,7 +8,7 @@ import { WeekCalendarDateState } from '@/lib/state/calendar/WeekCalendarDateStat
 import { Drawer } from 'flowbite-react'
 import { WeekDetailClassState } from '@/lib/state/weekDetailClassState'
 import instance from '@/lib/api/axios'
-import { changePhoneNUmberToString } from '@/utils'
+import { changePhoneNumberToString, formatLessonDate, formatClassTime } from '@/utils'
 
 export default function MainPageWeek() {
   const detailClassState = useRecoilValue(WeekDetailClassState)
@@ -25,7 +25,8 @@ export default function MainPageWeek() {
     capacity: 0,
     teacher: '',
     memo: '',
-    students: []
+    students: [],
+    schedules: []
   })
 
   useEffect(() => {
@@ -41,14 +42,15 @@ export default function MainPageWeek() {
           capacity: classData.capacity,
           teacher: classData.teacher.name,
           memo: classData.memo,
-          students: classData.registeredStudents
+          students: classData.registeredStudents,
+          schedules: classData.schedules && classData.schedules
         }))
       })
       setIsOpen(true)
     }
   }, [detailClassState])
 
-  console.log(detailClassState)
+  console.log(detailClassState, classDetail)
   return (
     <>
       <WeekCalendar />
@@ -102,20 +104,23 @@ export default function MainPageWeek() {
               <>
               <div className="w-full flex gap-8">
                 <div className="w-[150px] gray-500-medium text-base">• 기간 정보</div>
-                <div className="w-full gray-800-medium text-base">
-                  {/* {classDetail.duration[0].startDate} ~ {classDetail.duration[0].endDate} */}
-                  2024-06-15 ~ 2024-07-15
+                {classDetail.schedules.map((data, i) => {
+                  return (
+                    <div key={i} className="w-full gray-800-medium text-base">
+                      {formatLessonDate(data.startDate)} - {formatLessonDate(data.endDate)}
                 </div>
+                  )
+                })}
               </div>
               <div className="w-full flex gap-8">
                 <div className="w-[150px] gray-500-medium text-base">• 일정 정보</div>
-                {/* {classDetail.duration.map((data, index) => {
-                    return (
-                      <div key={index} className="w-full gray-800-medium text-base">
-                        {data.startTime} ~ {data.endTime} / {data.repeatDate}
+                {classDetail.schedules.map((data, i) => {
+                  return (
+                    <div key={i} className="w-full gray-800-medium text-base">
+                        {formatClassTime(data.startTime)} ~ {formatClassTime(data.endTime)} / {data.repeatDate}
                       </div>
-                    )
-                  })} */}
+                  )
+                })}
               </div>
               </>}
               <div className="w-full flex gap-8">
@@ -137,7 +142,7 @@ export default function MainPageWeek() {
                   <span className="w-[22px] text-primary-600 text-sm font-bold">{index + 1}</span>
                   <div className="w-full flex gap-2.5">
                     <div className="gray-800-medium text-sm">{data.name}</div>
-                    <div className="w-[102px] gray-500-normal text-sm">{changePhoneNUmberToString(data.phone)}</div>
+                    <div className="w-[105px] gray-500-normal text-sm">{changePhoneNumberToString(data.phone)}</div>
                     {classDetail.type === 'session' && (
                       <div className="text-primary-600 text-xs font-semibold">(잔여회차 : {data.sessionCount})</div>
                     )}

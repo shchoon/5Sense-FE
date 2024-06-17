@@ -157,7 +157,6 @@ export default function WeekSchedule() {
                                     </div>
                                   </div>
                                 )}
-
                                 <div
                                   className={`flex flex-col gap-[2px] px-1 py-[5px] rounded ${
                                     data.type === 'duration' ? 'bg-primary-100' : 'bg-secondary-100'

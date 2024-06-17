@@ -104,7 +104,7 @@ export default function MonthSchedule({ dateData }: IProps) {
             let sessions = 0
             if(data.length !== 0) {
               for(var i=0; i<data.length; i++){
-                const numOfDurations = data[i].data.filter(el => el.type === 'duration')
+                const numOfDurations = data[i].data.filter(el => el.type === 'duration').length
                 const numofSessions = data[i].data.length - numOfDurations
                 durations += numOfDurations
                 sessions += numofSessions

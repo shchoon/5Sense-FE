@@ -72,7 +72,7 @@ export default function MonthCalendar() {
 
   return (
     <>
-      <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
+      <div className="w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
         <div className="relative mx-auto flex gap-[138px] items-center w-full  h-[52px]  md:w-full ">
           <div className={`flex mx-auto w-[420px] h-full p-1.5 border rounded-md border-gray-100 bg-[#F8FAFD]`}>
             <div
