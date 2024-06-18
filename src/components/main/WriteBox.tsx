@@ -19,7 +19,8 @@ export default function WriteBox() {
         <div className="text-gray-600 text-base font-semibold">센터 메모</div>
         <textarea
           style={{ resize: 'none' }}
-          className={`w-full h-[96px] p-0 border-none focus:outline-none text-xl focus:font-normal font-bold focus:text-gray-900 text-gray-800 placeholder:text-gray-300 placeholder:text-xl placeholder:font-bold`}
+          className={`w-full h-[96px] p-0 border-none focus:outline-none text-xl focus:font-normal font-bold focus:text-gray-900 text-gray-800
+             placeholder:text-gray-300 placeholder:text-xl placeholder:font-bold focus:ring-0`}
           placeholder="메모를 적어보세요."
           value={memo}
           maxLength={300}

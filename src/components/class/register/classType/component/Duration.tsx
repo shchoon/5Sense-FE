@@ -81,8 +81,8 @@ export default function Duration({ classType, setClassType, valid }: ITypeProps)
             </div>
           </div>
         </Modal>
-      )}
-      {scheduleModal && (
+      )} */}
+      {/* {scheduleModal && (
         <Modal small>
           <AddClassModal
             onClick={() => {

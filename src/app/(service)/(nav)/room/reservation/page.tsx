@@ -11,6 +11,7 @@ import MemberOfCenter from '@/components/class/register/memberOfCenter'
 import instance from '@/lib/api/axios'
 import { classType } from '@/components/modal/StudentAddClassModal'
 import RoomReservationCheck from '@/components/check/RoomReservationCheck'
+import ContentHeader from '@/components/common/ContentHeader'
 
 import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
 import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
@@ -94,15 +95,9 @@ export default function Reservatoin() {
   console.log(studentName, calculateEndTime())
 
   return (
-    <>
-      <div className="relative">
-        <Link href={'/room'}>
-          <EllipsisIcon className="absolute left-[48px] top-[61px]" width={28} height={28} alt="" />
-          <ArrowBackIcon className="absolute left-[55px] top-[68px]" width={14} height={14} alt="" />
-        </Link>
-        <div className="absolute left-[92px] top-[60px] black-bold text-3xl ">예약하기</div>
-      </div>
-      <div className="w-[640px] pt-[120px] flex flex-col items-center gap-5 mx-auto">
+    <div className='w-full flex flex-col items-center pb-[60px]'>
+      <ContentHeader title='예약하기' back onClick={() => router.push('/room')} />
+      <div className="w-[640px] flex flex-col items-center gap-5">
         {classId === 'null' ? (
           <div className="w-full flex flex-col gap-10">
             <div className="w-full px-6 py-8 flex flex-col gap-10 border rounded-xl border-1 border-gray-200">
@@ -165,6 +160,6 @@ export default function Reservatoin() {
           예약하기
         </button>
       </div>
-    </>
+    </div>
   )
 }

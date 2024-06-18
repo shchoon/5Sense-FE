@@ -1,120 +1,103 @@
 'use client'
-import Image from 'next/image'
-import { useSetRecoilState, useRecoilValue } from 'recoil'
-import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { Button } from 'flowbite-react'
 
-import AcademyInfo from '@/components/layout/AcademyInfo'
-import Navbar from '@/components/common/Navbar'
-import TodaySchedule from '@/components/layout/TodaySchedule'
+import AcademyInfo from '@/components/layout/CenterInfo/AcademyInfo'
+import Navbar from '@/components/layout/Navbar'
+import TodaySchedule from '@/components/layout/CenterInfo/TodaySchedule'
 import { modalState } from '@/lib/state/modal'
-import Hambuger from '@/components/layout/Hambuger'
-import Modal from '@/components/common/modal'
+import Footer from '@/components/layout/Footer'
+import MobileHeader from '@/components/layout/Header/MobileHeader'
+import PcHeader from '@/components/layout/Header/PcHeader'
+import { getCenterInfo } from '@/lib/api/center'
+import NotFoundPage from '@/components/common/NotFoundPage'
 
-import LogoutIcon from 'public/assets/icons/logout.svg'
-import MenuIcon from 'public/assets/icons/menu.svg'
-import NoticeActiveIcon from 'public/assets/icons/notice-active.svg'
-import mainLogo from 'public/assets/logo/Logo.png'
+import PlusIcon from '@/icons/icon/plus.svg'
+import { centerInfoState } from '@/lib/state/centerInfoState'
+
+export interface CenterInfo {
+  name: string
+  address: string
+  mainPhone: string
+  profile: string
+  open: string
+  close: string
+}
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
-  const [isLogin, setisLogin] = useState<boolean>(false)
 
-  const footer = [
-    { id: 1, name: '개인정보처리방침' },
-    { id: 2, name: '이용약관' },
-    { id: 3, name: '팀소개' }
-  ]
-  const modal = useRecoilValue(modalState)
-  const setModal = useSetRecoilState(modalState)
-  const [isClickedMenu, setIsClickedMenu] = useState<boolean>(false)
+  const centerInfo = useRecoilValue(centerInfoState)
+  const setCenterInfo = useSetRecoilState(centerInfoState)
 
-  const onClose = () => {
-    setModal(false)
-    setIsClickedMenu(false)
+  const [isExistCenter, setIsExistCenter] = useState<boolean>()
+
+  const getCenterInfoData = async () => {
+    const result = await getCenterInfo()
+    if (result.message == 'Successfully getting center information') {
+      setIsExistCenter(true)
+      setCenterInfo(() => ({ ...result.data }))
+    }
+    if (result.data.message == 'Center information must be registered to be available') {
+      setIsExistCenter(false)
+    }
+  }
+
+  const renderContents = () => {
+    if (isExistCenter === undefined) {
+      return <div className="relative flex-1 lg:h-[832px] h-[658px] bg-white rounded-2xl lg:bottom-[22px] bottom-4" />
+    }
+    if (isExistCenter) {
+      return <div className="relative flex-1 w-full bg-white rounded-2xl lg:bottom-[22px] bottom-4">{children}</div>
+    }
+    return (
+      <NotFoundPage
+        title="아직 My센터를 등록하지 않으셨군요!"
+        subTitle="지금 바로 등록해 다양한 서비스를 이용해보세요!"
+        button={
+          <Button
+            color="primary"
+            size="sm"
+            onClick={() => {
+              router.push('/mycenter/register')
+            }}
+            className="mt-8"
+          >
+            <PlusIcon className="mr-2" />
+            My센터 등록
+          </Button>
+        }
+      />
+    )
   }
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken')
-    setisLogin(prev => accessToken !== null ? true : false)
-    if(accessToken === null){
-      alert('서비스를 이용하려면 로그인을 해주세요.')
-      router.replace('/login')
-    }
+    getCenterInfoData()
   }, [])
 
   return (
-    <>
-    {isLogin && 
-      <div className={`min-w-[768px] max-w-[2560px]`}>
-      <div className={`w-full h-full px-6 2md:px-12 box-border lg:pl-0 lg:pr-4 xl:pr-8 2xl:pr-12`}>
-        {/* 상위 relative가 없기때문에 body를 부모로 잡음 */}
-        <div className="header w-full h-[124px] flex justify-between items-center lg:flex-none lg:h-[66px]">
-          <div className="rightBox flex items-center gap-5 lg:flex-none lg:relative lg:top-12 lg:left-6">
-            <MenuIcon
-              className="menu lg:hidden cursor-pointer"
-              onClick={() => {
-                setModal(true)
-                setIsClickedMenu(true)
-              }}
-            />
-            <div className="logoBox flex gap-[10px]">
-              <Image src={mainLogo} alt="로고" />
-              <span className=" text-slate-50 text-xl font-bold leading-[52px]">5Sense</span>
-            </div>
-          </div>
-          <div className="iconBox lg:absolute lg:top-[37px] lg:right-6 flex items-center gap-[27px]">
-            {/* <NoticeActiveIcon className="w-[30px] h-[30px] text-primary-200" />
-            <LogoutIcon
-              className="w-7 h-7 text-primary-200 cursor-pointer"
-              onClick={() => {
-                typeof window !== undefined && localStorage.clear()
-                router.push('/login')
-              }}
-            /> */}
-          </div>
-        </div>
-        <div className="content w-full h-full lg:flex">
-          <div className="academyInfo hidden lg:side-info">
-            <AcademyInfo color="text-white" btnColor="bg-slate-50 bg-opacity-20" />
+    <div className={`w-screen h-screen`}>
+      <div className={`w-full h-full`}>
+        <MobileHeader centerInfo={centerInfo} isExistCenter={isExistCenter} />
+        <PcHeader />
+        <div className="w-full h-full flex lg:pl-0 2xl:pr-12 xl:pr-8 lg:pr-4 md:px-12 px-6">
+          <div className="w-full box-content mt-[180px] max-w-[248px] xl:px-6 lg:px-4 lg:block hidden">
+            <AcademyInfo centerInfo={centerInfo} isExistCenter={isExistCenter} />
+            <div className="w-full h-16"></div>
             <TodaySchedule />
           </div>
-          <div className="service w-full flex-grow 3xl:flex-grow-0 3xl:basis-[1576px] lg:translate-y-[-16px]">
+          <div className="flex-1 flex flex-col lg:pt-[66px]">
             <Navbar />
-            <div className="relative w-full flex flex-shrink min-h-[864px] lg:min-h-[854px] bg-white rounded-2xl">
-              {children}
-            </div>
-            <div className="footer flex w-full h-[52px] mt-12 justify-between">
-              <div className="right flex items-center gap-[56px]">
-                <span className="text-gray-300 text-xl font-bold font-['Poppins']">5sense</span>
-                <span className="text-gray-300 text-sm font-medium leading-[14px]">
-                  Copyright ⓒ2023 5sense inc, ltd. All rights reserved
-                </span>
-              </div>
-              <div className="left flex items-center">
-                {footer.map((item, idx) => (
-                  <span
-                    key={item.id}
-                    className="text-gray-300 text-xs font-medium leading-[14px] after:inline-block after:w-px after:h-2.5 after:bg-gray-300 after:mx-4 last:after:content-none"
-                  >
-                    {item.name}
-                  </span>
-                ))}
-              </div>
-            </div>
+            {renderContents()}
+            <Footer />
           </div>
         </div>
       </div>
-      {/* <SideModal /> */}
-      {/* {isClickedMenu && (
-        <Modal>
-          <Hambuger onClose={onClose} />
-        </Modal>
-      )} */}
+
       {/* static은 레이어 계층에 들어가지 않기때문에 purplebox에 인덱스값을 -로 설정함*/}
-      <div className="purplebox absolute top-0 left-0 md:w-screen min-w-[768px] h-[601px] lg:h-[469px] bg-gradient-to-b from-[#6F53DB] to-[#875EDC] z-[-10]" />
+      <div className="purplebox absolute top-0 left-0 w-screen h-[601px] lg:h-[469px] bg-gradient-to-b from-[#6F53DB] to-[#875EDC] z-[-10]" />
     </div>
-    }
-    </>
   )
 }

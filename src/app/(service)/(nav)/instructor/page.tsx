@@ -10,11 +10,11 @@ import { Button, Modal } from 'flowbite-react'
 //내장
 import { getDataType, metaType } from '../student/page'
 import { modalState } from '@/lib/state/modal'
-import NoneResult from '@/components/common/NoneResult'
 import instance from '@/lib/api/axios'
 import RegisterModal from '@/components/instructor/RegisterModal'
 import DetailInstructor from '@/components/modal/DetailInstructor'
 import SearchInput from '@/components/common/SearchInput'
+import NotFoundPage from '@/components/common/NotFoundPage'
 
 //이미지
 import ChevronRightIcon from 'public/assets/icons/chevron/chevron_right_pri_600.svg'
@@ -39,7 +39,7 @@ export default function InstructorPage() {
   const setModal = useSetRecoilState(modalState)
   const [isClickedRegister, setIsClickedRegister] = useState<boolean>(false)
   const [isRegistered, setIsRegistered] = useState<boolean>(false)
-  const [openModal, setOpenModal] = useState(true)
+  const [openModal, setOpenModal] = useState(false)
 
   const [instructorList, setInstructorList] = useState<instructorType[]>([])
   const [InstructorId, setInstructorId] = useState<number>(0)
@@ -176,7 +176,11 @@ export default function InstructorPage() {
       {/* 검색창 */}
       <SearchInput type="teachers" passInputData={getInputDataFromChild} />
       {/* 검색 결과 없음 */}
-      {isRefresh && instructorList.length === 0 ? <NoneResult /> : null}
+      {isRefresh && instructorList.length === 0 ? (
+        <div className="w-full mt-[140px]">
+          <NotFoundPage title="검색결과가 없습니다." subTitle="다른 검색어를 통해 검색을 이어나가보세요" />
+        </div>
+      ) : null}
       {/* 수강생 목록 시작 */}
       <div className="w-full grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-5">
         {instructorList.length !== 0 &&

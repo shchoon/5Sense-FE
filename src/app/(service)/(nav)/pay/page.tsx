@@ -6,7 +6,7 @@ import { studentType, metaType } from '../student/page'
 import ListInfo from '@/components/view/ListInfo'
 import instance from '@/lib/api/axios'
 
-import NoneResult from '@/components/common/NoneResult'
+import NotFoundPage from '@/components/common/NotFoundPage'
 import List from '@/components/view/List'
 import Loading from '@/components/common/Loading'
 import ChevronDownIcon from 'public/assets/icons/chevron/chevron-down-blue.svg'
@@ -223,7 +223,11 @@ export default function PayPage() {
           <div className={`lg:w-[220px] w-[148px] indigo-500-semibold text-sm`}>결제상태</div>
         </div>
         <div className="w-full flex flex-col gap-[14px]">
-          {isRefresh && studentList.length === 0 ? <NoneResult /> : null}
+          {isRefresh && studentList.length === 0 ? (
+            <div className="w-full mt-[140px]">
+              <NotFoundPage title="검색결과가 없습니다." subTitle="다른 검색어를 통해 검색을 이어나가보세요" />
+            </div>
+          ) : null}
           {studentList?.map((data: any, i) => {
             return (
               <button

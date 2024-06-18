@@ -10,7 +10,7 @@ export function toLocalString(number: string) {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
-export function revertPhoneNumberToString(phoneNumber: string) {
+export function changePhoneNumberToString(phoneNumber: string) {
   if (phoneNumber.slice(0, 2) === '02') {
     if (phoneNumber.length === 9) {
       return phoneNumber.slice(0, 2) + '-' + phoneNumber.slice(2, 5) + '-' + phoneNumber.slice(5, 9)
@@ -19,13 +19,36 @@ export function revertPhoneNumberToString(phoneNumber: string) {
     }
   } else if (phoneNumber.slice(0, 3) === '010') {
     return phoneNumber.slice(0, 3) + '-' + phoneNumber.slice(3, 7) + '-' + phoneNumber.slice(7, 11)
-  } else {
-    if (phoneNumber.length === 10) {
-      return phoneNumber.slice(0, 3) + '-' + phoneNumber.slice(3, 6) + '-' + phoneNumber.slice(6, 10)
-    } else {
-      return phoneNumber.slice(0, 3) + '-' + phoneNumber.slice(3, 7) + '-' + phoneNumber.slice(7, 11)
-    }
   }
+}
+
+export function formatStartTime(classTime: string) {
+  return classTime.slice(0, 5)
+}
+
+export function calculateEndTime(startTime: string, lessonTime: number) {
+  const divisionLessonTime = {
+    hour: Math.floor(lessonTime / 60),
+    min: lessonTime % 60
+  }
+
+  let endTime = {
+    hour: Number(startTime.split(':')[0]) + divisionLessonTime.hour,
+    min: Number(startTime.split(':')[1]) + divisionLessonTime.min
+  }
+
+  if (endTime.min === 60) {
+    return endTime.hour + 1 + ':00'
+  } else if (endTime.min === 0) {
+    return endTime.hour + ':00'
+  } else {
+    return endTime.hour + ':' + endTime.min
+  }
+}
+
+export function formatLessonDate(date: string) {
+  const formatDate = date.slice(0, 10).split('-')
+  return formatDate[0] + '.' + formatDate[1] + '.' + formatDate[2]
 }
 
 export function getKoreanNumber(value: string) {
@@ -56,4 +79,8 @@ export function getKoreanNumber(value: string) {
   }
 
   return answer
+}
+
+export const formatPhoneNum = (phoneNumber: string) => {
+  return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
 }

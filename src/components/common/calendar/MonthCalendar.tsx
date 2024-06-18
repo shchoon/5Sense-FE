@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import DateSlideTab from '@/components/main/DateSlideTab'
-import MonthDatePicker from '@/components/common/calendar/datePicker/monthDatePicker'
+import MonthDatePicker from './datePicker/monthDatePicker'
 import { dateDataType } from '@/components/common/calendar/datePicker/dayDatePIcker'
 import { MonthCalendarDateState } from '@/lib/state/calendar/MonthCalendarDateState'
 
@@ -72,7 +72,7 @@ export default function MonthCalendar() {
 
   return (
     <>
-      <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
+      <div className="w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
         <div className="relative mx-auto flex gap-[138px] items-center w-full  h-[52px]  md:w-full ">
           <div className={`flex mx-auto w-[420px] h-full p-1.5 border rounded-md border-gray-100 bg-[#F8FAFD]`}>
             <div
@@ -85,7 +85,7 @@ export default function MonthCalendar() {
               className="w-full px-3 py-2 flex justify-center gap-2 items-center gray-900-semibold text-base  hover:text-primary-600 cursor-pointer"
               onClick={onClickDatePickerHandler}
             >
-              <CalendarIcon />
+              <CalendarIcon className="text-gray-500" />
               {dateData.year}년 {dateData.month + 1}월
             </div>
             <div

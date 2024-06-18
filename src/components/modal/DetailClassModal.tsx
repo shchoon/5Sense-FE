@@ -164,35 +164,6 @@ export default function DetailClassModal({ id, type, onClose }: IProps) {
               <div className="w-[150px] gray-500-medium text-base">• 클래스 메모</div>
               <div className="w-full gray-800-medium text-base">{classDetail.memo}</div>
             </div>
-
-            {/* {classDetail !== null &&
-              classDetail.classInfo.map((info: any, i: number) => {
-                return (
-                  <>
-                    {info.title !== '일정 정보' ? (
-                      <div key={i} className="w-full flex gap-8">
-                        <div className="w-[150px] gray-500-medium text-base">• {info.title}</div>
-                        <div key={i} className="w-full gray-800-medium text-base">
-                          {info.text}
-                        </div>
-                      </div>
-                    ) : (
-                      <div key={i} className="w-full flex gap-8">
-                        <div className="w-[150px] gray-500-medium text-base">• {info.title}</div>
-                        <div className="w-full flex flex-col gap-1.5">
-                          {info.text.map((text: any, i: number) => {
-                            return (
-                              <div key={i} className=" gray-800-medium text-base">
-                                {text.startTime.slice(0, 5)} ~ {text.endTime.slice(0, 5)} / {text.repeatDate} 반복
-                              </div>
-                            )
-                          })}
-                        </div>
-                      </div>
-                    )}
-                  </>
-                )
-              })} */}
           </div>
         </div>
         {/* 회원 목록 */}

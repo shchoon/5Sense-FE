@@ -10,7 +10,7 @@ import instance from '@/lib/api/axios'
 import { studentDurationScheduleState } from '@/lib/state/studentDurationSchedule'
 import { modalState } from '@/lib/state/modal'
 
-import CloseIcon from 'public/assets/icons/closeCircle.svg'
+import ModalCloseIcon from '@/icons/icon/modalClose.svg'
 
 interface IProps {
   onClose: () => void
@@ -120,7 +120,7 @@ export default function StudentAddClassModal({ onClose }: IProps) {
     <div className="w-[640px] border border-1 border-gray-200 rounded-xl bg-white">
       <div className="relative w-full h-[90px]">
         <div className="absolute left-6 top-10 text-2xl gray-900-bold">클래스 추가</div>
-        <CloseIcon className="absolute right-4 top-4 cursor-pointer" width={35} height={35} onClick={() => onClose()} />
+        <ModalCloseIcon className="absolute right-4 top-4 cursor-pointer" width={35} height={35} onClick={() => onClose()} />
       </div>
       <div className="w-full px-6 pb-6 flex flex-col gap-10">
         {/* 회차/기간반 버튼 */}

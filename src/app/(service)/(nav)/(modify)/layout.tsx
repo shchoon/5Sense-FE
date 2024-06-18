@@ -1,9 +1,8 @@
 'use client'
-import Image from 'next/image'
-import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
-import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
+
+import ContentHeader from '@/components/common/ContentHeader'
 
 export default function ModifyPage({ children }: { children: React.ReactNode }) {
   const pathName = usePathname()
@@ -22,24 +21,20 @@ export default function ModifyPage({ children }: { children: React.ReactNode }) 
       title: '이용 약관'
     },
     {
-      url: '/withdrawal',
+      url: '/withDrawal',
       title: '회원 탈퇴'
     }
   ]
+
   return (
-    <div className="w-full">
-      <div className="relative">
-        <Link href={'/home'}>
-          <EllipsisIcon className="absolute left-[48px] top-[61px]" width={28} height={28} alt="" />
-          <ArrowBackIcon className="absolute left-[55px] top-[68px]" width={14} height={14} alt="" />
-        </Link>
-        <div className="absolute left-[92px] top-[60px] black-bold text-3xl ">내 프로필 관리</div>
-      </div>
-      <div className="w-full flex justify-center pt-[120px] pb-6">
-        <div className="w-[384px] h-6 flex gap-3.5">
+    <div className="w-full flex flex-col items-center pb-[60px]">
+      <ContentHeader title='내 프로필 관리' back onClick={() => router.push('/home')} />
+      <div className="w-[640px] flex pb-6">
+        <div className="h-6 flex gap-4">
           {linkList.map((data, i) => {
             return (
-              <div
+              <div className='flex items-center gap-4'>
+                <div
                 key={i}
                 className={`${
                   pathName === data.url ? 'text-indigo-500' : 'text-gray-400'
@@ -48,12 +43,14 @@ export default function ModifyPage({ children }: { children: React.ReactNode }) 
               >
                 {data.title}
               </div>
+              {i !== 3 && <span className='w-px h-[14px] bg-gray-300'/>}
+              </div>
             )
           })}
         </div>
       </div>
       {/* box */}
-      <div className="w-full flex justify-center pb-[60px]">{children}</div>
+      <div className="w-full flex justify-center">{children}</div>
     </div>
   )
 }

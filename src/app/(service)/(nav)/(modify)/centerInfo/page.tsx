@@ -28,7 +28,17 @@ interface snsLinkType {
 }
 
 export default function ManageMent() {
-  const [postData, setPostData] = useState<centerDataType>({
+  /* const [centerInfo, setCenterinfo] = useState({
+    name: '',
+    address: '',
+    mainPhone: '',
+    open: '',
+    close: '',
+    profile: ''
+  }) */
+  const centerInfo = useRecoilValue(centerInfoState)
+  const setCenterInfo = useSetRecoilState(centerInfoState)
+  const [patchData, setPatchData] = useState({
     name: '',
     address: '',
     mainPhone: '',
@@ -43,10 +53,7 @@ export default function ManageMent() {
   })
   const [snsModal, setSnsModal] = useState<boolean>(false)
   const [toggleStatus, setToggleStatus] = useState<boolean>(false)
-  const [img, setImg] = useState<string | null>()
   const [imgFile, setImgFile] = useState<File>()
-  const centerInfo = useRecoilValue(centerInfoState)
-  const setCenterInfo = useSetRecoilState(centerInfoState)
   const modal = useRecoilValue(modalState)
   const setModal = useSetRecoilState(modalState)
 
@@ -55,10 +62,10 @@ export default function ManageMent() {
       oncomplete: function (data: any) {
         // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
         // 예제를 참고하여 다양한 활용법을 확인해 보세요.
-        setPostData({
-          ...postData,
+        setPatchData(prev => ({
+          ...prev,
           address: data.address
-        })
+        }))
       }
     }).open()
   }
@@ -93,42 +100,42 @@ export default function ManageMent() {
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const type = e.currentTarget.name
-    setPostData({
-      ...postData,
+    setPatchData(prev => ({
+      ...prev,
       [type]: e.target.value
-    })
+    }))
   }
 
   const handleChangeDropwdownFromChild = (data: { time: string }) => {
-    setPostData(prevPostData => ({
-      ...prevPostData,
+    setPatchData(prev => ({
+      ...prev,
       open: data.time
     }))
   }
 
   const handleChangeCloseTimeFromChild = (data: { time: string }) => {
-    setPostData(prevPostData => ({
-      ...prevPostData,
+    setPatchData(prev => ({
+      ...prev,
       close: data.time
     }))
   }
 
   const checkDiff = () => {
     let data: any = {}
-    if (postData.name !== centerInfo.name) {
-      data.name = postData.name
+    if (patchData.name !== centerInfo.name) {
+      data.name = patchData.name
     }
-    if (postData.address !== centerInfo.address) {
-      data.address = postData.address
+    if (patchData.address !== centerInfo.address) {
+      data.address = patchData.address
     }
-    if (postData.mainPhone !== centerInfo.mainPhone) {
-      data.mainPhone = postData.mainPhone
+    if (patchData.mainPhone !== centerInfo.mainPhone) {
+      data.mainPhone = patchData.mainPhone
     }
-    if (postData.open !== centerInfo.open) {
-      data.open = postData.open
+    if (patchData.open !== centerInfo.open) {
+      data.open = patchData.open
     }
-    if (postData.close !== centerInfo.close) {
-      data.close = postData.close
+    if (patchData.close !== centerInfo.close) {
+      data.close = patchData.close
     }
     if (imgFile) {
       data.profile = imgFile
@@ -151,7 +158,6 @@ export default function ManageMent() {
       .then(res => {
         const modifiedData = res.data.data
         alert('프로필 정보 수정 완료되었습니다')
-        setCenterInfo(modifiedData)
         console.log(res)
       })
   }
@@ -167,65 +173,65 @@ export default function ManageMent() {
     setSnsModal(false)
   }
 
+  const inputList = [
+    {
+      title: '센터명',
+      name: 'name',
+      value: patchData.name,
+      placeholder: '센터명을 입력해주세요.'
+    },
+    {
+      title: '주소',
+      name: 'address',
+      value: patchData.address,
+      placeholder: '주소를 입력해주세요.'
+    },
+    {
+      title: '대표번호',
+      name: 'mainPhone',
+      value: patchData.mainPhone,
+      placeholder: '대표번호를 입력해주세요.'
+    }
+  ]
+
   useEffect(() => {
-    if (centerInfo.name !== '') {
-      console.log(centerInfo)
+    instance.get('/centers/my').then(res => {
+      const centerData = res.data.data
       setDropDownProps(prev => ({
         ...prev,
         open: {
           ...prev.open,
-          title: centerInfo.open
+          title: centerData.open
         },
         close: {
           ...prev.close,
-          title: centerInfo.close
+          title: centerData.close
         }
       }))
-      setPostData(prev => ({
-        ...prev,
-        name: centerInfo.name,
-        address: centerInfo.address,
-        mainPhone: centerInfo.mainPhone,
-        open: centerInfo.open,
-        close: centerInfo.close,
-        profile: centerInfo.profile
-      }))
-      setImg(centerInfo.profile)
-    }
-    setSnsLink(prev => ({
-      ...prev,
-      kakao: localStorage.getItem('social') === 'kakao' ? true : false,
-      naver: localStorage.getItem('social') === 'naver' ? true : false,
-      google: localStorage.getItem('social') === 'google' ? true : false
-    }))
-  }, [centerInfo])
+      setCenterInfo(prev => ({ ...centerData }))
+      setPatchData(prev => ({ ...centerData }))
+    })
+  }, [])
 
   return (
     <>
-      {postData.name !== '' && (
+      {patchData.name !== '' && (
         <div className="w-[640px] flex flex-col gap-5 justify-center">
           <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></Script>
           <form
-            className="w-full px-6 py-8 flex flex-col rounded-xl border border-gray-200 justify-center gap-10"
+            className="w-full px-6 py-8 flex flex-col rounded-xl border border-gray-200 items-start gap-10"
             onSubmit={e => {
               e.preventDefault()
               handleClickPatch()
             }}
           >
-            <div className="gray-900-bold text-xl ">센터 정보</div>
+            <div className="gray-900-bold text-xl h-5 leading-5">센터 정보</div>
             <div className="w-full flex flex-col items-center gap-10">
-              <div className="relative w-[140px] flex flex-col items-center">
-                {img === null ? (
-                  <div className="w-[140px] h-[140px] rounded-full bg-primary-300 flex justify-center items-center">
-                    <ProfileIcon className="" width={140} height={140} alt="" />
-                  </div>
-                ) : (
-                  <div className="w-[140px] h-[140px] ">
-                    <img src={img} className="rounded-full w-[140px] h-[140px]" alt="" />
-                  </div>
-                )}
-
-                <div className="absolute left-[35px] top-[124px] bg-white w-[70px] h-[34px] pl-2.5 pr-3 py-2 flex justify-center rounded-lg border border-primary-600">
+              <div className="w-[140px] h-[156px] flex flex-col items-center gap-[-18px]">
+                <div className="w-[140px] h-[140px] ">
+                  <Image src={patchData.profile} className="rounded-full" width={140} height={140} alt="profile" />
+                </div>
+                <div className="bg-white w-[70px] h-[34px] pl-2.5 pr-3 py-2 flex justify-center rounded-lg border border-primary-600">
                   <input
                     id="file"
                     type="file"
@@ -234,7 +240,10 @@ export default function ManageMent() {
                       if (e.target.files) {
                         let file = e.target.files[0]
                         let img = URL.createObjectURL(file)
-                        setImg(img)
+                        setPatchData(prev => ({
+                          ...prev,
+                          profile: img
+                        }))
                         setImgFile(file)
                       }
                     }}
@@ -246,46 +255,42 @@ export default function ManageMent() {
                 </div>
               </div>
               <div className="w-full flex flex-col gap-4">
-                <input
-                  name="name"
-                  value={postData.name}
-                  onChange={e => {
-                    onChangeHandler(e)
-                  }}
-                  className="w-full h-[60px] px-4 border rounded-lg border-gray-200 focus:outline-none focus:border-primary-700 focus:bg-gray-50"
-                  placeholder="센터명을 입력해주세요."
-                />
-                <input
-                  name="address"
-                  value={postData.address}
-                  onChange={e => {
-                    onChangeHandler(e)
-                  }}
-                  onClick={onClickAddress}
-                  className="w-full h-[60px] px-4 border rounded-lg border-gray-200 focus:outline-none focus:border-primary-700 focus:bg-gray-50"
-                  placeholder="주소를 입력해주세요"
-                />
-                <input
-                  name="mainPhone"
-                  value={postData.mainPhone}
-                  onChange={e => {
-                    onChangeHandler(e)
-                  }}
-                  className="w-full h-[60px] px-4 border rounded-lg border-gray-200 focus:outline-none focus:border-primary-700 focus:bg-gray-50"
-                  placeholder="대표번호를 입력해주세요"
-                />
-                <div className="flex gap-2">
-                  <DropDown
-                    {...dropDownProps.open}
-                    handleChangeParentsOpenTimeData={handleChangeDropwdownFromChild}
-                    type="open"
-                  />
-                  <span className="flex items-center">-</span>
-                  <DropDown
-                    {...dropDownProps.close}
-                    handleChangeParentsCloseTimeData={handleChangeCloseTimeFromChild}
-                    type="close"
-                  />
+                {inputList.map((data, i) => {
+                  return (
+                    <div className="w-full flex flex-col gap-2" key={i}>
+                      <span className="text-base gray-800-semibold">{data.title}</span>
+                      <input
+                        name={data.name}
+                        value={data.value}
+                        onChange={e => {
+                          onChangeHandler(e)
+                        }}
+                        className="w-full h-[52px] px-4 border rounded-lg border-gray-200 focus:outline-none focus:border-primary-700 focus:bg-gray-50"
+                        placeholder={data.placeholder}
+                      />
+                    </div>
+                  )
+                })}
+                <div className="w-full flex flex-col gap-2">
+                  <span className="text-base gray-800-semibold">영업시간</span>
+                  <div className="flex gap-3">
+                    <div className="w-full flex gap-2 items-center">
+                      <DropDown
+                        {...dropDownProps.open}
+                        handleChangeParentsOpenTimeData={handleChangeDropwdownFromChild}
+                        type="open"
+                      />
+                      <span className="text-[14px] gray-800-normal">부터</span>
+                    </div>
+                    <div className="w-full flex gap-2 items-center">
+                      <DropDown
+                        {...dropDownProps.close}
+                        handleChangeParentsCloseTimeData={handleChangeCloseTimeFromChild}
+                        type="close"
+                      />
+                      <span className="text-[14px] gray-800-normal">까지</span>
+                    </div>
+                  </div>
                 </div>
               </div>
               <button type="submit" className="w-full h-[52px] btn-purple">

@@ -124,7 +124,7 @@ export default function WeekCalendar() {
               className="w-full px-3 py-2 flex justify-center gap-2 items-center gray-900-semibold text-base  cursor-pointer hover:text-primary-600"
               onClick={onClickDatePickerHandler}
             >
-              <CalendarIcon />
+              <CalendarIcon className="text-gray-500" />
               {weekData.year}년 {weekData.month + 1}월 {weekData.week}주차
             </div>
             <div
@@ -145,7 +145,7 @@ export default function WeekCalendar() {
       </div>
       {/* 요일 탭 */}
       <div className="w-full flex max-w-[1016px] mx-auto justify-end pt-[32px]">
-        <div className="w-[51px] xl:mr-5 lg:mr-4"></div>
+        <div className="w-[50px] xl:mr-5 lg:mr-4 md:mr-[14px] mr-3.5"></div>
         <div className="w-full grid grid-cols-7 gap-[7px]">
           {dateTabData[weekData.week - 1]?.date.map((data: any, i: number) => {
             return (
