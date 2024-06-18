@@ -54,7 +54,7 @@ export default function MonthDateTab() {
               </div>
               <div className="gray-900-bold text-[26px] h-[39px] leading-[39px]">타임라인</div>
             </div>
-            <div className="w-full flex flex-col gap-6 max-h-[700px] overflow-y-scroll">
+            <div className="w-full flex flex-col gap-6 max-h-[700px] overflow-auto">
               {classDetails.classData.map((data: any, i: number) => {
                 return (
                   <div className="w-fill flex flex-col gap-2">

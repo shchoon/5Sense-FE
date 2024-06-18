@@ -17,23 +17,28 @@ export default function MonthSchedule({ dateData }: IProps) {
 
   const setClassDetails = useSetRecoilState(MonthDetailClassState)
 
-  const [classData, setClassData] = useState<any>([])
+  const [classData, setClassData] = useState<any[]>([])
   useEffect(() => {
-    const startDay = new Date(dateData.year, dateData.month, 0).getDay()
     instance(`/lessons/${dateData.year}/${dateData.month + 1}`).then(res => {
+      const startDay = new Date(dateData.year, dateData.month, 0).getDay()
       const data = res.data.data
       let returnData = []
-
-      for (var i = 0; i <= startDay; i++) {
-        returnData.push({ day: null })
+      /* 첫 주의 시작이 월요일인 경우 제외 */
+      if (startDay !== 6) {
+        for (var i = 0; i <= startDay; i++) {
+          returnData.push({ day: null })
+        }
       }
-      const formatData = FormatDayData(data)
-      console.log(formatData)
-      setClassData([...returnData, ...FormatDayData(data)])
+      const formatData = [...returnData, ...FormatDayData(data)]
+      setClassData(prev => formatData)
     })
+
+    return () => {
+      setClassData([])
+    }
   }, [dateData.month])
 
-  console.log(classData)
+  console.log('classData', classData)
 
   return (
     <div className="w-full flex flex-col gap-4 mx-auto xl:max-w-[1016px] pt-8">
@@ -65,57 +70,67 @@ export default function MonthSchedule({ dateData }: IProps) {
           })}
         </div>
         <div className="w-full grid grid-cols-7">
-          {classData.map((data: any, i: number) => {
-            const startDay = new Date(dateData.year, dateData.month, 0).getDay()
-            let day = 0
-            /* i > startDay */
-            if (data.day === undefined) {
-              day = i - startDay
-            }
-            let durations = 0
-            let sessions = 0
-            if (data.length !== 0) {
-              for (var i = 0; i < data.length; i++) {
-                const numOfDurations = data[i].data.filter(el => el.type === 'duration').length
-                const numofSessions = data[i].data.length - numOfDurations
-                durations += numOfDurations
-                sessions += numofSessions
+          {classData.length !== 0 &&
+            classData.map((data, i: number) => {
+              const startDay = new Date(dateData.year, dateData.month, 0).getDay()
+              let day = 0
+              /* day 지정 && 첫 주의 시작이 월요일인 경우 제외 */
+              if (startDay !== 6) {
+                if (i > startDay) {
+                  day = i - startDay
+                }
+              } else {
+              /* 첫 주의 시작이 월요일인 경우 */
+                day = i + 1
               }
-            }
-            return (
-              <div
-                key={i}
-                className="w-full h-[180px] px-[10px] pt-[10px] pb-3 flex flex-col justify-between outline outline-1 outline-gray-200 cursor-pointer"
-                onClick={() => {
-                  setClassDetails(prev => ({
-                    ...prev,
-                    day: `${dateData.year}/${dateData.month}/${day}`,
-                    classData: data
-                  }))
-                }}
-              >
-                {currentDay === day ? (
-                  <div className="w-7 h-7 flex items-center justify-center rounded-full bg-primary-600 text-white text-lg font-medium">
-                    {day}
-                  </div>
-                ) : (
-                  <div className="w-7 h-[21px] flex items-center justify-center gray-500-medium text-lg">{day}</div>
-                )}
-                {day !== 0 && (
-                  <div className="w-full h-14 flex flex-col border border-1 border-primary-200">
-                    <div className={`w-full flex items-center gap-1 h-7 px-2 py-[6px]`}>
-                      <div className={`w-[14px] h-[14px] bg-primary-500 rounded`}></div>
-                      <div className={`flex-1 text-right text-primary-600 text-[13px] font-bold`}>{durations}개</div>
+              let durations = 0
+              let sessions = 0
+              if (data.length !== 0) {
+                for (var i = 0; i < data.length; i++) {
+                  const numOfDurations = data[i].data.filter((el: { type: string }) => el.type === 'duration').length
+                  const numofSessions = data[i].data.length - numOfDurations
+                  durations += numOfDurations
+                  sessions += numofSessions
+                }
+              }
+              return (
+                <div
+                  key={i}
+                  className="w-full h-[180px] px-[10px] pt-[10px] pb-3 flex flex-col justify-between outline outline-1 outline-gray-200 cursor-pointer"
+                  onClick={() => {
+                    if (durations + sessions !== 0) {
+                      setClassDetails(prev => ({
+                        ...prev,
+                        day: `${dateData.year}/${dateData.month}/${day}`,
+                        classData: data
+                      }))
+                    }
+                  }}
+                >
+                  {currentDay === day ? (
+                    <div className="w-7 h-7 flex items-center justify-center rounded-full bg-primary-600 text-white text-lg font-medium">
+                      {day}
                     </div>
-                    <div className={`w-full flex gap-1 h-7 px-2 py-[6px]`}>
-                      <div className={`w-[14px] h-[14px] bg-secondary-500  rounded`}></div>
-                      <div className={`flex-1 text-right text-secondary-600 text-[13px] font-bold`}>{sessions}개</div>
+                  ) : (
+                    <div className="w-7 h-[21px] flex items-center justify-center gray-500-medium text-lg">
+                      {day !== 0 && day}
                     </div>
-                  </div>
-                )}
-              </div>
-            )
-          })}
+                  )}
+                  {day !== 0 && (
+                    <div className="w-full h-14 flex flex-col border border-1 border-primary-200">
+                      <div className={`w-full flex items-center gap-1 h-7 px-2 py-[6px]`}>
+                        <div className={`w-[14px] h-[14px] bg-primary-500 rounded`}></div>
+                        <div className={`flex-1 text-right text-primary-600 text-[13px] font-bold`}>{durations}개</div>
+                      </div>
+                      <div className={`w-full flex gap-1 h-7 px-2 py-[6px]`}>
+                        <div className={`w-[14px] h-[14px] bg-secondary-500  rounded`}></div>
+                        <div className={`flex-1 text-right text-secondary-600 text-[13px] font-bold`}>{sessions}개</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )
+            })}
         </div>
       </div>
     </div>
