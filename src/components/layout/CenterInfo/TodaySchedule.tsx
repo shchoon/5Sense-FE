@@ -37,29 +37,31 @@ export default function TodaySchedule() {
   useEffect(() => {
     instance(`/lessons/${formattedToday.year}/${formattedToday.month}`).then(res => {
       const data = res.data.data[formattedToday.date - 1]
-      /* 클래스 startTime 순으로 정렬 */
-      const sortedData = data.sort(
-        (a: any, b: any) => Number(a.startTime.split(':')[0]) - Number(b.startTime.split(':')[0])
-      )
-      const formatData = []
-      formatData.push(sortedData[0])
-      /* 중복되는 클래스 데이터 제거 */
-      for (var i = 1; i < sortedData.length; i++) {
-        const target = sortedData[i - 1]
-        if (sortedData[i].startTime !== target.startTime || sortedData[i].id !== target.id) {
-          formatData.push(sortedData[i])
+      if (data.length !== 0) {
+        /* 클래스 startTime 순으로 정렬 */
+        const sortedData = data.sort(
+          (a: any, b: any) => Number(a.startTime.split(':')[0]) - Number(b.startTime.split(':')[0])
+        )
+        const formatData = []
+        formatData.push(sortedData[0])
+        /* 중복되는 클래스 데이터 제거 */
+        for (var i = 1; i < sortedData.length; i++) {
+          const target = sortedData[i - 1]
+          if (sortedData[i].startTime !== target.startTime || sortedData[i].id !== target.id) {
+            formatData.push(sortedData[i])
+          }
         }
+        const divisionFormatData = []
+        /*  */
+        for (var i = 0; i < formatData.length; i += 5) {
+          divisionFormatData.push(formatData.slice(i, i + 5))
+        }
+        setTodayLessonData(divisionFormatData)
+        setPageData(prev => ({
+          ...prev,
+          wholePage: Math.ceil(formatData.length / 5)
+        }))
       }
-      const divisionFormatData = []
-      /*  */
-      for (var i = 0; i < formatData.length; i += 5) {
-        divisionFormatData.push(formatData.slice(i, i + 5))
-      }
-      setTodayLessonData(divisionFormatData)
-      setPageData(prev => ({
-        ...prev,
-        wholePage: Math.ceil(formatData.length / 5)
-      }))
     })
   }, [])
 
@@ -93,39 +95,41 @@ export default function TodaySchedule() {
                 </div>
               ))}
           </div>
-          <div className="relative w-full top-1 text-center text-gray-700 text-xs font-medium   leading-3">
-            <span
-              className="absolute left-2.5 cursor-pointer"
-              onClick={() => {
-                if (pageData.currentPage === 1) {
-                  return
-                } else {
-                  setPageData(prev => ({
-                    ...prev,
-                    currentPage: prev.currentPage - 1
-                  }))
-                }
-              }}
-            >
-              &lt;
-            </span>
-            {pageData.currentPage} / {pageData.wholePage}
-            <span
-              className="absolute right-2.5 cursor-pointer"
-              onClick={() => {
-                if (pageData.currentPage === todayLessonData.length) {
-                  return
-                } else {
-                  setPageData(prev => ({
-                    ...prev,
-                    currentPage: prev.currentPage + 1
-                  }))
-                }
-              }}
-            >
-              &gt;
-            </span>
-          </div>
+          {pageData.wholePage === 0 && (
+            <div className="relative w-full top-1 text-center text-gray-700 text-xs font-medium   leading-3">
+              <span
+                className="absolute left-2.5 cursor-pointer"
+                onClick={() => {
+                  if (pageData.currentPage === 1) {
+                    return
+                  } else {
+                    setPageData(prev => ({
+                      ...prev,
+                      currentPage: prev.currentPage - 1
+                    }))
+                  }
+                }}
+              >
+                &lt;
+              </span>
+              {pageData.currentPage} / {pageData.wholePage}
+              <span
+                className="absolute right-2.5 cursor-pointer"
+                onClick={() => {
+                  if (pageData.currentPage === todayLessonData.length) {
+                    return
+                  } else {
+                    setPageData(prev => ({
+                      ...prev,
+                      currentPage: prev.currentPage + 1
+                    }))
+                  }
+                }}
+              >
+                &gt;
+              </span>
+            </div>
+          )}
         </div>
       )}
     </>
