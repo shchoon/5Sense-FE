@@ -11,7 +11,7 @@ import { filterStateType } from '@/lib/filter/filterState'
 import Modal from '@/components/common/modal'
 import { modalState } from '@/lib/state/modal'
 import DetailClassModal from '@/components/modal/DetailClassModal'
-import NoneResult from '@/components/common/NoneResult'
+
 import ContentHeader from '@/components/common/ContentHeader'
 import { Drawer } from 'flowbite-react'
 
@@ -125,7 +125,7 @@ export default function ClassPage() {
   }, [metaData])
 
   return (
-    <div className="w-full overflow-x-hidden">
+    <div className="w-full">
       <ContentHeader title="클래스 관리" btnName="클래스 등록" onClick={() => router.push('class/register')} />
       <ClassFilter />
       <div className="container w-full grid grid-cols-2 2xl:grid-cols-3 gap-[20px] mt-5">
@@ -177,7 +177,7 @@ export default function ClassPage() {
         </Modal>
       )}
       {isRefresh && classList.length === 0 && <NoneResult />} */}
-      <Drawer open={isOpen} onClose={handleClose}>
+      {/* <Drawer open={isOpen} onClose={handleClose}>
         <Drawer.Header />
         <Drawer.Items>
           <div className=" bg-red-50">
@@ -185,7 +185,7 @@ export default function ClassPage() {
             <div className="h-[600px]">byebye</div>
           </div>
         </Drawer.Items>
-      </Drawer>
+      </Drawer> */}
     </div>
   )
 }

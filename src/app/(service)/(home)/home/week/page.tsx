@@ -37,7 +37,7 @@ export default function MainPageWeek() {
         setClassDetail(prev => ({
           ...prev,
           type: classData.type,
-          categoryName: classData.category.subName,
+          categoryName: classData.category.subName === null ? classData.category.name : classData.category.subName,
           className: classData.name,
           capacity: classData.capacity,
           teacher: classData.teacher.name,
@@ -47,6 +47,13 @@ export default function MainPageWeek() {
         }))
       })
       setIsOpen(true)
+
+      return () => {
+        setDetailClassState({
+          id: 0,
+          type: ''
+        })
+      }
     }
   }, [detailClassState])
 
@@ -55,12 +62,6 @@ export default function MainPageWeek() {
     <>
       <WeekCalendar />
       <WeekSchedule />
-      {/* <WeekSchedule dateData={dateData} week={weekData} /> */}
-      {/* {modal && (
-        <Modal>
-          <DetailClassModal {...props} onClose={() => setModal(false)} />
-        </Modal>
-      )} */}
       <Drawer open={isOpen} onClose={handleClose}>
         <Drawer.Header />
         <Drawer.Items>
@@ -106,7 +107,7 @@ export default function MainPageWeek() {
                 <>
                   <div className="w-full flex gap-8">
                     <div className="w-[150px] gray-500-medium text-base">• 기간 정보</div>
-                    {classDetail.schedules.map((data, i) => {
+                    {classDetail.schedules.map((data: { startDate: string; endDate: string }, i) => {
                       return (
                         <div key={i} className="w-full gray-800-medium text-base">
                           {formatLessonDate(data.startDate)} - {formatLessonDate(data.endDate)}
@@ -116,13 +117,15 @@ export default function MainPageWeek() {
                   </div>
                   <div className="w-full flex gap-8">
                     <div className="w-[150px] gray-500-medium text-base">• 일정 정보</div>
-                    {classDetail.schedules.map((data, i) => {
-                      return (
-                        <div key={i} className="w-full gray-800-medium text-base">
-                          {formatStartTime(data.startTime)} ~ {formatStartTime(data.endTime)} / {data.repeatDate}
-                        </div>
-                      )
-                    })}
+                    {classDetail.schedules.map(
+                      (data: { startTime: string; endTime: string; repeatDate: string }, i) => {
+                        return (
+                          <div key={i} className="w-full gray-800-medium text-base">
+                            {formatStartTime(data.startTime)} ~ {formatStartTime(data.endTime)} / {data.repeatDate}
+                          </div>
+                        )
+                      }
+                    )}
                   </div>
                 </>
               )}
@@ -139,10 +142,10 @@ export default function MainPageWeek() {
               </div>
               {/* 학생 리스트 */}
               <div className="w-full flex flex-col gap-2.5">
-                {classDetail.students.map((data: any, index: number) => {
+                {classDetail.students.map((data: { name: string; phone: string; sessionCount: number }, i) => {
                   return (
-                    <div key={index} className="w-full flex gap-1">
-                      <span className="w-[22px] text-primary-600 text-sm font-bold">{index + 1}</span>
+                    <div key={i} className="w-full flex gap-1">
+                      <span className="w-[22px] text-primary-600 text-sm font-bold">{i + 1}</span>
                       <div className="w-full flex gap-2.5">
                         <div className="gray-800-medium text-sm">{data.name}</div>
                         <div className="w-[105px] gray-500-normal text-sm">{changePhoneNumberToString(data.phone)}</div>

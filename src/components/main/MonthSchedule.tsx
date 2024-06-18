@@ -23,41 +23,12 @@ export default function MonthSchedule({ dateData }: IProps) {
     instance(`/lessons/${dateData.year}/${dateData.month + 1}`).then(res => {
       const data = res.data.data
       let returnData = []
+
       for (var i = 0; i <= startDay; i++) {
-        returnData.push({day: null})
+        returnData.push({ day: null })
       }
-      /* for (var i = 0; i < data.length; i++) {
-        let day = i + 1
-        const sortedData = data[i].sort(
-          (a: any, b: any) => Number(a.startTime.split(':')[0]) - Number(b.startTime.split(':')[0])
-        )
-        const filterData = []
-        if(sortedData.length !== 0) {
-          filterData.push(sortedData[0])
-          for (var j = 1; j < sortedData.length; j++) {
-            const target = filterData[filterData.length - 1]
-            if (target.id !== sortedData[j].id || target.startTime !== sortedData[j].startTime) {
-              filterData.push(sortedData[j])
-            }
-          }
-          let duration = filterData.filter((data: any) => data.type == 'duration').length
-        let session = filterData.length - duration
-        returnData.push({
-          day: day,
-          duration: duration,
-          session: session
-        })
-        } else {
-        returnData.push({
-          day: day,
-          duration: 0,
-          session: 0
-        })
-        }
-        
-      } */
-     const formatData = FormatDayData(data)
-     console.log(formatData)
+      const formatData = FormatDayData(data)
+      console.log(formatData)
       setClassData([...returnData, ...FormatDayData(data)])
     })
   }, [dateData.month])
@@ -97,27 +68,30 @@ export default function MonthSchedule({ dateData }: IProps) {
           {classData.map((data: any, i: number) => {
             const startDay = new Date(dateData.year, dateData.month, 0).getDay()
             let day = 0
-            if(data.day === undefined){
-              day = i + - startDay
+            /* i > startDay */
+            if (data.day === undefined) {
+              day = i - startDay
             }
             let durations = 0
             let sessions = 0
-            if(data.length !== 0) {
-              for(var i=0; i<data.length; i++){
+            if (data.length !== 0) {
+              for (var i = 0; i < data.length; i++) {
                 const numOfDurations = data[i].data.filter(el => el.type === 'duration').length
                 const numofSessions = data[i].data.length - numOfDurations
                 durations += numOfDurations
                 sessions += numofSessions
               }
-              /* durations =  data.filter(el => el.data.type === 'duration').length
-              sessions = data.length - durations */
             }
             return (
               <div
                 key={i}
-                className="w-full h-[180px] px-[10px] pt-[10px] pb-3 flex flex-col justify-between outline outline-1 outline-gray-200"
+                className="w-full h-[180px] px-[10px] pt-[10px] pb-3 flex flex-col justify-between outline outline-1 outline-gray-200 cursor-pointer"
                 onClick={() => {
-                  setClassDetails(data)
+                  setClassDetails(prev => ({
+                    ...prev,
+                    day: `${dateData.year}/${dateData.month}/${day}`,
+                    classData: data
+                  }))
                 }}
               >
                 {currentDay === day ? (
@@ -125,9 +99,7 @@ export default function MonthSchedule({ dateData }: IProps) {
                     {day}
                   </div>
                 ) : (
-                  <div className="w-7 h-[21px] flex items-center justify-center gray-500-medium text-lg">
-                    {day}
-                  </div>
+                  <div className="w-7 h-[21px] flex items-center justify-center gray-500-medium text-lg">{day}</div>
                 )}
                 {day !== 0 && (
                   <div className="w-full h-14 flex flex-col border border-1 border-primary-200">

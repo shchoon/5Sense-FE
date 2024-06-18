@@ -1,69 +1,48 @@
 'use client'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
 import Image from 'next/image'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRouter } from 'next/navigation'
 
-import { getCenterInfo } from '@/lib/api/center'
-import { centerInfoState } from '@/lib/state/centerInfoState'
-import { useEffect } from 'react'
-import DefaultProfile from './DefualtProfile'
+import { CenterInfo } from '@/app/(service)/layout'
 import { formatPhoneNum } from '@/utils'
+import DefaultProfile from './DefualtProfile'
 
-export interface CenterInfo {
-  status: string
-  name: string
-  address: string
-  mainPhone: string
-  profile: string
-  open: string
-  close: string
+interface IProps {
+  centerInfo: CenterInfo | undefined
+  isExistCenter: boolean | undefined
+  drawer?: boolean
 }
 
-export default function AcademyInfo() {
+export default function AcademyInfo({ centerInfo, isExistCenter, drawer }: IProps) {
   const router = useRouter()
 
-  const centerInfo = useRecoilValue(centerInfoState)
-  const setCenterInfo = useSetRecoilState(centerInfoState)
-  //const [centerInfo, setCenterInfo] = useState<CenterInfo>()
-
-  const getCenterInfoData = async () => {
-    try {
-      const result = await getCenterInfo()
-      setCenterInfo(() => ({ ...result.data.data, status: 'success' }))
-    } catch (err) {
-      throw err
-    }
+  if (isExistCenter == undefined) {
+    return
   }
-  const renderProfile = () => {
-    if (centerInfo) {
-      return centerInfo.status !== '' ? (
-        <div className="w-full flex flex-col items-center gap-4">
-          <Image className="rounded-full" src={centerInfo.profile} alt="profile" width={90} height={90} />
-          <div className="w-full flex flex-col items-center gap-2">
-            <p className={`text-white text-[21px] font-bold`}>{centerInfo.name}</p>
-            <p className={`text-white h-[14px] text-sm font-medium`}>{formatPhoneNum(centerInfo.mainPhone)}</p>
-            <p className={`text-white h-3 text-xs font-medium`}>{centerInfo.address}</p>
-          </div>
-        </div>
-      ) : (
-        <DefaultProfile />
-      )
-    }
-  }
-  useEffect(() => {
-    getCenterInfoData()
-  }, [])
 
-  return (
+  return centerInfo ? (
     <div className="w-full flex flex-col items-center gap-7">
-      {renderProfile()}
+      <div className="w-full flex flex-col items-center gap-4">
+        <Image className="rounded-full bg-[#D3C4F9]" src={centerInfo.profile} alt="profile" width={90} height={90} />
+        <div className="w-full flex flex-col items-center gap-2">
+          <p className={` text-[21px] font-bold ${drawer ? 'text-[#1F2A37' : 'text-white'} `}>{centerInfo.name}</p>
+          <p className={` h-[14px] text-sm font-medium ${drawer ? 'text-[#4B5563]' : 'text-white'} `}>
+            {formatPhoneNum(centerInfo.mainPhone)}
+          </p>
+          <p className={` h-3 text-xs font-medium ${drawer ? 'text-[#4B5563]' : 'text-white'} `}>
+            {centerInfo.address}
+          </p>
+        </div>
+      </div>
       <button
-        className="max-w-[200px] w-full px-4 py-3 bg-slate-50 opacity-20 rounded-md text-center text-sm font-bold leading-[21px] cursor-pointer"
+        className={`${
+          drawer ? 'bg-primary-600' : 'bg-slate-50 bg-opacity-20'
+        } max-w-[200px] w-full px-4 py-3  rounded-md text-center text-sm font-bold leading-[21px] cursor-pointer text-white`}
         onClick={() => router.push('/centerInfo')}
       >
         내 프로필 관리
       </button>
     </div>
+  ) : (
+    <DefaultProfile />
   )
 }

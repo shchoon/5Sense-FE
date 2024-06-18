@@ -1,5 +1,10 @@
 import instance from '../axios'
 
 export const getCenterInfo = async () => {
-  return instance.get('/centers/my')
+  try {
+    const res = await instance.get('/centers/my')
+    return res.data
+  } catch (error: any) {
+    return error.response
+  }
 }
