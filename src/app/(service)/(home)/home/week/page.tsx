@@ -158,6 +158,14 @@ export default function MainPageWeek() {
                 })}
               </div>
             </div>
+            <div className="absolute bottom-0 left-0 w-full flex gap-2.5 pb-[18px] px-6">
+              <button className="w-full h-[52px] flex justify-center items-center border border-1 border-primary-600 rounded-lg">
+                <span className="text-[16px] text-primary-600 font-semibold">취소하기</span>
+              </button>
+              <button className="w-full h-[52px] flex justify-center items-center text-white bg-primary-600 rounded-lg">
+                <span className="text-[16px] font-semibold">수정하기</span>
+              </button>
+            </div>
           </div>
         </Drawer.Items>
       </Drawer>
