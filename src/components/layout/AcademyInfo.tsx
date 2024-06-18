@@ -6,7 +6,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import instance from '@/lib/api/axios'
 import { centerInfoState } from '@/lib/state/centerInfoState'
-import { revertPhoneNumberToString } from '@/utils'
+import { changePhoneNumberToString } from '@/utils'
 
 import profile from 'public/assets/images/profile.png'
 import ProfileIcon from '@/icons/icon/defaultProfile.svg'
@@ -52,7 +52,7 @@ export default function AcademyInfo(props: any) {
           <div className="absolute top-[100px] w-full infoDetail flex flex-col items-center gap-2">
             <p className={`${props.color} text-[21px] font-bold`}>{centerInfo.name}</p>
             <p className={`${props.color} h-[14px] text-sm font-medium`}>
-              {revertPhoneNumberToString(centerInfo.mainPhone)}
+              {changePhoneNumberToString(centerInfo.mainPhone)}
             </p>
             <p className={`${props.color} h-3 text-xs font-medium `}>{centerInfo.address}</p>
           </div>
