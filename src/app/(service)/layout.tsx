@@ -85,6 +85,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         <div className="w-full h-full flex lg:pl-0 2xl:pr-12 xl:pr-8 lg:pr-4 md:px-12 px-6">
           <div className="w-full box-content mt-[180px] max-w-[248px] xl:px-6 lg:px-4 lg:block hidden">
             <AcademyInfo centerInfo={centerInfo} isExistCenter={isExistCenter} />
+            <div className="w-full h-16"></div>
             <TodaySchedule />
           </div>
           <div className="flex-1 flex flex-col lg:pt-[66px]">

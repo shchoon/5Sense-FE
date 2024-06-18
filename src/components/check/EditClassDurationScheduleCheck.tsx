@@ -1,6 +1,6 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import { durationScheduleState } from '@/lib/state/classDurationSchedule'
+import { durationClassScheduleState } from '@/lib/state/classDurationSchedule'
 
 import PencilIcon from 'public/assets/icons/pencil.svg'
 import { modalState } from '@/lib/state/modal'
@@ -15,10 +15,10 @@ import AddClassModal from '../modal/AddClassModal'
 export default function EditDurationScheduleCheck() {
   const setModal = useSetRecoilState(modalState)
   const [scheduleModal, setScheduleModal] = useState(false)
-  const setDurationScheduleState = useSetRecoilState(durationScheduleState)
+  const setDurationScheduleState = useSetRecoilState(durationClassScheduleState)
   const titleList = ['기간', '시간', '요일', '강의실']
 
-  const durationSchedules = useRecoilValue(durationScheduleState)
+  const durationSchedules = useRecoilValue(durationClassScheduleState)
 
   console.log('here', durationSchedules)
 
@@ -81,7 +81,7 @@ export default function EditDurationScheduleCheck() {
           })}
         </div>
       )}
-      {scheduleModal && (
+      {/* {scheduleModal && (
         <Modal small>
           <AddClassModal
             onClick={() => {
@@ -90,7 +90,7 @@ export default function EditDurationScheduleCheck() {
             }}
           />
         </Modal>
-      )}
+      )} */}
     </>
   )
 }

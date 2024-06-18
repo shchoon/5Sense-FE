@@ -1,11 +1,13 @@
 'use client'
 import { useState, useRef, useEffect, useLayoutEffect } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { dateDataType } from '../common/calendar/datePicker/dayDatePIcker'
-import WeekDataFormatter from '../common/calendar/WeekDataFormatter'
+import WeekDataFormatter from './DataFormatter/WeekDataFormatter'
 import { WeekCalendarDateState } from '@/lib/state/calendar/WeekCalendarDateState'
 import instance from '@/lib/api/axios'
+import { WeekDetailClassState } from '@/lib/state/weekDetailClassState'
+import { getSesstionLessons } from '@/lib/api/class'
 
 interface IProps {
   dateData: dateDataType
@@ -13,6 +15,7 @@ interface IProps {
 }
 
 export default function WeekSchedule() {
+  const setDetailClassState = useSetRecoilState(WeekDetailClassState)
   const weekData = useRecoilValue(WeekCalendarDateState)
   const [cursorPosition, setCursorPosition] = useState<{
     x: number
@@ -83,11 +86,23 @@ export default function WeekSchedule() {
                                 id={`${pI}` + `${cI}` + i.toString()}
                                 key={i}
                                 className={`relative flex flex-col p-[5px] gap-2 outline outline-1 rounded ${
-                                  data.type === 'duration' ? 'outline-primary-200 bg-primary-50' : 'outline-orange-200 bg-secondary-50'
+                                  data.type === 'duration'
+                                    ? 'outline-primary-200 bg-primary-50'
+                                    : 'outline-orange-200 bg-secondary-50'
                                 }  cursor-pointer`}
                                 onMouseMove={handleMouseMove}
                                 onMouseEnter={handleMouseEnter}
                                 onMouseLeave={handelMouseLeave}
+                                onClick={() => {
+                                  setDetailClassState(prev => ({
+                                    ...prev,
+                                    id: data.id,
+                                    type: data.type
+                                  }))
+                                  /* instance.get(`/session-lessons/${data.id}/details`).then(res => {
+                                    console.log(res)
+                                  }) */
+                                }}
                               >
                                 {mouseOverId === `${pI}` + `${cI}` + i.toString() && (
                                   <div
@@ -142,7 +157,6 @@ export default function WeekSchedule() {
                                     </div>
                                   </div>
                                 )}
-
                                 <div
                                   className={`flex flex-col gap-[2px] px-1 py-[5px] rounded ${
                                     data.type === 'duration' ? 'bg-primary-100' : 'bg-secondary-100'

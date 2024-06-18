@@ -63,7 +63,7 @@ export default function Duration({ classType, setClassType, valid }: ITypeProps)
         <DurationScheduleCheck />
         {/**여기 일정 UI 들어가면 됩니다. */}
       </div>
-      {noticeModal && (
+      {/* {noticeModal && (
         <Modal small>
           <div className="w-[424px] h-[282px] px-6 pt-[82px] pb-6 bg-white rounded-xl border border-gray-900 flex flex-col justify-center items-center">
             <p className="text-gray-900 text-2xl font-bold">
@@ -81,8 +81,8 @@ export default function Duration({ classType, setClassType, valid }: ITypeProps)
             </div>
           </div>
         </Modal>
-      )}
-      {scheduleModal && (
+      )} */}
+      {/* {scheduleModal && (
         <Modal small>
           <AddClassModal
             onClick={() => {
@@ -91,7 +91,7 @@ export default function Duration({ classType, setClassType, valid }: ITypeProps)
             }}
           />
         </Modal>
-      )}
+      )} */}
     </div>
   )
 }

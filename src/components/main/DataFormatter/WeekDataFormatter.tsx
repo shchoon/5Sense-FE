@@ -1,21 +1,35 @@
-import { dateDataType } from './datePicker/dayDatePIcker'
+import { dateDataType } from "@/components/common/calendar/datePicker/dayDatePIcker"
+
 
 export default function WeekDataFormatter(data: any, dateData: dateDataType) {
-  let returnData = []
+  const formatData = []
   for (var i = 0; i < data.length; i++) {
-    data[i].sort((a: any, b: any) => a.startTime.split(':')[0] - b.startTime.split(':')[0])
+    const filterData = []
+    const targetData = data[i]
+    if (targetData.length !== 0) {
+      const sortedData = targetData.sort(
+        (a: any, b: any) => Number(a.startTime.split(':')[0]) - Number(b.startTime.split(':')[0])
+      )
+      filterData.push(sortedData[0])
+      for (var j = 0; j < sortedData.length; j++) {
+        const target = filterData[filterData.length - 1]
+        if (target.id !== sortedData[j].id || target.startTime !== sortedData[j].startTime) {
+          filterData.push(sortedData[j])
+        }
+      }
+      data[i] = filterData
+    }
   }
   const startDay = new Date(dateData.year, dateData.month, 0).getDay()
   for (var i = 0; i <= startDay; i++) {
-    returnData.push({})
+    formatData.push({})
   }
   for (var i = 0; i < data.length; i++) {
-    returnData.push(data[i])
+    formatData.push(data[i])
   }
-  console.log(returnData)
-  let result: any = []
-  for (var i = 0; i < returnData.length; i += 7) {
-    result.push(returnData.slice(i, i + 7))
+  const result: any = []
+  for (var i = 0; i < formatData.length; i += 7) {
+    result.push(formatData.slice(i, i + 7))
   }
 
   let resultList: {
@@ -33,7 +47,7 @@ export default function WeekDataFormatter(data: any, dateData: dateDataType) {
       }[]
     }[]
   }[][] = []
-
+  console.log(result)
   for (var k = 0; k < result.length; k++) {
     let list: {
       time: string
@@ -46,7 +60,7 @@ export default function WeekDataFormatter(data: any, dateData: dateDataType) {
           startTime: string
           type: string
           teacher: string
-          studentNum: '5'
+          studentNum: string
         }[]
       }[]
     }[] = []
@@ -65,7 +79,7 @@ export default function WeekDataFormatter(data: any, dateData: dateDataType) {
             startTime: result[k][i][j].startTime,
             type: result[k][i][j].type,
             teacher: result[k][i][j].teacher,
-            studentNum: '5'
+            studentNum: result[k][i][j].numberOfStudents
           })
         } else {
           list[timeIndex].classData.push({
@@ -78,7 +92,7 @@ export default function WeekDataFormatter(data: any, dateData: dateDataType) {
                 startTime: result[k][i][j].startTime,
                 type: result[k][i][j].type,
                 teacher: result[k][i][j].teacher,
-                studentNum: '5'
+                studentNum: result[k][i][j].numberOfStudents
               }
             ]
           })
@@ -104,6 +118,6 @@ export default function WeekDataFormatter(data: any, dateData: dateDataType) {
       resultList[k][i].classData.sort((a: any, b: any) => a.index - b.index)
     }
   }
-
+  console.log(resultList)
   return resultList
 }

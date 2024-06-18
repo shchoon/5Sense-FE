@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react'
 
 import instance from '@/lib/api/axios'
 import { dateDataType } from '../../common/calendar/datePicker/dayDatePIcker'
+import FormatDayData from '@/components/main/DataFormatter/FormatDayData'
+import { calculateEndTime, formatStartTime } from '@/utils'
 
 interface getLessonDataType {
   id: number
@@ -24,52 +26,45 @@ export default function TodaySchedule() {
     month: Today.getMonth() + 1,
     date: Today.getDate()
   }
-
-  const [todayLessonData, setTodayLessonData] = useState<{ startTime: string; endTime: string; className: string }[][]>(
+  const [todayLessonData, setTodayLessonData] = useState<{ startTime: string; lessonTime: number; name: string }[][]>(
     []
   )
-  const [pageData, setPageData] = useState<{ wholePage: undefined | number; currentPage: number }>({
-    wholePage: undefined,
-    currentPage: 0
+  const [pageData, setPageData] = useState<{ wholePage: number; currentPage: number }>({
+    wholePage: 0,
+    currentPage: 1
   })
 
   useEffect(() => {
     instance(`/lessons/${formattedToday.year}/${formattedToday.month}`).then(res => {
-      const classData: getLessonDataType[] = res.data.data[formattedToday.date - 1]
+      const data = res.data.data[formattedToday.date - 1]
+      /* 클래스 startTime 순으로 정렬 */
+      const sortedData = data.sort(
+        (a: any, b: any) => Number(a.startTime.split(':')[0]) - Number(b.startTime.split(':')[0])
+      )
+      const formatData = []
+      formatData.push(sortedData[0])
+      /* 중복되는 클래스 데이터 제거 */
+      for (var i = 1; i < sortedData.length; i++) {
+        const target = sortedData[i - 1]
+        if (sortedData[i].startTime !== target.startTime || sortedData[i].id !== target.id) {
+          formatData.push(sortedData[i])
+        }
+      }
+      const divisionFormatData = []
+      /*  */
+      for (var i = 0; i < formatData.length; i += 5) {
+        divisionFormatData.push(formatData.slice(i, i + 5))
+      }
+      setTodayLessonData(divisionFormatData)
       setPageData(prev => ({
         ...prev,
-        wholePage: Math.ceil(classData.length / 5)
+        wholePage: Math.ceil(formatData.length / 5)
       }))
-      let list = []
-      classData.sort((a, b) => Number(a.startTime.split(':')[0]) - Number(b.startTime.split(':')[0]))
-      for (var i = 0; i < classData.length; i++) {
-        let hour, min
-        if (classData[i].lessonTime % 60 === 0) {
-          hour = Number(classData[i].startTime.split(':')[0]) + Math.floor(classData[i].lessonTime / 60)
-          min = classData[i].startTime.split(':')[1]
-        } else {
-          if (Number(classData[i].startTime.split(':')[1]) === 30) {
-            hour = Number(classData[i].startTime.split(':')[0]) + Math.floor(classData[i].lessonTime / 60) + 1
-            min = '00'
-          } else {
-            hour = Number(classData[i].startTime.split(':')[0]) + Math.floor(classData[i].lessonTime / 60)
-            min = '30'
-          }
-        }
-
-        list.push({
-          startTime: classData[i].startTime.slice(0, 6),
-          endTime: String(hour) + ':' + String(min),
-          className: classData[i].name
-        })
-      }
-      let result = []
-      for (var i = 0; i < list.length; i += 5) {
-        result.push(list.slice(i, i + 5))
-      }
-      setTodayLessonData(result)
     })
   }, [])
+
+  console.log(todayLessonData)
+
   return (
     <>
       {todayLessonData.length !== 0 && (
@@ -82,16 +77,18 @@ export default function TodaySchedule() {
           </div>
           <div className="w-full flex flex-col gap-1.5">
             {todayLessonData.length !== 0 &&
-              todayLessonData[pageData.currentPage].map((item, idx) => (
-                <div key={idx} className="flex flex-col">
+              todayLessonData[pageData.currentPage - 1].map((data, i) => (
+                <div key={i} className="flex flex-col">
                   <div className="before:inline-block before:w-[6px] before:h-[6px] before:rounded-full before:bg-primary-500 before:mr-2">
-                    <span className="text-gray-500 text-xs font-semibold   leading-[18px]">{item.startTime}</span>
+                    <span className="text-gray-500 text-xs font-semibold   leading-[18px]">
+                      {formatStartTime(data.startTime)}
+                    </span>
                     <span className="text-gray-500 text-xs font-semibold   leading-[18px] before:content-['-'] before:px-1">
-                      {item.endTime}
+                      {calculateEndTime(data.startTime, data.lessonTime)}
                     </span>
                   </div>
                   <div className="pl-4 mr-0 text-['#1F2A37'] text-[13px] font-semibold   leading-tight">
-                    {item.className}
+                    {data.name}
                   </div>
                 </div>
               ))}
@@ -100,7 +97,7 @@ export default function TodaySchedule() {
             <span
               className="absolute left-2.5 cursor-pointer"
               onClick={() => {
-                if (pageData.currentPage === 0) {
+                if (pageData.currentPage === 1) {
                   return
                 } else {
                   setPageData(prev => ({
@@ -112,11 +109,11 @@ export default function TodaySchedule() {
             >
               &lt;
             </span>
-            {pageData.currentPage + 1} / {pageData.wholePage}
+            {pageData.currentPage} / {pageData.wholePage}
             <span
               className="absolute right-2.5 cursor-pointer"
               onClick={() => {
-                if (pageData.currentPage + 1 === todayLessonData.length) {
+                if (pageData.currentPage === todayLessonData.length) {
                   return
                 } else {
                   setPageData(prev => ({

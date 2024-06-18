@@ -28,7 +28,7 @@ export default function MobileHeader({ centerInfo, isExistCenter }: IProps) {
     setActiveDrawer(!activeDrawer)
   }
   return (
-    <div className="lg:hidden block w-full px-6 pt-8 pb-10 box-border md:px-12">
+    <div className="lg:hidden block w-full pt-8 pb-10 box-border md:px-12">
       <div className="flex justify-between items-center">
         <div className="rightBox flex items-center gap-5">
           <MenuIcon className="cursor-pointer" onClick={handleDrawer} />
@@ -52,9 +52,9 @@ export default function MobileHeader({ centerInfo, isExistCenter }: IProps) {
       <Drawer open={activeDrawer} onClose={handleDrawer}>
         <Drawer.Header />
         <Drawer.Items>
-          <div className="w-full flex flex-col gap-20 ">
+          <div className="w-full flex flex-col gap-10 ">
             <AcademyInfo centerInfo={centerInfo} isExistCenter={isExistCenter} drawer />
-            <div className="w-[480px] h-px absolute top-[364px] left-0 bg-gray-200 " />
+            <div className="w-[480px] h-px bg-gray-200" />
             <TodaySchedule />
           </div>
         </Drawer.Items>
