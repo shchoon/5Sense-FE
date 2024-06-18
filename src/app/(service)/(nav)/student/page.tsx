@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import NoneResult from '@/components/common/NoneResult'
+import NotFoundPage from '@/components/common/NotFoundPage'
 import Loading from '@/components/common/Loading'
 import Modal from '@/components/common/modal'
 import { modalState } from '@/lib/state/modal'
@@ -170,7 +170,11 @@ export default function StudentPage() {
         <ListInfo type="student" listInfo={listInfoProps} />
         {/* 수강생 목록 시작 */}
         <div className="w-full flex flex-col gap-[14px]">
-          {isRefresh && studentList.length === 0 ? <NoneResult /> : null}
+          {isRefresh && studentList.length === 0 ? (
+            <div className="w-full mt-[140px]">
+              <NotFoundPage title="검색결과가 없습니다." subTitle="다른 검색어를 통해 검색을 이어나가보세요" />
+            </div>
+          ) : null}
           {/* 검색 결과 없음 */}
           {studentList?.map(({ id, name, lessons, phone, particulars }) => {
             const props = { id: id, name: name, lessons: lessons, phone: phone, particulars: particulars }
