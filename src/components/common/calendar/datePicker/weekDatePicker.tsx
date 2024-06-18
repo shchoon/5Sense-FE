@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { WeekCalendarDateState } from '@/lib/state/calendar/WeekCalendarDateState'
-import GetWeekList from '../GetWeekList'
+import GetWeekList from '../getWeekList'
 
 import AllowRight from '@/icons/icon/datePicker/allowRight.svg'
 import AllowLeft from '@/icons/icon/datePicker/allowLeft.svg'

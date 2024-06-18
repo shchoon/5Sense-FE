@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import { GetCalendarData } from '../GetCalendarData'
+import { GetCalendarData } from '../getCalendarData'
 import { DayCalendarDateState } from '@/lib/state/calendar/DayCalendarDateState'
 
 import AllowRight from '@/icons/icon/datePicker/allowRight.svg'
