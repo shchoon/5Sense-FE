@@ -1,5 +1,4 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
 import { useEffect, useState, useRef } from 'react'
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil'
@@ -8,8 +7,8 @@ import ClassFilter from '@/components/class/classFilter'
 import instance from '@/lib/api/axios'
 import { filterState } from '@/lib/filter/filterState'
 import { filterStateType } from '@/lib/filter/filterState'
-import Modal from '@/components/common/modal'
 import { modalState } from '@/lib/state/modal'
+import { changePhoneNumberToString, formatLessonDate, formatStartTime } from '@/utils'
 import DetailClassModal from '@/components/modal/DetailClassModal'
 
 import ContentHeader from '@/components/common/ContentHeader'
@@ -29,24 +28,22 @@ export default function ClassPage() {
   const router = useRouter()
   const target = useRef<HTMLDivElement>(null)
   const filterValue = useRecoilValue(filterState)
-  const modal = useRecoilValue(modalState)
-  const setModal = useSetRecoilState(modalState)
 
-  const [isOpen, setIsOpen] = useState(true)
-
-  const handleClose = () => setIsOpen(false)
-
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [classList, setClassList] = useState<classType[]>([])
-  const [props, setProps] = useState<{ id: number; type: string }>({
+  const [targetClass, setTargetClass] = useState<{ id: number; type: string }>({
     id: 0,
     type: ''
   })
+
   const [metaData, setMetaData] = useState<{ page: number; hasNextPage: boolean }>({
     page: 1,
     hasNextPage: false
   })
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isRefresh, setIsRefresh] = useState<boolean>(false)
+
+  const handleClose = () => setIsModalOpen(false)
 
   const checkLessonUrl = (data: filterStateType, page: number) => {
     let baseUrl = ['lessons/filters?']
@@ -135,12 +132,12 @@ export default function ClassPage() {
               key={idx}
               className="h-56 px-4 py-8 flex flex-col justify-between box-border bg-white rounded-lg shadow border border-gray-200 hover:border-primary-600"
               onClick={() => {
-                setProps(prev => ({
+                setTargetClass(prev => ({
                   ...prev,
                   id: data.id,
                   type: data.type
                 }))
-                setModal(true)
+                setIsModalOpen(true)
               }}
             >
               <div
@@ -171,21 +168,17 @@ export default function ClassPage() {
           </div>
         </div>
       )}
-      {modal && (
-        <Modal>
-          <DetailClassModal {...props} onClose={() => setModal(false)} />
-        </Modal>
-      )}
       {isRefresh && classList.length === 0 && <NoneResult />} */}
-      {/* <Drawer open={isOpen} onClose={handleClose}>
-        <Drawer.Header />
-        <Drawer.Items>
-          <div className=" bg-red-50">
-            <div className="h-[700px]">byebye</div>
-            <div className="h-[600px]">byebye</div>
-          </div>
-        </Drawer.Items>
-      </Drawer> */}
+      {isModalOpen && (
+        <DetailClassModal
+          id={targetClass.id}
+          type={targetClass.type}
+          isOpen={isModalOpen}
+          handleClose={() => {
+            setIsModalOpen(false)
+          }}
+        />
+      )}
     </div>
   )
 }

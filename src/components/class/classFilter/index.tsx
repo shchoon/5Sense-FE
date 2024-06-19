@@ -234,6 +234,7 @@ export default function ClassFilter() {
   return (
     <div className="flex flex-col gap-2 h-[50px]">
       <div className="w-full h-[37px] items-start gap-2 flex">
+        {/* 클래스 유형 */}
         <button
           ref={classTypeRef}
           className="group flex items-center gap-2 w-[120px] h-full border px-3 py-2 rounded-lg border-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9]"
@@ -250,6 +251,7 @@ export default function ClassFilter() {
             <ChevronDownIcon width={16} height={16} />
           )}
         </button>
+        {/* 강사 */}
         <button
           ref={teacherNameTypeRef}
           className="group flex items-center gap-2 max-w-[160px] h-full px-3 py-2 border rounded-lg border-indigo-500  hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9] focus-within:text-white"
@@ -266,6 +268,7 @@ export default function ClassFilter() {
             <ChevronDownIcon width={16} height={16} />
           )}
         </button>
+        {/* 카테고리 */}
         <button
           ref={categoryTypeRef}
           className="group flex items-center gap-2 max-w-[200px] h-full px-3 py-2 border rounded-lg border-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9]"

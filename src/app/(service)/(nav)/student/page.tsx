@@ -157,8 +157,6 @@ export default function StudentPage() {
     }
   }, [metaData])
 
-  console.log(studentList)
-
   return (
     <div>
       <ContentHeader title="수강생 관리" btnName="수강생 등록" onClick={() => router.push('student/register')} />

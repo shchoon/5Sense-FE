@@ -71,11 +71,7 @@ export default function FilterSearchName(props: IProps) {
           onFocus={() => {
             setIsFocusInput(true)
           }}
-          /* onBlur={e => {
-            console.log(e.target)
-            setIsFocusInput(false)
-          }} */
-          className="w-full h-full bg-gray-50 focus:outline-none text-gray-500 text-sm font-normal  leading-[17.50px]"
+          className="w-full h-full bg-gray-50 border-none focus:ring-0 text-gray-500 text-sm font-normal leading-[17.50px]"
           onChange={event => {
             SearchName(event)
           }}
