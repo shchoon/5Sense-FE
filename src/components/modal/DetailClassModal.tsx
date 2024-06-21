@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 import { changePhoneNumberToString, formatLessonDate, formatStartTime } from '@/utils'
 import { Drawer } from 'flowbite-react'
@@ -42,6 +43,8 @@ interface ClassDetail {
 }
 
 export default function DetailClassModal({ id, type, isOpen, handleClose }: IProps) {
+  const router = useRouter()
+
   const [classDetail, setClassDetail] = useState<ClassDetail>({
     type: '',
     categoryName: '',
@@ -52,6 +55,17 @@ export default function DetailClassModal({ id, type, isOpen, handleClose }: IPro
     students: [],
     schedules: []
   })
+  const [isClickedEdit, setIsClickedEdit] = useState<boolean>(false)
+
+  const endOfClass = () => {
+    instance.patch(`/${type}-lessons/${id}/close`).then(res => {
+      console.log(res)
+    })
+  }
+
+  const editOfClass = () => {
+    setIsClickedEdit(true)
+  }
 
   useEffect(() => {
     instance.get(`/${type}-lessons/${id}/details`).then(res => {
@@ -70,6 +84,19 @@ export default function DetailClassModal({ id, type, isOpen, handleClose }: IPro
       }))
     })
   }, [])
+
+  useEffect(() => {
+    if (isClickedEdit) {
+      localStorage.setItem('editClassType', type)
+      localStorage.setItem('editClassId', String(id))
+
+      if (type === 'session') {
+        router.push('class/edit/session')
+      } else if (type === 'duration') {
+        router.push('class/edit/duration')
+      }
+    }
+  }, [editOfClass])
 
   return (
     <>
@@ -175,10 +202,16 @@ export default function DetailClassModal({ id, type, isOpen, handleClose }: IPro
                 </div>
               </div>
               <div className="absolute bottom-0 left-0 w-full flex gap-2.5 pb-[18px] px-6">
-                <button className="w-full h-[52px] flex justify-center items-center border border-1 border-primary-600 rounded-lg">
-                  <span className="text-[16px] text-primary-600 font-semibold">취소하기</span>
+                <button
+                  className="w-full h-[52px] flex justify-center items-center border border-1 border-primary-600 rounded-lg"
+                  onClick={() => endOfClass()}
+                >
+                  <span className="text-[16px] text-primary-600 font-semibold">종료하기</span>
                 </button>
-                <button className="w-full h-[52px] flex justify-center items-center text-white bg-primary-600 rounded-lg">
+                <button
+                  className="w-full h-[52px] flex justify-center items-center text-white bg-primary-600 rounded-lg"
+                  onClick={() => editOfClass()}
+                >
                   <span className="text-[16px] font-semibold">수정하기</span>
                 </button>
               </div>
