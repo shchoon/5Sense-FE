@@ -52,11 +52,30 @@ export interface ITeacherInfo {
   name: string
 }
 
-export const dynamicParams = true;
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  return []
+  return [{id: '7'}]
 }
+
+/* const getSessionClassId = async () => {
+  const IP_ADDRESS = process.env.NEXT_PUBLIC_IP_ADDRESS
+  const accessToken = typeof window !== 'undefined' && localStorage.getItem('acccessToken')
+  const res = await fetch(`${IP_ADDRESS}/lessons/filters?type=session&page=1&take=10`,{
+    method: 'GET',
+    headers: {
+      authorization: `Bearer ${accessToken}`
+    }
+  }).then(res => {
+    return res.json()
+  })
+
+  const sessions = await res.data.lessons
+
+  return sessions.map((lessons: {id: string}) => ({
+    id: String(lessons.id)
+  }))
+} */
 
 export default async function EditPage({params}: {params: {id: string}}) {
   //const classId = await getSessionClassId()
