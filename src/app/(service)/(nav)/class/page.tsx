@@ -26,13 +26,15 @@ interface classType {
 }
 
 export default function ClassPage() {
+
+  
   const router = useRouter()
   const target = useRef<HTMLDivElement>(null)
   const filterValue = useRecoilValue(filterState)
   const modal = useRecoilValue(modalState)
   const setModal = useSetRecoilState(modalState)
 
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
 
   const handleClose = () => setIsOpen(false)
 
@@ -66,8 +68,30 @@ export default function ClassPage() {
     baseUrl.push(`&page=${page}&take=10`)
     return baseUrl.join('')
   }
+  const IP_ADDRESS = process.env.NEXT_PUBLIC_IP_ADDRESS
+  const a = async () => {
+    const test = await fetch(`${IP_ADDRESS}/lessons/filters?type=session&page=1&take=10`,{
+      method: 'GET',
+      headers: {
+        authorization: `Bearer ${localStorage.getItem('accessToken')}`
+      }
+    }).then(res => {
+      return res.json()
+    })
 
+    const data  = test.data.lessons
+    console.log(data)
+    const list = data.map((lesson: {id: number}) => ({
+      id: lesson.id
+    }))
+    console.log(list)
+    return data.map((lesson: {id: number}) => {
+      id: lesson.id
+    })
+  }
+  a()
   useEffect(() => {
+    
     instance(checkLessonUrl(filterValue, 1)).then(res => {
       const lessonData = res.data.data.lessons
       const meta = res.data.data.meta
@@ -124,6 +148,8 @@ export default function ClassPage() {
     }
   }, [metaData])
 
+  console.log(props)
+
   return (
     <div className="w-full">
       <ContentHeader title="클래스 관리" btnName="클래스 등록" onClick={() => router.push('class/register')} />
@@ -140,7 +166,8 @@ export default function ClassPage() {
                   id: data.id,
                   type: data.type
                 }))
-                setModal(true)
+                //setModal(true)
+                setIsOpen(true)
               }}
             >
               <div
@@ -177,15 +204,19 @@ export default function ClassPage() {
         </Modal>
       )}
       {isRefresh && classList.length === 0 && <NoneResult />} */}
-      {/* <Drawer open={isOpen} onClose={handleClose}>
+      <Drawer open={isOpen} onClose={handleClose}>
         <Drawer.Header />
         <Drawer.Items>
-          <div className=" bg-red-50">
+          {/* <div className=" bg-red-50">
             <div className="h-[700px]">byebye</div>
             <div className="h-[600px]">byebye</div>
-          </div>
+          </div> */}
+          <button
+          onClick={() => {
+            router.push(`/class/edit/session/${props.id}`)
+          }}>수정</button>
         </Drawer.Items>
-      </Drawer> */}
+      </Drawer>
     </div>
   )
 }
