@@ -55,7 +55,11 @@ export interface ITeacherInfo {
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  return [{id: '7'}]
+  const dynamicRoute = []
+  for(var i=1; i<100; i++){
+    dynamicRoute.push({id: String(i)})
+  }
+  return dynamicRoute
 }
 
 /* const getSessionClassId = async () => {
