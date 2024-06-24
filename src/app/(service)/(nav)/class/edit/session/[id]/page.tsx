@@ -80,7 +80,7 @@ const getSessionClassId = async (params: { id: string }) => {
   }))
 }
 
-export default async function EditPage(params: { id: string }) {
+export default async function EditPage({ params }: { params: { id: string } }) {
   //const classId = await getSessionClassId()
   console.log('params', params.id)
   return <SessionEdit classId={params.id} />
