@@ -63,7 +63,7 @@ export async function generateStaticParams() {
 
 const getSessionClassId = async (params: { id: string }) => {
   //const IP_ADDRESS = process.env.NEXT_PUBLIC_IP_ADDRESS
-  const accessToken = typeof window !== 'undefined' && localStorage.getItem('acccessToken')
+  /* const accessToken = typeof window !== 'undefined' && localStorage.getItem('acccessToken')
   const res = await fetch(`/lessons/filters?type=session&page=1&take=10`, {
     method: 'GET',
     headers: {
@@ -77,11 +77,16 @@ const getSessionClassId = async (params: { id: string }) => {
 
   return sessions.map((lessons: { id: string }) => ({
     id: String(lessons.id)
-  }))
+  })) */
+
+  const classId = params.id
+  return {
+    id: classId
+  }
 }
 
 export default async function EditPage({ params }: { params: { id: string } }) {
   //const classId = await getSessionClassId()
-  console.log('params', params.id)
-  return <SessionEdit classId={params.id} />
+  const classId = await getSessionClassId(params)
+  return <SessionEdit classId={classId.id} />
 }

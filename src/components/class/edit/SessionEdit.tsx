@@ -9,8 +9,8 @@ import ClassType from './classType'
 import TeacherInfo from './teacherInfo'
 import { getSesstionLessons } from '@/lib/api/class'
 
-export default function SessionEdit({classId}: {classId: string}) {
-    const router = useRouter()
+export default function SessionEdit({ classId }: { classId: string }) {
+  //const router = useRouter()
 
   //const params = useParams<{ type: string; id: string }>()
 
