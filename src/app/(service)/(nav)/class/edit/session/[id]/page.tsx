@@ -54,31 +54,10 @@ export interface ITeacherInfo {
 export const dynamicParams = true
 
 export async function generateStaticParams() {
-  /* const dynamicRoute = []
-  for(var i=1; i<100; i++){
-    dynamicRoute.push({id: String(i)})
-  } */
   return []
 }
 
 const getSessionClassId = async (params: { id: string }) => {
-  //const IP_ADDRESS = process.env.NEXT_PUBLIC_IP_ADDRESS
-  /* const accessToken = typeof window !== 'undefined' && localStorage.getItem('acccessToken')
-  const res = await fetch(`/lessons/filters?type=session&page=1&take=10`, {
-    method: 'GET',
-    headers: {
-      authorization: `Bearer ${accessToken}`
-    }
-  }).then(res => {
-    return res.json()
-  })
-
-  const sessions = await res.data.lessons
-
-  return sessions.map((lessons: { id: string }) => ({
-    id: String(lessons.id)
-  })) */
-
   const classId = params.id
   return {
     id: classId
@@ -86,7 +65,6 @@ const getSessionClassId = async (params: { id: string }) => {
 }
 
 export default async function EditPage({ params }: { params: { id: string } }) {
-  //const classId = await getSessionClassId()
   const classId = await getSessionClassId(params)
-  return <SessionEdit classId={classId.id} />
+  return <div>test classId = {classId.id}</div>
 }
