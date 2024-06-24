@@ -1,4 +1,3 @@
-'use client'
 /* 'use client'
 import { useEffect, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
@@ -11,9 +10,6 @@ import TeacherInfo from '@/components/class/edit/teacherInfo'
 import { getDurationLessons, getSesstionLessons, putSesstionLessons } from '@/lib/api/class' */
 import SessionEdit from '@/components/class/edit/SessionEdit'
 import instance from '@/lib/api/axios'
-import { access } from 'fs'
-import { getStaticPaths } from 'next/dist/build/templates/pages'
-import { usePathname } from 'next/navigation'
 
 export interface IClassInfo {
   name: string
@@ -53,21 +49,20 @@ export interface ITeacherInfo {
   name: string
 }
 
-/* export const dynamicParams = false
+export const dynamicParams = true
 
 export async function generateStaticParams() {
-  return []
-} */
+  return [{ id: '7' }]
+}
 
-/* const getSessionClassId = async (params: { id: string }) => {
+const getSessionClassId = async (params: { id: string }) => {
   const classId = params.id
   return {
     id: classId
   }
-} */
+}
 
-export default function EditPage() {
-  //const classId = await getSessionClassId(params)
-  const pathName = usePathname()
-  return <div>test classId = {pathName}</div>
+export default async function EditPage({ params }: { params: { id: string } }) {
+  const classId = await getSessionClassId(params)
+  return <div>test classId = {classId.id}</div>
 }
