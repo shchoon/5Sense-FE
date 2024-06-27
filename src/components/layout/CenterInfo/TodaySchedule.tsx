@@ -68,15 +68,15 @@ export default function TodaySchedule() {
   console.log(todayLessonData)
 
   return (
-    <>
+    <div className="flex flex-col w-full lg:w-[248px] gap-3">
+      <div className="today flex w-fit h-[29px] items-center box-border px-2 py-1 gap-[6px] bg-primary-100 rounded">
+        <span className="bold-500 text-sm leading-[21px]">TODAY</span>
+        <span className="medium-500 text-sm leading-[21px]">
+          {formattedToday.year}/{formattedToday.month}/{formattedToday.date}
+        </span>
+      </div>
       {todayLessonData.length !== 0 && (
-        <div className="flex flex-col w-full lg:w-[248px] gap-3">
-          <div className="today flex w-fit h-[29px] items-center box-border px-2 py-1 gap-[6px] bg-primary-100 rounded">
-            <span className="bold-500 text-sm leading-[21px]">TODAY</span>
-            <span className="medium-500 text-sm leading-[21px]">
-              {formattedToday.year}/{formattedToday.month}/{formattedToday.date}
-            </span>
-          </div>
+        <>
           <div className="w-full flex flex-col gap-1.5">
             {todayLessonData.length !== 0 &&
               todayLessonData[pageData.currentPage - 1].map((data, i) => (
@@ -130,8 +130,8 @@ export default function TodaySchedule() {
               </span>
             </div>
           )}
-        </div>
+        </>
       )}
-    </>
+    </div>
   )
 }
