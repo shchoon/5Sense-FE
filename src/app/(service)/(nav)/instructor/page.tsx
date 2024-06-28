@@ -169,7 +169,7 @@ export default function InstructorPage() {
   }, [metaData])
 
   return (
-    <div>
+    <>
       <ContentHeader
         title="강사 관리"
         btnName="강사 등록"
@@ -232,15 +232,7 @@ export default function InstructorPage() {
           </div>
         </div>
       )}
-      {/* <Modal size="sm" show={openModal} onClose={() => setOpenModal(false)}>
-        <Modal.Header>강사 등록</Modal.Header>
-        <Modal.Body>
-          <Button color="primary" fullSized onClick={() => setOpenModal(false)}>
-            등록
-          </Button>
-        </Modal.Body>
-      </Modal> */}
-      <Drawer
+      {isOpen.detail && <Drawer
         open={isOpen.detail}
         onClose={() => {
           setIsOpen(prev => ({
@@ -253,7 +245,7 @@ export default function InstructorPage() {
         <Drawer.Items>
           <DetailInstructor />
         </Drawer.Items>
-      </Drawer>
-    </div>
+      </Drawer>}
+    </>
   )
 }

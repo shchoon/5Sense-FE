@@ -54,7 +54,7 @@ export default function DetailInstructor() {
       {/* 클래스 목록 */}
       <div className="w-full p-6 flex flex-col gap-4 border border-1 border-gray-200 rounded-lg shadow-[0_5px_15px_0_rgba(0,0,0,0.02)]">
         <span className="gray-800-bold text-base">클래스 목록</span>
-        <div className="w-full flex flex-col gap-4">
+        <div className="w-full flex flex-col gap-4 max-h-[700px] overflow-auto">
           {instructorData.sessionLessons.length !== 0 &&
             instructorData.sessionLessons.map((data, i) => {
               return <SessionDetailCard sessionData={data} />
@@ -64,6 +64,14 @@ export default function DetailInstructor() {
               return <DurationDetailCard durationData={data} />
             })}
         </div>
+      </div>
+      {/* 수정 버튼 */}
+      <div className='absolute bottom-0 w-full px-6 py-[18px]'>
+      <button className='w-full h-[52px] rounded-lg bg-primary-600' onClick={() => [
+        router.push('/instructor/edit')
+      ]}>
+        <span className='text-white text-[16px] font-semibold'>수정하기</span>
+      </button>
       </div>
     </div>
   )
