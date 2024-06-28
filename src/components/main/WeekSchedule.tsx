@@ -106,7 +106,7 @@ export default function WeekSchedule() {
                               >
                                 {mouseOverId === `${pI}` + `${cI}` + i.toString() && (
                                   <div
-                                    className={`absolute z-10 left-10 top-10 w-[180px] min-h-[160px] p-[5px] flex flex-col gap-2 outline outline-1 ${
+                                    className={`absolute z-10 left-10 top-10 w-[180px]  p-[5px] flex flex-col gap-2 outline outline-1 ${
                                       data.type === 'duration' ? 'outline-primary-200' : 'outline-orange-200'
                                     } bg-stone-50 rounded`}
                                     style={{

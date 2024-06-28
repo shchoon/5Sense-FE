@@ -6,21 +6,21 @@ import DateSlideTab from '@/components/main/DateSlideTab'
 import { dateDataType } from '@/components/common/calendar/datePicker/dayDatePIcker'
 import DayDatePicker from '@/components/common/calendar/datePicker/dayDatePIcker'
 import { DayCalendarDateState } from '@/lib/state/calendar/DayCalendarDateState'
+import { useWindowSize } from '@/hooks/useWindowSize'
 
 import ChevronLeft from '@/icons/icon/datePicker/chevronLeft.svg'
 import ChevronRight from '@/icons/icon/datePicker/chevronRight.svg'
 import CalendarIcon from '@/icons/icon/datePicker/calendar.svg'
 
 export default function Calendar({ page }: { page: string }) {
+  const {width, height} = useWindowSize()
   const calendarDate = useRecoilValue(DayCalendarDateState)
   const setCalendarDate = useSetRecoilState(DayCalendarDateState)
 
-  const currentDate = new Date()
-  const [dateData, setDateData] = useState<dateDataType>(calendarDate)
-  const [isClickedDatePicker, setIsClickedDatePicker] = useState<boolean>(false)
-
   const lastDateOfCurrnetMonthData = new Date(calendarDate.year, calendarDate.month + 1, 0)
   const lastDateOfLastMonthData = new Date(calendarDate.year, calendarDate.month, 0)
+
+  const [isClickedDatePicker, setIsClickedDatePicker] = useState<boolean>(false)
 
   const onClickDatePickerHandler = () => {
     setIsClickedDatePicker(prev => !prev)
@@ -87,7 +87,9 @@ export default function Calendar({ page }: { page: string }) {
   return (
     <div className="w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
       <div className="relative mx-auto flex gap-[138px] w-full  h-[52px]  md:w-full ">
-        <div className={`flex mx-auto w-[420px] h-full p-1.5 border rounded-md border-gray-100 bg-[#F8FAFD]`}>
+        <div className={`flex mx-auto ${
+              width > 950 ? 'w-[420px]' : 'w-[312px]'
+            } h-full p-1.5 border rounded-md border-gray-100 bg-[#F8FAFD]`}>
           <div
             className="h-10 w-10 border p-2 rounded border-gray-200 bg-white flex items-center cursor-pointer"
             onClick={moveBackDay}
@@ -112,7 +114,7 @@ export default function Calendar({ page }: { page: string }) {
         </div>
         {page === 'main' && <DateSlideTab />}
         {isClickedDatePicker && (
-          <div className="absolute w-[283px] z-10 right-0 left-0 mx-auto top-[60px]">
+          <div className="absolute w-[284px] z-10 right-0 left-0 mx-auto top-[60px]">
             <DayDatePicker parentsDateData={calendarDate} onClose={onCloseDatePicker} />
           </div>
         )}

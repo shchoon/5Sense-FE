@@ -74,7 +74,7 @@ export default function MonthDatePicker(props: any) {
   }
 
   return (
-    <div className="flex flex-col gap-2 w-[255px] bg-white p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
+    <div className="w-full flex flex-col gap-2 bg-white p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
       <div className="w-full flex justify-between items-center">
         <AllowLeft className="cursor-pointer" onClick={onClickYearBackHandler} />
         <div className="w-[126px] text-center gray-900-bold text-xs">{dateData.year}년</div>
