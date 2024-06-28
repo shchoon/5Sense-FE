@@ -128,12 +128,12 @@ export default function ClassPage() {
     <div className="w-full">
       <ContentHeader title="클래스 관리" btnName="클래스 등록" onClick={() => router.push('class/register')} />
       <ClassFilter />
-      <div className="container w-full grid grid-cols-2 2xl:grid-cols-3 gap-[20px] mt-5">
+      <div className="w-full grid grid-cols-2 2xl:grid-cols-3 gap-[20px] mt-5">
         {classList.length !== 0 &&
           classList.map((data, idx) => (
             <button
               key={idx}
-              className="h-56 px-4 py-8 flex flex-col justify-between box-border bg-white rounded-lg shadow border border-gray-200 hover:border-primary-600"
+              className="h-[224px] px-6 py-8 flex flex-col rounded-lg shadow-[0_5px_15px_0_rgba(0,0,0,0.02)] border border-gray-200 hover:border-primary-600"
               onClick={() => {
                 setProps(prev => ({
                   ...prev,
@@ -143,17 +143,17 @@ export default function ClassPage() {
                 setModal(true)
               }}
             >
-              <div
-                className={`categor w-fit h-fit px-2.5 py-2 box-border rounded justify-center items-center ${
-                  data.type === 'duration' ? 'text-primary-600 bg-primary-100' : 'text-secondary-600 bg-secondary-100'
-                } text-xs font-semibold`}
-              >
-                {data.category}
-              </div>
-              <div className="mt-4 flex-1 gray-900-semibold text-xl">{data.name}</div>
-              <div className="w-full flex justify-between">
+                <div
+                  className={`mb-5 h-7 px-2.5 py-2 rounded justify-center items-center ${
+                    data.type === 'duration' ? 'text-primary-600 bg-primary-100' : 'text-secondary-600 bg-secondary-100'
+                  } text-xs font-semibold`}
+                >
+                  {data.category}
+                </div>
+                <div className="mb-8 h-[60px] gray-900-semibold text-[20px]">{data.name}</div>
+              <div className="w-full flex items-center justify-between">
                 <div className="gray-500-medium text-base">담당 강사 : {data.teacher}</div>
-                <div className="gray-500-normal text-sm">회원 수 : {data.numberOfStudents}</div>
+                <div className="gray-500-normal text-base">회원 수 : {data.numberOfStudents}</div>
               </div>
             </button>
           ))}
