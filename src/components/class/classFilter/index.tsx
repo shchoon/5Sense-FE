@@ -236,51 +236,57 @@ export default function ClassFilter() {
       <div className="w-full h-[37px] items-start gap-2 flex">
         <button
           ref={classTypeRef}
-          className="group flex items-center gap-2 w-[120px] h-full border px-3 py-2 rounded-lg border-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9]"
+          className="group flex items-center gap-2 w-[120px] h-full border px-3 py-2 rounded-lg filter-btn"
           onClick={e => {
             handleClickClassInside()
           }}
         >
-          <span className="w-20 text-sm indigo-500-semibold group-hover:text-white group-focus:text-white">
+          <span className="w-20 h-[21px] leading-[21px] text-sm primary-600-semibold group-hover:text-white group-focus:text-white">
             {classType === '' ? '클래스 유형' : classType}
           </span>
+          <div className='h-[21px] py-[2.5px]'>
           {isClickedfilter.isClickedClassFilter ? (
             <ChevronUpIcon width={16} height={16} />
           ) : (
             <ChevronDownIcon width={16} height={16} />
           )}
+          </div>
         </button>
         <button
           ref={teacherNameTypeRef}
-          className="group flex items-center gap-2 max-w-[160px] h-full px-3 py-2 border rounded-lg border-indigo-500  hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9] focus-within:text-white"
+          className="group flex items-center gap-2 max-w-[160px] h-full px-3 py-2 border rounded-lg filter-btn"
           onClick={() => {
             handleClickTeacherInside()
           }}
         >
-          <span className="max-w-[120px] text-sm indigo-500-semibold group-hover:text-white group-focus:text-white">
+          <span className="max-w-[120px] h-[21px] leading-[21px] text-sm primary-600-semibold group-hover:text-white group-focus:text-white">
             {filterValue.teacherName.length === 0 ? '강사명' : getCheckedName()}
           </span>
+          <div className='h-[21px] py-[2.5px]'>
           {isClickedfilter.isClickedTeacherFilter ? (
             <ChevronUpIcon width={16} height={16} />
           ) : (
             <ChevronDownIcon width={16} height={16} />
           )}
+          </div>
         </button>
         <button
           ref={categoryTypeRef}
-          className="group flex items-center gap-2 max-w-[200px] h-full px-3 py-2 border rounded-lg border-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9]"
+          className="group flex items-center gap-2 max-w-[200px] h-full px-3 py-2 border rounded-lg filter-btn"
           onClick={() => {
             handleClickCategoryInside()
           }}
         >
-          <span className="max-w-[150px] text-sm indigo-500-semibold group-hover:text-white group-focus:text-white">
+          <span className="max-w-[150px] h-[21px] leading-[21px] text-sm indigo-500-semibold group-hover:text-white group-focus:text-white">
             {categoryData.mainClass} {categoryData.subClass !== '' && `/ ${categoryData.subClass}`}
           </span>
+          <div className='h-[21px] py-[2.5px]'>
           {isClickedfilter.isClickedCategoryFilter ? (
             <ChevronUpIcon width={16} height={16} />
           ) : (
             <ChevronDownIcon width={16} height={16} />
           )}
+          </div>
         </button>
       </div>
       <div className="relative">

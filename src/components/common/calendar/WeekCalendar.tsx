@@ -107,7 +107,7 @@ export default function WeekCalendar() {
 
   return (
     <>
-      <div className="mt-[80px] w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
+      <div className="w-full flex xl:mx-auto xl:max-w-[1016px] lg:max-w-[936px]">
         <div className="relative mx-auto flex gap-[138px] items-center w-full  h-[52px]  md:w-full ">
           <div
             className={`flex mx-auto ${
@@ -137,7 +137,7 @@ export default function WeekCalendar() {
           <DateSlideTab />
           {/* 주 단위 달력 */}
           {isClickedDatePicker && (
-            <div className="absolute w-[255px] z-10 right-0 left-0 mx-auto top-[60px]">
+            <div className="absolute w-[284px] z-10 right-0 left-0 mx-auto top-[60px]">
               <WeekDatePicker handleChangeIsClickedDatePicker={handleChangeIsClickedDatePicker} />
             </div>
           )}

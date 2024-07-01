@@ -88,7 +88,7 @@ export default function WeekDatePicker(props: IProps) {
   }, [currentMonthData.month])
 
   return (
-    <div className="flex flex-col z-10 bg-white gap-2 w-[283px] p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
+    <div className="w-full flex flex-col z-10 bg-white gap-2 p-4 rounded-lg shadow-[0px_1px_2px_-1px_rgba(0, 0, 0, 0.10)] shadow">
       <div className="w-full flex justify-between items-center">
         <AllowLeft className="cursor-pointer" onClick={onClickMonthBackHandler} />
         <div className="w-[126px] text-center gray-900-bold text-xs ">
