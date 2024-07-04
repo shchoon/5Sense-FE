@@ -5,6 +5,7 @@ import SearchInput from '@/components/common/SearchInput'
 import { studentType, metaType } from '../student/page'
 import ListInfo from '@/components/view/ListInfo'
 import instance from '@/lib/api/axios'
+import { changePhoneNumberToString } from '@/utils'
 
 import NotFoundPage from '@/components/common/NotFoundPage'
 import List from '@/components/view/List'
@@ -14,6 +15,7 @@ import ChevronUpIcon from 'public/assets/icons/chevron/chevron-up-blue.svg'
 import ToggleOnIcon from 'public/assets/icons/toggle_on.svg'
 import ToggleOffIcon from 'public/assets/icons/toggle_off.svg'
 import ContentHeader from '@/components/common/ContentHeader'
+import RadioIcon from '@/icons/icon/radio.svg'
 
 export interface PaymentType {
   id: number
@@ -142,76 +144,80 @@ export default function PayPage() {
   return (
     <div>
       <ContentHeader title="청구/납무" />
-      <div className="w-full flex justify-between">
+      <div className="relative w-full flex justify-between">
         <button
-          className={`group relative w-[100px] h-[37px] flex items-center gap-2 px-3 py-2 rounded-lg border border-primary-600 hover:bg-indigo-700 ${
-            isClickedDropdown && 'bg-indigo-700 outline outline-2.5 outline-[#D3C4F9]'
-          }`}
+          className={`group ${currentPaymentStatus === 'Unpaid' ? 'w-[87px]' : 'w-[100px]'}  h-[37px] flex items-center gap-2 px-3 py-2 rounded-lg border filter-btn`}
           onClick={() => {
             setIsClickedDropdown(prev => !prev)
           }}
         >
-          <div
-            className={`group-hover:text-white ${
-              isClickedDropdown ? 'text-white' : 'text-primary-600'
-            } text-sm font-semibold`}
-          >
+          <div className={`primary-600-semibold group-hover:text-white group-focus:text-white text-sm`}>
             {currentPaymentStatus === 'All' ? '결제상태' : currentPaymentStatus === 'Paid' ? '결제완료' : '미결제'}
           </div>
-          {isClickedDropdown ? (
-            <ChevronUpIcon className="absolute top-2 right-3" width={16} height={16} />
-          ) : (
-            <ChevronDownIcon className="absolute top-2 right-3" width={16} height={16} />
-          )}
-          {isClickedDropdown && (
-            <div className="absolute top-[40px] left-0 w-[195px] flex flex-col p-4 border rounded-lg border-gray-300 shadow-[0_1px_2px_0_rgba(0,0,0,0.08)] bg-white">
-              <div id="classTypeFilter" className="w-[130px] h-[54] flex flex-col gap-3 ">
-                <p className="flex gap-2 items-center">
+          <div className="h-[21px] py-[2.5px]">
+            {isClickedDropdown ? <ChevronUpIcon width={16} height={16} /> : <ChevronDownIcon width={16} height={16} />}
+          </div>
+        </button>
+        {isClickedDropdown && (
+          <div className="absolute top-[45px] left-0 w-[195px] flex flex-col p-4 border rounded-lg border-gray-300 shadow-[0_1px_2px_0_rgba(0,0,0,0.08)] bg-white">
+            <div id="classTypeFilter" className="w-[130px] h-[54] flex flex-col gap-3 ">
+              <p className="flex gap-2 items-center">
+                {currentPaymentStatus === 'Paid' ? (
+                  <RadioIcon />
+                ) : (
                   <input
-                    className="cursor-pointer"
+                    className="cursor-pointer focus:ring-offset-0 focus:ring-0"
                     type="radio"
                     id="paid"
                     value="결제완료"
                     checked={currentPaymentStatus === 'Paid' && true}
                     onChange={() => {
                       setCurrentPaymentStatus('Paid')
+                      setIsClickedDropdown(false)
                     }}
                   />
-                  <label
-                    htmlFor="paid"
-                    className="gray-900-semibold text-sm cursor-pointer"
-                    onClick={() => {
-                      setCurrentPaymentStatus('Paid')
-                    }}
-                  >
-                    결제완료
-                  </label>
-                </p>
-                <p className="flex gap-2 items-center cursor-pointer">
+                )}
+                <label
+                  htmlFor="paid"
+                  className="gray-900-semibold text-sm cursor-pointer"
+                  onClick={() => {
+                    setCurrentPaymentStatus('Paid')
+                    setIsClickedDropdown(false)
+                  }}
+                >
+                  결제완료
+                </label>
+              </p>
+              <p className="flex gap-2 items-center cursor-pointer">
+                {currentPaymentStatus === 'Unpaid' ? (
+                  <RadioIcon />
+                ) : (
                   <input
-                    className="cursor-pointer"
+                    className="cursor-pointer focus:ring-offset-0 focus:ring-0"
                     type="radio"
                     id="unpaid"
                     value="미결제"
                     checked={currentPaymentStatus === 'Unpaid' && true}
                     onChange={() => {
                       setCurrentPaymentStatus('Unpaid')
+                      setIsClickedDropdown(false)
                     }}
                   />
-                  <label
-                    htmlFor="unpaid"
-                    className="gray-900-semibold text-sm cursor-pointer"
-                    onClick={() => {
-                      setCurrentPaymentStatus('Unpaid')
-                    }}
-                  >
-                    미결제
-                  </label>
-                </p>
-              </div>
+                )}
+                <label
+                  htmlFor="unpaid"
+                  className="gray-900-semibold text-sm cursor-pointer"
+                  onClick={() => {
+                    setCurrentPaymentStatus('Unpaid')
+                    setIsClickedDropdown(false)
+                  }}
+                >
+                  미결제
+                </label>
+              </p>
             </div>
-          )}
-        </button>
+          </div>
+        )}
         <SearchInput type="payment" paymentStatus={currentPaymentStatus} passInputData={getInputDataFromChild} />
       </div>
       <div className="w-full flex flex-col gap-3">
@@ -232,17 +238,21 @@ export default function PayPage() {
             return (
               <button
                 key={i}
-                className="w-full flex lg:gap-8 gap-5 p-6 outline rounded-md outline-1 outline-gray-200 shadow-[0_5px_15px_0px_rgba(0,0,0,0.02)] hover:outline-primary-600"
+                className="w-full flex lg:gap-8 gap-5 p-6 outline rounded-md outline-1 outline-gray-200 shadow-[0_5px_15px_0px_rgba(0,0,0,0.02)]"
               >
-                <div className=" lg:w-[100px] w-[70px] gray-800-semibold text-sm text-left">{data.student.name}</div>
-                <div className="lg:w-[160px] w-[110px] gray-800-semibold text-sm text-left">
-                  {data.student.phone.slice(0, 3)}-{data.student.phone.slice(3, 7)}-{data.student.phone.slice(7, 11)}
+                <div className=" lg:w-[100px] w-[70px] gray-800-semibold lg:text-[16px] text-[14px] text-left">
+                  {data.student.name}
                 </div>
-                <div className="flex-1 gray-800-semibold text-sm text-left">{data.lesson.name}</div>
-                <div className="lg:w-[140px] w-[110px] grsy-800-semibold text-sm text-left">1,500,000</div>
+                <div className="lg:w-[160px] w-[110px] gray-800-semibold lg:text-[16px] text-[14px] text-left">
+                  {changePhoneNumberToString(data.student.phone)}
+                </div>
+                <div className="flex-1 gray-900-normal lg:text-[16px] text-[14px] text-left">{data.lesson.name}</div>
+                <div className="lg:w-[140px] w-[110px] grsy-900-normal lg:text-[16px] text-[14px] text-left">
+                  1,500,000
+                </div>
                 <div className={`lg:w-[220px] w-[148px] gray-900-normal text-base text-left`}>
                   <div className="w-full flex items-center xl:gap-2.5 gap-2">
-                    <div className="text-gray-700 xl:text-base text-sm font-medium">미결제</div>
+                    <div className="text-gray-700 lg:text-[16px] text-[14px] font-medium">미결제</div>
                     {data.paymentStatus === 'Paid' ? (
                       <ToggleOnIcon
                         onClick={() => {
@@ -298,7 +308,7 @@ export default function PayPage() {
                         }}
                       />
                     )}
-                    <div className="text-gray-700 xl:text-base text-sm font-medium">결제완료</div>
+                    <div className="text-gray-700 lg:text-[16px] text-[14px] font-medium">결제완료</div>
                   </div>
                 </div>
               </button>
