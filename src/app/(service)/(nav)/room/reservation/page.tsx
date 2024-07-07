@@ -16,8 +16,8 @@ import ContentHeader from '@/components/common/ContentHeader'
 import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
 import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
 import AlertIcon from 'public/assets/icons/alert-circle.svg'
-import SearchIcon from 'public/assets/icons/search.svg'
-import { start } from 'repl'
+import SearchIcon from '@/icons/icon/search.svg'
+import CalendarIcon from '@/icons/icon/datePicker/calendar.svg'
 
 interface IProps {
   query: {
@@ -36,6 +36,7 @@ export default function Reservatoin() {
   const [selectedClass, setSelectedClass] = useState<classType>()
   const [studentName, setStudentName] = useState<string>('')
   const [category, setCategory] = useState<string>('')
+  const [studentList, setStudentList] = useState([])
 
   const handleChangeParentsDropdownData = (data: classType) => {
     setSelectedClass(data)
@@ -92,46 +93,63 @@ export default function Reservatoin() {
     return endTime.hour + ':' + endTime.min
   }
 
-  console.log(studentName, calculateEndTime())
+  const getStudentList = () => {
+    if (selectedClass !== undefined) {
+      instance(`/students/lessons/${selectedClass.id}`).then(res => {
+        const studentList = res.data.data
+        setStudentList(studentList)
+      })
+    }
+  }
+
+  console.log(selectedClass)
 
   return (
-    <div className='w-full flex flex-col items-center pb-[60px]'>
-      <ContentHeader title='예약하기' back onClick={() => router.push('/room')} />
-      <div className="w-[640px] flex flex-col items-center gap-5">
-        {classId === 'null' ? (
-          <div className="w-full flex flex-col gap-10">
-            <div className="w-full px-6 py-8 flex flex-col gap-10 border rounded-xl border-1 border-gray-200">
-              <div className="gray-900-bold text-xl">클래스 정보</div>
-              <div className="w-full flex flex-col gap-6">
-                <div className="w-full flex flex-col gap-2">
-                  <div className="flex flex-col gap-2">
-                    <div className="w-full text-left gray-800-semibold text-base">클래스 선택</div>
-                    <DropDown
-                      {...dropDownProps}
-                      handleChangeParentsClassDropdownData={handleChangeParentsDropdownData}
-                    />
-                  </div>
-                  <div className="w-full flex gap-1.5 items-center">
-                    <AlertIcon width={18} height={18} alt="AlertCircle" />
-                    <div className="w-full gray-500-normal text-sm">
-                      기간반은 [클래스 관리 - 클래스 등록]에서 강의실을 등록하고있습니다.
-                    </div>
+    <div className="w-full flex flex-col items-center pb-[60px]">
+      <ContentHeader title="예약하기" back onClick={() => router.push('/room')} />
+      <div className="w-[640px] flex flex-col items-center gap-10">
+        {/* 예약 정보 */}
+        <div className="w-full flex flex-col gap-10">
+          <div className="w-full px-6 py-8 flex flex-col gap-10 border rounded-xl border-1 border-gray-200">
+            <div className="gray-900-bold text-[20px]">예약 정보</div>
+            {/*  날짜 정보 */}
+            <div className="w-full h-[52px] flex border border-gray-100 rounded-md bg-primary-50 items-center justify-center">
+              <div className="h-6 flex gap-2">
+                <CalendarIcon className="text-gray-500" />
+                <span className="gray-900-semibold text-[16px]">2024년 7월 5일</span>
+              </div>
+            </div>
+            <div className="w-full flex flex-col gap-6">
+              {/* 클래스 선택 */}
+              <div className="w-full flex flex-col gap-2">
+                <div className="gray-800-semibold text-[16px]">클래스 선택</div>
+                <DropDown {...dropDownProps} handleChangeParentsClassDropdownData={handleChangeParentsDropdownData} />
+                <div className="w-full flex gap-1.5 items-center">
+                  <AlertIcon width={18} height={18} alt="AlertCircle" />
+                  <div className="w-full gray-500-normal text-sm">
+                    기간반은 [클래스 관리 - 클래스 등록]에서 강의실을 등록하고있습니다.
                   </div>
                 </div>
               </div>
+              {/* 수강생 찾기 */}
+              {/* <div className="relative w-full flex flex-col gap-2">
+                <div className="gray-800-semibold text-[16px]">수강생 찾기</div>
+                <div className="flex items-center gap-2 w-full h-[52px] px-3 py-3.5 border border-[#E5E7EB] bg-[#F9FAFB] rounded-lg focus-within:border-[#7354E8]">
+                  <SearchIcon />
+                  <input
+                    className="flex-1 focus:outline-none bg-inherit"
+                    placeholder="수강생 이름을 입력해주세요"
+                    onClick={getStudentList}
+                  />
+                </div>
+              </div> */}
+              <div className="w-full"></div>
             </div>
           </div>
-        ) : (
-          <RoomReservationCheck {...reservationData} />
-        )}
+        </div>
+        {/* 예약 시간 확정 */}
+        <div></div>
 
-        <MemberOfCenter
-          valid={true}
-          type="students"
-          onChange={(name: string) => {
-            setStudentName(name)
-          }}
-        />
         <button
           className="w-full h-[52px] btn-purple"
           onClick={() => {

@@ -198,17 +198,18 @@ export default function RoomSchedule({ roomScheduleData, indexOfRoomList }: IPro
                               className="lg:w-[75px] lg:h-[39px] w-[68px] h-[36px] flex items-center px-3 py-2 border rounded-lg border-1 border-gray-200
                              gray-800-semibold lg:text-sm text-xs hover:text-primary-600"
                               onClick={() => {
+                                console.log(data)
                                 router.push('/room/reservation')
                                 localStorage.setItem('roomId', roomId)
                                 localStorage.setItem('roomName', roomName)
-                                localStorage.setItem('className', data.name)
-                                localStorage.setItem('reservationTime', data.time)
-                                localStorage.setItem(
+                                //localStorage.setItem('className', data.name)
+                                //localStorage.setItem('reservationTime', data.time)
+                                /* localStorage.setItem(
                                   'reservationDate',
                                   `${calendarDate.year}.${calendarDate.month + 1}.${calendarDate.date}`
-                                )
-                                localStorage.setItem('classId', data.id)
-                                localStorage.setItem('lessonTime', data.lessonTime)
+                                ) */
+                                //localStorage.setItem('classId', data.id)
+                                //localStorage.setItem('lessonTime', data.lessonTime)
                               }}
                             >
                               예약하기
