@@ -185,9 +185,13 @@ export default function MyCenter() {
           <div className="w-full flex flex-col items-center gap-4">
             <TextInput
               title="센터명"
+              name="name"
               placeholder="20자 이내의 센터명을 입력해 주세요"
               value={postData.name}
-              onChange={value => setPostData(prev => ({ ...prev, name: value }))}
+              onChange={e => {
+                const { name, value } = e.target
+                setPostData(prev => ({ ...prev, [name]: value }))
+              }}
             />
             <div className={inputBox}>
               <span className={label}>주소</span>
@@ -196,7 +200,7 @@ export default function MyCenter() {
                 name="address"
                 placeholder="주소를 입력해 주세요"
                 value={postData.address}
-                className={textInput}
+                className="text-input"
                 onClick={onClickAdd}
               />
             </div>
@@ -207,7 +211,7 @@ export default function MyCenter() {
                 placeholder="전화번호 (-제외)"
                 onKeyDown={allowOnlyNum}
                 value={postData.mainPhone}
-                className={textInput}
+                className="text-input"
                 onChange={e => setPostData(prev => ({ ...prev, mainPhone: e.target.value }))}
               />
             </div>
@@ -255,8 +259,5 @@ export default function MyCenter() {
 }
 
 const inputBox = 'w-full flex flex-col gap-2.5'
-
-const textInput =
-  'px-4 py-3.5 bg-white rounded-lg border border-gray-200 justify-start items-center text-gray-900 placeholder:text-gray-400 focus:border-indigo-700 focus:ring-0 focus-visible:outline-none'
 
 const label = 'text-gray-800 text-base font-semibold leading-normal'

@@ -42,10 +42,6 @@ export default function CustomInput({
         onChange={handleChange}
         maxLength={maxLength}
       />
-
-      <span className="text-gray-500 text-sm font-normal font-['Inter'] text-right">
-        {value.length}/{maxLength}
-      </span>
     </div>
   )
 }

@@ -14,14 +14,16 @@ import PlusIcon from 'public/assets/icons/plus.svg'
 import SearchIcon from 'public/assets/icons/search.svg'
 import UserCircle from 'public/assets/icons/user_circle.svg'
 import VecterIcon from 'public/assets/icons/vector.svg'
+import { UseFormGetValues, UseFormSetValue } from 'react-hook-form'
+import { classDataType } from '@/app/(service)/(nav)/class/register/page'
 
 interface IProps {
-  onChange: (name: string) => void
-  valid: boolean
   type: string
+  getValues?: UseFormGetValues<classDataType>
+  setValue?: UseFormSetValue<classDataType>
 }
 
-export default function MemberOfCenter({ onChange, valid, type }: IProps) {
+export default function MemberOfCenter({ type, getValues, setValue }: IProps) {
   const inputClickRef = useRef<HTMLInputElement>(null)
   const autoCompleteTeacherNameRef = useRef<HTMLDivElement>(null)
 
@@ -70,11 +72,7 @@ export default function MemberOfCenter({ onChange, valid, type }: IProps) {
 
   return (
     <>
-      <div
-        className={`flex flex-col items-start w-[640px] py-8 px-6 border ${
-          valid ? 'border-[#E5E7EB]' : 'border-[#EF5D5D]'
-        } rounded-xl bg-[#FFF]`}
-      >
+      <div className={`flex flex-col items-start w-[640px] py-8 px-6 border rounded-xl bg-[#FFF]`}>
         <div className="gray-900-bold text-xl pb-10">강사 정보</div>
         {type === 'students' && <div className="w-full text-left gray-800-semibold text-base pb-2">수강생 찾기</div>}
         <div className="flex flex-start flex-col w-[100%] h-[auto] px-4 py-[14px] justify-center border border-[#E5E7EB] bg-[#F9FAFB] rounded-lg focus-within:border-[#7354E8]">
@@ -90,7 +88,7 @@ export default function MemberOfCenter({ onChange, valid, type }: IProps) {
               }}
               onChange={e => {
                 setSearchingName(e.target.value)
-                onChange(e.target.value)
+                setValue?.('teacherId', e.target.value)
               }}
             />
             {/* 
@@ -131,7 +129,7 @@ export default function MemberOfCenter({ onChange, valid, type }: IProps) {
                           setCheckInclude(prev => !prev)
                           setNameValue(data.name)
                           setOpenNameList(prev => !prev)
-                          onChange(data.id)
+                          setValue?.('teacherId', data.id)
                         }}
                       >
                         <UserCircle className="text-gray-400" />

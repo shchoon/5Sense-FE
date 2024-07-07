@@ -78,7 +78,7 @@ export default function Navbar() {
             }}
             className={`cursor-pointer`}
           >
-            {pathname === menu.slug ? (
+            {pathname.includes(menu.slug) ? (
               <div className="lg:w-[160px] w-[130px] lg:h-[76px] h-[62px] relative">
                 <Image
                   src={'/assets/icons/icon/nav/menu.png'}

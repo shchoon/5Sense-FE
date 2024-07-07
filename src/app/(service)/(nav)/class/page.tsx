@@ -1,19 +1,14 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useEffect, useState, useRef } from 'react'
-import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil'
+import { useEffect, useRef, useState } from 'react'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import ClassFilter from '@/components/class/classFilter'
 import instance from '@/lib/api/axios'
-import { filterState } from '@/lib/filter/filterState'
-import { filterStateType } from '@/lib/filter/filterState'
-import Modal from '@/components/common/modal'
+import { filterState, filterStateType } from '@/lib/filter/filterState'
 import { modalState } from '@/lib/state/modal'
-import DetailClassModal from '@/components/modal/DetailClassModal'
-
 import ContentHeader from '@/components/common/ContentHeader'
-import { Drawer } from 'flowbite-react'
 
 interface classType {
   category: string
@@ -158,34 +153,6 @@ export default function ClassPage() {
             </button>
           ))}
       </div>
-      {/* {!isLoading && <div ref={target}></div>}
-      {isLoading && (
-        <div className="w-full h-[70px] pt-[50px] flex justify-center items-center">
-          <div
-            className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-            role="status"
-          >
-            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-              Loading...
-            </span>
-          </div>
-        </div>
-      )}
-      {modal && (
-        <Modal>
-          <DetailClassModal {...props} onClose={() => setModal(false)} />
-        </Modal>
-      )}
-      {isRefresh && classList.length === 0 && <NoneResult />} */}
-      {/* <Drawer open={isOpen} onClose={handleClose}>
-        <Drawer.Header />
-        <Drawer.Items>
-          <div className=" bg-red-50">
-            <div className="h-[700px]">byebye</div>
-            <div className="h-[600px]">byebye</div>
-          </div>
-        </Drawer.Items>
-      </Drawer> */}
     </div>
   )
 }

@@ -84,3 +84,11 @@ export function getKoreanNumber(value: string) {
 export const formatPhoneNum = (phoneNumber: string) => {
   return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
 }
+
+export const formatAddComma = (tutionFee: number, cnt: number) => {
+  const strTutionFee = tutionFee.toString()
+
+  const removedCommaValue = Number(strTutionFee.replaceAll(',', ''))
+
+  return (removedCommaValue * cnt).toLocaleString()
+}
