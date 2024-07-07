@@ -14,12 +14,12 @@ interface IProps {
 
 export default function AcademyInfo({ centerInfo, isExistCenter, drawer }: IProps) {
   const router = useRouter()
-
+  console.log(isExistCenter)
   if (isExistCenter == undefined) {
     return
   }
 
-  return centerInfo ? (
+  return isExistCenter && centerInfo ? (
     <div className="w-full flex flex-col items-center gap-7">
       <div className="w-full flex flex-col items-center gap-4">
         <Image className="rounded-full bg-[#D3C4F9]" src={centerInfo.profile} alt="profile" width={90} height={90} />

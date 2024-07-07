@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { useState, useRef, useEffect } from 'react'
 import { useSetRecoilState, useRecoilValue } from 'recoil'
 
+import instance from '@/lib/api/axios'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
 import DropDown from '@/components/common/DropDown'
 import FilterSearchName from '@/components/common/FilterSearchName'
@@ -9,7 +10,7 @@ import { filterState } from '@/lib/filter/filterState'
 
 import ChevronDownIcon from 'public/assets/icons/chevron/chevron-down-blue.svg'
 import ChevronUpIcon from 'public/assets/icons/chevron/chevron-up-blue.svg'
-import instance from '@/lib/api/axios'
+import RadioIcon from '@/icons/icon/radio.svg'
 
 export interface instructorDataType {
   id: string
@@ -236,51 +237,57 @@ export default function ClassFilter() {
       <div className="w-full h-[37px] items-start gap-2 flex">
         <button
           ref={classTypeRef}
-          className="group flex items-center gap-2 w-[120px] h-full border px-3 py-2 rounded-lg border-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9]"
+          className="group flex items-center gap-2 w-[120px] h-full border px-3 py-2 rounded-lg filter-btn"
           onClick={e => {
             handleClickClassInside()
           }}
         >
-          <span className="w-20 text-sm indigo-500-semibold group-hover:text-white group-focus:text-white">
+          <span className="w-20 h-[21px] leading-[21px] text-sm primary-600-semibold group-hover:text-white group-focus:text-white">
             {classType === '' ? '클래스 유형' : classType}
           </span>
-          {isClickedfilter.isClickedClassFilter ? (
-            <ChevronUpIcon width={16} height={16} />
-          ) : (
-            <ChevronDownIcon width={16} height={16} />
-          )}
+          <div className="h-[21px] py-[2.5px]">
+            {isClickedfilter.isClickedClassFilter ? (
+              <ChevronUpIcon width={16} height={16} />
+            ) : (
+              <ChevronDownIcon width={16} height={16} />
+            )}
+          </div>
         </button>
         <button
           ref={teacherNameTypeRef}
-          className="group flex items-center gap-2 max-w-[160px] h-full px-3 py-2 border rounded-lg border-indigo-500  hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9] focus-within:text-white"
+          className="group flex items-center gap-2 max-w-[160px] h-full px-3 py-2 border rounded-lg filter-btn"
           onClick={() => {
             handleClickTeacherInside()
           }}
         >
-          <span className="max-w-[120px] text-sm indigo-500-semibold group-hover:text-white group-focus:text-white">
+          <span className="max-w-[120px] h-[21px] leading-[21px] text-sm primary-600-semibold group-hover:text-white group-focus:text-white">
             {filterValue.teacherName.length === 0 ? '강사명' : getCheckedName()}
           </span>
-          {isClickedfilter.isClickedTeacherFilter ? (
-            <ChevronUpIcon width={16} height={16} />
-          ) : (
-            <ChevronDownIcon width={16} height={16} />
-          )}
+          <div className="h-[21px] py-[2.5px]">
+            {isClickedfilter.isClickedTeacherFilter ? (
+              <ChevronUpIcon width={16} height={16} />
+            ) : (
+              <ChevronDownIcon width={16} height={16} />
+            )}
+          </div>
         </button>
         <button
           ref={categoryTypeRef}
-          className="group flex items-center gap-2 max-w-[200px] h-full px-3 py-2 border rounded-lg border-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 focus:outline focus:outline-2.5 focus:outline-[#D3C4F9]"
+          className="group flex items-center gap-2 max-w-[200px] h-full px-3 py-2 border rounded-lg filter-btn"
           onClick={() => {
             handleClickCategoryInside()
           }}
         >
-          <span className="max-w-[150px] text-sm indigo-500-semibold group-hover:text-white group-focus:text-white">
+          <span className="max-w-[150px] h-[21px] leading-[21px] text-sm indigo-500-semibold group-hover:text-white group-focus:text-white">
             {categoryData.mainClass} {categoryData.subClass !== '' && `/ ${categoryData.subClass}`}
           </span>
-          {isClickedfilter.isClickedCategoryFilter ? (
-            <ChevronUpIcon width={16} height={16} />
-          ) : (
-            <ChevronDownIcon width={16} height={16} />
-          )}
+          <div className="h-[21px] py-[2.5px]">
+            {isClickedfilter.isClickedCategoryFilter ? (
+              <ChevronUpIcon width={16} height={16} />
+            ) : (
+              <ChevronDownIcon width={16} height={16} />
+            )}
+          </div>
         </button>
       </div>
       <div className="relative">
@@ -293,29 +300,37 @@ export default function ClassFilter() {
           >
             <div id="classTypeFilter" className="w-[130px] h-[54] flex flex-col gap-3 ">
               <p className="flex gap-2 items-center">
-                <input
-                  className="cursor-pointer"
-                  type="radio"
-                  id="timeClass"
-                  name="classType"
-                  value="회차반"
-                  checked={classType === '회차반' && true}
-                  onChange={radioHandler}
-                />
+                {classType === '회차반' ? (
+                  <RadioIcon />
+                ) : (
+                  <input
+                    className="cursor-pointer focus:ring-offset-0 focus:ring-0"
+                    type="radio"
+                    id="timeClass"
+                    name="classType"
+                    value="회차반"
+                    checked={classType === '회차반' && true}
+                    onChange={radioHandler}
+                  />
+                )}
                 <label htmlFor="timeClass" className="gray-900-semibold text-sm cursor-pointer">
                   회차반
                 </label>
               </p>
               <p className="flex gap-2 items-center cursor-pointer">
-                <input
-                  className="cursor-pointer"
-                  type="radio"
-                  id="preiodClass"
-                  name="classType"
-                  value="기간반"
-                  checked={classType === '기간반' && true}
-                  onChange={radioHandler}
-                />
+                {classType === '기간반' ? (
+                  <RadioIcon />
+                ) : (
+                  <input
+                    className="cursor-pointer focus:ring-offset-0 focus:ring-0"
+                    type="radio"
+                    id="preiodClass"
+                    name="classType"
+                    value="기간반"
+                    checked={classType === '기간반' && true}
+                    onChange={radioHandler}
+                  />
+                )}
                 <label htmlFor="preiodClass" className="gray-900-semibold text-sm cursor-pointer">
                   기간반
                 </label>

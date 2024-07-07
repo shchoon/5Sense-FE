@@ -6,6 +6,7 @@ import { useRef } from 'react'
 import { useEffect, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { Button, Modal } from 'flowbite-react'
+import { Drawer } from 'flowbite-react'
 
 //내장
 import { getDataType, metaType } from '../student/page'
@@ -15,6 +16,7 @@ import RegisterModal from '@/components/instructor/RegisterModal'
 import DetailInstructor from '@/components/modal/DetailInstructor'
 import SearchInput from '@/components/common/SearchInput'
 import NotFoundPage from '@/components/common/NotFoundPage'
+import { changePhoneNumberToString } from '@/utils'
 
 //이미지
 import ChevronRightIcon from 'public/assets/icons/chevron/chevron_right_pri_600.svg'
@@ -39,7 +41,10 @@ export default function InstructorPage() {
   const setModal = useSetRecoilState(modalState)
   const [isClickedRegister, setIsClickedRegister] = useState<boolean>(false)
   const [isRegistered, setIsRegistered] = useState<boolean>(false)
-  const [openModal, setOpenModal] = useState(false)
+  const [isOpen, setIsOpen] = useState<{ detail: boolean; addInstructor: false }>({
+    detail: false,
+    addInstructor: false
+  })
 
   const [instructorList, setInstructorList] = useState<instructorType[]>([])
   const [InstructorId, setInstructorId] = useState<number>(0)
@@ -164,7 +169,7 @@ export default function InstructorPage() {
   }, [metaData])
 
   return (
-    <div>
+    <>
       <ContentHeader
         title="강사 관리"
         btnName="강사 등록"
@@ -191,18 +196,20 @@ export default function InstructorPage() {
                 className="w-full h-[240px] flex flex-col justify-between px-6 pt-8 pb-6 border border-gray-200 rounded-3xl shadow-[0px_5px_15px_0px_rgba(0, 0, 0, 0.02)]"
               >
                 <div className="w-full flex flex-col gap-2">
-                  <div className="w-[307px] gray-900-semibold text-2xl ">{name}</div>
-                  <div className="w-[307px] text-gray-500 text-base font-medium ">
-                    {phone.slice(0, 3)}-{phone.slice(3, 7)}-{phone.slice(7, 11)}
-                  </div>
+                  <span className="gray-900-semibold text-[24px] h-9 leading-9">{name}</span>
+                  <span className="text-gray-500 text-[14px] font-medium h-6 leading-6">
+                    {changePhoneNumberToString(phone)}
+                  </span>
                 </div>
                 <button
                   type="button"
                   className="w-full px-5 py-2.5 flex gap-2 justify-center border border-primary-600 rounded-lg"
                   onClick={() => {
-                    setModal(true)
-                    //setIsClickedInstructor(true)
-                    setInstructorId(Number(id))
+                    setIsOpen(prev => ({
+                      ...prev,
+                      detail: true
+                    }))
+                    localStorage.setItem('instructorId', id)
                   }}
                 >
                   <div className="indigo-500-semibold text-sm ">강사 정보</div>
@@ -225,37 +232,20 @@ export default function InstructorPage() {
           </div>
         </div>
       )}
-      <Modal size="sm" show={openModal} onClose={() => setOpenModal(false)}>
-        <Modal.Header>강사 등록</Modal.Header>
-        <Modal.Body>
-          <Button color="primary" fullSized onClick={() => setOpenModal(false)}>
-            등록
-          </Button>
-        </Modal.Body>
-        {/* <Modal.Footer>
-          <Button color="primary" fullSized onClick={() => setOpenModal(false)}>
-            등록
-          </Button>
-        </Modal.Footer> */}
-      </Modal>
-      {/* {isClickedInstructor && (
-        <Modal>
-          <DetailInstructor
-            id={InstructorId}
-            onClose={() => setIsClickedInstructor(false)}
-            onCloseState={() => setModal(false)}
-          />
-        </Modal>
-      )}
-      {isClickedInstructor && (
-        <Modal>
-          <DetailInstructor
-            id={InstructorId}
-            onClose={() => setIsClickedInstructor(false)}
-            onCloseState={() => setModal(false)}
-          />
-        </Modal>
-      )} */}
-    </div>
+      {isOpen.detail && <Drawer
+        open={isOpen.detail}
+        onClose={() => {
+          setIsOpen(prev => ({
+            ...prev,
+            detail: false
+          }))
+        }}
+      >
+        <Drawer.Header />
+        <Drawer.Items>
+          <DetailInstructor />
+        </Drawer.Items>
+      </Drawer>}
+    </>
   )
 }

@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from 'axios'
+import { config } from 'process'
 
 const current = new Date()
 const checkToken = (accessTokenExp: string) => {
@@ -53,20 +54,6 @@ instance.interceptors.request.use(
         if (config.url === '/auth/cancelMembership') {
           config.headers.Authorization = `Bearer ${refreshToken}`
         }
-        // 센터 등록 요청
-        if (config.url === 'centers') {
-          const { data } = await axios.post(
-            process.env.NEXT_PUBLIC_IP_ADDRESS + '/auth/reissue',
-            {},
-            {
-              headers: {
-                authorization: `Bearer ${refreshToken}`
-              }
-            }
-          )
-          localStorage.setItem('accessToken', data.data.accessToken)
-          localStorage.setItem('accessTokenExp', data.data.accessTokenExp)
-        }
         config.headers.Authorization = `Bearer ${accessToken}`
       }
     }
@@ -81,7 +68,22 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   async (response: AxiosResponse) => {
-    console.log(response)
+    const { url, method } = response.config
+    /* 센터를 등록 응답을 받은 후에 다시 reissue 요청을 하고 토큰 값을 업데이트해야하기 때문에 response에 위치시킴 */
+    if (url === '/centers' && method === 'post') {
+      const refreshToken = localStorage.getItem('refreshToken')
+      const { data } = await axios.post(
+        process.env.NEXT_PUBLIC_IP_ADDRESS + '/auth/reissue',
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${refreshToken}`
+          }
+        }
+      )
+      localStorage.setItem('accessToken', data.data.accessToken)
+      localStorage.setItem('accessTokenExp', data.data.accessTokenExp)
+    }
     return response
   },
   error => {

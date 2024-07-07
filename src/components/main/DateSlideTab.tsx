@@ -35,18 +35,13 @@ export default function DateSlideTab() {
   const [date, setDate] = useState<number>(dateData.date)
   const firstDayOfYear = new Date(currentDate.getFullYear(), 0, 1)
   const lastDateOfMonth = new Date(2023, 2, 0)
-  //console.log(currentDate, firstDayOfYear)
-  //const days = Math.floor((currentDate - firstDayOfYear) / (24 * 60 * 60 * 1000));
-  //const week = Math.ceil((days + firstDayOfYear.getDay() + 1) / 7);
 
-  function moveForwardDay() {
-    setDate(date + 1)
-  }
+
   return (
     <>
       <div className="absolute right-0 flex items-center w-[160px] h-[44px] p-1 outline outline-1 rounded-full outline-gray-200">
         <div
-          className={`absolute z-0 w-14 h-9 outline outline-1 outline-[#9B81FE] bg-primary-600 rounded-full transition-transform ${slideTab}`}
+          className={`absolute z-0 w-14 h-9 border border-1 border-primary-400 bg-primary-600 rounded-full transition-transform ${slideTab}`}
         ></div>
         <div
           className={` z-10 px-3 py-1.5 rounded-full gray-500-medium text-base text-center  cursor-pointer
