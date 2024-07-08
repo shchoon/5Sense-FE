@@ -41,11 +41,13 @@ export default function RoomPage() {
 
   useEffect(() => {
     return () => {
-      setCalendarDate({
-        year: currentDate.getFullYear(),
-        month: currentDate.getMonth(),
-        date: currentDate.getDate()
-      })
+      if(!window.location.href.includes('room')){
+        setCalendarDate({
+          year: currentDate.getFullYear(),
+          month: currentDate.getMonth(),
+          date: currentDate.getDate()
+        })
+      }
     }
   }, [])
 

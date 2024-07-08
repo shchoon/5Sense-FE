@@ -73,7 +73,7 @@ export default function MemberOfCenter({ type, getValues, setValue }: IProps) {
   return (
     <>
       <div className={`flex flex-col items-start w-[640px] py-8 px-6 border rounded-xl bg-[#FFF]`}>
-        <div className="gray-900-bold text-xl pb-10">강사 정보</div>
+        <div className="gray-900-bold text-xl pb-10">{type === 'students' ? '수강생 정보' : '강사 정보'}</div>
         {type === 'students' && <div className="w-full text-left gray-800-semibold text-base pb-2">수강생 찾기</div>}
         <div className="flex flex-start flex-col w-[100%] h-[auto] px-4 py-[14px] justify-center border border-[#E5E7EB] bg-[#F9FAFB] rounded-lg focus-within:border-[#7354E8]">
           <div className="relative flex w-[100%] items-center gap-2">

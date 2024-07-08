@@ -105,6 +105,7 @@ export default function RoomSchedule({ roomScheduleData, indexOfRoomList }: IPro
                 <div key={i} className="w-full flex flex-col">
                   {data.workTime &&
                     data.workTime.map((data: any, i: number) => {
+                      console.log(data)
                       return (
                         <div
                           key={i}
@@ -173,7 +174,11 @@ export default function RoomSchedule({ roomScheduleData, indexOfRoomList }: IPro
                                     font-semibold lg:text-sm text-xs text-center`}
                                       onClick={() => {
                                         if (data.isOpenForBooking) {
-                                          router.push('/room/reservation')
+                                          if(data.type === 'session'){
+                                            router.push('/room/reservation/unempty')
+                                          }else {
+                                            router.push('/room/reservation/empty')
+                                          }
                                           localStorage.setItem('roomId', roomId)
                                           localStorage.setItem('roomName', roomName)
                                           localStorage.setItem('className', data.name)

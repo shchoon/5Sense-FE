@@ -17,10 +17,11 @@ import VecterIcon from 'public/assets/icons/vector.svg'
 
 interface IProps {
   onChange: (name: string) => void
-  type: string
+  classId: number
 }
 
-export default function SearchStudents({ onChange, type }: IProps) {
+export default function SearchStudents({ onChange, classId }: IProps) {
+  console.log(classId)
   const inputClickRef = useRef<HTMLInputElement>(null)
   const autoCompleteTeacherNameRef = useRef<HTMLDivElement>(null)
 
@@ -50,8 +51,13 @@ export default function SearchStudents({ onChange, type }: IProps) {
   }
 
   const [nameList, setNameList] = useState<{ id: string; name: string; phone: string; particulars?: string }[]>([])
+  
   useEffect(() => {
-    if (type === 'teachers') {
+    instance(`/students/lessons/${classId}`).then(res => {
+      const data = res.data.data
+      setNameList(data)
+    })
+    /* if (type === 'teachers') {
       instance(`/teachers?searchBy=none&take=100`).then(res => {
         const data = res.data.data.teachers
         setNameList(data)
@@ -64,19 +70,19 @@ export default function SearchStudents({ onChange, type }: IProps) {
           setNameList(data)
         })
       }
-    }
-  }, [isClickedAddTeacher])
+    } */
+  }, [classId])
 
   return (
-    <>
-      {type === 'students' && <div className="w-full text-left gray-800-semibold text-base pb-2">수강생 찾기</div>}
-      <div className="flex flex-start flex-col w-[100%] h-[auto] px-4 py-[14px] justify-center border border-[#E5E7EB] bg-[#F9FAFB] rounded-lg focus-within:border-[#7354E8]">
-        <div className="relative flex w-[100%] items-center gap-2">
+    <div className='w-full flex flex-col gap-2'>
+      <div className="gray-800-semibold text-[16px]">수강생 찾기</div>
+      <div className="flex flex-col w-full h-[52px] px-4 py-[14px] justify-center bg-white border border-gray-200 rounded-lg focus-within:border-[#7354E8]">
+        <div className="relative flex w-full items-center gap-2">
           <SearchIcon />
           <input
             ref={inputClickRef}
-            className="w-[100%] text-[16px] bg-[#F9FAFB] text-[#111928] font-normal outline-none"
-            placeholder={type === 'teachers' ? '강사 이름을 입력해주세요' : '수강생 이름을 입력해주세요'}
+            className="flex-1 text-[16px] bg-inherit text-[#111928] font-normal outline-none"
+            placeholder='수강생 이름을 입력해주세요'
             value={searchingName}
             onClick={() => {
               handleClickInsideOfInput()
@@ -103,12 +109,12 @@ export default function SearchStudents({ onChange, type }: IProps) {
           ) : null}
         </div>
       </div>
-      {openNameList ? (
+      {openNameList && (
         <div
           ref={autoCompleteTeacherNameRef}
           className=" flex flex-col w-[100%] h-[auto] p-4 border rounded-lg items-center gap-3 bg-[#FFF] border-[#E5E7EB] shadow-[0px_1px_2px_0px_rgba(0, 0, 0, 0.08)]"
         >
-          <div className="w-[100%] text-[14px] gray-900-semibold">강사 이름</div>
+          <div className="w-[100%] text-[14px] gray-900-semibold">수강생 이름</div>
           <div className=" w-full overflow-hidden">
             <div className="max-h-[185px] overflow-y-scroll">
               {nameList.map((data, index) => {
@@ -138,20 +144,8 @@ export default function SearchStudents({ onChange, type }: IProps) {
               })}
             </div>
           </div>
-          {type === 'teachers' && (
-            <div
-              className="flex w-full pt-3 border-t border-t-[#E5E7EB] gap-1 text-[14px] text-primary-600 font-semibold items-center cursor-pointer"
-              onClick={() => {
-                setIsClickedAddTeacher(true)
-                setModal(true)
-              }}
-            >
-              <PlusIcon />
-              강사 추가
-            </div>
-          )}
         </div>
-      ) : null}
-    </>
+      )}
+    </div>
   )
 }
