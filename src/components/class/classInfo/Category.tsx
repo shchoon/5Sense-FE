@@ -10,7 +10,7 @@ import IconVocal from '@/icons/icon/category/vocal.svg'
 import IconPlay from '@/icons/icon/category/play.svg'
 import IconProduce from '@/icons/icon/category/produce.svg'
 import IconEtc from '@/icons/icon/category/etc.svg'
-import { UseFormGetValues, UseFormSetValue } from 'react-hook-form'
+import { UseFormGetValues, UseFormReturn, UseFormSetValue } from 'react-hook-form'
 import { classDataType } from '@/app/(service)/(nav)/class/register/page'
 
 export type category = {
@@ -23,11 +23,6 @@ export type category = {
 type subCategory = {
   id: number
   name: string
-}
-
-interface IProps {
-  getValues: UseFormGetValues<classDataType>
-  setValue: UseFormSetValue<classDataType>
 }
 const categorydata: category[] = [
   {
@@ -124,11 +119,18 @@ const categorydata: category[] = [
   }
 ]
 
-export default function Category({ getValues, setValue }: IProps) {
+export default function Category({
+  register,
+  getValues,
+  setValue,
+  watch
+}: UseFormReturn<classDataType, any, undefined>) {
   const [selectedOptionList, setSelectedOptionList] = useState([])
   const [option, setOption] = useState('')
 
   const [valid, setvalid] = useState(true)
+
+  const [active, setActive] = useState(false)
 
   const [category, setCategory] = useState({
     id: 0,
@@ -138,12 +140,12 @@ export default function Category({ getValues, setValue }: IProps) {
   })
 
   const handleGroupChange = (groupId: number, groupName: string, optionList: any) => {
-    if (optionList.length === 0) {
-      return setCategory({ id: groupId, name: groupName, subId: groupId, subName: groupName })
-    }
+    // if (optionList.length === 0) {
+    //   return setCategory({ id: groupId, name: groupName, subId: groupId, subName: groupName })
+    // }
     setCategory(prev => ({ ...prev, id: groupId, name: groupName }))
-    setValue('category.id', groupId)
-    setValue('category.name', groupName)
+    // setValue('category.id', groupId)
+    // setValue('category.name', groupName)
     setSelectedOptionList(optionList)
   }
   const handleOptionChange = (optionId: number, optionName: string) => {
@@ -212,7 +214,9 @@ export default function Category({ getValues, setValue }: IProps) {
     )
   }
 
-  useEffect(() => {}, [category, option])
+  // useEffect(() => {
+  //   console.log('ho')
+  // }, [category, option])
 
   return (
     <div>
@@ -220,16 +224,20 @@ export default function Category({ getValues, setValue }: IProps) {
       {/* 대분류 소분류 박스 */}
       <div className="flex flex-col gap-6 mt-2">
         <div className="grid grid-cols-3 w-full gap-2">
-          {categorydata.map((item: category) => {
-            const active = category.id === item.id
-
+          {categorydata.map(item => {
+            const active = watch('category.id') === item.id
+            console.log(active)
             return (
-              <div
+              <label
                 key={item.id}
                 className={`relative flex flex-col gap-[6px] justify-center items-center h-[110px] py-4 rounded-md border border-primary-500 cursor-pointer ${
                   active ? 'bg-[#F0EFFF]' : 'bg-white '
                 }`}
-                onClick={() => handleGroupChange(item.id, item.name, item.options)}
+                // {...register('category.id', { required: true })}
+                onClick={() => {
+                  setValue('category.id', item.id)
+                  handleGroupChange(item.id, item.name, item.options)
+                }}
               >
                 {active && <IconCheck className="absolute top-1 right-1" />}
                 <div
@@ -240,14 +248,11 @@ export default function Category({ getValues, setValue }: IProps) {
                   {item.imgUrl}
                 </div>
 
-                <input type="radio" id={String(item.id)} value={item.id} className={`hidden`} />
-                <label
-                  htmlFor={String(item.id)}
-                  className={`text-sm font-semibold cursor-pointer ${active ? 'text-primary-600' : 'text-gray-500'} `}
-                >
+                <input type="radio" id={String(item.id)} value={item.id} className="hidden" />
+                <span className={`text-sm font-semibold ${active ? 'text-primary-600' : 'text-gray-500'}`}>
                   {item.name}
-                </label>
-              </div>
+                </span>
+              </label>
             )
           })}
         </div>

@@ -8,6 +8,7 @@ import DropDown from '@/components/common/DropDown'
 import { Button } from 'flowbite-react'
 import LoginHeader from '@/components/login/LoginHeader'
 import TextInput from '@/components/common/TextInput'
+import InputForm from '@/components/common/InputForm'
 
 declare global {
   interface Window {
@@ -183,7 +184,7 @@ export default function MyCenter() {
         <div className="w-full flex flex-col items-center gap-8">
           <div className="w-full text-left gray-900-bold text-xl">내 센터정보를 입력해 주세요</div>
           <div className="w-full flex flex-col items-center gap-4">
-            <TextInput
+            <InputForm
               title="센터명"
               name="name"
               placeholder="20자 이내의 센터명을 입력해 주세요"

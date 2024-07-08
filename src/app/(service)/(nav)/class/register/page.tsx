@@ -1,18 +1,17 @@
 'use client'
+import { Button } from 'flowbite-react'
+import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
+import Category from '@/components/class/classInfo/Category'
 import ClassType from '@/components/class/register/classType'
 import MemberOfCenter from '@/components/class/register/memberOfCenter'
-import { DurationScheduleType, durationClassScheduleState } from '@/lib/state/classDurationSchedule'
-
-import Category from '@/components/class/classInfo/Category'
 import ContentHeader from '@/components/common/ContentHeader'
 import TextInput from '@/components/common/TextInput'
 import TextareaForm from '@/components/common/TextareaForm'
-import { Button } from 'flowbite-react'
-import { useRouter } from 'next/navigation'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { DurationScheduleType, durationClassScheduleState } from '@/lib/state/classDurationSchedule'
 
 export type classDataType = {
   name: string
@@ -25,8 +24,8 @@ export type classDataType = {
   }
   type: string
   lessonTime: number
-  tuitionFee: number
-  totalSessions: number
+  tuitionFee: string
+  totalSessions: string
   capacity: number
   schedules: DurationScheduleType[]
   teacherId: string
@@ -50,8 +49,8 @@ export default function RegisterPage() {
       },
       type: 'duration',
       lessonTime: 30,
-      tuitionFee: 0,
-      totalSessions: 0,
+      tuitionFee: '',
+      totalSessions: '',
       capacity: 1,
       schedules: durationSchedule,
       teacherId: ''
@@ -108,7 +107,7 @@ export default function RegisterPage() {
               placeholder="클래스관련 메모를 적어주세요"
               maxLength={300}
             />
-            <Category getValues={getValues} setValue={setValue} />
+            <Category {...Props} />
           </div>
         </div>
         <ClassType {...Props} />

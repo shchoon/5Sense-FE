@@ -57,6 +57,7 @@ export default function Duration({
           type="number"
           className="w-full h-[60px] border-b-2 border-x-0 border-t-0 flex-col justify-center items-start gray-900-semibold text-2xl placeholder:text-gray-300 focus:shadow-none focus:border-current focus:ring-0 focus:ring-transparent"
           placeholder="0 원"
+          value={watch('tuitionFee')}
           {...register('tuitionFee', { required: true })}
         />
         <p className="text-gray-500 text-sm font-normal font-['Inter']">

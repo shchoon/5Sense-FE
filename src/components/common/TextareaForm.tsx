@@ -1,4 +1,4 @@
-import { ChangeEvent, FocusEventHandler, useCallback, useEffect, useRef } from 'react'
+import { FocusEventHandler, useEffect } from 'react'
 
 import { UseFormSetFocus } from 'react-hook-form'
 import { IInput } from './TextInput'
@@ -8,7 +8,9 @@ interface ITextArea extends IInput {
 }
 
 export default function TextareaForm({ title, placeholder, register, errors, maxLength, value, setFocus }: ITextArea) {
-  const { onChange, name, ref } = register
+  const { name } = register
+
+  console.log('register', register)
 
   useEffect(() => {
     setFocus('content')
