@@ -10,8 +10,6 @@ interface ITextArea extends IInput {
 export default function TextareaForm({ title, placeholder, register, errors, maxLength, value, setFocus }: ITextArea) {
   const { name } = register
 
-  console.log('register', register)
-
   useEffect(() => {
     setFocus('content')
   }, [setFocus])

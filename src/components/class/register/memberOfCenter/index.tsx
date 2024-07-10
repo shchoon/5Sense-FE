@@ -1,34 +1,28 @@
 'use client'
-import Image from 'next/image'
+import { Modal } from 'flowbite-react'
 import { useEffect, useRef, useState } from 'react'
+import { UseFormGetValues, UseFormSetValue } from 'react-hook-form'
 
-import Modal from '@/components/common/modal'
+import { classDataType } from '@/app/(service)/(nav)/class/register/page'
 import RegisterModal from '@/components/instructor/RegisterModal'
+import UseModal from '@/hooks/useModal'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
 import instance from '@/lib/api/axios'
-import { modalState } from '@/lib/state/modal'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import Close_Circle_bg from 'public/assets/icons/close_circle_bg_pri_600.svg'
 import PlusIcon from 'public/assets/icons/plus.svg'
 import SearchIcon from 'public/assets/icons/search.svg'
 import UserCircle from 'public/assets/icons/user_circle.svg'
 import VecterIcon from 'public/assets/icons/vector.svg'
-import { UseFormGetValues, UseFormSetValue } from 'react-hook-form'
-import { classDataType } from '@/app/(service)/(nav)/class/register/page'
 
 interface IProps {
   type: string
-  getValues?: UseFormGetValues<classDataType>
   setValue?: UseFormSetValue<classDataType>
 }
 
-export default function MemberOfCenter({ type, getValues, setValue }: IProps) {
+export default function MemberOfCenter({ type, setValue }: IProps) {
   const inputClickRef = useRef<HTMLInputElement>(null)
   const autoCompleteTeacherNameRef = useRef<HTMLDivElement>(null)
-
-  const modal = useRecoilValue(modalState)
-  const setModal = useSetRecoilState(modalState)
 
   const handleClickOutsideOfInput = (e: any) => {
     if (openNameList && !autoCompleteTeacherNameRef.current?.contains(e.target)) {
@@ -48,11 +42,14 @@ export default function MemberOfCenter({ type, getValues, setValue }: IProps) {
   let [openNameList, setOpenNameList] = useState<boolean>(false)
   let [nameValue, setNameValue] = useState<string>('')
 
+  const [teacher, close, open] = UseModal()
+
   const emptyInput = () => {
     setSearchingName('')
   }
 
   const [nameList, setNameList] = useState<{ id: string; name: string; phone: string; particulars?: string }[]>([])
+
   useEffect(() => {
     if (type === 'teachers') {
       instance(`/teachers?searchBy=none&take=100`).then(res => {
@@ -146,10 +143,7 @@ export default function MemberOfCenter({ type, getValues, setValue }: IProps) {
             {type === 'teachers' && (
               <div
                 className="flex w-full pt-3 border-t border-t-[#E5E7EB] gap-1 text-[14px] text-primary-600 font-semibold items-center cursor-pointer"
-                onClick={() => {
-                  setIsClickedAddTeacher(true)
-                  setModal(true)
-                }}
+                onClick={open}
               >
                 <PlusIcon />
                 강사 추가
@@ -158,11 +152,13 @@ export default function MemberOfCenter({ type, getValues, setValue }: IProps) {
           </div>
         ) : null}
       </div>
-      {/* {type === 'teachers' && isClickedAddTeacher && (
-        <Modal small>
-          <RegisterModal onClose={() => setModal(false)} onCloseState={() => setIsClickedAddTeacher(false)} />
-        </Modal>
-      )} */}
+
+      <Modal size="sm" show={teacher} onClose={close}>
+        <Modal.Header>강사 등록</Modal.Header>
+        <Modal.Body>
+          <RegisterModal onClose={close} onCloseState={() => setIsClickedAddTeacher(false)} />
+        </Modal.Body>
+      </Modal>
     </>
   )
 }

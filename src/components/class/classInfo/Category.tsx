@@ -1,17 +1,18 @@
-import { ReactElement, useEffect, useState } from 'react'
+import { ReactElement, useState } from 'react'
+import { UseFormReturn } from 'react-hook-form'
 
-import IconCheck from '@/icons/icon/category/check.svg'
+import { classDataType } from '@/app/(service)/(nav)/class/register/page'
+
 import IconArt from '@/icons/icon/category/arts.svg'
-import IconShow from '@/icons/icon/category/show.svg'
-import IconPerformance from '@/icons/icon/category/performance.svg'
-import IconSports from '@/icons/icon/category/sports.svg'
+import IconCheck from '@/icons/icon/category/check.svg'
 import IconDance from '@/icons/icon/category/dance.svg'
-import IconVocal from '@/icons/icon/category/vocal.svg'
+import IconEtc from '@/icons/icon/category/etc.svg'
+import IconPerformance from '@/icons/icon/category/performance.svg'
 import IconPlay from '@/icons/icon/category/play.svg'
 import IconProduce from '@/icons/icon/category/produce.svg'
-import IconEtc from '@/icons/icon/category/etc.svg'
-import { UseFormGetValues, UseFormReturn, UseFormSetValue } from 'react-hook-form'
-import { classDataType } from '@/app/(service)/(nav)/class/register/page'
+import IconShow from '@/icons/icon/category/show.svg'
+import IconSports from '@/icons/icon/category/sports.svg'
+import IconVocal from '@/icons/icon/category/vocal.svg'
 
 export type category = {
   id: number
@@ -123,43 +124,30 @@ export default function Category({
   register,
   getValues,
   setValue,
-  watch
+  watch,
+  resetField,
+  formState: { errors }
 }: UseFormReturn<classDataType, any, undefined>) {
-  const [selectedOptionList, setSelectedOptionList] = useState([])
+  const [selectedOptionList, setSelectedOptionList] = useState<subCategory[]>([])
   const [option, setOption] = useState('')
 
-  const [valid, setvalid] = useState(true)
+  const handleGroupChange = (groupId: number, groupName: string, optionList: subCategory[]) => {
+    setValue('category.id', groupId)
+    setValue('category.name', groupName)
 
-  const [active, setActive] = useState(false)
+    resetField('category.subId')
 
-  const [category, setCategory] = useState({
-    id: 0,
-    name: '',
-    subId: 0,
-    subName: ''
-  })
-
-  const handleGroupChange = (groupId: number, groupName: string, optionList: any) => {
-    // if (optionList.length === 0) {
-    //   return setCategory({ id: groupId, name: groupName, subId: groupId, subName: groupName })
-    // }
-    setCategory(prev => ({ ...prev, id: groupId, name: groupName }))
-    // setValue('category.id', groupId)
-    // setValue('category.name', groupName)
     setSelectedOptionList(optionList)
   }
   const handleOptionChange = (optionId: number, optionName: string) => {
     setValue('category.subId', optionId)
     setValue('category.subName', optionName)
-    setCategory(prev => ({ ...prev, subId: optionId, subName: optionName }))
   }
-
-  console.log(category)
 
   const renderOptionsList = () => {
     return (
       <>
-        {category.id === 9 ? (
+        {watch('category.id') === 9 ? (
           <div className="flex flex-col gap-2">
             <p className={` gray-800-semibold`}>기타</p>
 
@@ -184,21 +172,15 @@ export default function Category({
               <div
                 key={option.id}
                 className={`relative flex justify-center items-center w-[142px] h-[45px] p-3 rounded-md border border-indigo-400 ${
-                  category.subId === option.id ? 'bg-[#F0EFFF]' : 'bg-white cursor-pointer'
+                  watch('category.subId') === option.id ? 'bg-[#F0EFFF]' : 'bg-white cursor-pointer'
                 }`}
+                {...register('category.subId')}
                 onClick={() => handleOptionChange(option.id, option.name)}
               >
                 <>
-                  {category.subId === option.id && <IconCheck className="absolute top-1 right-1" />}
+                  {watch('category.subId') === option.id && <IconCheck className="absolute top-1 right-1" />}
 
-                  <input
-                    required
-                    type="radio"
-                    id={option.name}
-                    value={option.name}
-                    className="hidden"
-                    onInvalid={e => setvalid(false)}
-                  />
+                  <input required type="radio" id={option.name} value={option.name} className="hidden" />
                   <label
                     htmlFor={option.name}
                     className={`text-base font-medium leading-normal text-primary-600 cursor-pointer`}
@@ -214,28 +196,22 @@ export default function Category({
     )
   }
 
-  // useEffect(() => {
-  //   console.log('ho')
-  // }, [category, option])
-
   return (
     <div>
-      <p className={`${valid ? '' : 'text-red-500'} text-base gray-800-semibold leading-normal`}>카테고리</p>
+      <p className={`text-base gray-800-semibold leading-normal`}>카테고리</p>
       {/* 대분류 소분류 박스 */}
       <div className="flex flex-col gap-6 mt-2">
         <div className="grid grid-cols-3 w-full gap-2">
           {categorydata.map(item => {
             const active = watch('category.id') === item.id
-            console.log(active)
             return (
               <label
                 key={item.id}
                 className={`relative flex flex-col gap-[6px] justify-center items-center h-[110px] py-4 rounded-md border border-primary-500 cursor-pointer ${
                   active ? 'bg-[#F0EFFF]' : 'bg-white '
                 }`}
-                // {...register('category.id', { required: true })}
+                {...register('category.id')}
                 onClick={() => {
-                  setValue('category.id', item.id)
                   handleGroupChange(item.id, item.name, item.options)
                 }}
               >
@@ -256,7 +232,7 @@ export default function Category({
             )
           })}
         </div>
-        {category.id > 0 && renderOptionsList()}
+        {watch('category.id') != null && renderOptionsList()}
       </div>
     </div>
   )

@@ -25,7 +25,7 @@ const customTheme: CustomFlowbiteTheme = {
       },
       sizes: {
         sm: 'w-[424px]',
-        md: 'max-w-md'
+        md: 'w-[640px]'
       }
     },
     content: {

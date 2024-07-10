@@ -1,5 +1,6 @@
 import instance from '@/lib/api/axios'
 import { AxiosResponse } from 'axios'
+import { Button } from 'flowbite-react'
 import React, { useState } from 'react'
 
 interface postDataType {
@@ -13,7 +14,7 @@ interface IProps {
   onRigister?: () => void
 }
 
-export default function RegisterModal(props: IProps) {
+export default function RegisterModal({ onClose, onCloseState, onRigister }: IProps) {
   const [postData, setPostData] = useState<postDataType>({
     name: '',
     phone: ''
@@ -56,7 +57,6 @@ export default function RegisterModal(props: IProps) {
 
   return (
     <form
-      className="relative w-[424px] h-[326px] bg-white rounded-xl border border-gray-900 flex justify-center"
       onSubmit={e => {
         e.preventDefault()
         const data = postData
@@ -65,30 +65,19 @@ export default function RegisterModal(props: IProps) {
           return
         }
         instance.post('/teachers', data).then((res: AxiosResponse) => {
-          props.onClose()
-          if (props.onCloseState) {
-            props.onCloseState()
+          console.log(res)
+          onClose()
+          if (onCloseState) {
+            onCloseState()
           }
-          if (props.onRigister) {
-            props.onRigister()
+          if (onRigister) {
+            onRigister()
           }
         })
       }}
     >
-      <div className="absolute left-6 top-10 gray-900-bold text-[22px]">강사 등록</div>
-      {/* <CloseIcon
-        className="absolute right-4 top-4 cursor-pointer"
-        width={35}
-        height={35}
-        onClick={() => {
-          props.onClose()
-          if (props.onCloseState) {
-            props.onCloseState()
-          }
-        }}
-      /> */}
-      <div className="absolute top-[90px] w-[376px] flex flex-col gap-7">
-        <div className="w-full flex flex-col gap-4">
+      <div className="flex flex-col gap-7">
+        <div className="flex flex-col gap-4">
           <input
             type="text"
             placeholder="이름"
@@ -111,9 +100,9 @@ export default function RegisterModal(props: IProps) {
             className={`${postData.phone.length > 0 ? 'bg-gray-50' : 'bg-white'} w-full h-[58px] input-line-gray`}
           />
         </div>
-        <button type="submit" className="w-full h-[52px] btn-purple">
-          <div className="text-white text-base font-semibold">등록</div>
-        </button>
+        <Button color="primary" fullSized size="lg" type="submit">
+          등록
+        </Button>
       </div>
     </form>
   )

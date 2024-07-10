@@ -17,10 +17,10 @@ export type classDataType = {
   name: string
   memo: string
   category: {
-    id: number
-    name: string
-    subId: number
-    subName: string
+    id: number | undefined
+    name: string | undefined
+    subId: number | undefined
+    subName: string | undefined
   }
   type: string
   lessonTime: number
@@ -42,10 +42,10 @@ export default function RegisterPage() {
       name: '',
       memo: '',
       category: {
-        id: 0,
-        name: '',
-        subId: 0,
-        subName: ''
+        id: undefined,
+        name: undefined,
+        subId: undefined,
+        subName: undefined
       },
       type: 'duration',
       lessonTime: 30,
@@ -59,7 +59,8 @@ export default function RegisterPage() {
     reValidateMode: 'onSubmit'
   })
 
-  const onSubmit: SubmitHandler<classDataType> = data => console.log(data)
+  const onSubmit: SubmitHandler<classDataType> = (data, e) => console.log('submitdata', data)
+  const onError = (errors: any, e: any) => console.log(errors, e)
   const {
     register,
     handleSubmit,
@@ -79,7 +80,7 @@ export default function RegisterPage() {
   return (
     <div className="flex flex-col items-center pb-[60px]">
       <ContentHeader title="클래스 관리" back onClick={() => router.push('/class')} />
-      <form className="w-[640px] flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
+      <form className="w-[640px] flex flex-col gap-5" onSubmit={handleSubmit(onSubmit, onError)}>
         <div className={`class-box`}>
           <div className={`gray-900-bold text-xl`}>클래스 정보</div>
           <div className="info-detail flex flex-col gap-2">
@@ -111,7 +112,7 @@ export default function RegisterPage() {
           </div>
         </div>
         <ClassType {...Props} />
-        <MemberOfCenter type="teachers" getValues={getValues} setValue={setValue} />
+        <MemberOfCenter type="teachers" setValue={setValue} />
         <Button type="submit" color="primary">
           등록하기
         </Button>
