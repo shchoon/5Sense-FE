@@ -1,65 +1,44 @@
-import { ChangeEvent, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
+import { FocusEventHandler, useEffect } from 'react'
 
-export interface TextareaFormProps {
-  title: string
-  placeholder: string
-  name: string
-  maxLength: number
-  height?: string
-  submitData: any
-  onChange: (vlaue: any) => void
+import { UseFormSetFocus } from 'react-hook-form'
+import { IInput } from './TextInput'
+
+interface ITextArea extends IInput {
+  setFocus: UseFormSetFocus<any>
 }
 
-export default function TextareaForm({ title, placeholder, name, maxLength, submitData, onChange }: TextareaFormProps) {
-  const [inputValue, setInputValue] = useState<string>('')
-  const ValueLength = inputValue?.length
+export default function TextareaForm({ title, placeholder, register, errors, maxLength, value, setFocus }: ITextArea) {
+  const { name } = register
 
-  const textarea = useRef<HTMLTextAreaElement | null>(null)
-  const handleResizeHeight = useCallback(
-    (e: ChangeEvent<HTMLTextAreaElement>) => {
-      if (!textarea.current) return
-      setInputValue(textarea.current.value)
-      textarea.current.style.height = 'auto'
-      textarea.current.style.height = textarea.current?.scrollHeight + 'px'
-    },
-    [textarea]
-  )
-  const handelChage = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value.length <= maxLength) {
-      setInputValue(e.target.value)
-    } else if (e.target.value.length > maxLength) {
-      setInputValue(e.target.value.slice(0, maxLength))
-    }
-    onChange({ [name]: e.target.value })
+  useEffect(() => {
+    setFocus('content')
+  }, [setFocus])
+
+  const handleOnFocusTextarea: FocusEventHandler<HTMLTextAreaElement> = e => {
+    const { target } = e
+    setTimeout(() => {
+      target.style.height = `${target.scrollHeight}px`
+    }, 0)
   }
-
-  useEffect(() => {
-    setInputValue(submitData[name])
-  }, [submitData])
-
-  useEffect(() => {
-    handelChage
-  }, [submitData])
 
   return (
     <>
-      <p className="gray-800-semibold">{title}</p>
+      <span
+        className={`${errors[name] != null ? 'text-red-500' : 'text-gray-800'} text-base font-semibold leading-normal`}
+      >
+        {title}
+      </span>
       <textarea
-        ref={textarea}
-        className={`${
-          inputValue?.length > 0 ? 'bg-gray-50' : 'bg-white'
-        } w-full h-auto input-line-gray gray-900-400 resize-none overflow-hidden`}
+        className={`text-input resize-none overflow-hidden`}
         placeholder={placeholder}
-        name={name}
-        value={inputValue}
-        onInput={handleResizeHeight}
-        onChange={handelChage}
         rows={1}
         maxLength={maxLength}
+        {...register}
+        onFocus={handleOnFocusTextarea}
       />
 
       <span className="text-gray-500 text-sm font-normal font-['Inter'] text-right">
-        {ValueLength}/{maxLength}
+        {value?.length}/{maxLength}
       </span>
     </>
   )

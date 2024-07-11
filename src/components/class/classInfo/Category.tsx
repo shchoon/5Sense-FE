@@ -1,14 +1,23 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import Image from 'next/image'
+import { ReactElement, useState } from 'react'
+import { UseFormReturn } from 'react-hook-form'
 
-import { IClassInfo, IInfoValid } from '@/app/(service)/(nav)/class/register/page'
-import CheckIcon from 'public/assets/icons/circle/check.svg'
-import InputForm from '@/components/common/InputForm'
+import { classDataType } from '@/app/(service)/(nav)/class/register/page'
+
+import IconArt from '@/icons/icon/category/arts.svg'
+import IconCheck from '@/icons/icon/category/check.svg'
+import IconDance from '@/icons/icon/category/dance.svg'
+import IconEtc from '@/icons/icon/category/etc.svg'
+import IconPerformance from '@/icons/icon/category/performance.svg'
+import IconPlay from '@/icons/icon/category/play.svg'
+import IconProduce from '@/icons/icon/category/produce.svg'
+import IconShow from '@/icons/icon/category/show.svg'
+import IconSports from '@/icons/icon/category/sports.svg'
+import IconVocal from '@/icons/icon/category/vocal.svg'
 
 export type category = {
   id: number
   name: string
-  imgUrl: string
+  imgUrl: ReactElement
   options: subCategory[]
 }
 
@@ -16,18 +25,11 @@ type subCategory = {
   id: number
   name: string
 }
-
-interface IProps {
-  classInfo: IClassInfo
-  valid: boolean
-  checkValid: (vlaue: any) => void
-  onChange: (vlaue: any) => void
-}
 const categorydata: category[] = [
   {
     id: 1,
     name: '미술',
-    imgUrl: '/assets/icons/category/arts.svg',
+    imgUrl: <IconArt width={30} height={30} />,
     options: [
       { id: 10, name: '아크릴화' },
       { id: 11, name: '수채화' },
@@ -40,19 +42,19 @@ const categorydata: category[] = [
   {
     id: 2,
     name: '연기',
-    imgUrl: '/assets/icons/category/show.svg',
+    imgUrl: <IconShow width={30} height={30} />,
     options: []
   },
   {
     id: 3,
     name: '공연',
-    imgUrl: '/assets/icons/category/performance.svg',
+    imgUrl: <IconPerformance width={30} height={30} />,
     options: []
   },
   {
     id: 4,
     name: '체육',
-    imgUrl: '/assets/icons/category/sports.svg',
+    imgUrl: <IconSports width={30} height={30} />,
     options: [
       { id: 16, name: '클라이밍' },
       { id: 17, name: '실내다이빙' },
@@ -67,7 +69,7 @@ const categorydata: category[] = [
   {
     id: 5,
     name: '댄스',
-    imgUrl: '/assets/icons/category/dance.svg',
+    imgUrl: <IconDance width={30} height={30} />,
     options: [
       { id: 24, name: '방송댄스' },
       { id: 25, name: '발레' },
@@ -79,7 +81,7 @@ const categorydata: category[] = [
   {
     id: 6,
     name: '보컬',
-    imgUrl: '/assets/icons/category/vocal.svg',
+    imgUrl: <IconVocal width={30} height={30} />,
     options: [
       { id: 29, name: '재즈' },
       { id: 30, name: '실용음악' },
@@ -90,7 +92,7 @@ const categorydata: category[] = [
   {
     id: 7,
     name: '프로듀싱',
-    imgUrl: '/assets/icons/category/produce.svg',
+    imgUrl: <IconProduce width={30} height={30} />,
     options: [
       { id: 33, name: '프로듀싱' },
       { id: 34, name: '작곡·작사' },
@@ -100,7 +102,7 @@ const categorydata: category[] = [
   {
     id: 8,
     name: '연주',
-    imgUrl: '/assets/icons/category/play.svg',
+    imgUrl: <IconPlay width={30} height={30} />,
     options: [
       { id: 36, name: '피아노' },
       { id: 37, name: '현악기' },
@@ -113,39 +115,41 @@ const categorydata: category[] = [
   {
     id: 9,
     name: '기타',
-    imgUrl: '/assets/icons/category/etc.svg',
+    imgUrl: <IconEtc width={30} height={30} />,
     options: []
   }
 ]
 
-export default function Category({ classInfo, valid, checkValid, onChange }: IProps) {
-  const [selectedOptionList, setSelectedOptionList] = useState([])
+export default function Category({
+  register,
+  getValues,
+  setValue,
+  watch,
+  resetField,
+  formState: { errors }
+}: UseFormReturn<classDataType, any, undefined>) {
+  const [selectedOptionList, setSelectedOptionList] = useState<subCategory[]>([])
   const [option, setOption] = useState('')
 
-  const [category, setCategory] = useState({
-    id: 0,
-    name: '',
-    subId: 0,
-    subName: ''
-  })
+  const handleGroupChange = (groupId: number, groupName: string, optionList: subCategory[]) => {
+    setValue('category.id', groupId)
+    setValue('category.name', groupName)
 
-  const handleGroupChange = (groupId: number, groupName: string, optionList: any) => {
-    if (optionList.length === 0) {
-      return setCategory({ id: groupId, name: groupName, subId: groupId, subName: groupName })
-    }
-    setCategory(prev => ({ ...prev, id: groupId, name: groupName }))
+    resetField('category.subId')
+
     setSelectedOptionList(optionList)
   }
   const handleOptionChange = (optionId: number, optionName: string) => {
-    setCategory(prev => ({ ...prev, subId: optionId, subName: optionName }))
+    setValue('category.subId', optionId)
+    setValue('category.subName', optionName)
   }
 
   const renderOptionsList = () => {
     return (
       <>
-        {category.id === 9 ? (
+        {watch('category.id') === 9 ? (
           <div className="flex flex-col gap-2">
-            <p className={`${valid ? '' : 'text-[#EF5D5D]'} gray-800-semibold`}>기타</p>
+            <p className={` gray-800-semibold`}>기타</p>
 
             <input
               className={`${option.length > 0 ? 'bg-gray-50' : 'bg-white'} w-full h-auto input-line-gray`}
@@ -168,14 +172,15 @@ export default function Category({ classInfo, valid, checkValid, onChange }: IPr
               <div
                 key={option.id}
                 className={`relative flex justify-center items-center w-[142px] h-[45px] p-3 rounded-md border border-indigo-400 ${
-                  category.subId === option.id ? 'bg-[#F0EFFF]' : 'bg-white cursor-pointer'
+                  watch('category.subId') === option.id ? 'bg-[#F0EFFF]' : 'bg-white cursor-pointer'
                 }`}
+                {...register('category.subId')}
                 onClick={() => handleOptionChange(option.id, option.name)}
               >
                 <>
-                  {category.subId === option.id && <CheckIcon className="absolute top-1 right-1" />}
+                  {watch('category.subId') === option.id && <IconCheck className="absolute top-1 right-1" />}
 
-                  <input type="radio" id={option.name} value={option.name} className="hidden" />
+                  <input required type="radio" id={option.name} value={option.name} className="hidden" />
                   <label
                     htmlFor={option.name}
                     className={`text-base font-medium leading-normal text-primary-600 cursor-pointer`}
@@ -191,47 +196,43 @@ export default function Category({ classInfo, valid, checkValid, onChange }: IPr
     )
   }
 
-  useEffect(() => {
-    onChange({ ['category']: category })
-    console.log(classInfo)
-  }, [category, option])
-
   return (
     <div>
-      <p className={`${valid ? '' : 'text-[#EF5D5D]'} gray-800-semibold`}>카테고리</p>
+      <p className={`text-base gray-800-semibold leading-normal`}>카테고리</p>
       {/* 대분류 소분류 박스 */}
       <div className="flex flex-col gap-6 mt-2">
         <div className="grid grid-cols-3 w-full gap-2">
-          {categorydata.map((item: category) => (
-            <div
-              key={item.id}
-              className={`relative flex flex-col gap-[6px] justify-center items-center h-[110px] py-4 rounded-md border border-primary-500 ${
-                category.id === item.id ? 'bg-[#F0EFFF]' : 'bg-white cursor-pointer'
-              }`}
-              onClick={() => handleGroupChange(item.id, item.name, item.options)}
-            >
-              {category.id === item.id && <CheckIcon className="absolute top-1 right-1" />}
-              <div
-                className={`w-12 h-12 rounded-[50px] flex justify-center items-center ${
-                  category.id === item.id ? 'bg-white' : 'bg-gray-100'
-                }`}
-              >
-                <Image src={item.imgUrl} alt={item.name} width={30} height={30} />
-              </div>
-
-              <input type="radio" id={String(item.id)} value={item.id} className={`hidden`} />
+          {categorydata.map(item => {
+            const active = watch('category.id') === item.id
+            return (
               <label
-                htmlFor={String(item.id)}
-                className={`text-sm font-semibold ${
-                  category.id === item.id ? 'text-primary-600' : 'text-gray-500'
-                } cursor-pointer`}
+                key={item.id}
+                className={`relative flex flex-col gap-[6px] justify-center items-center h-[110px] py-4 rounded-md border border-primary-500 cursor-pointer ${
+                  active ? 'bg-[#F0EFFF]' : 'bg-white '
+                }`}
+                {...register('category.id')}
+                onClick={() => {
+                  handleGroupChange(item.id, item.name, item.options)
+                }}
               >
-                {item.name}
+                {active && <IconCheck className="absolute top-1 right-1" />}
+                <div
+                  className={`w-12 h-12 rounded-[50px] flex justify-center items-center ${
+                    active ? 'bg-white text-primary-600' : 'bg-gray-100 text-gray-500'
+                  }`}
+                >
+                  {item.imgUrl}
+                </div>
+
+                <input type="radio" id={String(item.id)} value={item.id} className="hidden" />
+                <span className={`text-sm font-semibold ${active ? 'text-primary-600' : 'text-gray-500'}`}>
+                  {item.name}
+                </span>
               </label>
-            </div>
-          ))}
+            )
+          })}
         </div>
-        {category.id > 0 && renderOptionsList()}
+        {watch('category.id') != null && renderOptionsList()}
       </div>
     </div>
   )

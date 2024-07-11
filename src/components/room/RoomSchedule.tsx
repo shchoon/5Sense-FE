@@ -43,7 +43,7 @@ export default function RoomSchedule({ roomScheduleData, indexOfRoomList }: IPro
 
   const timeList = createTimeList()
 
-  const test = (lessonTime: number) => {
+  const getScheduleHeight = (lessonTime: number) => {
     if (lessonTime === 30 || lessonTime === null) {
       return '2xl:h-[162px] lg:h-[183px] h-[180px]'
     } else if (lessonTime === 60) {
@@ -53,15 +53,6 @@ export default function RoomSchedule({ roomScheduleData, indexOfRoomList }: IPro
     } else if (lessonTime === 120) {
       return '2xl:h-[648px] lg:h-[732px] h-[720px]'
     }
-
-    /* else {
-      const multipleValue = lessonTime / 30
-      const high = `2xl:h-[${162 * multipleValue}px] `
-      const middle = `lg:h-[${183 * multipleValue}px] `
-      const low = `h-[${180 * multipleValue}px]`
-
-      return `2xl:h-[${162 * multipleValue}px] lg:h-[${183 * multipleValue}px] h-[${180 * multipleValue}px]`
-    } */
   }
 
   return (
@@ -108,7 +99,7 @@ export default function RoomSchedule({ roomScheduleData, indexOfRoomList }: IPro
                       return (
                         <div
                           key={i}
-                          className={`w-full ${test(
+                          className={`w-full ${getScheduleHeight(
                             data.lessonTime
                           )} p-1.5 border border-1 border-gray-200 flex items-center justify-center`}
                         >
@@ -173,7 +164,7 @@ export default function RoomSchedule({ roomScheduleData, indexOfRoomList }: IPro
                                     font-semibold lg:text-sm text-xs text-center`}
                                       onClick={() => {
                                         if (data.isOpenForBooking) {
-                                          router.push('/room/reservation')
+                                          router.push('/room/reservation/booked')
                                           localStorage.setItem('roomId', roomId)
                                           localStorage.setItem('roomName', roomName)
                                           localStorage.setItem('className', data.name)
@@ -198,17 +189,16 @@ export default function RoomSchedule({ roomScheduleData, indexOfRoomList }: IPro
                               className="lg:w-[75px] lg:h-[39px] w-[68px] h-[36px] flex items-center px-3 py-2 border rounded-lg border-1 border-gray-200
                              gray-800-semibold lg:text-sm text-xs hover:text-primary-600"
                               onClick={() => {
-                                router.push('/room/reservation')
+                                router.push('/room/reservation/unbooked')
                                 localStorage.setItem('roomId', roomId)
                                 localStorage.setItem('roomName', roomName)
-                                localStorage.setItem('className', data.name)
                                 localStorage.setItem('reservationTime', data.time)
                                 localStorage.setItem(
                                   'reservationDate',
                                   `${calendarDate.year}.${calendarDate.month + 1}.${calendarDate.date}`
                                 )
-                                localStorage.setItem('classId', data.id)
-                                localStorage.setItem('lessonTime', data.lessonTime)
+                                //localStorage.setItem('classId', data.id)
+                                //localStorage.setItem('lessonTime', data.lessonTime)
                               }}
                             >
                               예약하기

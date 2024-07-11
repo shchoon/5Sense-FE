@@ -201,6 +201,12 @@ module.exports = {
   ],
   theme: {
     extend: {
+      ringWidth: {
+        DEFAULT: '0px' // 기본 링 너비를 0으로 설정
+      },
+      ringColor: {
+        DEFAULT: 'transparent' // 기본 링 색상을 투명으로 설정
+      },
       height: {
         'screen-minus-72': 'calc(100vh - 72px)'
       },
@@ -245,6 +251,12 @@ module.exports = {
       fontFamily: {
         pretendard: ['var(--font-pretendard)']
       }
+    }
+  },
+  variants: {
+    extend: {
+      ringWidth: ['focus'], // 포커스 상태에서 링 너비를 비활성화
+      ringColor: ['focus'] // 포커스 상태에서 링 색상을 비활성화
     }
   }
 }

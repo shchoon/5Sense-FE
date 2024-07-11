@@ -28,14 +28,6 @@ interface snsLinkType {
 }
 
 export default function ManageMent() {
-  /* const [centerInfo, setCenterinfo] = useState({
-    name: '',
-    address: '',
-    mainPhone: '',
-    open: '',
-    close: '',
-    profile: ''
-  }) */
  const centerInfo = useRecoilValue(centerInfoState)
  const setCenterInfo = useSetRecoilState(centerInfoState)
   const [patchData, setPatchData] = useState({

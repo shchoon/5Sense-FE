@@ -1,0 +1,36 @@
+<svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="16" height="17" fill="#3D3D3D"/>
+<g id="&#237;&#129;&#180;&#235;&#158;&#152;&#236;&#138;&#164;&#234;&#180;&#128;&#235;&#166;&#172;">
+<rect width="16055" height="18928" transform="translate(-2302 -3971)" fill="#C9C9C9"/>
+<g id="Frame 814302">
+<g id="Frame 1321315992">
+<g id="Dropdown Buttons">
+<g id="Dropdown Menu" filter="url(#filter0_d_1045_4139)">
+<rect x="-16" y="-51" width="195" height="86" rx="8" fill="white"/>
+<rect x="-15.5" y="-50.5" width="194" height="85" rx="7.5" stroke="#D1D5DB"/>
+<g id="Dropdown Menu_2">
+<g id="Nav Link">
+<g id="Radio">
+<g id="Input">
+<circle id="Ellipse 20" cx="8" cy="8.5" r="6" fill="#F9FAFB" stroke="#563AC0" stroke-width="4"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<filter id="filter0_d_1045_4139" x="-18" y="-52" width="199" height="90" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="1"/>
+<feGaussianBlur stdDeviation="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1045_4139"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1045_4139" result="shape"/>
+</filter>
+</defs>
+</svg>

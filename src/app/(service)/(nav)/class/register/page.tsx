@@ -1,179 +1,75 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { Button } from 'flowbite-react'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import ClassInfo from '@/components/class/register/classInfo'
+import Category from '@/components/class/classInfo/Category'
 import ClassType from '@/components/class/register/classType'
-import MemberOfCenter from '@/components/class/register/memberOfCenter'
-import { durationClassScheduleState } from '@/lib/state/classDurationSchedule'
-
-import { useRouter } from 'next/navigation'
-import { postDurationLessons, postSesstionLessons } from '@/lib/api/class'
+import SearchPerson from '@/components/class/register/searchPerson'
 import ContentHeader from '@/components/common/ContentHeader'
-import { Button } from 'flowbite-react'
+import TextInput from '@/components/common/TextInput'
+import TextareaForm from '@/components/common/TextareaForm'
+import { DurationScheduleType, durationClassScheduleState } from '@/lib/state/classDurationSchedule'
 
-export interface IClassInfo {
+export type classDataType = {
   name: string
   memo: string
   category: {
-    id: number
-    name: string
-    subId: number
-    subName: string
+    id: number | undefined
+    name: string | undefined
+    subId: number | undefined
+    subName: string | undefined
   }
-}
-
-export interface IInfoValid {
-  valid: boolean
-  name: boolean
-  category: boolean
-}
-
-export interface ITypeValid {
-  valid: boolean
-  fee: boolean
-  schedule: boolean
-}
-
-export interface IClassType {
   type: string
   lessonTime: number
   tuitionFee: string
   totalSessions: string
   capacity: number
-}
-
-export interface ITeacherInfo {
+  schedules: DurationScheduleType[]
   teacherId: string
-}
-
-interface IProps {
-  id: number
-  type: string
 }
 
 export default function RegisterPage() {
   const router = useRouter()
 
-  const [classInfo, setClassInfo] = useState({
-    name: '',
-    memo: '',
-    category: {
-      id: 0,
-      name: '',
-      subId: 0,
-      subName: ''
-    }
-  })
-
-  const [classType, setClassType] = useState({
-    type: 'duration',
-    lessonTime: 30,
-    tuitionFee: '',
-    totalSessions: '',
-    capacity: 1
-  })
-
-  const [teacherInfo, setTeacherInfo] = useState('')
-
   const durationSchedule = useRecoilValue(durationClassScheduleState)
   const setDurationSchedule = useSetRecoilState(durationClassScheduleState)
 
-  const [infoValid, setInfoValid] = useState({
-    valid: true,
-    name: true,
-    category: true
+  const Props = useForm<classDataType>({
+    defaultValues: {
+      name: '',
+      memo: '',
+      category: {
+        id: undefined,
+        name: undefined,
+        subId: undefined,
+        subName: undefined
+      },
+      type: 'duration',
+      lessonTime: 30,
+      tuitionFee: '',
+      totalSessions: '',
+      capacity: 1,
+      schedules: durationSchedule,
+      teacherId: ''
+    },
+    mode: 'onSubmit',
+    reValidateMode: 'onSubmit'
   })
 
-  const [typeValid, setTypeValid] = useState({
-    valid: true,
-    fee: true,
-    schedule: true
-  })
-
-  const [teacherValid, setTeacherValid] = useState(true)
-
-  useEffect(() => {
-    console.log(classInfo)
-    console.log(classType)
-    console.log(teacherInfo)
-  }, [classInfo, classType, teacherInfo])
-
-  console.log(durationSchedule)
-
-  const handleRegisterClass = () => {
-    if (classInfo.name.length === 0) {
-      return setInfoValid(prev => ({ ...prev, valid: false, name: false }))
-    } else {
-      setInfoValid(prev => ({ ...prev, valid: true, name: true }))
-    }
-
-    if (classInfo.category.id == 0 || classInfo.category.subName.length === 0) {
-      return setInfoValid(prev => ({ ...prev, valid: false, category: false }))
-    } else {
-      setInfoValid(prev => ({ ...prev, category: true }))
-    }
-    console.log(classType.tuitionFee.length)
-    if (classType.tuitionFee.length === 0) {
-      return setTypeValid(prev => ({ ...prev, valid: false, fee: false }))
-    } else {
-      setTypeValid(prev => ({ ...prev, valid: true, fee: true }))
-    }
-
-    if (classType.type === 'duration') {
-      if (durationSchedule.length === 0) {
-        return setTypeValid(prev => ({ ...prev, valid: false, schedule: false }))
-      } else {
-        setTypeValid(prev => ({ ...prev, schedule: true }))
-      }
-    }
-
-    if (teacherInfo.length === 0) {
-      return setTeacherValid(false)
-    }
-
-    let data
-    const tuition = classType.tuitionFee.replaceAll(',', '')
-    if (classType.type === 'duration') {
-      data = {
-        name: classInfo.name,
-        memo: classInfo.memo,
-        category: {
-          id: classInfo.category.subId,
-          name: classInfo.category.subName
-        },
-        tuitionFee: Number(tuition),
-        teacherId: Number(teacherInfo),
-        schedules: durationSchedule
-      }
-
-      return console.log(data)
-      // return postDurationLessons(data).then(res => {
-      //   console.log(res)
-      //   // router.push('/class')
-      // })
-    } else {
-      data = {
-        name: classInfo.name,
-        memo: classInfo.memo,
-        category: {
-          id: classInfo.category.subId,
-          name: classInfo.category.subName
-        },
-        lessonTime: Number(classType.lessonTime),
-        tuitionFee: Number(tuition),
-        capacity: classType.capacity,
-        totalSessions: Number(classType.totalSessions),
-        teacherId: Number(teacherInfo)
-      }
-
-      return postSesstionLessons(data).then(res => {
-        if (res.status === 201) {
-          router.push('/class')
-        }
-      })
-    }
-  }
+  const onSubmit: SubmitHandler<classDataType> = (data, e) => console.log('submitdata', data)
+  const onError = (errors: any, e: any) => console.log(errors, e)
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setValue,
+    watch,
+    setFocus,
+    formState: { errors }
+  } = Props
 
   useEffect(() => {
     return () => {
@@ -184,23 +80,43 @@ export default function RegisterPage() {
   return (
     <div className="flex flex-col items-center pb-[60px]">
       <ContentHeader title="클래스 관리" back onClick={() => router.push('/class')} />
-      <div className="w-[640px] flex flex-col gap-5">
-        <ClassInfo
-          classInfo={classInfo}
-          vaild={infoValid}
-          checkValid={(newValue: { [key: string]: boolean }) => {
-            setClassType(prev => ({ ...prev, ...newValue }))
-          }}
-          onChange={(newValue: { [key: string]: string }) => {
-            setClassInfo(prev => ({ ...prev, ...newValue }))
-          }}
-        />
-        <ClassType classType={classType} valid={typeValid} setClassType={setClassType} />
-        <MemberOfCenter type="teachers" valid={teacherValid} onChange={(name: string) => setTeacherInfo(name)} />
-        <Button color="primary" onClick={handleRegisterClass}>
+      <form className="w-[640px] flex flex-col gap-5" onSubmit={handleSubmit(onSubmit, onError)}>
+        <div className={`class-box`}>
+          <div className={`gray-900-bold text-xl`}>클래스 정보</div>
+          <div className="info-detail flex flex-col gap-2">
+            <TextInput
+              register={register('name', { required: true })}
+              errors={errors}
+              value={watch('name')}
+              title="클래스 명"
+              placeholder="클래스명을 입력해 주세요"
+              maxLength={20}
+            />
+            <TextareaForm
+              register={register('memo', {
+                required: true,
+                onChange: e => {
+                  const element = e.target as HTMLTextAreaElement
+                  element.style.height = 'auto'
+                  element.style.height = `${element.scrollHeight}px`
+                }
+              })}
+              setFocus={setFocus}
+              errors={errors}
+              value={watch('memo')}
+              title="클래스 메모"
+              placeholder="클래스관련 메모를 적어주세요"
+              maxLength={300}
+            />
+            <Category {...Props} />
+          </div>
+        </div>
+        <ClassType {...Props} />
+        <SearchPerson type="teachers" setValue={setValue} />
+        <Button type="submit" color="primary">
           등록하기
         </Button>
-      </div>
+      </form>
     </div>
   )
 }

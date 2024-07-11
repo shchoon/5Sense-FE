@@ -86,7 +86,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           <div className="w-full box-content mt-[180px] max-w-[248px] xl:px-6 lg:px-4 lg:block hidden">
             <AcademyInfo centerInfo={centerInfo} isExistCenter={isExistCenter} />
             <div className="w-full h-16"></div>
-            <TodaySchedule />
+            {isExistCenter !== undefined && <TodaySchedule />}
           </div>
           <div className="flex-1 flex flex-col lg:pt-[66px]">
             <Navbar />
@@ -95,7 +95,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           </div>
         </div>
       </div>
-
       {/* static은 레이어 계층에 들어가지 않기때문에 purplebox에 인덱스값을 -로 설정함*/}
       <div className="purplebox absolute top-0 left-0 w-screen h-[601px] lg:h-[469px] bg-gradient-to-b from-[#6F53DB] to-[#875EDC] z-[-10]" />
     </div>

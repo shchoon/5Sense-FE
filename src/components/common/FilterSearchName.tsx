@@ -59,7 +59,7 @@ export default function FilterSearchName(props: IProps) {
       setListData(list)
     })
   }, [])
-  console.log(isFocudInput)
+
   return (
     <div ref={studentsListRef} className="relative w-full flex flex-col gap-3">
       <div className="w-full h-[42px] p-3 border rounded-lg border-gray-200 bg-gray-50 flex gap-2 focus:border-none focus-within:ring-1 focus-within:ring-[#7354E8]">

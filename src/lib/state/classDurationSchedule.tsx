@@ -1,7 +1,7 @@
 import { atom } from 'recoil'
 import Schedule from '../../app/(service)/(nav)/room/schedule/page'
 
-interface DurationScheduleType {
+export interface DurationScheduleType {
   startDate: string
   endDate: string
   startTime: string
