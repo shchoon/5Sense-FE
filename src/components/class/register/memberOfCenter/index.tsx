@@ -1,21 +1,20 @@
 'use client'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import Modal from '@/components/common/modal'
-import RegisterModal from '@/components/instructor/RegisterModal'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
 import instance from '@/lib/api/axios'
 import { modalState } from '@/lib/state/modal'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { AddSessionState } from '@/lib/state/addSessionState'
+import { UseFormGetValues, UseFormSetValue } from 'react-hook-form'
+import { classDataType } from '@/app/(service)/(nav)/class/register/page'
 
 import Close_Circle_bg from 'public/assets/icons/close_circle_bg_pri_600.svg'
 import PlusIcon from 'public/assets/icons/plus.svg'
 import SearchIcon from 'public/assets/icons/search.svg'
 import UserCircle from 'public/assets/icons/user_circle.svg'
 import VecterIcon from 'public/assets/icons/vector.svg'
-import { UseFormGetValues, UseFormSetValue } from 'react-hook-form'
-import { classDataType } from '@/app/(service)/(nav)/class/register/page'
 
 interface IProps {
   type: string
@@ -29,6 +28,7 @@ export default function MemberOfCenter({ type, getValues, setValue }: IProps) {
 
   const modal = useRecoilValue(modalState)
   const setModal = useSetRecoilState(modalState)
+  const setAddSessionState = useSetRecoilState(AddSessionState)
 
   const handleClickOutsideOfInput = (e: any) => {
     if (openNameList && !autoCompleteTeacherNameRef.current?.contains(e.target)) {
@@ -47,12 +47,13 @@ export default function MemberOfCenter({ type, getValues, setValue }: IProps) {
   let [isClickedAddTeacher, setIsClickedAddTeacher] = useState<boolean>(false)
   let [openNameList, setOpenNameList] = useState<boolean>(false)
   let [nameValue, setNameValue] = useState<string>('')
-
   const emptyInput = () => {
     setSearchingName('')
   }
 
-  const [nameList, setNameList] = useState<{ id: string; name: string; phone: string; particulars?: string }[]>([])
+  const [nameList, setNameList] = useState<
+    { id: string; name: string; phone: string; particulars?: string; sessionCount?: string }[]
+  >([])
   useEffect(() => {
     if (type === 'teachers') {
       instance(`/teachers?searchBy=none&take=100`).then(res => {
@@ -62,9 +63,20 @@ export default function MemberOfCenter({ type, getValues, setValue }: IProps) {
     } else if (type === 'students') {
       const classId = localStorage.getItem('classId')
       if (classId !== 'null') {
-        instance(`/students/lessons/${classId}`).then(res => {
-          const data = res.data.data
-          setNameList(data)
+        instance(`/session-lessons/${classId}/details`).then(res => {
+          let studentsData = res.data.data.registeredStudents
+          setNameList(studentsData)
+          instance(`/students/lessons/${classId}`).then(res => {
+            const studentsList = res.data.data
+            for (var i = 0; i < studentsData.length; i++) {
+              const compareValue = studentsList.filter(
+                (data: { name: string; phone: string }) =>
+                  data.name === studentsData[i].name && data.phone === studentsData[i].phone
+              )
+              console.log(compareValue)
+              studentsData[i].id = compareValue[0].id
+            }
+          })
         })
       }
     }
@@ -91,13 +103,9 @@ export default function MemberOfCenter({ type, getValues, setValue }: IProps) {
                 setValue?.('teacherId', e.target.value)
               }}
             />
-            {/* 
-            {searchingName !== '' && searchingName !== nameValue ? (
-              <CloseCircleIcon className="text-gray-400 cursor-pointer" onClick={emptyInput} />
-            ) : null} */}
-            {searchingName === nameValue && searchingName !== '' ? (
+            {searchingName.includes(nameValue) && searchingName !== '' && nameValue !== '' ? (
               <Close_Circle_bg
-                className="absolute left-[100px] cursor-pointer"
+                className={`absolute ${type === 'teachers' ? 'left-[100px]' : 'left-[200px]'}  cursor-pointer`}
                 width={20}
                 height={20}
                 onClick={() => {
@@ -113,10 +121,16 @@ export default function MemberOfCenter({ type, getValues, setValue }: IProps) {
             ref={autoCompleteTeacherNameRef}
             className=" flex flex-col w-[100%] h-[auto] p-4 border rounded-lg items-center gap-3 bg-[#FFF] border-[#E5E7EB] shadow-[0px_1px_2px_0px_rgba(0, 0, 0, 0.08)]"
           >
-            <div className="w-[100%] text-[14px] gray-900-semibold">강사 이름</div>
+            {type === 'teachers' && <div className="w-[100%] text-[14px] gray-900-semibold">강사 이름</div>}
             <div className=" w-full overflow-hidden">
               <div className="max-h-[185px] overflow-y-scroll">
                 {nameList.map((data, index) => {
+                  console.log(data)
+                  let sessionCount = null
+                  if (type === 'students' && data.sessionCount) {
+                    sessionCount = Number(data.sessionCount.split('/')[1]) - Number(data.sessionCount.split('/')[0])
+                  }
+
                   if (data.name.includes(searchingName)) {
                     return (
                       <div
@@ -125,16 +139,23 @@ export default function MemberOfCenter({ type, getValues, setValue }: IProps) {
                         className="relative flex w-full px-3 py-2 items-center gap-2 rounded-lg bg-[#F9FAFB] cursor-pointer hover:opacity-70"
                         onClick={e => {
                           const name: any = e.currentTarget.getAttribute('data-teachername')
-                          setSearchingName(name)
+                          sessionCount === null
+                            ? setSearchingName(name)
+                            : setSearchingName(`${name} (잔여회차: ${sessionCount}회)`)
                           setCheckInclude(prev => !prev)
                           setNameValue(data.name)
                           setOpenNameList(prev => !prev)
                           setValue?.('teacherId', data.id)
+                          type === 'students' &&
+                            setAddSessionState(prev => ({
+                              ...prev,
+                              studentId: Number(data.id)
+                            }))
                         }}
                       >
                         <UserCircle className="text-gray-400" />
                         <div id="name" className="text-gray-500 text-sm font-normal">
-                          {data.name}
+                          {data.name} ({data.phone.slice(data.phone.length - 4, data.phone.length)})
                         </div>
                         <VecterIcon className="absolute right-3" width={14} height={15} />
                       </div>

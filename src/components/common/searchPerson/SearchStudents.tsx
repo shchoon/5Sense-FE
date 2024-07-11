@@ -10,23 +10,18 @@ import { modalState } from '@/lib/state/modal'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import Close_Circle_bg from 'public/assets/icons/close_circle_bg_pri_600.svg'
-import PlusIcon from 'public/assets/icons/plus.svg'
 import SearchIcon from 'public/assets/icons/search.svg'
 import UserCircle from 'public/assets/icons/user_circle.svg'
 import VecterIcon from 'public/assets/icons/vector.svg'
 
 interface IProps {
-  onChange: (name: string) => void
+  handleChangeStudentId: (id: string) => void
   classId: number
 }
 
-export default function SearchStudents({ onChange, classId }: IProps) {
-  console.log(classId)
+export default function SearchStudents({ handleChangeStudentId, classId }: IProps) {
   const inputClickRef = useRef<HTMLInputElement>(null)
   const autoCompleteTeacherNameRef = useRef<HTMLDivElement>(null)
-
-  const modal = useRecoilValue(modalState)
-  const setModal = useSetRecoilState(modalState)
 
   const handleClickOutsideOfInput = (e: any) => {
     if (openNameList && !autoCompleteTeacherNameRef.current?.contains(e.target)) {
@@ -42,7 +37,6 @@ export default function SearchStudents({ onChange, classId }: IProps) {
 
   let [searchingName, setSearchingName] = useState<string>('')
   let [checkInclude, setCheckInclude] = useState<boolean>(false)
-  let [isClickedAddTeacher, setIsClickedAddTeacher] = useState<boolean>(false)
   let [openNameList, setOpenNameList] = useState<boolean>(false)
   let [nameValue, setNameValue] = useState<string>('')
 
@@ -50,31 +44,28 @@ export default function SearchStudents({ onChange, classId }: IProps) {
     setSearchingName('')
   }
 
-  const [nameList, setNameList] = useState<{ id: string; name: string; phone: string; particulars?: string }[]>([])
-  
+  const [nameList, setNameList] = useState<{ id: string; name: string; phone: string; sessionCount: string }[]>([])
+
   useEffect(() => {
-    instance(`/students/lessons/${classId}`).then(res => {
-      const data = res.data.data
-      setNameList(data)
-    })
-    /* if (type === 'teachers') {
-      instance(`/teachers?searchBy=none&take=100`).then(res => {
-        const data = res.data.data.teachers
-        setNameList(data)
+    instance(`/session-lessons/${classId}/details`).then(res => {
+      let studentsData = res.data.data.registeredStudents
+      setNameList(studentsData)
+      instance(`/students/lessons/${classId}`).then(res => {
+        const studentsList = res.data.data
+        for (var i = 0; i < studentsData.length; i++) {
+          const compareValue = studentsList.filter(
+            (data: { name: string; phone: string }) =>
+              data.name === studentsData[i].name && data.phone === studentsData[i].phone
+          )
+          console.log(compareValue)
+          studentsData[i].id = compareValue[0].id
+        }
       })
-    } else if (type === 'students') {
-      const classId = localStorage.getItem('classId')
-      if (classId !== 'null') {
-        instance(`/students/lessons/${classId}`).then(res => {
-          const data = res.data.data
-          setNameList(data)
-        })
-      }
-    } */
+    })
   }, [classId])
 
   return (
-    <div className='w-full flex flex-col gap-2'>
+    <div className="w-full flex flex-col gap-2">
       <div className="gray-800-semibold text-[16px]">수강생 찾기</div>
       <div className="flex flex-col w-full h-[52px] px-4 py-[14px] justify-center bg-white border border-gray-200 rounded-lg focus-within:border-[#7354E8]">
         <div className="relative flex w-full items-center gap-2">
@@ -82,23 +73,18 @@ export default function SearchStudents({ onChange, classId }: IProps) {
           <input
             ref={inputClickRef}
             className="flex-1 text-[16px] bg-inherit text-[#111928] font-normal outline-none"
-            placeholder='수강생 이름을 입력해주세요'
+            placeholder="수강생 이름을 입력해주세요"
             value={searchingName}
             onClick={() => {
               handleClickInsideOfInput()
             }}
             onChange={e => {
               setSearchingName(e.target.value)
-              onChange(e.target.value)
             }}
           />
-          {/* 
-            {searchingName !== '' && searchingName !== nameValue ? (
-              <CloseCircleIcon className="text-gray-400 cursor-pointer" onClick={emptyInput} />
-            ) : null} */}
-          {searchingName === nameValue && searchingName !== '' ? (
+          {searchingName.includes(nameValue) && nameValue !== '' && searchingName !== '' ? (
             <Close_Circle_bg
-              className="absolute left-[100px] cursor-pointer"
+              className="absolute left-[200px] cursor-pointer"
               width={20}
               height={20}
               onClick={() => {
@@ -118,6 +104,9 @@ export default function SearchStudents({ onChange, classId }: IProps) {
           <div className=" w-full overflow-hidden">
             <div className="max-h-[185px] overflow-y-scroll">
               {nameList.map((data, index) => {
+                console.log(data)
+                const sessionCount = Number(data.sessionCount.split('/')[1]) - Number(data.sessionCount.split('/')[0])
+
                 if (data.name.includes(searchingName)) {
                   return (
                     <div
@@ -126,16 +115,18 @@ export default function SearchStudents({ onChange, classId }: IProps) {
                       className="relative flex w-full px-3 py-2 items-center gap-2 rounded-lg bg-[#F9FAFB] cursor-pointer hover:opacity-70"
                       onClick={e => {
                         const name: any = e.currentTarget.getAttribute('data-teachername')
-                        setSearchingName(name)
+                        sessionCount === null
+                          ? setSearchingName(name)
+                          : setSearchingName(`${name} (잔여회차: ${sessionCount}회)`)
                         setCheckInclude(prev => !prev)
                         setNameValue(data.name)
                         setOpenNameList(prev => !prev)
-                        onChange(data.id)
+                        handleChangeStudentId(data.id)
                       }}
                     >
                       <UserCircle className="text-gray-400" />
                       <div id="name" className="text-gray-500 text-sm font-normal">
-                        {data.name}
+                        {data.name} ({data.phone.slice(data.phone.length - 4, data.phone.length)})
                       </div>
                       <VecterIcon className="absolute right-3" width={14} height={15} />
                     </div>

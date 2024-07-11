@@ -92,3 +92,61 @@ export const formatAddComma = (tutionFee: number, cnt: number) => {
 
   return (removedCommaValue * cnt).toLocaleString()
 }
+
+export const formatDate = (date: string) => {
+  const dayList = ['일', '월', '화', '수', '목', '금', '토']
+  const dateData = {
+    year: Number(date.split('.')[0]),
+    month: Number(date.split('.')[1]) - 1,
+    date: Number(date.split('.')[2])
+  }
+
+  const dayIndex = new Date(dateData.year, dateData.month, dateData.date).getDay()
+
+  const returnData = {
+    year: date.split('.')[0],
+    month: date.split('.')[1].length === 1 ? '0' + date.split('.')[1] : date.split('.')[1],
+    date: date.split('.')[2].length === 1 ? '0' + date.split('.')[2] : date.split('.')[2],
+    day: dayList[dayIndex]
+  }
+
+  return returnData.year + '.' + returnData.month + '.' + returnData.date + ` (${returnData.day})`
+}
+
+export const formatReservationDate = (date: string) => {
+  const dateData = {
+    year: Number(date.split('.')[0]),
+    month: Number(date.split('.')[1]),
+    date: Number(date.split('.')[2])
+  }
+  return `${dateData.year}년 ${dateData.month}월 ${dateData.date}일`
+}
+
+export const calculateRervationTime = (openTime: string, closeTime: string) => {
+  const startTimeData = {
+    hour: Number(openTime.split(':')[0]),
+    min: openTime.split(':')[1]
+  }
+
+  const endTimeData = {
+    hour: closeTime.split(':')[1] === '30' ? Number(closeTime.split(':')[0]) : Number(closeTime.split(':')[0]),
+    min: closeTime.split(':')[1]
+  }
+
+  const timeList = []
+
+  for (var i = startTimeData.hour; i <= endTimeData.hour; i++) {
+    if (i < 10) {
+      timeList.push(`0${i}:00`)
+      timeList.push(`0${i}:30`)
+    } else {
+      timeList.push(`${i}:00`)
+      timeList.push(`${i}:30`)
+    }
+  }
+
+  const indexOfOpenTime = timeList.indexOf(openTime)
+  const indexOfCloseTime = timeList.indexOf(closeTime)
+
+  return timeList.slice(indexOfOpenTime, indexOfCloseTime + 1)
+}
