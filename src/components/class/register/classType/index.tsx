@@ -23,18 +23,24 @@ export default function ClassType(props: UseFormReturn<classDataType, any, undef
 
   const onInitClassType = (data: string) => {
     if (data === '기간반') {
-      setValue('type', 'duration')
-      setValue('lessonTime', 30)
-      setValue('tuitionFee', 0)
-      setValue('totalSessions', 0)
-      setValue('capacity', 1)
+      reset({
+        ...getValues(),
+        type: 'duration',
+        lessonTime: 30,
+        tuitionFee: '',
+        totalSessions: '',
+        capacity: 1
+      })
       setIsDuration(true)
     } else {
-      setValue('type', 'session')
-      setValue('lessonTime', 30)
-      setValue('tuitionFee', 0)
-      setValue('totalSessions', 0)
-      setValue('capacity', 1)
+      reset({
+        ...getValues(),
+        type: 'session',
+        lessonTime: 30,
+        tuitionFee: '',
+        totalSessions: '',
+        capacity: 1
+      })
       setIsDuration(false)
     }
   }

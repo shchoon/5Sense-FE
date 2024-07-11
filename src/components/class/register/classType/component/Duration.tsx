@@ -1,15 +1,14 @@
-import { useState } from 'react'
-
 import { durationClassScheduleState } from '@/lib/state/classDurationSchedule'
-import { modalState } from '@/lib/state/modal'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import DurationScheduleCheck from '../../../../check/ClassDurationScheduleCheck'
+import { Button, Modal } from 'flowbite-react'
+import { UseFormReturn } from 'react-hook-form'
+import { useRecoilValue } from 'recoil'
 
 import { classDataType } from '@/app/(service)/(nav)/class/register/page'
+import RoomReservation from '@/components/room/RoomReservation'
+import UseModal from '@/hooks/useModal'
 import PlusIcon from '@/icons/icon/plus.svg'
-import { Button } from 'flowbite-react'
-import { UseFormReturn } from 'react-hook-form'
 import { getKoreanNumber } from '@/utils'
+import DurationScheduleCheck from '../../../../check/ClassDurationScheduleCheck'
 
 export default function Duration({
   register,
@@ -18,10 +17,9 @@ export default function Duration({
   getValues
 }: UseFormReturn<classDataType, any, undefined>) {
   const { errors, defaultValues } = formState
-  const setModal = useSetRecoilState(modalState)
   const duarationSchedule = useRecoilValue(durationClassScheduleState)
-  const [noticeModal, setNoticeModal] = useState(false)
-  const [scheduleModal, setScheduleModal] = useState(false)
+
+  const [Schedule, close, open] = UseModal()
 
   // const changeTuitionFee = (e: ChangeEvent<HTMLInputElement>) => {
   //   const value: string = e.target.value
@@ -65,7 +63,7 @@ export default function Duration({
       </div>
       <div className="w-full flex flex-col gap-2">
         <p className={`gray-800-semibold`}>일정</p>
-        <Button color="outline" fullSized>
+        <Button color="outline" fullSized onClick={open}>
           <PlusIcon className="mr-2" />
           일정 추가
         </Button>
@@ -92,16 +90,13 @@ export default function Duration({
           </div>
         </Modal>
       )} */}
-      {/* {scheduleModal && (
-        <Modal small>
-          <AddClassModal
-            onClick={() => {
-              setModal(false)
-              setScheduleModal(false)
-            }}
-          />
-        </Modal>
-      )} */}
+
+      <Modal size="md" show={Schedule} onClose={close}>
+        <Modal.Header>일정 추가</Modal.Header>
+        <Modal.Body>
+          <RoomReservation classType="duration" viewType="modal" onClick={close} />
+        </Modal.Body>
+      </Modal>
     </div>
   )
 }

@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 import { useRecoilValue } from 'recoil'
 
 import ContentHeader from '@/components/common/ContentHeader'
-import MemberOfCenter from '@/components/class/register/memberOfCenter'
+import SearchPerson from '@/components/class/register/searchPerson'
 import SessionReservationCard from '@/components/common/card/SessionReservationCard'
 import { AddSessionState } from '@/lib/state/addSessionState'
 import instance from '@/lib/api/axios'
@@ -48,7 +48,7 @@ export default function BookedRoomReservation() {
         }}
       >
         <SessionReservationCard />
-        <MemberOfCenter type="students" />
+        <SearchPerson type="students" />
         <button
           type="submit"
           className="w-full h-[52px] flex justify-center items-center text-white text-base font-semibold btn-purple"

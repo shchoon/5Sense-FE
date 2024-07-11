@@ -1,16 +1,15 @@
-import { IClassInfo } from '@/app/(service)/(nav)/class/register/page'
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react'
 
-interface IProps {
-  name: string
-  maxLength: number
-  submitData: IClassInfo
-  onChange: (name: string, value: string) => void
-}
+// interface IProps {
+//   name: string
+//   maxLength: number
+//   submitData: IClassInfo
+//   onChange: (name: string, value: string) => void
+// }
 
 type UseInputReturn = [string, (e: ChangeEvent<HTMLInputElement>) => void]
 
-export function useInput({ name, maxLength, submitData, onChange }: IProps): UseInputReturn {
+export function useInput({ name, maxLength, submitData, onChange }: any): UseInputReturn {
   const [inputValue, setInputValue] = useState(submitData?.name)
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
