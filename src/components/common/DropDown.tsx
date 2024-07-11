@@ -32,7 +32,6 @@ interface IProps {
 }
 
 export default function DropDown(props: IProps) {
-  console.log(props)
   const refs = useRef<(HTMLDivElement | null)[]>([])
   const dropdownRef = useRef<HTMLDivElement>(null)
   const propsFunction = (item: any) => {

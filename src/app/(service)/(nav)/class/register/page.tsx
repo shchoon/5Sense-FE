@@ -7,7 +7,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import Category from '@/components/class/classInfo/Category'
 import ClassType from '@/components/class/register/classType'
-import MemberOfCenter from '@/components/class/register/memberOfCenter'
+import SearchPerson from '@/components/class/register/searchPerson'
 import ContentHeader from '@/components/common/ContentHeader'
 import TextInput from '@/components/common/TextInput'
 import TextareaForm from '@/components/common/TextareaForm'
@@ -112,7 +112,7 @@ export default function RegisterPage() {
           </div>
         </div>
         <ClassType {...Props} />
-        <MemberOfCenter type="teachers" setValue={setValue} />
+        <SearchPerson type="teachers" setValue={setValue} />
         <Button type="submit" color="primary">
           등록하기
         </Button>
