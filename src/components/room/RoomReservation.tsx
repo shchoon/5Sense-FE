@@ -219,6 +219,26 @@ export default function RoomReservation(props: IProps) {
     })
   }
 
+  const test = () => {
+    console.log(dateValue, lessonTime)
+    const date = {
+      start: dateValue.split('~')[0].split('.'),
+      end: dateValue.split('~')[1].split('.')
+    }
+    const repeatDate = lessonTime.split(',')[0].replace('  반복', '').replace(' ', ',')
+    const startDate = new Date(Number(date.start[0]), Number(date.start[1]) - 1, Number(date.start[2])).toISOString()
+    const endDate = new Date(Number(date.end[0]), Number(date.end[1]) - 1, Number(date.end[2])).toISOString()
+    instance('/lesson-rooms/range', {
+      params: {
+        startDate: startDate,
+        endDate: endDate,
+        repeatDate: repeatDate
+      }
+    }).then(res => {
+      console.log(res)
+    })
+  }
+
   const scrollRight = (i: number) => {
     const element = refs.current[i]
     if (element) {
@@ -317,7 +337,7 @@ export default function RoomReservation(props: IProps) {
 
   return (
     <>
-      <div className="relative w-full flex flex-col gap-4">
+      <div className="relative w-full flex flex-col gap-4 mb-10">
         <div className="w-full text-left gray-900-semibold text-base">예약 가능한 강의실 찾기</div>
         <div
           className={`w-full h-[68px] flex items-center justify-between ${
@@ -391,14 +411,15 @@ export default function RoomReservation(props: IProps) {
           <div
             className="w-12 h-12 rounded-full bg-primary-600 flex items-center justify-center cursor-pointer"
             onClick={() => {
-              if ((dateValue !== '날짜' && lessonTime !== '시간') || durationSchedules.length >= 1) {
+              test()
+              /* if ((dateValue !== '날짜' && lessonTime !== '시간') || durationSchedules.length >= 1) {
                 setIsClickedSearch(true)
                 if (props.classType === 'session') {
                   getRoomData()
                 }
               } else {
                 return
-              }
+              } */
             }}
           >
             <SearchIcon width={20} height={20} />
@@ -563,7 +584,9 @@ export default function RoomReservation(props: IProps) {
                       <ChevronRightIcon className="z-10" width={16} height={16} />
                     </button>
                     <div
-                      ref={el => {refs.current[i] = el}}
+                      ref={el => {
+                        refs.current[i] = el
+                      }}
                       className="w-full grid grid-flow-col overflow-y-auto scrollbar-hide"
                     >
                       <div className="w-full flex flex-col">
