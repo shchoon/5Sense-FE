@@ -23,7 +23,7 @@ export function changePhoneNumberToString(phoneNumber: string) {
 }
 
 export function formatStartTime(classTime: string) {
-  return classTime.slice(0, 5)
+  return classTime.slice(0, classTime.length - 3)
 }
 
 export function calculateEndTime(startTime: string, lessonTime: number) {

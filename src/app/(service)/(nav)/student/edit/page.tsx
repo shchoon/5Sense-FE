@@ -5,15 +5,13 @@ import { AxiosResponse } from 'axios'
 import { SetStateAction, useEffect, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import InputForm, { InputFormProps } from '@/components/common/InputForm'
-import TextareaForm, { TextareaFormProps } from '@/components/common/TextareaForm'
 import useInputNum from '@/hooks/useInputNum'
 import instance from '@/lib/api/axios'
 import StudentAddClassModal from '@/components/modal/StudentAddClassModal'
 import Modal from '@/components/common/modal'
 import { modalState } from '@/lib/state/modal'
-import StudentsSession from '@/components/studentsDetail/studentsSession'
-import StudentsDuration from '@/components/studentsDetail/studentsDuartion'
+import StudentsSession from '@/components/studentsDetail/card/studentsSession'
+import StudentsDuration from '@/components/studentsDetail/card/studentsDuartion'
 import { sessionScheduleState } from '@/lib/state/studentSessionSchedule'
 import { studentDurationScheduleState } from '@/lib/state/studentDurationSchedule'
 import { AddSessionLessonCheck } from '@/components/student/addSessionLessonCheck'
@@ -62,23 +60,6 @@ export default function StudentEdit() {
     submitData: studentInfo,
     setSubmitData: setStudentInfo
   })
-  /* const studentNameProps: InputFormProps = {
-    title: '이름',
-    placeholder: '이름을 입력해 주세요',
-    name: 'name',
-    maxLength: 20,
-    submitData: studentInfo,
-    setSubmitData: setStudentInfo
-  } */
-
-  /* const studentMemoProps: TextareaFormProps = {
-    title: '특이사항',
-    placeholder: '수강생 특이사항을 적어주세요.',
-    name: 'particulars',
-    maxLength: 300,
-    submitData: studentInfo,
-    setSubmitData: setStudentInfo
-  } */
 
   const onInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const maxLength: number = e.target.maxLength
@@ -150,16 +131,16 @@ export default function StudentEdit() {
         .then(res => {
           router.push('/student')
         })
-    } else if( sessionSchedule.length === 0 && durationSchedule.length === 0){
+    } else if (sessionSchedule.length === 0 && durationSchedule.length === 0) {
       /* 단순 수강생 정보 수정 */
     }
   }
 
   useEffect(() => {
-    const studentId = localStorage.getItem('studentId') !== null ? Number(localStorage.getItem('studentId')) : 0
+    const studentId = localStorage.getItem('studentId')
     setStudentInfo(prev => ({
       ...prev,
-      id: studentId
+      id: Number(studentId)
     }))
     instance(`/students/${studentId}`).then(res => {
       const studentData = res.data.data
@@ -183,7 +164,7 @@ export default function StudentEdit() {
 
   return (
     <div className="w-full flex flex-col items-center pb-[60px]">
-      <ContentHeader title='수강생 정보수정' back onClick={() => router.push('/student')} />
+      <ContentHeader title="수강생 정보수정" back onClick={() => router.push('/student')} />
       <div className="w-[640px] ">
         <form className="flex flex-col gap-5 pb-[60px]" onSubmit={e => reservation(e)}>
           {/* 수강생 정보 등록 */}
@@ -276,12 +257,12 @@ export default function StudentEdit() {
                 )
               })}
 
-              {durationSchedule.map((data, i) => {
+              {/* {durationSchedule.map((data, i) => {
                 return (
                   <StudentsDuration
                     key={i}
                     className={data.name}
-                    startDate={data.startDate}
+                    Date={data.startDate}
                     endDate={data.endDate}
                     startTime={data.startTime}
                     endTime={data.endTime}
@@ -290,8 +271,8 @@ export default function StudentEdit() {
                     type="check"
                   />
                 )
-              })}
-              {studentInfo.sessionLessons.length !== 0 &&
+              })} */}
+              {/* {studentInfo.sessionLessons.length !== 0 &&
                 studentInfo.sessionLessons.map((data: any, i: number) => {
                   console.log(data)
                   return (
@@ -301,12 +282,10 @@ export default function StudentEdit() {
                       paymentStatus={data.paymentStatus}
                       sessionSchedule={data.schedules}
                       type="check"
-                      /* onDelete={() => {
-                      setSessionSchedule([...sessionSchedule.filter((data, index) => index !== i)])
-                    }} */
+                      
                     />
                   )
-                })}
+                })} */}
             </div>
           </div>
           {/* 등록 버튼 */}
@@ -314,11 +293,6 @@ export default function StudentEdit() {
             <div className="text-white text-base font-semibold">등록하기</div>
           </button>
         </form>
-        {/* {isClickedAddClass && modal && (
-          <Modal small>
-            <StudentAddClassModal onClose={onClose} />
-          </Modal>
-        )} */}
       </div>
     </div>
   )

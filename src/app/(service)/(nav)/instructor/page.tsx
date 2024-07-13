@@ -232,20 +232,22 @@ export default function InstructorPage() {
           </div>
         </div>
       )}
-      {isOpen.detail && <Drawer
-        open={isOpen.detail}
-        onClose={() => {
-          setIsOpen(prev => ({
-            ...prev,
-            detail: false
-          }))
-        }}
-      >
-        <Drawer.Header />
-        <Drawer.Items>
-          <DetailInstructor />
-        </Drawer.Items>
-      </Drawer>}
+      {isOpen.detail && (
+        <Drawer
+          open={isOpen.detail}
+          onClose={() => {
+            setIsOpen(prev => ({
+              ...prev,
+              detail: false
+            }))
+          }}
+        >
+          <Drawer.Header />
+          <Drawer.Items>
+            <DetailInstructor />
+          </Drawer.Items>
+        </Drawer>
+      )}
     </>
   )
 }

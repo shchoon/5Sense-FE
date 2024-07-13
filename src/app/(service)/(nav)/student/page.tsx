@@ -7,7 +7,6 @@ import NotFoundPage from '@/components/common/NotFoundPage'
 import Loading from '@/components/common/Loading'
 import Modal from '@/components/common/modal'
 import { modalState } from '@/lib/state/modal'
-import DetailStudent from '@/components/modal/DetailStudent'
 import instance from '@/lib/api/axios'
 import ContentHeader from '@/components/common/ContentHeader'
 import SearchInput from '@/components/common/SearchInput'
@@ -15,7 +14,8 @@ import ListInfo from '@/components/view/ListInfo'
 import { PaymentType } from '../pay/page'
 import List from '@/components/view/List'
 import { studentForClass } from '@/lib/state/studentForClass'
-import StudentsDuration from '@/components/studentsDetail/studentsDuartion'
+import { Drawer } from 'flowbite-react'
+import StudentsDetail from '@/components/studentsDetail/studentsDetail'
 
 export interface studentType {
   id: string
@@ -42,8 +42,13 @@ export default function StudentPage() {
 
   const setModal = useSetRecoilState(modalState)
   const setStudentForClass = useSetRecoilState(studentForClass)
-  const [isClickedStudent, setIsClickedStudent] = useState<boolean>(false)
-  const [clickedStudentsId, setClickedStudentsId] = useState<string>('')
+  const [targetedStudentData, setTargetedStudent] = useState({
+    id: '',
+    name: '',
+    phone: '',
+    particulars: '',
+    lessons: []
+  })
 
   const [studentList, setStudentList] = useState<
     { id: string; name: string; phone: string; className: string; particulars: string; lessons: any }[]
@@ -59,13 +64,9 @@ export default function StudentPage() {
     value: '',
     searchBy: ''
   })
+  const [isOpenDetail, setIsOpenDetail] = useState<boolean>(false)
 
   const listInfoProps = ['이름', '전화번호', '수강중인 클래스', '특이사항']
-
-  const onClose = () => {
-    setModal(false)
-    setIsClickedStudent(false)
-  }
 
   const getInputDataFromChild = (data: { value: string; searchBy: string; list: any; meta: metaType }) => {
     setInputData(prev => ({
@@ -160,51 +161,67 @@ export default function StudentPage() {
   console.log(studentList)
 
   return (
-    <div>
-      <ContentHeader title="수강생 관리" btnName="수강생 등록" onClick={() => router.push('student/register')} />
-      {/* 검색창 */}
-      <SearchInput type="students" passInputData={getInputDataFromChild} />
-      {/* 수강생 목록 시작 */}
-      <div className="w-full flex flex-col gap-3">
-        {/* 수강생 목록 설명 */}
-        <ListInfo type="student" listInfo={listInfoProps} />
+    <>
+      <div>
+        <ContentHeader title="수강생 관리" btnName="수강생 등록" onClick={() => router.push('student/register')} />
+        {/* 검색창 */}
+        <SearchInput type="students" passInputData={getInputDataFromChild} />
         {/* 수강생 목록 시작 */}
-        <div className="w-full flex flex-col gap-[14px]">
-          {isRefresh && studentList.length === 0 ? (
-            <div className="w-full mt-[140px]">
-              <NotFoundPage title="검색결과가 없습니다." subTitle="다른 검색어를 통해 검색을 이어나가보세요" />
-            </div>
-          ) : null}
-          {/* 검색 결과 없음 */}
-          {studentList?.map(({ id, name, lessons, phone, particulars }) => {
-            const props = { id: id, name: name, lessons: lessons, phone: phone, particulars: particulars }
-            return (
-              <List
-                key={id}
-                type="student"
-                {...props}
-                onClick={() => {
-                  setModal(true)
-                  setIsClickedStudent(true)
-                  setClickedStudentsId(id)
-                  localStorage.setItem('studentId', id)
-                  /* setStudentForClass(prev => ({
+        <div className="w-full flex flex-col gap-3">
+          {/* 수강생 목록 설명 */}
+          <ListInfo type="student" listInfo={listInfoProps} />
+          {/* 수강생 목록 시작 */}
+          <div className="w-full flex flex-col gap-[14px]">
+            {isRefresh && studentList.length === 0 ? (
+              <div className="w-full mt-[140px]">
+                <NotFoundPage title="검색결과가 없습니다." subTitle="다른 검색어를 통해 검색을 이어나가보세요" />
+              </div>
+            ) : null}
+            {/* 검색 결과 없음 */}
+            {studentList?.map(({ id, name, lessons, phone, particulars }) => {
+              const props = { id: id, name: name, lessons: lessons, phone: phone, particulars: particulars }
+              return (
+                <List
+                  key={id}
+                  type="student"
+                  {...props}
+                  onClick={() => {
+                    setTargetedStudent(prev => ({
+                      ...prev,
+                      id: id,
+                      name: name,
+                      phone: phone,
+                      particulars: particulars,
+                      lessons: lessons
+                    }))
+                    setIsOpenDetail(true)
+                    localStorage.setItem('studentId', id)
+                    /* setStudentForClass(prev => ({
                     ...prev,
                     id: id
                   })) */
-                }}
-              />
-            )
-          })}
+                  }}
+                />
+              )
+            })}
+          </div>
         </div>
+        {!isLoading && <div ref={target}></div>}
+        {isLoading && <Loading />}
       </div>
-      {!isLoading && <div ref={target}></div>}
-      {isLoading && <Loading />}
-      {/* {isClickedStudent && (
-        <Modal>
-          <DetailStudent studentsId={clickedStudentsId} onClose={onClose} />
-        </Modal>
-      )} */}
-    </div>
+      {isOpenDetail && (
+        <Drawer
+          open={isOpenDetail}
+          onClose={() => {
+            setIsOpenDetail(false)
+          }}
+        >
+          <Drawer.Header />
+          <Drawer.Items>
+            <StudentsDetail studentData={targetedStudentData} />
+          </Drawer.Items>
+        </Drawer>
+      )}
+    </>
   )
 }
