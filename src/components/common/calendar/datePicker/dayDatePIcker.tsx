@@ -22,8 +22,8 @@ interface IProps {
 }
 
 export default function DayDatePicker(props: IProps) {
+  const calendarDate = useRecoilValue(DayCalendarDateState)
   const setCalendarDate = useSetRecoilState(DayCalendarDateState)
-
   const dateName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const [dateData, setDateData] = useState<dateDataType>(props.parentsDateData)
   const [clickedDate, setClickedDate] = useState<string>(`${dateData.date}`)
@@ -145,7 +145,21 @@ export default function DayDatePicker(props: IProps) {
         >
           취소
         </button>
-        <button className="w-[121px] h-full px-3 py-2 text-sm btn-purple" onClick={onClickCheckHandler}>
+        <button
+          className="w-[121px] h-full px-3 py-2 text-sm btn-purple"
+          onClick={() => {
+            console.log(calendarDate)
+            onClickCheckHandler()
+            if (props.changeParentsDateData) {
+              const data = {
+                year: dateData.year,
+                month: dateData.month,
+                date: Number(clickedDate)
+              }
+              props.changeParentsDateData(data, 'session')
+            }
+          }}
+        >
           확인
         </button>
       </div>

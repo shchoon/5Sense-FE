@@ -46,7 +46,7 @@ export default function UnbookedRoomReservatoin() {
   const [studentName, setStudentName] = useState<string>('')
   const [category, setCategory] = useState<string>('')
   const [studentId, setStudentId] = useState(0)
-  const [roomData, setRoomdata] = useState<any>([])
+  const [roomData, setRoomData] = useState<any>([])
   const [clickedRoomData, setClickedRoomData] = useState<{
     roomId: number
     clickedTime: number
@@ -155,7 +155,7 @@ export default function UnbookedRoomReservatoin() {
         /* 선택한 클래스와 룸에 예약되어 있는 클래스가 다른 경우 처리 -> 룸에 에약되어있는 클래스가 있는 경우에만 처리 */
       }
 
-      setRoomdata(list)
+      setRoomData(list)
       /* 선택된 클래스와 해당 예약 시간대에 예약 가능 여부 */
       const startTime = {
         hour: Number(reservationData.startTime.split(':')[0]),

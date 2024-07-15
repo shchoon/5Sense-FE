@@ -1,16 +1,17 @@
 import { atom } from 'recoil'
 
 interface DurationScheduleType {
-  name: string
-  studentId: number
-  lessonId: number
+  className: string
+  classId: number
   paymentStatus: string
-  startTime: string
-  endTime: string
-  startDate: string
-  endDate: string
-  roomName: string
-  repeatDate: string
+  schedules: {
+    startDate: string
+    endDate: string
+    startTime: string
+    endTime: string
+    room: string
+    repeatDate: string
+  }
 }
 
 export const studentDurationScheduleState = atom<DurationScheduleType[]>({

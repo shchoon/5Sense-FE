@@ -16,7 +16,7 @@ interface IProps {
   }
 }
 
-interface durationLessonsType {
+export interface durationLessonsType {
   name: string
   paymentStatus: string
   schedules: {
@@ -29,8 +29,9 @@ interface durationLessonsType {
   }[]
 }
 
-interface sessionLessonsType {
+export interface sessionLessonsType {
   name: string
+  id?: number
   paymentStatus: string
   schedules: {
     sessionDate: string

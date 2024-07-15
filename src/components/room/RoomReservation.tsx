@@ -17,9 +17,11 @@ import { centerInfoState } from '@/lib/state/centerInfoState'
 import { classType } from '../modal/StudentAddClassModal'
 import instance from '@/lib/api/axios'
 import { sessionScheduleState } from '@/lib/state/studentSessionSchedule'
+import { DayCalendarDateState } from '@/lib/state/calendar/DayCalendarDateState'
+import { calculateRervationTime } from '@/utils'
 
-import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
-import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
+import ChevronLeftIcon from '@/icons/icon/room/chevronLeft.svg'
+import ChevronRightIcon from '@/icons/icon/room/chevronRight.svg'
 import SearchIcon from 'public/assets/icons/search_white.svg'
 import UserIcon from 'public/assets/icons/user.svg'
 import CalendarIcon from '@/icons/icon/datePicker/calendar.svg'
@@ -39,7 +41,7 @@ interface IProps {
   class?: classType
   classType: string
   viewType: string
-  onClick?: () => void
+  onClose: () => void
   lessonTime?: string
   paymentStatus?: string
 }
@@ -55,7 +57,10 @@ export default function RoomReservation(props: IProps) {
   const setDurationSchedule = useSetRecoilState(durationClassScheduleState)
   const setSessionSchedule = useSetRecoilState(sessionScheduleState)
   const setLessonTimeState = useSetRecoilState(lessonTimeState)
+  const calendarDate = useRecoilValue(DayCalendarDateState)
+  const setCalendarDate = useSetRecoilState(DayCalendarDateState)
   const centerInfo = useRecoilValue(centerInfoState)
+  const timeList = calculateRervationTime(centerInfo.open, centerInfo.close)
 
   const currentDate = new Date()
   const [dateData, setDateData] = useState<dateDataType>({
@@ -71,25 +76,20 @@ export default function RoomReservation(props: IProps) {
   })
   const [isClickedSearch, setIsClickedSearch] = useState<boolean>(false)
   const [clickedRoomData, setClickedRoomData] = useState<{
-    roomId: undefined | number
-    clickedTime: undefined | number
+    roomId: number
+    clickedTime: number
     room: string
   }>({
-    roomId: undefined,
-    clickedTime: undefined,
+    roomId: 0,
+    clickedTime: 0,
     room: ''
   })
   const [roomData, setRoomData] = useState<any>([])
   const [restOfSessions, setRestOfSessions] = useState<number>(0)
 
   const handleChangeDateDataFromChild = (data: dateDataType | any, type?: string) => {
+    console.log(calendarDate)
     if (type === 'session') {
-      setDateData({
-        ...dateData,
-        year: data.year,
-        month: data.month,
-        date: data.date
-      })
       setDateValue(`${data.year}.${data.month + 1}.${data.date}`)
     }
 
@@ -160,12 +160,11 @@ export default function RoomReservation(props: IProps) {
     }
   }
 
-  const getRoomData = () => {
-    console.log(props.class)
-    console.log(props.classType)
+  const getRoomData = (classId: number, lessonTime: number) => {
+    const date = dateValue.split('.')
     instance('/lesson-rooms/daily', {
       params: {
-        date: new Date(dateData.year, dateData.month, dateData.date).toISOString()
+        date: new Date(Number(date[0]), Number(date[1]) - 1, Number(date[2])).toISOString()
       }
     }).then(res => {
       const list = res.data.data
@@ -189,12 +188,7 @@ export default function RoomReservation(props: IProps) {
               absolutlyBookingFalse.push(n)
             }
           }
-          if (
-            test[k].lesonTime !== null &&
-            test[k].isOpenForBooking &&
-            props.class &&
-            Number(props.class.id) !== test[k].id
-          ) {
+          if (test[k].lesonTime !== null && test[k].isOpenForBooking && classId !== test[k].id) {
             const range = Number(test[k].lessonTime) / 30 - 1
             for (var n = k; n <= k + range; n++) {
               relativlyBookingFalse.push(n)
@@ -212,10 +206,16 @@ export default function RoomReservation(props: IProps) {
           }
         }
         /* 선택한 클래스와 룸에 예약되어 있는 클래스가 다른 경우 처리 -> 룸에 에약되어있는 클래스가 있는 경우에만 처리 */
-        console.log(relativlyBookingFalse)
       }
-      console.log(list)
+
       setRoomData(list)
+
+      /* setClickedRoomData(prev => ({
+        ...prev,
+        roomId: Number(reservationData.roomId),
+        room: reservationData.roomName,
+        clickedTime: indexOfStartTime
+      })) */
     })
   }
 
@@ -293,27 +293,30 @@ export default function RoomReservation(props: IProps) {
       setLessonTime(props.lessonTime)
       setClickedRoomData(prev => ({
         ...prev,
-        roomId: undefined,
-        clickedTime: undefined,
+        roomId: 0,
+        clickedTime: 0,
         room: ''
       }))
-    }
-    if (params.id) {
-      instance(`/students/${params.id}`).then(res => {
-        const sessionLessons = res.data.data.sessionLessons
-        console.log(sessionLessons)
-        const alreadyRigisteredLessons = sessionLessons.filter(
-          (data: any, i: number) => props.class && data.id === props.class.id
-        )
-        if (alreadyRigisteredLessons.length !== 0) {
-          console.log('alreadyRigisteredLessons', alreadyRigisteredLessons)
-          setRestOfSessions(alreadyRigisteredLessons[0].schedules[0].restOfSessions)
-        }
-      })
+      setDateValue('날짜')
+      setRoomData([])
+      setIsClickedSearch(false)
+
+      const studentId = localStorage.getItem('studentId') as string
+      if (studentId !== null) {
+        instance(`/students/${studentId}`).then(res => {
+          const sessionLessons = res.data.data.sessionLessons
+          console.log(sessionLessons)
+          const alreadyRigisteredLessons = sessionLessons.filter(
+            (data: any, i: number) => props.class && data.id === props.class.id
+          )
+          if (alreadyRigisteredLessons.length !== 0) {
+            console.log('alreadyRigisteredLessons', alreadyRigisteredLessons)
+            setRestOfSessions(alreadyRigisteredLessons[0].schedules[0].restOfSessions)
+          }
+        })
+      }
     }
   }, [props.lessonTime])
-
-  console.log(roomData)
 
   return (
     <>
@@ -328,6 +331,7 @@ export default function RoomReservation(props: IProps) {
               : 'pl-6'
           } pr-2.5 py-2.5 rounded-full border border-1 border-gray-300`}
         >
+          {/* 날짜 */}
           <button
             className={`${
               isClickedTab.date
@@ -357,7 +361,7 @@ export default function RoomReservation(props: IProps) {
             </div>
           </button>
           {!isClickedTab.date && !isClickedTab.time && <div className="w-px h-7 bg-gray-300"></div>}
-
+          {/* 소요시간 / 요일 */}
           <button
             className={`${
               isClickedTab.time
@@ -393,8 +397,8 @@ export default function RoomReservation(props: IProps) {
             onClick={() => {
               if ((dateValue !== '날짜' && lessonTime !== '시간') || durationSchedules.length >= 1) {
                 setIsClickedSearch(true)
-                if (props.classType === 'session') {
-                  getRoomData()
+                if (props.classType === 'session' && props.class) {
+                  getRoomData(props.class.id, Number(props.class.lessonTime))
                 }
               } else {
                 return
@@ -407,10 +411,15 @@ export default function RoomReservation(props: IProps) {
         <div className="absolute z-10 left-0 top-[120px]">
           {props.classType === 'session' && isClickedTab.date && (
             <DayDatePicker
-              parentsDateData={dateData}
               changeParentsDateData={handleChangeDateDataFromChild}
+              parentsDateData={calendarDate}
               type="addClass"
-              onClose={() => {}}
+              onClose={() => {
+                setIsClickedTab(prev => ({
+                  ...prev,
+                  date: false
+                }))
+              }}
             />
           )}
           {props.classType === 'duration' && isClickedTab.date && (
@@ -452,9 +461,7 @@ export default function RoomReservation(props: IProps) {
                 const roomId = data.id
                 const room = data.name
                 const timeRange: number | undefined = lessonTime === '시간' ? undefined : Number(lessonTime) / 30
-                /* : lessonTime.length <= 3
-                    ? Number(lessonTime) / 30
-                    : calculatePeriodClassLessonTime() / 30 */
+
                 return (
                   <div key={i} className="relative flex flex-col gap-4">
                     <div className="flex justify-between">
@@ -471,27 +478,25 @@ export default function RoomReservation(props: IProps) {
                           if (room !== clickedRoomData.room) {
                             return
                           }
-                          if (props.classType === 'session' && timeRange) {
-                            const lessonTime = calculateLessonTimeOfRoom(timeRange)
-                            const day = calculateDay(new Date(dateData.year, dateData.month, dateData.date).getDay())
-                            console.log(restOfSessions)
+                          if (props.classType === 'session' && timeRange && props.class) {
+                            const studentId = typeof window !== 'undefined' && localStorage.getItem('studentId')
+                            console.log(clickedRoomData, props.class, studentId, calendarDate)
                             setSessionSchedule(prev => [
                               ...prev,
                               {
                                 name: props.class !== undefined ? props.class.name : '',
-                                totalSessions: props.class !== undefined ? props.class.totalSessions : '',
+                                totalSessions: props.class !== undefined ? props.class.totalSessions : 0,
                                 lessonId: props.class !== undefined ? Number(props.class.id) : 0,
-                                sessionDate: new Date(dateData.year, dateData.month, dateData.date).toISOString(),
-                                startTime: calculateLessonTimeOfRoom(timeRange).startTime,
-                                endTime: calculateLessonTimeOfRoom(timeRange).endTime,
+                                sessionDate: dateValue,
+                                startTime: timeList[clickedRoomData.clickedTime],
+                                endTime: timeList[clickedRoomData.clickedTime + Number(lessonTime) / 30],
                                 roomId: Number(clickedRoomData.roomId),
                                 paymentStatus: props.paymentStatus !== undefined ? props.paymentStatus : '',
                                 roomName: clickedRoomData.room,
                                 restOfSessions: restOfSessions
                               }
                             ])
-
-                            setModal(false)
+                            props.onClose()
                             //reservation(lessonTime.startTime, lessonTime.endTime)
                             /* 예약 확인 모달 보여주기 위함 */
                             /* if (props.viewType === 'page') {
@@ -552,7 +557,7 @@ export default function RoomReservation(props: IProps) {
                         scrollLeft(i)
                       }}
                     >
-                      <ChevronLeftIcon className="z-10" width={16} height={16} />
+                      <ChevronLeftIcon className="z-10" />
                     </button>
                     <button
                       className="absolute z-10 -right-3 top-[60px] flex items-center justify-center w-6 h-6 border border-1 border-gray-200 bg-primary-50 rounded-full"
@@ -560,10 +565,12 @@ export default function RoomReservation(props: IProps) {
                         scrollRight(i)
                       }}
                     >
-                      <ChevronRightIcon className="z-10" width={16} height={16} />
+                      <ChevronRightIcon className="z-10" />
                     </button>
                     <div
-                      ref={el => {refs.current[i] = el}}
+                      ref={el => {
+                        refs.current[i] = el
+                      }}
                       className="w-full grid grid-flow-col overflow-y-auto scrollbar-hide"
                     >
                       <div className="w-full flex flex-col">
@@ -627,11 +634,6 @@ export default function RoomReservation(props: IProps) {
           </div>
         </div>
       )}
-      {/* {props.viewType === 'page' && modal && (
-        <Modal small>
-          <RoomReservationCheck reservationData={reservationData} />
-        </Modal>
-      )} */}
     </>
   )
 }

@@ -4,30 +4,32 @@ import { useRouter, useParams } from 'next/navigation'
 import { AxiosResponse } from 'axios'
 import { SetStateAction, useEffect, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { Modal, Button } from 'flowbite-react'
 
 import useInputNum from '@/hooks/useInputNum'
 import instance from '@/lib/api/axios'
+import UseModal from '@/hooks/useModal'
 import StudentAddClassModal from '@/components/modal/StudentAddClassModal'
-import Modal from '@/components/common/modal'
 import { modalState } from '@/lib/state/modal'
 import StudentsSession from '@/components/studentsDetail/card/studentsSession'
 import StudentsDuration from '@/components/studentsDetail/card/studentsDuartion'
 import { sessionScheduleState } from '@/lib/state/studentSessionSchedule'
 import { studentDurationScheduleState } from '@/lib/state/studentDurationSchedule'
 import { AddSessionLessonCheck } from '@/components/student/addSessionLessonCheck'
+import AddDurationLessonCheck from '@/components/student/addDurationLessonCheck'
 import ContentHeader from '@/components/common/ContentHeader'
+import { sessionLessonsType, durationLessonsType } from '@/components/studentsDetail/studentsDetail'
+import { DayCalendarDateState } from '@/lib/state/calendar/DayCalendarDateState'
 
-import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
-import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
-import PlusIcon from 'public/assets/icons/plus_circle_bg_pri_600.svg'
+import PlusIcon from '@/icons/icon/plus.svg'
 
 interface studentInfo {
   id: number
   name: string
   phone: string
   particulars: string
-  durationLessons: any
-  sessionLessons: any
+  durationLessons: durationLessonsType[]
+  sessionLessons: sessionLessonsType[]
 }
 
 export interface InputNumProps {
@@ -38,13 +40,13 @@ export interface InputNumProps {
 
 export default function StudentEdit() {
   const router = useRouter()
-  const params = useParams()
   const durationSchedule = useRecoilValue(studentDurationScheduleState)
   const sessionSchedule = useRecoilValue(sessionScheduleState)
   const setDurationSchedule = useSetRecoilState(studentDurationScheduleState)
   const setSessionSchedule = useSetRecoilState(sessionScheduleState)
-  const setModal = useSetRecoilState(modalState)
-  const modal = useRecoilValue(modalState)
+  const setDayCalenderState = useSetRecoilState(DayCalendarDateState)
+
+  const [Schedule, close, open] = UseModal()
 
   const [isClickedAddClass, setIsClickedAddClass] = useState<boolean>(false)
   const [studentInfo, setStudentInfo] = useState<studentInfo>({
@@ -71,11 +73,6 @@ export default function StudentEdit() {
       ...prev,
       [title]: e.target.value
     }))
-  }
-
-  const onClose = () => {
-    setModal(false)
-    setIsClickedAddClass(false)
   }
 
   const reservation = (e: React.FormEvent<HTMLFormElement>) => {
@@ -108,11 +105,16 @@ export default function StudentEdit() {
           })
       } else {
         /* 이미 추가된 회차반에 대해 일정 추가를 하는 경우 */
+        const sessionDate = {
+          year: Number(sessionSchedule[0].sessionDate.split('.')[0]),
+          month: Number(sessionSchedule[0].sessionDate.split('.')[1]) - 1,
+          date: Number(sessionSchedule[0].sessionDate.split('.')[2])
+        }
         instance
           .post('/session-lesson-schedules', {
             lessonId: sessionSchedule[0].lessonId,
             studentId: studentInfo.id,
-            sessionDate: sessionSchedule[0].sessionDate,
+            sessionDate: new Date(sessionDate.year, sessionDate.month, sessionDate.date).toISOString(),
             startTime: sessionSchedule[0].startTime,
             endTime: sessionSchedule[0].endTime,
             roomId: sessionSchedule[0].roomId
@@ -125,7 +127,7 @@ export default function StudentEdit() {
       instance
         .post('/duration-lesson-registrations', {
           studentId: studentInfo.id,
-          lessonId: Number(durationSchedule[0].lessonId),
+          lessonId: durationSchedule[0].classId,
           paymentStatus: durationSchedule[0].paymentStatus
         })
         .then(res => {
@@ -133,7 +135,24 @@ export default function StudentEdit() {
         })
     } else if (sessionSchedule.length === 0 && durationSchedule.length === 0) {
       /* 단순 수강생 정보 수정 */
+      instance
+        .put(`students/${studentInfo.id}`, {
+          name: studentInfo.name,
+          phone: studentInfo.phone,
+          particulars: studentInfo.particulars
+        })
+        .then(res => {
+          router.push('/student')
+          console.log(res)
+        })
     }
+  }
+
+  const onDeleteDurationSchedules = (classId: number) => {
+    const formatedDurationSchedules = durationSchedule.filter(
+      (data: { classId: number }, i) => data.classId !== classId
+    )
+    setDurationSchedule(formatedDurationSchedules)
   }
 
   useEffect(() => {
@@ -160,7 +179,18 @@ export default function StudentEdit() {
     }
   }, [])
 
-  console.log(sessionSchedule)
+  useEffect(() => {
+    return () => {
+      const currentDate = new Date()
+      setDayCalenderState({
+        year: currentDate.getFullYear(),
+        month: currentDate.getMonth(),
+        date: currentDate.getDate()
+      })
+      localStorage.removeItem('studentId')
+    }
+  }, [])
+  console.log(sessionSchedule, studentInfo)
 
   return (
     <div className="w-full flex flex-col items-center pb-[60px]">
@@ -228,17 +258,26 @@ export default function StudentEdit() {
           <div className="flex flex-col gap-10 w-[640px] px-6 py-8 border rounded-xl border-gray-200">
             <div className="gray-900-bold text-xl">클래스 목록</div>
             <div className="w-full flex flex-col gap-4">
-              <button
-                type="button"
-                className="flex justify-center gap-2 w-full px-6 py-3.5 border rounded-lg border-primary-600"
-                onClick={() => {
-                  setModal(true)
-                  setIsClickedAddClass(true)
-                }}
-              >
-                <PlusIcon width={24} height={24} />
-                <div className="text-base font-semibold text-primary-600">클래스 추가</div>
-              </button>
+              <Button color="outline" fullSized onClick={open}>
+                <PlusIcon className="mr-2" />
+                일정 추가
+              </Button>
+              {/* 현재 페이지에서 추가하는 기간반 클래스 */}
+              {durationSchedule.length !== 0 &&
+                durationSchedule.map((data, i) => {
+                  const classId = data.classId
+                  return (
+                    <AddDurationLessonCheck
+                      key={i}
+                      className={data.className}
+                      paymentStatus={data.paymentStatus}
+                      schedules={data.schedules}
+                      onDelete={() => {
+                        onDeleteDurationSchedules(classId)
+                      }}
+                    />
+                  )
+                })}
               {sessionSchedule.map((data, i) => {
                 return (
                   <AddSessionLessonCheck
@@ -256,36 +295,47 @@ export default function StudentEdit() {
                   />
                 )
               })}
-
-              {/* {durationSchedule.map((data, i) => {
-                return (
-                  <StudentsDuration
-                    key={i}
-                    className={data.name}
-                    Date={data.startDate}
-                    endDate={data.endDate}
-                    startTime={data.startTime}
-                    endTime={data.endTime}
-                    room={data.roomName}
-                    repeatDate={data.repeatDate}
-                    type="check"
-                  />
-                )
-              })} */}
-              {/* {studentInfo.sessionLessons.length !== 0 &&
-                studentInfo.sessionLessons.map((data: any, i: number) => {
-                  console.log(data)
+              {/* 기존에 수강중인 기간반 */}
+              {studentInfo.durationLessons.length !== 0 &&
+                studentInfo.durationLessons.map((data, i) => {
                   return (
-                    <StudentsSession
-                      key={i}
+                    <StudentsDuration
                       className={data.name}
                       paymentStatus={data.paymentStatus}
-                      sessionSchedule={data.schedules}
                       type="check"
-                      
+                      schedules={data.schedules[0]}
                     />
                   )
-                })} */}
+                })}
+              {/* 기존에 수강중인 회차반 */}
+              {studentInfo.sessionLessons.length !== 0 &&
+                studentInfo.sessionLessons.map((data, i) => {
+                  /* 잔여회차 정확히 하기위해 새로 추가한 회차반에 기존에 있는 회차반에 포함되는지 체크 */
+                  const checkAddSameClass: boolean =
+                    sessionSchedule.filter((sessionLesson, i) => sessionLesson.lessonId === data.id).length !== 0
+                      ? true
+                      : false
+                  const className = data.name
+                  const paymentStatus = data.paymentStatus
+                  const totalLessons = data.schedules[0].restOfSessions + data.schedules.length
+                  return (
+                    <>
+                      {data.schedules.map((schedule, i) => {
+                        return (
+                          <StudentsSession
+                            key={i}
+                            className={className}
+                            paymentStatus={paymentStatus}
+                            type="check"
+                            restOfSessions={checkAddSameClass ? schedule.restOfSessions - 1 : schedule.restOfSessions}
+                            totalLessons={totalLessons}
+                            schedules={schedule}
+                          />
+                        )
+                      })}
+                    </>
+                  )
+                })}
             </div>
           </div>
           {/* 등록 버튼 */}
@@ -294,6 +344,12 @@ export default function StudentEdit() {
           </button>
         </form>
       </div>
+      <Modal size="md" show={Schedule} onClose={close}>
+        <Modal.Header>클래스 추가</Modal.Header>
+        <Modal.Body>
+          <StudentAddClassModal onClose={close} />
+        </Modal.Body>
+      </Modal>
     </div>
   )
 }

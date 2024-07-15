@@ -2,7 +2,7 @@ import { atom } from 'recoil'
 
 interface SessionScheduleType {
   name: string
-  totalSessions: string
+  totalSessions: number
   studentId?: number
   lessonId: number
   paymentStatus: string

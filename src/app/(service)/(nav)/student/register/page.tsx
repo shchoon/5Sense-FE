@@ -1,26 +1,21 @@
 'use client'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { AxiosResponse } from 'axios'
 import { SetStateAction, useState, useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { Modal, Button } from 'flowbite-react'
 
-import InputForm, { InputFormProps } from '@/components/common/InputForm'
-import TextareaForm, { TextareaFormProps } from '@/components/common/TextareaForm'
 import useInputNum from '@/hooks/useInputNum'
 import instance from '@/lib/api/axios'
 import StudentAddClassModal from '@/components/modal/StudentAddClassModal'
-import Modal from '@/components/common/modal'
-import { modalState } from '@/lib/state/modal'
+import UseModal from '@/hooks/useModal'
 import { sessionScheduleState } from '@/lib/state/studentSessionSchedule'
 import { studentDurationScheduleState } from '@/lib/state/studentDurationSchedule'
-import StudentsSession from '@/components/studentsDetail/studentsSession'
-import StudentsDuration from '@/components/studentsDetail/studentsDuartion'
+import AddDurationLessonCheck from '@/components/student/addDurationLessonCheck'
+import { AddSessionLessonCheck } from '@/components/student/addSessionLessonCheck'
 import ContentHeader from '@/components/common/ContentHeader'
 
-import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
-import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
-import PlusIcon from 'public/assets/icons/plus_circle_bg_pri_600.svg'
+import PlusIcon from '@/icons/icon/plus.svg'
 
 type studentInfo = {
   name: string
@@ -40,9 +35,7 @@ export default function StudentRegister() {
   const setDurationSchedule = useSetRecoilState(studentDurationScheduleState)
   const sessionSchedule = useRecoilValue(sessionScheduleState)
   const setSessionSchedule = useSetRecoilState(sessionScheduleState)
-  const setModal = useSetRecoilState(modalState)
-  const modal = useRecoilValue(modalState)
-  const [isClickedAddClass, setIsClickedAddClass] = useState<boolean>(false)
+  const [Schedule, close, open] = UseModal()
   const [studentInfo, setStudentInfo] = useState<studentInfo>({
     name: '',
     phone: '',
@@ -53,23 +46,6 @@ export default function StudentRegister() {
     submitData: studentInfo,
     setSubmitData: setStudentInfo
   })
-  /* const studentNameProps: InputFormProps = {
-    title: '이름',
-    placeholder: '이름을 입력해 주세요',
-    name: 'name',
-    maxLength: 20,
-    submitData: studentInfo,
-    setSubmitData: setStudentInfo
-  } */
-
-  /* const studentMemoProps: TextareaFormProps = {
-    title: '특이사항',
-    placeholder: '수강생 특이사항을 적어주세요.',
-    name: 'particulars',
-    maxLength: 300,
-    submitData: studentInfo,
-    setSubmitData: setStudentInfo
-  } */
 
   const onInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const maxLength: number = e.target.maxLength
@@ -83,6 +59,13 @@ export default function StudentRegister() {
     }))
   }
 
+  const onDeleteDurationSchedules = (classId: number) => {
+    const formatedDurationSchedules = durationSchedule.filter(
+      (data: { classId: number }, i) => data.classId !== classId
+    )
+    setDurationSchedule(formatedDurationSchedules)
+  }
+
   const studentRigister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (sessionSchedule.length !== 0) {
@@ -91,16 +74,21 @@ export default function StudentRegister() {
         const studentId = studentData.id
         instance
           .post('/session-lesson-registrations', {
-            studentId: Number(studentId),
+            studentId: studentId,
             lessonId: sessionSchedule[0].lessonId,
             paymentStatus: sessionSchedule[0].paymentStatus
           })
           .then(res => {
+            const sessionDate = {
+              year: Number(sessionSchedule[0].sessionDate.split('.')[0]),
+              month: Number(sessionSchedule[0].sessionDate.split('.')[1]) - 1,
+              date: Number(sessionSchedule[0].sessionDate.split('.')[2])
+            }
             instance
               .post('/session-lesson-schedules', {
                 lessonId: sessionSchedule[0].lessonId,
-                studentId: Number(studentId),
-                sessionDate: sessionSchedule[0].sessionDate,
+                studentId: studentId,
+                sessionDate: new Date(sessionDate.year, sessionDate.month, sessionDate.date).toISOString(),
                 startTime: sessionSchedule[0].startTime,
                 endTime: sessionSchedule[0].endTime,
                 roomId: sessionSchedule[0].roomId
@@ -117,7 +105,7 @@ export default function StudentRegister() {
         instance
           .post('/duration-lesson-registrations', {
             studentId: Number(studentId),
-            lessonId: Number(durationSchedule[0].lessonId),
+            lessonId: durationSchedule[0].classId,
             paymentStatus: durationSchedule[0].paymentStatus
           })
           .then(res => {
@@ -129,11 +117,6 @@ export default function StudentRegister() {
         router.push('/student')
       })
     }
-  }
-
-  const onClose = () => {
-    setModal(false)
-    setIsClickedAddClass(false)
   }
 
   useEffect(() => {
@@ -148,7 +131,7 @@ export default function StudentRegister() {
 
   return (
     <div className="w-full flex flex-col items-center pb-[60px]">
-      <ContentHeader title='수강생 등록' back onClick={() => router.push('/student')} />
+      <ContentHeader title="수강생 등록" back onClick={() => router.push('/student')} />
       <div className="w-[640px]">
         <form className="flex flex-col gap-5 pb-[60px]" onSubmit={studentRigister}>
           {/* 수강생 정보 등록 */}
@@ -212,45 +195,40 @@ export default function StudentRegister() {
           <div className="flex flex-col gap-10 w-[640px] px-6 py-8 border rounded-xl border-gray-200">
             <div className="gray-900-bold text-xl">클래스 목록</div>
             <div className="w-full flex flex-col gap-4">
-              <button
-                type="button"
-                className="flex justify-center gap-2 w-full px-6 py-3.5 border rounded-lg border-primary-600"
-                onClick={() => {
-                  setModal(true)
-                  setIsClickedAddClass(true)
-                }}
-              >
-                <PlusIcon width={24} height={24} />
-                <div className="text-base font-semibold text-primary-600">클래스 추가</div>
-              </button>
-              {sessionSchedule.map((data: any, i) => {
+              <Button color="outline" fullSized onClick={open}>
+                <PlusIcon className="mr-2" />
+                일정 추가
+              </Button>
+              {/* 기간반 추가 */}
+              {durationSchedule.length !== 0 &&
+                durationSchedule.map((data, i) => {
+                  const classId = data.classId
+                  return (
+                    <AddDurationLessonCheck
+                      key={i}
+                      className={data.className}
+                      paymentStatus={data.paymentStatus}
+                      schedules={data.schedules}
+                      onDelete={() => {
+                        onDeleteDurationSchedules(classId)
+                      }}
+                    />
+                  )
+                })}
+              {/* 회차반 추가 */}
+              {sessionSchedule.map((data, i) => {
                 return (
-                  <StudentsSession
+                  <AddSessionLessonCheck
                     key={i}
                     className={data.name}
-                    paymentStatus={data.paymentStatus}
-                    sessionSchedule={data.schedules}
-                    type="check"
-                    onDelete={() => {
-                      setSessionSchedule([...sessionSchedule.filter((data, index) => index !== i)])
-                    }}
-                  />
-                )
-              })}
-              {durationSchedule.map((data, i) => {
-                return (
-                  <StudentsDuration
-                    key={i}
-                    className={data.name}
-                    startDate={data.startDate}
-                    endDate={data.endDate}
+                    sessionDate={data.sessionDate}
                     startTime={data.startTime}
                     endTime={data.endTime}
-                    room={data.roomName}
-                    repeatDate={data.repeatDate}
-                    type="check"
+                    roomName={data.roomName}
+                    restOfSessions={data.restOfSessions}
+                    totalSessions={data.totalSessions}
                     onDelete={() => {
-                      setDurationSchedule([...durationSchedule.filter((data, index) => index !== i)])
+                      setSessionSchedule([...sessionSchedule.filter((data, index) => index !== i)])
                     }}
                   />
                 )
@@ -262,12 +240,13 @@ export default function StudentRegister() {
             <div className="text-white text-base font-semibold">등록하기</div>
           </button>
         </form>
-        {/* {isClickedAddClass && modal && (
-          <Modal small>
-            <StudentAddClassModal onClose={onClose} />
-          </Modal>
-        )} */}
       </div>
+      <Modal size="md" show={Schedule} onClose={close}>
+        <Modal.Header>클래스 추가</Modal.Header>
+        <Modal.Body>
+          <StudentAddClassModal onClose={close} />
+        </Modal.Body>
+      </Modal>
     </div>
   )
 }

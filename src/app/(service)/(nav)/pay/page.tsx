@@ -248,7 +248,7 @@ export default function PayPage() {
                 </div>
                 <div className="flex-1 gray-900-normal lg:text-[16px] text-[14px] text-left">{data.lesson.name}</div>
                 <div className="lg:w-[140px] w-[110px] grsy-900-normal lg:text-[16px] text-[14px] text-left">
-                  1,500,000
+                  {data.lesson.tuitionFee} 원
                 </div>
                 <div className={`lg:w-[220px] w-[148px] gray-900-normal text-base text-left`}>
                   <div className="w-full flex items-center xl:gap-2.5 gap-2">
