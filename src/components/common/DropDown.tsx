@@ -8,6 +8,7 @@ import { classType } from '../modal/StudentAddClassModal'
 
 import ChevronDownIcon from 'public/assets/icons/chevron/chevron_down_gray.svg'
 import ChevronUpIcon from 'public/assets/icons/chevron/chevron_up_gray.svg'
+import CheckedIcon from '@/icons/icon/checked.svg'
 
 interface HandleChangeTimeFromChildType {
   (data: { open?: string; close?: string }): void
@@ -200,7 +201,7 @@ export default function DropDown(props: IProps) {
                 <div key={i} className="flex w-full h-[42px] px-3 py-2.5 items-center gap-2">
                   <input
                     type="checkbox"
-                    className="w-[14px] h-[14px] cursor-pointer"
+                    className="w-[14px] h-[14px] cursor-pointer focus:ring-offset-0 focus:ring-0"
                     id={item}
                     checked={checked.includes(item) && true}
                     onClick={e => {

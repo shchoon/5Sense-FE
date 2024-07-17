@@ -67,30 +67,9 @@ export default function Duration({
           <PlusIcon className="mr-2" />
           일정 추가
         </Button>
-
-        <DurationScheduleCheck />
         {/**여기 일정 UI 들어가면 됩니다. */}
+        <DurationScheduleCheck />
       </div>
-      {/* {noticeModal && (
-        <Modal small>
-          <div className="w-[424px] h-[282px] px-6 pt-[82px] pb-6 bg-white rounded-xl border border-gray-900 flex flex-col justify-center items-center">
-            <p className="text-gray-900 text-2xl font-bold">
-              최대 금액 <span className="text-indigo-500">₩999,999,999</span>
-            </p>
-            <p className="text-gray-900 text-2xl font-bold mb-[52px]">초과 했습니다.</p>
-            <div
-              className="w-full btn-purple-lg"
-              onClick={() => {
-                setModal(false)
-                setNoticeModal(false)
-              }}
-            >
-              확인
-            </div>
-          </div>
-        </Modal>
-      )} */}
-
       <Modal size="md" show={Schedule} onClose={close}>
         <Modal.Header>일정 추가</Modal.Header>
         <Modal.Body>
