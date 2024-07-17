@@ -43,7 +43,7 @@ export default function SearchPerson({ type, setValue }: IProps) {
   >([])
   const [searchingName, setSearchingName] = useState<string>('')
   const [checkInclude, setCheckInclude] = useState<boolean>(false)
-  const [isClickedAddTeacher, setIsClickedAddTeacher] = useState<boolean>(false)
+  const [isClickedAddTeacher, setIsClickedAddTeacher] = useState<boolean>(true)
   const [openNameList, setOpenNameList] = useState<boolean>(false)
   const [nameValue, setNameValue] = useState<string>('')
 
@@ -70,7 +70,6 @@ export default function SearchPerson({ type, setValue }: IProps) {
                 (data: { name: string; phone: string }) =>
                   data.name === studentsData[i].name && data.phone === studentsData[i].phone
               )
-              console.log(compareValue)
               studentsData[i].id = compareValue[0].id
             }
           })

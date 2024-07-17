@@ -6,8 +6,8 @@ const nextConfig = {
         hostname: 'oh-sense.s3.ap-northeast-2.amazonaws.com',
         port: '',
         pathname: '**'
-      },
-    ],
+      }
+    ]
   },
   /* images: {
     domains: ['oh-sense.s3.ap-northeast-2.amazonaws.com']
@@ -19,7 +19,15 @@ const nextConfig = {
     })
     return config
   },
-  
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/login',
+        permanent: true
+      }
+    ]
+  },
   reactStrictMode: false
 }
 

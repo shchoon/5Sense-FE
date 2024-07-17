@@ -219,6 +219,132 @@ export default function RoomReservation(props: IProps) {
     })
   }
 
+  const getDurationRoomData = () => {
+    console.log(props.class)
+    console.log(props.classType)
+    instance('/lesson-rooms/daily', {
+      params: {
+        date: new Date(dateData.year, dateData.month, dateData.date).toISOString()
+      }
+    }).then(res => {
+      const list = res.data.data
+      for (var i = 0; i < list.length; i++) {
+        const test: any = []
+        const keys = Object.keys(list[i].workTime)
+        for (var j = 0; j < keys.length; j++) {
+          const key = keys[j]
+          let value = list[i].workTime[key]
+          value.time = key
+          test.push(value)
+        }
+        list[i].workTime = test
+        /* 예약 불가인 룸 처리(애초에 예약 가능 여부가 false) -> 무조건 필요한거 */
+        const absolutlyBookingFalse = []
+        const relativlyBookingFalse = []
+        for (var k = 0; k < test.length; k++) {
+          if (test[k].lesonTime !== null && !test[k].isOpenForBooking) {
+            const range = Number(test[k].lessonTime) / 30 - 1
+            for (var n = k + 1; n <= k + range; n++) {
+              absolutlyBookingFalse.push(n)
+            }
+          }
+          if (
+            test[k].lesonTime !== null &&
+            test[k].isOpenForBooking &&
+            props.class &&
+            Number(props.class.id) !== test[k].id
+          ) {
+            const range = Number(test[k].lessonTime) / 30 - 1
+            for (var n = k; n <= k + range; n++) {
+              relativlyBookingFalse.push(n)
+            }
+          }
+        }
+        if (absolutlyBookingFalse.length !== 0) {
+          for (var l = 0; l < absolutlyBookingFalse.length; l++) {
+            test[absolutlyBookingFalse[l]].isOpenForBooking = false
+          }
+        }
+        if (relativlyBookingFalse.length !== 0) {
+          for (var l = 0; l < relativlyBookingFalse.length; l++) {
+            test[relativlyBookingFalse[l]].isOpenForBooking = false
+          }
+        }
+        /* 선택한 클래스와 룸에 예약되어 있는 클래스가 다른 경우 처리 -> 룸에 에약되어있는 클래스가 있는 경우에만 처리 */
+        console.log(relativlyBookingFalse)
+      }
+      console.log(list)
+      setRoomData(list)
+    })
+  }
+
+  const test = () => {
+    console.log(dateValue, lessonTime)
+    const date = {
+      start: dateValue.split('~')[0].split('.'),
+      end: dateValue.split('~')[1].split('.')
+    }
+    const repeatDate = lessonTime.split(',')[0].replace('  반복', '').replace(' ', ',')
+    const startDate = new Date(Number(date.start[0]), Number(date.start[1]) - 1, Number(date.start[2])).toISOString()
+    const endDate = new Date(Number(date.end[0]), Number(date.end[1]) - 1, Number(date.end[2])).toISOString()
+    instance('/lesson-rooms/range', {
+      params: {
+        startDate: startDate,
+        endDate: endDate,
+        repeatDate: repeatDate
+      }
+    }).then(res => {
+      console.log(res)
+      const list = res.data.data
+      for (var i = 0; i < list.length; i++) {
+        const test: any = []
+        const keys = Object.keys(list[i].workTime)
+        for (var j = 0; j < keys.length; j++) {
+          const key = keys[j]
+          let value = list[i].workTime[key]
+          value.time = key
+          test.push(value)
+        }
+        list[i].workTime = test
+        /* 예약 불가인 룸 처리(애초에 예약 가능 여부가 false) -> 무조건 필요한거 */
+        const absolutlyBookingFalse = []
+        const relativlyBookingFalse = []
+        for (var k = 0; k < test.length; k++) {
+          if (test[k].lesonTime !== null && !test[k].isOpenForBooking) {
+            const range = Number(test[k].lessonTime) / 30 - 1
+            for (var n = k + 1; n <= k + range; n++) {
+              absolutlyBookingFalse.push(n)
+            }
+          }
+          /* if (
+            test[k].lesonTime !== null &&
+            test[k].isOpenForBooking &&
+            props.class &&
+            Number(props.class.id) !== test[k].id
+          ) {
+            const range = Number(test[k].lessonTime) / 30 - 1
+            for (var n = k; n <= k + range; n++) {
+              relativlyBookingFalse.push(n)
+            }
+          } */
+        }
+        if (absolutlyBookingFalse.length !== 0) {
+          for (var l = 0; l < absolutlyBookingFalse.length; l++) {
+            test[absolutlyBookingFalse[l]].isOpenForBooking = false
+          }
+        }
+        /* if (relativlyBookingFalse.length !== 0) {
+          for (var l = 0; l < relativlyBookingFalse.length; l++) {
+            test[relativlyBookingFalse[l]].isOpenForBooking = false
+          }
+        } */
+        /* 선택한 클래스와 룸에 예약되어 있는 클래스가 다른 경우 처리 -> 룸에 에약되어있는 클래스가 있는 경우에만 처리 */
+        //console.log(relativlyBookingFalse)
+      }
+      setRoomData(list)
+    })
+  }
+
   const scrollRight = (i: number) => {
     const element = refs.current[i]
     if (element) {
@@ -313,11 +439,11 @@ export default function RoomReservation(props: IProps) {
     }
   }, [props.lessonTime])
 
-  console.log(roomData)
+  console.log(durationSchedules)
 
   return (
     <>
-      <div className="relative w-full flex flex-col gap-4">
+      <div className="relative w-full flex flex-col gap-4 mb-10">
         <div className="w-full text-left gray-900-semibold text-base">예약 가능한 강의실 찾기</div>
         <div
           className={`w-full h-[68px] flex items-center justify-between ${
@@ -391,19 +517,21 @@ export default function RoomReservation(props: IProps) {
           <div
             className="w-12 h-12 rounded-full bg-primary-600 flex items-center justify-center cursor-pointer"
             onClick={() => {
-              if ((dateValue !== '날짜' && lessonTime !== '시간') || durationSchedules.length >= 1) {
+              if (dateValue !== '날짜' && lessonTime !== '시간') {
                 setIsClickedSearch(true)
+                console.log(dateValue, lessonTime, durationSchedules, props.classType)
                 if (props.classType === 'session') {
                   getRoomData()
+                } else if (props.classType === 'duration') {
+                  test()
                 }
-              } else {
-                return
               }
             }}
           >
             <SearchIcon width={20} height={20} />
           </div>
         </div>
+        {/* datePicker */}
         <div className="absolute z-10 left-0 top-[120px]">
           {props.classType === 'session' && isClickedTab.date && (
             <DayDatePicker
@@ -417,6 +545,7 @@ export default function RoomReservation(props: IProps) {
             <PeriodDatePicker changeParentDateData={handleChangeDateDataFromChild} />
           )}
         </div>
+        {/* 시간, 요일 선택 모달 */}
         <div className="absolute z-10 right-10 top-[120px]">
           {props.classType === 'session' && isClickedTab.time && (
             <LessonTimeModal
@@ -451,7 +580,13 @@ export default function RoomReservation(props: IProps) {
               roomData.map((data: any, i: number) => {
                 const roomId = data.id
                 const room = data.name
-                const timeRange: number | undefined = lessonTime === '시간' ? undefined : Number(lessonTime) / 30
+                const calculatedLessonTime =
+                  props.classType === 'duration'
+                    ? lessonTime.split(',')[1].replace(' ', '').replace('분', '')
+                    : lessonTime
+                const timeRange: number | undefined =
+                  lessonTime === '시간' ? undefined : Number(calculatedLessonTime) / 30
+                console.log(calculatedLessonTime)
                 /* : lessonTime.length <= 3
                     ? Number(lessonTime) / 30
                     : calculatePeriodClassLessonTime() / 30 */
@@ -471,6 +606,7 @@ export default function RoomReservation(props: IProps) {
                           if (room !== clickedRoomData.room) {
                             return
                           }
+                          /* 회차반 */
                           if (props.classType === 'session' && timeRange) {
                             const lessonTime = calculateLessonTimeOfRoom(timeRange)
                             const day = calculateDay(new Date(dateData.year, dateData.month, dateData.date).getDay())
@@ -490,19 +626,8 @@ export default function RoomReservation(props: IProps) {
                                 restOfSessions: restOfSessions
                               }
                             ])
-
-                            setModal(false)
-                            //reservation(lessonTime.startTime, lessonTime.endTime)
-                            /* 예약 확인 모달 보여주기 위함 */
-                            /* if (props.viewType === 'page') {
-                              setModal(true)
-                            } else if (props.viewType === 'modal') {
-                              console.log(dateValue, lessonTime)
-                              const data = {
-                                date: ''
-                              }
-                            } */
                           } else if (props.classType === 'duration') {
+                            /* 기간반 */
                             if (timeRange !== undefined && durationSchedules.length === 0) {
                               const startDateData = dateValue.split('~')[0].split('.')
                               const endDateData = dateValue.split('~')[1].split('.')
@@ -526,6 +651,8 @@ export default function RoomReservation(props: IProps) {
                                   lessonTime: calculatePeriodClassLessonTime()
                                 }
                               ])
+                              /* 모달 닫기 */
+                              props.onClick && props.onClick()
                             } else if (timeRange !== undefined && durationSchedules.length >= 1) {
                               setDurationSchedule(prev => [
                                 ...prev,
@@ -563,7 +690,9 @@ export default function RoomReservation(props: IProps) {
                       <ChevronRightIcon className="z-10" width={16} height={16} />
                     </button>
                     <div
-                      ref={el => {refs.current[i] = el}}
+                      ref={el => {
+                        refs.current[i] = el
+                      }}
                       className="w-full grid grid-flow-col overflow-y-auto scrollbar-hide"
                     >
                       <div className="w-full flex flex-col">
@@ -627,11 +756,6 @@ export default function RoomReservation(props: IProps) {
           </div>
         </div>
       )}
-      {/* {props.viewType === 'page' && modal && (
-        <Modal small>
-          <RoomReservationCheck reservationData={reservationData} />
-        </Modal>
-      )} */}
     </>
   )
 }

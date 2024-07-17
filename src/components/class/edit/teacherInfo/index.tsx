@@ -14,7 +14,7 @@ import PlusIcon from 'public/assets/icons/plus.svg'
 import SearchIcon from 'public/assets/icons/search.svg'
 import UserCircle from 'public/assets/icons/user_circle.svg'
 import VecterIcon from 'public/assets/icons/vector.svg'
-import { ITeacherInfo } from '@/app/(service)/(nav)/class/edit/session/[id]/page'
+import { ITeacherInfo } from '@/app/(service)/(nav)/class/edit/session/page'
 
 interface IProps {
   teacherInfo?: ITeacherInfo

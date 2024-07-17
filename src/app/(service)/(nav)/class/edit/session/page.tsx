@@ -50,8 +50,11 @@ export interface ITeacherInfo {
 export default function EditPage() {
   const router = useRouter()
 
-  const params = useParams<{ type: string; id: string }>()
-
+  //const params = useParams<{ type: string; id: string }>()
+  const [targetClass, setTargetClass] = useState<{ id: number; type: string }>({
+    id: 0,
+    type: ''
+  })
   const [classInfo, setClassInfo] = useState({
     name: '',
     memo: '',
@@ -94,7 +97,7 @@ export default function EditPage() {
   const [teacherValid, setTeacherValid] = useState(true)
 
   useEffect(() => {
-    getSesstionLessons({ id: params.id }).then((res): any => {
+    getSesstionLessons({ id: targetClass.id }).then((res): any => {
       const result = res.data.data
       console.log('result', result)
       if (result.category.subId === null || result.category.id === 0) {
@@ -198,6 +201,14 @@ export default function EditPage() {
     //   console.log(res)
     // })
   }
+
+  useEffect(() => {
+    setTargetClass(prev => ({
+      ...prev,
+      id: Number(localStorage.getItem('editClassId')),
+      type: String(localStorage.getItem('editClassType'))
+    }))
+  }, [])
 
   return (
     <div className="w-[640px] flex flex-col gap-5">
