@@ -1,5 +1,5 @@
-import { ReactElement, useState } from 'react'
-import { UseFormReturn } from 'react-hook-form'
+import { ReactElement, useEffect, useState } from 'react'
+import { Controller, UseFormReturn } from 'react-hook-form'
 
 import { classDataType } from '@/app/(service)/(nav)/class/register/page'
 
@@ -13,6 +13,7 @@ import IconProduce from '@/icons/icon/category/produce.svg'
 import IconShow from '@/icons/icon/category/show.svg'
 import IconSports from '@/icons/icon/category/sports.svg'
 import IconVocal from '@/icons/icon/category/vocal.svg'
+import { constSelector } from 'recoil'
 
 export type category = {
   id: number
@@ -126,10 +127,10 @@ export default function Category({
   setValue,
   watch,
   resetField,
+  control,
   formState: { errors }
 }: UseFormReturn<classDataType, any, undefined>) {
   const [selectedOptionList, setSelectedOptionList] = useState<subCategory[]>([])
-  const [option, setOption] = useState('')
 
   const handleGroupChange = (groupId: number, groupName: string, optionList: subCategory[]) => {
     setValue('category.id', groupId)
@@ -144,51 +145,69 @@ export default function Category({
     setValue('category.subName', optionName)
   }
 
+  const hasSubCatogory = () => {
+    const result = categorydata.filter(data => data.options.length > 0).map(data => data.id)
+
+    const currentCategoryId = watch('category.id')
+    if (currentCategoryId) {
+      return result.includes(currentCategoryId)
+    }
+  }
+
   const renderOptionsList = () => {
     return (
       <>
         {watch('category.id') === 9 ? (
           <div className="flex flex-col gap-2">
-            <p className={` gray-800-semibold`}>기타</p>
+            <p
+              className={`${errors.category?.subName != null ? 'text-red-500' : 'text-gray-800'} text-base font-semibold leading-normal`}
+            >
+              기타
+            </p>
 
             <input
-              className={`${option.length > 0 ? 'bg-gray-50' : 'bg-white'} w-full h-auto input-line-gray`}
+              className={`w-full h-auto input-line-gray`}
               placeholder={'직접 입력'}
-              value={option}
-              onChange={e => {
-                setOption(e.target.value)
-                handleOptionChange(0, option)
-              }}
+              {...register('category.subName', { required: watch('category.id') === 9 })}
               maxLength={10}
             />
 
             <span className="text-gray-500 text-sm font-normal font-['Inter'] text-right">
-              {option.length}/{10}
+              {watch('category.subName')?.length}/{10}
             </span>
           </div>
         ) : (
           <div className="grid grid-cols-4 w-full gap-2">
             {selectedOptionList.map((option: subCategory) => (
-              <div
+              <Controller
                 key={option.id}
-                className={`relative flex justify-center items-center w-[142px] h-[45px] p-3 rounded-md border border-indigo-400 ${
-                  watch('category.subId') === option.id ? 'bg-[#F0EFFF]' : 'bg-white cursor-pointer'
-                }`}
-                {...register('category.subId')}
-                onClick={() => handleOptionChange(option.id, option.name)}
-              >
-                <>
-                  {watch('category.subId') === option.id && <IconCheck className="absolute top-1 right-1" />}
-
-                  <input required type="radio" id={option.name} value={option.name} className="hidden" />
-                  <label
-                    htmlFor={option.name}
-                    className={`text-base font-medium leading-normal text-primary-600 cursor-pointer`}
+                name="category.subId"
+                control={control}
+                rules={{ required: hasSubCatogory() ? 'true' : 'false' }}
+                render={({ field }) => (
+                  <div
+                    key={option.id}
+                    className={`relative flex justify-center items-center w-[142px] h-[45px] p-3 rounded-md border border-indigo-400 ${
+                      field.value === option.id ? 'bg-[#F0EFFF]' : 'bg-white cursor-pointer'
+                    }`}
                   >
-                    {option.name}
-                  </label>
-                </>
-              </div>
+                    <input
+                      required
+                      type="radio"
+                      id={option.name}
+                      value={option.name}
+                      className="hidden"
+                      onClick={() => handleOptionChange(option.id, option.name)}
+                    />
+                    <label
+                      htmlFor={option.name}
+                      className={`text-base font-medium leading-normal text-primary-600 cursor-pointer`}
+                    >
+                      {option.name}
+                    </label>
+                  </div>
+                )}
+              />
             ))}
           </div>
         )}
@@ -198,37 +217,59 @@ export default function Category({
 
   return (
     <div>
-      <p className={`text-base gray-800-semibold leading-normal`}>카테고리</p>
+      <p
+        className={`${errors.category?.id || errors.category?.subId ? 'text-red-500' : 'text-gray-800'} text-base font-semibold leading-normal`}
+      >
+        카테고리
+      </p>
       {/* 대분류 소분류 박스 */}
       <div className="flex flex-col gap-6 mt-2">
         <div className="grid grid-cols-3 w-full gap-2">
           {categorydata.map(item => {
             const active = watch('category.id') === item.id
             return (
-              <label
-                key={item.id}
-                className={`relative flex flex-col gap-[6px] justify-center items-center h-[110px] py-4 rounded-md border border-primary-500 cursor-pointer ${
-                  active ? 'bg-[#F0EFFF]' : 'bg-white '
-                }`}
-                {...register('category.id')}
-                onClick={() => {
-                  handleGroupChange(item.id, item.name, item.options)
-                }}
-              >
-                {active && <IconCheck className="absolute top-1 right-1" />}
-                <div
-                  className={`w-12 h-12 rounded-[50px] flex justify-center items-center ${
-                    active ? 'bg-white text-primary-600' : 'bg-gray-100 text-gray-500'
-                  }`}
-                >
-                  {item.imgUrl}
-                </div>
+              <div key={item.id}>
+                <Controller
+                  name="category.id"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <>
+                      <input
+                        type="radio"
+                        id={String(item.id)}
+                        value={item.id}
+                        className="hidden"
+                        checked={field.value === item.id}
+                        onChange={e => field.onChange(e.target.value)}
+                      />
+                      <label
+                        htmlFor={String(item.id)}
+                        className={`relative flex flex-col gap-[6px] justify-center items-center h-[110px] py-4 rounded-md border border-primary-500 cursor-pointer ${
+                          active ? 'bg-[#F0EFFF]' : 'bg-white '
+                        }`}
+                        onClick={() => {
+                          handleGroupChange(item.id, item.name, item.options)
+                        }}
+                      >
+                        {active && <IconCheck className="absolute top-1 right-1" />}
+                        <div
+                          className={`w-12 h-12 rounded-[50px] flex justify-center items-center ${
+                            active ? 'bg-white text-primary-600' : 'bg-gray-100 text-gray-500'
+                          }`}
+                        >
+                          {item.imgUrl}
+                        </div>
 
-                <input type="radio" id={String(item.id)} value={item.id} className="hidden" />
-                <span className={`text-sm font-semibold ${active ? 'text-primary-600' : 'text-gray-500'}`}>
-                  {item.name}
-                </span>
-              </label>
+                        <input type="radio" id={String(item.id)} value={item.id} className="hidden" />
+                        <span className={`text-sm font-semibold ${active ? 'text-primary-600' : 'text-gray-500'}`}>
+                          {item.name}
+                        </span>
+                      </label>
+                    </>
+                  )}
+                />
+              </div>
             )
           })}
         </div>
