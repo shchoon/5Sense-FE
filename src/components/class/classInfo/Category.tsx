@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react'
+import { ReactElement, useState } from 'react'
 import { Controller, UseFormReturn } from 'react-hook-form'
 
 import { classDataType } from '@/app/(service)/(nav)/class/register/page'
@@ -13,7 +13,6 @@ import IconProduce from '@/icons/icon/category/produce.svg'
 import IconShow from '@/icons/icon/category/show.svg'
 import IconSports from '@/icons/icon/category/sports.svg'
 import IconVocal from '@/icons/icon/category/vocal.svg'
-import { constSelector } from 'recoil'
 
 export type category = {
   id: number

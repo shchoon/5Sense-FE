@@ -62,7 +62,7 @@ export default function Duration({
         </p>
       </div>
       <div className="w-full flex flex-col gap-2">
-        <p className={`gray-800-semibold`}>일정</p>
+        <p className={`${errors.schedules ? 'text-red-500' : 'text-gray-800'} gray-800-semibold`}>일정</p>
         <Button color="outline" fullSized onClick={open}>
           <PlusIcon className="mr-2" />
           일정 추가

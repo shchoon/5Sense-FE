@@ -1,7 +1,7 @@
 'use client'
 import { Modal } from 'flowbite-react'
 import { useEffect, useRef, useState } from 'react'
-import { UseFormGetValues, UseFormSetValue } from 'react-hook-form'
+import { FieldErrors, UseFormGetValues, UseFormSetValue } from 'react-hook-form'
 
 import { classDataType } from '@/app/(service)/(nav)/class/register/page'
 import RegisterModal from '@/components/instructor/RegisterModal'
@@ -16,13 +16,15 @@ import SearchIcon from 'public/assets/icons/search.svg'
 import UserCircle from 'public/assets/icons/user_circle.svg'
 import VecterIcon from 'public/assets/icons/vector.svg'
 import { useSetRecoilState } from 'recoil'
+import { error } from 'console'
 
 interface IProps {
   type: string
   setValue?: UseFormSetValue<classDataType>
+  errors?: FieldErrors<classDataType>
 }
 
-export default function SearchPerson({ type, setValue }: IProps) {
+export default function SearchPerson({ type, setValue, errors }: IProps) {
   const inputClickRef = useRef<HTMLInputElement>(null)
   const autoCompleteTeacherNameRef = useRef<HTMLDivElement>(null)
 
@@ -81,7 +83,9 @@ export default function SearchPerson({ type, setValue }: IProps) {
   return (
     <>
       <div className={`flex flex-col items-start w-[640px] py-8 px-6 border rounded-xl bg-[#FFF]`}>
-        <div className="gray-900-bold text-xl pb-10">{type === 'students' ? '수강생 정보' : '강사 정보'}</div>
+        <div className={`${errors?.teacherId ? 'text-red-500' : 'text-gray-800'} gray-900-bold text-xl pb-10`}>
+          {type === 'students' ? '수강생 정보' : '강사 정보'}
+        </div>
         {type === 'students' && <div className="w-full text-left gray-800-semibold text-base pb-2">수강생 찾기</div>}
         <div className="flex flex-start flex-col w-[100%] h-[auto] px-4 py-[14px] justify-center border border-[#E5E7EB] bg-[#F9FAFB] rounded-lg focus-within:border-[#7354E8]">
           <div className="relative flex w-[100%] items-center gap-2">

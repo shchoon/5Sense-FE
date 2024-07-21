@@ -1,8 +1,8 @@
 'use client'
 import { Button } from 'flowbite-react'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { BaseSyntheticEvent, useEffect } from 'react'
+import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import Category from '@/components/class/classInfo/Category'
@@ -11,6 +11,7 @@ import SearchPerson from '@/components/class/register/searchPerson'
 import ContentHeader from '@/components/common/ContentHeader'
 import TextInput from '@/components/common/TextInput'
 import TextareaForm from '@/components/common/TextareaForm'
+import { postDurationLessons, postSessionLessons } from '@/lib/api/class'
 import { DurationScheduleType, durationClassScheduleState } from '@/lib/state/classDurationSchedule'
 
 export type classDataType = {
@@ -59,8 +60,57 @@ export default function RegisterPage() {
     reValidateMode: 'onSubmit'
   })
 
-  const onSubmit: SubmitHandler<classDataType> = (data, e) => console.log('submitdata', data)
-  const onError = (errors: any, e: any) => console.log(errors, e)
+  const onSubmit: SubmitHandler<classDataType> = async (data, e) => {
+    let categoryId
+    let categoryName
+
+    if (data.category.subId == undefined && data.category.subName == undefined) {
+      categoryId = data.category.id
+      categoryName = data.category.name
+    } else if (data.category.id === 9) {
+      categoryId = 0
+      categoryName = data.category.subName
+    } else {
+      categoryId = data.category.subId
+      categoryName = data.category.subName
+    }
+
+    if (data.type === 'duration') {
+      const result = await postDurationLessons({
+        name: data.name,
+        memo: data.memo,
+        tuitionFee: Number(data.tuitionFee),
+        category: {
+          id: categoryId,
+          name: categoryName
+        },
+        teacherId: data.teacherId,
+        schedules: data.schedules
+      })
+      if (result.success) {
+        router.push('/class')
+      }
+    }
+
+    if (data.type === 'session') {
+      const result = await postSessionLessons({
+        name: data.name,
+        memo: data.memo,
+        lessonTime: data.lessonTime,
+        tuitionFee: Number(data.tuitionFee),
+        capacity: data.capacity,
+        totalSessions: Number(data.totalSessions),
+        category: {
+          id: categoryId,
+          name: categoryName
+        },
+        teacherId: data.teacherId
+      })
+      if (result.success) {
+        router.push('/class')
+      }
+    }
+  }
   const {
     register,
     handleSubmit,
@@ -68,6 +118,8 @@ export default function RegisterPage() {
     setValue,
     watch,
     setFocus,
+    setError,
+    clearErrors,
     formState: { errors }
   } = Props
 
@@ -77,10 +129,36 @@ export default function RegisterPage() {
     }
   }, [])
 
+  useEffect(() => {
+    setValue('schedules', durationSchedule)
+  }, [durationSchedule])
+
+  const customHandleSubmit =
+    (onValid: SubmitHandler<classDataType>, onInvalid?: SubmitErrorHandler<classDataType>) =>
+    (event?: BaseSyntheticEvent) => {
+      event?.preventDefault()
+      if (isNaN(parseInt(getValues('teacherId')))) {
+        setError('teacherId', {
+          type: 'required'
+        })
+      } else {
+        clearErrors('teacherId')
+      }
+      if (getValues('type') === 'duration' && getValues('schedules').length < 1) {
+        setError('schedules', {
+          type: 'required'
+        })
+      } else {
+        clearErrors('schedules')
+      }
+
+      handleSubmit(onValid, onInvalid)(event)
+    }
+
   return (
     <div className="flex flex-col items-center pb-[60px]">
       <ContentHeader title="클래스 관리" back onClick={() => router.push('/class')} />
-      <form className="w-[640px] flex flex-col gap-5" onSubmit={handleSubmit(onSubmit, onError)}>
+      <form className="w-[640px] flex flex-col gap-5" onSubmit={customHandleSubmit(onSubmit)}>
         <div className={`class-box`}>
           <div className={`gray-900-bold text-xl`}>클래스 정보</div>
           <div className="info-detail flex flex-col gap-2">
@@ -112,7 +190,7 @@ export default function RegisterPage() {
           </div>
         </div>
         <ClassType {...Props} />
-        <SearchPerson type="teachers" setValue={setValue} />
+        <SearchPerson type="teachers" setValue={setValue} errors={errors} />
         <Button type="submit" color="primary">
           등록하기
         </Button>
