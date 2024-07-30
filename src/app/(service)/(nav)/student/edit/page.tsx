@@ -46,9 +46,10 @@ export default function StudentEdit() {
   const setSessionSchedule = useSetRecoilState(sessionScheduleState)
   const setDayCalenderState = useSetRecoilState(DayCalendarDateState)
 
+  console.log(sessionSchedule)
+
   const [Schedule, close, open] = UseModal()
 
-  const [isClickedAddClass, setIsClickedAddClass] = useState<boolean>(false)
   const [studentInfo, setStudentInfo] = useState<studentInfo>({
     id: 0,
     name: '',
@@ -57,6 +58,7 @@ export default function StudentEdit() {
     durationLessons: [],
     sessionLessons: []
   })
+
   const [InputValue, handleChange] = useInputNum({
     name: 'phone',
     submitData: studentInfo,
@@ -82,6 +84,11 @@ export default function StudentEdit() {
         studentInfo.sessionLessons.filter((data: any, i: number) => data.id === sessionSchedule[0].lessonId).length ===
         0
       ) {
+        const sessionDate = {
+          year: Number(sessionSchedule[0].sessionDate.split('.')[0]),
+          month: Number(sessionSchedule[0].sessionDate.split('.')[1]) - 1,
+          date: Number(sessionSchedule[0].sessionDate.split('.')[2])
+        }
         /* 수강생 정보 수정에서 새로운 회차반 클래스 추가하고 일정추가를 하는 경우 */
         instance
           .post('/session-lesson-registrations', {
@@ -94,7 +101,7 @@ export default function StudentEdit() {
               .post('/session-lesson-schedules', {
                 lessonId: sessionSchedule[0].lessonId,
                 studentId: studentInfo.id,
-                sessionDate: sessionSchedule[0].sessionDate,
+                sessionDate: new Date(sessionDate.year, sessionDate.month, sessionDate.date).toISOString(),
                 startTime: sessionSchedule[0].startTime,
                 endTime: sessionSchedule[0].endTime,
                 roomId: sessionSchedule[0].roomId
@@ -176,11 +183,6 @@ export default function StudentEdit() {
 
     return () => {
       setSessionSchedule([])
-    }
-  }, [])
-
-  useEffect(() => {
-    return () => {
       const currentDate = new Date()
       setDayCalenderState({
         year: currentDate.getFullYear(),
@@ -190,6 +192,7 @@ export default function StudentEdit() {
       localStorage.removeItem('studentId')
     }
   }, [])
+
   console.log(sessionSchedule, studentInfo)
 
   return (

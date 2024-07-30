@@ -62,39 +62,18 @@ export default function Duration({
         </p>
       </div>
       <div className="w-full flex flex-col gap-2">
-        <p className={`gray-800-semibold`}>일정</p>
+        <p className={`${errors.schedules ? 'text-red-500' : 'text-gray-800'} gray-800-semibold`}>일정</p>
         <Button color="outline" fullSized onClick={open}>
           <PlusIcon className="mr-2" />
           일정 추가
         </Button>
-
-        <DurationScheduleCheck />
         {/**여기 일정 UI 들어가면 됩니다. */}
+        <DurationScheduleCheck />
       </div>
-      {/* {noticeModal && (
-        <Modal small>
-          <div className="w-[424px] h-[282px] px-6 pt-[82px] pb-6 bg-white rounded-xl border border-gray-900 flex flex-col justify-center items-center">
-            <p className="text-gray-900 text-2xl font-bold">
-              최대 금액 <span className="text-indigo-500">₩999,999,999</span>
-            </p>
-            <p className="text-gray-900 text-2xl font-bold mb-[52px]">초과 했습니다.</p>
-            <div
-              className="w-full btn-purple-lg"
-              onClick={() => {
-                setModal(false)
-                setNoticeModal(false)
-              }}
-            >
-              확인
-            </div>
-          </div>
-        </Modal>
-      )} */}
-
       <Modal size="md" show={Schedule} onClose={close}>
         <Modal.Header>일정 추가</Modal.Header>
         <Modal.Body>
-          <RoomReservation classType="duration" viewType="modal" onClick={close} />
+          <RoomReservation classType="duration" viewType="modal" onClose={close} />
         </Modal.Body>
       </Modal>
     </div>

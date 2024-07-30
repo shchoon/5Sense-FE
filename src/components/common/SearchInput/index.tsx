@@ -25,6 +25,10 @@ export default function SearchInput(props: IProps) {
   }
 
   const handleClickSearch = () => {
+    if (inputValue === '') {
+      alert('검색어를 입력해주세요.')
+      return
+    }
     let searchBy: string = ''
     if (checkNumTypeList.includes(inputValue[0])) {
       searchBy = 'phone'

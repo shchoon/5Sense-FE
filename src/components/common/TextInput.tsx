@@ -1,5 +1,4 @@
-import { useEffect } from 'react'
-import { FieldElement, FieldErrors, RegisterOptions, UseFormGetValues, UseFormRegisterReturn } from 'react-hook-form'
+import { FieldErrors, UseFormRegisterReturn } from 'react-hook-form'
 
 export interface IInput {
   title: string

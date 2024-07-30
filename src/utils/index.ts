@@ -150,3 +150,17 @@ export const calculateRervationTime = (openTime: string, closeTime: string) => {
 
   return timeList.slice(indexOfOpenTime, indexOfCloseTime + 1)
 }
+
+export const getTimeListByHour = (openTime: string, closeTime: string) => {
+  const timeList: string[] = []
+
+  const time = {
+    open: Number(openTime.split(':')[0]),
+    close: Number(closeTime.split(':')[0])
+  }
+  for (var i = time.open; i < time.close; i++) {
+    timeList.push(`${i}`)
+  }
+
+  return timeList
+}

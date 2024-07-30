@@ -158,8 +158,6 @@ export default function StudentPage() {
     }
   }, [metaData])
 
-  console.log(studentList)
-
   return (
     <>
       <div>

@@ -1,11 +1,10 @@
 'use client'
 import { classDataType } from '@/app/(service)/(nav)/class/register/page'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { UseFormReturn } from 'react-hook-form'
+
 import Duration from './component/Duration'
 import Session from './component/Session'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { durationClassScheduleState } from '@/lib/state/classDurationSchedule'
 
 export type scheduleItem = {
   id: number
@@ -14,12 +13,9 @@ export type scheduleItem = {
 }
 
 export default function ClassType(props: UseFormReturn<classDataType, any, undefined>) {
-  const { setValue, reset, getValues } = props
+  const { reset, getValues } = props
 
   const [isDuration, setIsDuration] = useState<boolean>(true)
-
-  const durationSchedule = useRecoilValue(durationClassScheduleState)
-  const setDurationSchedule = useSetRecoilState(durationClassScheduleState)
 
   const onInitClassType = (data: string) => {
     if (data === '기간반') {

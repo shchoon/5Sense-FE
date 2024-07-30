@@ -177,9 +177,6 @@ export default function PeriodDatePicker(props: IProps) {
       {/* 첫 번째 달력 */}
       <div className="flex flex-col bg-white gap-2 w-full rounded-lg">
         <div className="w-full flex justify-between">
-          <div className="w-full h-5 text-center gray-900-bold text-xs">
-            {firstDateData.year}년 {firstDateData.month + 1}월
-          </div>
           {firstDateData.year === currentDate.getFullYear() && firstDateData.month === currentDate.getMonth() ? null : (
             <AllowLeftIcon
               width={20}
@@ -191,6 +188,9 @@ export default function PeriodDatePicker(props: IProps) {
               }}
             />
           )}
+          <div className="w-full h-5 text-center gray-900-bold text-xs">
+            {firstDateData.year}년 {firstDateData.month + 1}월
+          </div>
         </div>
         {/* 달력 */}
         <div className="w-[252px] h-[238px]">
@@ -207,6 +207,12 @@ export default function PeriodDatePicker(props: IProps) {
             return (
               <div key={i} className="w-full h-[34px] grid grid-cols-7">
                 {data.map((dateData: any, i: number) => {
+                  let first = 0
+                  let second = 0
+                  const sorted = firstClickedData.date.sort()
+                  first = sorted[0]
+                  second = sorted[1]
+                  console.log(i, first, second, dateData)
                   return (
                     <div
                       key={i}
@@ -217,16 +223,18 @@ export default function PeriodDatePicker(props: IProps) {
                         firstClickedData.year === firstDateData.year &&
                         firstClickedData.month === firstDateData.month &&
                         firstClickedData.date.includes(dateData.date) &&
-                        'bg-primary-700 border rounded-lg'
+                        (dateData.date === first
+                          ? 'bg-primary-700 border rounded-l-lg'
+                          : 'bg-primary-700 border rounded-r-lg')
                       }
                       /* 두번째 달력 -> 첫번째 달력에 위치해 있을 때 배경 색칠 */
-                      /* ${
-                        dateData.clickable &&
-                        secondClickedData.year === firstDateData.year &&
-                        secondClickedData.month === firstDateData.month &&
-                        secondClickedData.date.includes(dateData.date) &&
-                        'bg-primary-700 border rounded-lg'
-                      } */
+                       ${
+                         dateData.clickable &&
+                         secondClickedData.year === firstDateData.year &&
+                         secondClickedData.month === firstDateData.month &&
+                         secondClickedData.date.includes(dateData.date) &&
+                         'bg-primary-700 border rounded-r-lg'
+                       }
                       
                       /* 같은 월에서 기간 선택 */
                       ${
@@ -234,7 +242,7 @@ export default function PeriodDatePicker(props: IProps) {
                         firstClickedData.year === firstDateData.year &&
                         firstClickedData.month === firstDateData.month &&
                         calculateRange(firstClickedData.date, dateData.date) &&
-                        'bg-red-100'
+                        'bg-primary-50'
                       }
                       /* 두번째 달력 -> 첫번쨰 달력에 위치 -> 클릭된 날짜보다 작은 날짜들 배경 색칠 */
                       ${
@@ -244,7 +252,7 @@ export default function PeriodDatePicker(props: IProps) {
                         firstDateData.month === secondClickedData.month &&
                         dateData.clickable &&
                         dateData.date < secondClickedData.date[0] &&
-                        'bg-red-100'
+                        'bg-primary-50'
                       }
                       /* 다른 월에서 기간 선택 -> 첫번째 달력 클릭 날짜보다 큰 날짜들만 색칠 */
                       ${
@@ -255,7 +263,7 @@ export default function PeriodDatePicker(props: IProps) {
                         firstClickedData.year === firstDateData.year &&
                         firstClickedData.month === firstDateData.month &&
                         dateData.date > firstClickedData.date[0] &&
-                        'bg-red-100'
+                        'bg-primary-50'
                       }
                       /* 첫번째 달력 클릭 날짜 < 현재 첫번째 달력 < 두번째 달력 클릭 날짜 */
                       ${
@@ -268,7 +276,7 @@ export default function PeriodDatePicker(props: IProps) {
                         secondClickedData.month > firstDateData.month &&
                         firstDateData.month > firstClickedData.month &&
                         dateData.clickable &&
-                        'bg-red-100'
+                        'bg-primary-50'
                       }
                       /* 첫번째 달력 클릭 연도 !== 두번째 달력 클릭 연도 */
                       ${
@@ -282,7 +290,7 @@ export default function PeriodDatePicker(props: IProps) {
                           firstDateData.month > firstClickedData.month) ||
                           (firstClickedData.year < firstDateData.year &&
                             firstDateData.month < secondClickedData.month)) &&
-                        'bg-red-100'
+                        'bg-primary-50'
                       }
                       `}
                       onClick={() => {
@@ -449,6 +457,12 @@ export default function PeriodDatePicker(props: IProps) {
             return (
               <div key={i} className="w-full h-[34px] grid grid-cols-7">
                 {data.map((dateData: any, i: number) => {
+                  let first = 0
+                  let second = 0
+                  const sorted = firstClickedData.date.sort()
+                  first = sorted[0]
+                  second = sorted[1]
+                  console.log(i, first, second, dateData)
                   return (
                     <div
                       key={i}
@@ -459,7 +473,7 @@ export default function PeriodDatePicker(props: IProps) {
                         secondClickedData.year === secondDateData.year &&
                         secondClickedData.month === secondDateData.month &&
                         secondClickedData.date.includes(dateData.date) &&
-                        'bg-primary-700 border rounded-lg'
+                        'bg-primary-700 border rounded-r-lg'
                       } */
                       ${
                         dateData.clickable &&
@@ -467,25 +481,19 @@ export default function PeriodDatePicker(props: IProps) {
                         firstClickedData.year === secondDateData.year &&
                         firstClickedData.month === secondDateData.month &&
                         firstClickedData.date.includes(dateData.date) &&
-                        'bg-primary-700 border rounded-lg'
+                        (dateData.date === first
+                          ? 'bg-primary-700 border rounded-l-lg'
+                          : 'bg-primary-700 border rounded-r-lg')
                       }
                       /* 첫번째 달력 -> 두번째 달력에 위치해 있을 때 배경 색칠 */
-                      ${
-                        dateData.clickable &&
-                        firstClickedData.date.length === 1 &&
-                        secondClickedData.date.length === 1 &&
-                        firstClickedData.year === secondDateData.year &&
-                        firstClickedData.month === secondDateData.month &&
-                        firstClickedData.date.includes(dateData.date) &&
-                        'bg-primary-700 border rounded-lg'
-                      }
+                      
                       ${
                         dateData.clickable &&
                         firstClickedData.date.length === 1 &&
                         firstClickedData.year === secondDateData.year &&
                         firstClickedData.month === secondDateData.month &&
                         firstClickedData.date.includes(dateData.date) &&
-                        'bg-primary-700 border rounded-lg'
+                        'bg-primary-700 border rounded-l-lg'
                       }
                       /* 같은 월에서 기간 선택 */
                       ${
@@ -493,7 +501,7 @@ export default function PeriodDatePicker(props: IProps) {
                         firstClickedData.year === secondDateData.year &&
                         firstClickedData.month === secondDateData.month &&
                         calculateRange(firstClickedData.date, dateData.date) &&
-                        'bg-red-100'
+                        'bg-primary-50'
                       }
                       
                       /* 첫번쩨 달력 -> 두번째 달력 -> 클릭된 날짜보다 큰 날짜들 배경 색칠 */
@@ -506,7 +514,7 @@ export default function PeriodDatePicker(props: IProps) {
                         firstClickedData.month === secondDateData.month &&
                         firstClickedData.date[0] < dateData.date &&
                         dateData.clickable &&
-                        'bg-red-100'
+                        'bg-primary-50'
                       }
                       /* 다른 월에서 기간 선택 -> 두번째 달력 클릭 날짜보다 작은 날짜들만 색칠 */
                       ${
@@ -517,7 +525,7 @@ export default function PeriodDatePicker(props: IProps) {
                         secondClickedData.year === secondDateData.year &&
                         secondClickedData.month === secondDateData.month &&
                         secondClickedData.date[0] > dateData.date &&
-                        'bg-red-100'
+                        'bg-primary-50'
                       }
                       /* 첫번째 달력 클릭 날짜 < 두번째 달력 < 두번째 달력 클릭 날짜 */
                       ${
@@ -530,7 +538,7 @@ export default function PeriodDatePicker(props: IProps) {
                         secondDateData.month > firstClickedData.month &&
                         secondDateData.month < secondClickedData.month &&
                         dateData.clickable &&
-                        'bg-red-100'
+                        'bg-primary-50'
                       }
                       /* 첫번쨰 달력 클릭 연도 !== 두번쨰 달력 클릭 연도 */
                       ${
@@ -544,7 +552,7 @@ export default function PeriodDatePicker(props: IProps) {
                           secondDateData.month < secondClickedData.month) ||
                           (secondClickedData.year > secondDateData.year &&
                             secondDateData.month > firstClickedData.month)) &&
-                        'bg-red-100'
+                        'bg-primary-50'
                       }
                       `}
                       onClick={() => {

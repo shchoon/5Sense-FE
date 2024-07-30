@@ -1,13 +1,21 @@
 import instance from '../axios'
 
 export const postDurationLessons = async (requestData: any) => {
-  console.log(requestData)
-  return instance.post(`/duration-lessons`, requestData)
+  try {
+    const res = await instance.post(`/duration-lessons`, requestData)
+    return res.data
+  } catch (error: any) {
+    return error.response
+  }
 }
 
-export const postSesstionLessons = async (requestData: any) => {
-  console.log(requestData)
-  return instance.post(`/session-lessons`, requestData)
+export const postSessionLessons = async (requestData: any) => {
+  try {
+    const res = await instance.post(`/session-lessons`, requestData)
+    return res.data
+  } catch (error: any) {
+    return error.response
+  }
 }
 
 export const patchDurationLessons = async (requestData: any) => {
