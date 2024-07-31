@@ -31,7 +31,7 @@ const nextConfig = {
     return [
       {
         source: '/:path*',
-        destination: `${process.env.NEXT_PUBLIC_IP_ADDRESS}/:path*`
+        destination: `http://43.203.231.217:3000/:path*`
       }
     ]
   },
