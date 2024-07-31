@@ -188,6 +188,7 @@ export default function StudentPage() {
                   setIsClickedStudent(true)
                   setClickedStudentsId(id)
                   localStorage.setItem('studentId', id)
+                  router.push(`/student/edit/${id}`)
                   /* setStudentForClass(prev => ({
                     ...prev,
                     id: id
