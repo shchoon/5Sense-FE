@@ -19,11 +19,19 @@ const nextConfig = {
     })
     return config
   },
-  async rewrites() {
+  /* async rewrites() {
     return [
       {
         source: '/:path*',
-        destination: 'http://43.203.231.217:3000/:path*'
+        destination: `${process.env.NEXT_PUBLIC_IP_ADDRESS}/:path*`
+      }
+    ]
+  }, */
+  async rewrites() {
+    return [
+      {
+        source: '/home',
+        destination: '/student'
       }
     ]
   },

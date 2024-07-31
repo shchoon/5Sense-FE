@@ -41,6 +41,7 @@ export interface InputNumProps {
 export default function StudentEdit() {
   const router = useRouter()
   const params = useParams()
+  console.log(params)
   const durationSchedule = useRecoilValue(studentDurationScheduleState)
   const sessionSchedule = useRecoilValue(sessionScheduleState)
   const setDurationSchedule = useSetRecoilState(studentDurationScheduleState)
@@ -150,7 +151,7 @@ export default function StudentEdit() {
         .then(res => {
           router.push('/student')
         })
-    } else if( sessionSchedule.length === 0 && durationSchedule.length === 0){
+    } else if (sessionSchedule.length === 0 && durationSchedule.length === 0) {
       /* 단순 수강생 정보 수정 */
     }
   }
@@ -183,7 +184,7 @@ export default function StudentEdit() {
 
   return (
     <div className="w-full flex flex-col items-center pb-[60px]">
-      <ContentHeader title='수강생 정보수정' back onClick={() => router.push('/student')} />
+      <ContentHeader title="수강생 정보수정" back onClick={() => router.push('/student')} />
       <div className="w-[640px] ">
         <form className="flex flex-col gap-5 pb-[60px]" onSubmit={e => reservation(e)}>
           {/* 수강생 정보 등록 */}
