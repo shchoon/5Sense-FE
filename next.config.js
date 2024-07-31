@@ -32,6 +32,14 @@ const nextConfig = {
       {
         source: '/students/:path*',
         destination: `${process.env.NEXT_PUBLIC_IP_ADDRESS}/students/:path*`
+      },
+      {
+        source: '/lessons/:path*',
+        destination: `${process.env.NEXT_PUBLIC_IP_ADDRESS}/lessons/:path*`
+      },
+      {
+        source: '/centers/:path*',
+        destination: `${process.env.NEXT_PUBLIC_IP_ADDRESS}/centers/:path*`
       }
     ]
   },
