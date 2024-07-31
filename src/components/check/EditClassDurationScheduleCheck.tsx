@@ -5,12 +5,6 @@ import { durationClassScheduleState } from '@/lib/state/classDurationSchedule'
 import PencilIcon from 'public/assets/icons/pencil.svg'
 import { modalState } from '@/lib/state/modal'
 import { useState } from 'react'
-import Modal from '../common/modal'
-import AddClassModal from '../modal/AddClassModal'
-
-// interface IProps {
-//   edit: boolean
-// }
 
 export default function EditDurationScheduleCheck() {
   const setModal = useSetRecoilState(modalState)

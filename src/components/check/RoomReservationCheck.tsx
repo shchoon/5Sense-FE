@@ -1,6 +1,3 @@
-import local from 'next/font/local'
-import Image from 'next/image'
-
 interface IProps {
   className: string | null
   date: string | null

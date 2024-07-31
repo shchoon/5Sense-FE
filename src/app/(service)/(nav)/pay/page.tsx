@@ -2,13 +2,11 @@
 import { useState, useEffect, useRef } from 'react'
 
 import SearchInput from '@/components/common/SearchInput'
-import { studentType, metaType } from '../student/page'
-import ListInfo from '@/components/view/ListInfo'
+import { metaType } from '../student/page'
 import instance from '@/lib/api/axios'
 import { changePhoneNumberToString } from '@/utils'
 
 import NotFoundPage from '@/components/common/NotFoundPage'
-import List from '@/components/view/List'
 import Loading from '@/components/common/Loading'
 import ChevronDownIcon from 'public/assets/icons/chevron/chevron-down-blue.svg'
 import ChevronUpIcon from 'public/assets/icons/chevron/chevron-up-blue.svg'
@@ -43,7 +41,6 @@ export default function PayPage() {
   const [currentPaymentStatus, setCurrentPaymentStatus] = useState<string>('All')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isRefresh, setIsRefresh] = useState<boolean>(false)
-  const listInfoProps = ['이름', '전화번호', '수강중인 클래스', '결제상태']
 
   const getInputDataFromChild = (data: { value: string; searchBy: string; list: PaymentType[]; meta: metaType }) => {
     setInputData(prev => ({

@@ -54,10 +54,6 @@ export default function SearchInput(props: IProps) {
     }
   }
 
-  const handleClickInputRefresh = () => {
-    setInputValue('')
-  }
-
   const clickEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key == 'Enter') {
       handleClickSearch()
@@ -77,12 +73,6 @@ export default function SearchInput(props: IProps) {
           onChange={handleChangeInput}
           onKeyDown={e => clickEnter(e)}
         />
-        {/* <CloseIcon
-          className="absolute xl:right-4 right-2 cursor-pointer"
-          width={12}
-          height={12}
-          onClick={() => handleClickInputRefresh()}
-        /> */}
       </div>
       <div
         className="lg:w-[42px] lg:h-[42px] w-9 h-9 p-2 flex items-center justify-center rounded-lg bg-primary-600 cursor-pointer"

@@ -1,9 +1,6 @@
 'use client'
-import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 
-import Modal from '@/components/common/modal'
-import RegisterModal from '@/components/instructor/RegisterModal'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
 import instance from '@/lib/api/axios'
 import { modalState } from '@/lib/state/modal'
