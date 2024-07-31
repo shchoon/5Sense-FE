@@ -30,7 +30,15 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/:path*',
+        source: '/students/:path*',
+        destination: `http://43.203.231.217:3000/:path*`
+      },
+      {
+        source: '/lessons/:path*',
+        destination: `http://43.203.231.217:3000/:path*`
+      },
+      {
+        source: '/centers/:path*',
         destination: `http://43.203.231.217:3000/:path*`
       }
     ]
