@@ -30,8 +30,8 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/home',
-        destination: '/student'
+        source: '/students/:path*',
+        destination: `${process.env.NEXT_PUBLIC_IP_ADDRESS}/students/:path*`
       }
     ]
   },
