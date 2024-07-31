@@ -19,6 +19,14 @@ const nextConfig = {
     })
     return config
   },
+  async rewrites() {
+    return [
+      {
+        source: '/:path*',
+        destination: 'http://43.203.231.217:3000/:path*'
+      }
+    ]
+  },
   async redirects() {
     return [
       {
