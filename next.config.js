@@ -30,16 +30,16 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: 'https://5-sense-fe.vercel.app/students/:path*',
-        destination: `${process.env.NEXT_PUBLIC_IP_ADDRESS}/students/:path*`
+        source: '/students/:path*',
+        destination: `${process.env.NEXT_PUBLIC_IP_ADDRESS}/:path*`
       },
       {
-        source: 'https://5-sense-fe.vercel.app/lessons/:path*',
-        destination: `${process.env.NEXT_PUBLIC_IP_ADDRESS}/lessons/:path*`
+        source: '/lessons/:path*',
+        destination: `${process.env.NEXT_PUBLIC_IP_ADDRESS}/:path*`
       },
       {
-        source: 'https://5-sense-fe.vercel.app/centers/:path*',
-        destination: `${process.env.NEXT_PUBLIC_IP_ADDRESS}/centers/:path*`
+        source: '/centers/:path*',
+        destination: `${process.env.NEXT_PUBLIC_IP_ADDRESS}/:path*`
       }
     ]
   },
