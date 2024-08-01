@@ -29,7 +29,7 @@ const nextConfig = {
   }, */
   async rewrites() {
     return [
-      {
+      /* {
         source: '/students',
         has: [
           {
@@ -61,6 +61,10 @@ const nextConfig = {
       {
         source: '/auth/:path*',
         destination: 'http://43.203.231.217:3000/auth/:path*'
+      } */
+      {
+        source: '/:path*',
+        destination: `${process.env.NEXT_PUBLIC_IP_ADDRESS}/:path*`
       }
     ]
   },
