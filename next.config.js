@@ -61,8 +61,7 @@ const nextConfig = {
       {
         source: '/auth/:path*',
         destination: 'http://43.203.231.217:3000/auth/:path*'
-      },
-      {}
+      }
     ]
   },
   async redirects() {
