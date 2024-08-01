@@ -30,8 +30,25 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/students/:path*',
-        destination: `http://43.203.231.217:3000/studetns/:path*`
+        source: '/students/',
+        has: [
+          {
+            type: 'query',
+            key: 'take',
+            value: '(?<take>.*)'
+          },
+          {
+            type: 'query',
+            key: 'page',
+            value: '(?<page>.*)'
+          },
+          {
+            type: 'query',
+            key: 'searchBy',
+            value: '(?<searchBy>.*)'
+          }
+        ],
+        destination: `http://43.203.231.217:3000/studetns?take=:take&page=:page&serchBy=:searchBy*`
       },
       {
         source: '/lessons/:path*',
@@ -44,7 +61,8 @@ const nextConfig = {
       {
         source: '/auth/:path*',
         destination: 'http://43.203.231.217:3000/auth/:path*'
-      }
+      },
+      {}
     ]
   },
   async redirects() {
