@@ -31,15 +31,15 @@ const nextConfig = {
     return [
       {
         source: '/students/:path*',
-        destination: `http://43.203.231.217:3000/:path*`
+        destination: `http://43.203.231.217:3000/studetns/:path*`
       },
       {
         source: '/lessons/:path*',
-        destination: `http://43.203.231.217:3000/:path*`
+        destination: `http://43.203.231.217:3000/lessons/:path*`
       },
       {
         source: '/centers/:path*',
-        destination: `http://43.203.231.217:3000/:path*`
+        destination: `http://43.203.231.217:3000/centers/:path*`
       }
     ]
   },
