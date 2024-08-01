@@ -40,6 +40,10 @@ const nextConfig = {
       {
         source: '/centers/:path*',
         destination: `http://43.203.231.217:3000/centers/:path*`
+      },
+      {
+        source: '/auth/:path*',
+        destination: 'http://43.203.231.217:3000/auth/:path*'
       }
     ]
   },
