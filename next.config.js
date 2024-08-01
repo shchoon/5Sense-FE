@@ -30,7 +30,7 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/students/',
+        source: '/students',
         has: [
           {
             type: 'query',
@@ -48,7 +48,7 @@ const nextConfig = {
             value: '(?<searchBy>.*)'
           }
         ],
-        destination: `http://43.203.231.217:3000/studetns?take=:take&page=:page&serchBy=:searchBy*`
+        destination: `http://43.203.231.217:3000/students?take=:take&page=:page&serchBy=:searchBy*`
       },
       {
         source: '/lessons/:path*',
