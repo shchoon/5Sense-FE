@@ -35,7 +35,8 @@ export interface InputNumProps {
   setSubmitData: React.Dispatch<SetStateAction<any>>
 }
 
-export default function StudentEdit() {
+export default function StudentEdit({ params }: { params: { studentId: string } }) {
+  const studentId = params.studentId
   const router = useRouter()
   const durationSchedule = useRecoilValue(studentDurationScheduleState)
   const sessionSchedule = useRecoilValue(sessionScheduleState)
@@ -158,7 +159,7 @@ export default function StudentEdit() {
   }
 
   useEffect(() => {
-    const studentId = localStorage.getItem('studentId')
+    //const studentId = localStorage.getItem('studentId')
     setStudentInfo(prev => ({
       ...prev,
       id: Number(studentId)

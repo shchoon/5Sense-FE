@@ -43,7 +43,6 @@ export interface sessionLessonsType {
 }
 
 export default function StudentsDetail({ studentData }: IProps) {
-  console.log(studentData)
   const router = useRouter()
   const [studentsLessonData, setStudentLessonData] = useState<{
     durationLessons: durationLessonsType[]
@@ -110,7 +109,7 @@ export default function StudentsDetail({ studentData }: IProps) {
       </div>
       {/* 수정 버튼 */}
       <div className="absolute bottom-0 w-full px-6 py-[18px]">
-        <button className="w-full h-[52px] btn-purple" onClick={() => [router.push('/student/edit')]}>
+        <button className="w-full h-[52px] btn-purple" onClick={() => [router.push(`/student/edit/${studentData.id}`)]}>
           <span className="text-white text-[16px] font-semibold">수정하기</span>
         </button>
       </div>

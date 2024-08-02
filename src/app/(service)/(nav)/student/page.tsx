@@ -186,7 +186,6 @@ export default function StudentPage() {
                       lessons: lessons
                     }))
                     setIsOpenDetail(true)
-                    localStorage.setItem('studentId', id)
                   }}
                 />
               )
