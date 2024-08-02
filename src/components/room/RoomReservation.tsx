@@ -6,7 +6,6 @@ import { useRouter, useParams } from 'next/navigation'
 import LessonTimeModal from '../modal/RoundLessonTimeModal'
 import { durationClassScheduleState } from '@/lib/state/classDurationSchedule'
 import { lessonTimeState } from '@/lib/state/lessonTime'
-import { modalState } from '@/lib/state/modal'
 import { dateDataType } from '../common/calendar/datePicker/dayDatePIcker'
 import DayDatePicker from '../common/calendar/datePicker/dayDatePIcker'
 import PeriodDatePicker from '../common/calendar/datePicker/periodDatePicker'
@@ -45,6 +44,7 @@ interface IProps {
 }
 
 export default function RoomReservation(props: IProps) {
+  console.log('test')
   const refs = useRef<(HTMLDivElement | null)[]>([])
   const durationSchedules = useRecoilValue(durationClassScheduleState)
   const sessionSchedules = useRecoilValue(sessionScheduleState)
