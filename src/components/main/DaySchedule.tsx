@@ -52,8 +52,6 @@ export default function DaySchedule({ dateData }: IProps) {
     }
   }, [dateData.month])
 
-  console.log(lessonData)
-
   return (
     <>
       <div className="w-full flex flex-col gap-4 mx-auto xl:max-w-[1016px] pt-8">

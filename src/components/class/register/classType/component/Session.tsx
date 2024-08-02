@@ -5,7 +5,6 @@ import PlusIcon from 'public/assets/icons/plus_vector.svg'
 
 import { classDataType } from '@/app/(service)/(nav)/class/register/page'
 import { UseFormReturn } from 'react-hook-form'
-import { watch } from 'fs'
 import { formatAddComma } from '@/utils'
 
 export default function Session({
@@ -112,11 +111,11 @@ export default function Session({
                   disabled ? 'text-[#9CA3AF]' : 'text-indigo-500'
                 }`}
               >
-                {formatAddComma(watch('tuitionFee'), watch('totalSessions'))}원
+                {/* {formatAddComma(watch('tuitionFee'), watch('totalSessions'))} */}원
               </span>
             </div>
             <p className="text-right text-gray-500 text-xs font-medium">
-              {geKoreanNumber(formatAddComma(watch('tuitionFee'), watch('totalSessions')))}원
+              {/* {geKoreanNumber(formatAddComma(watch('tuitionFee'), watch('totalSessions')))} */}원
             </p>
           </div>
         </div>

@@ -3,20 +3,7 @@ import { useState, useEffect } from 'react'
 
 import instance from '@/lib/api/axios'
 import { dateDataType } from '../../common/calendar/datePicker/dayDatePIcker'
-import FormatDayData from '@/components/main/DataFormatter/FormatDayData'
 import { calculateEndTime, formatStartTime } from '@/utils'
-
-interface getLessonDataType {
-  id: number
-  type: string
-  name: string
-  lessonTime: number
-  memo: string
-  startTime: string
-  teacher: string
-  numberOfStudents: number
-  room: string
-}
 
 // 메인에서 스케줄 받아오고 저장해서 모달에서도 햄버거 버튼때도 사용해야함
 export default function TodaySchedule() {
@@ -64,8 +51,6 @@ export default function TodaySchedule() {
       }
     })
   }, [])
-
-  console.log(todayLessonData)
 
   return (
     <div className="flex flex-col w-full lg:w-[248px] gap-3">

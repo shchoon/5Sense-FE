@@ -14,7 +14,6 @@ interface IProps {
 
 export default function AcademyInfo({ centerInfo, isExistCenter, drawer }: IProps) {
   const router = useRouter()
-  console.log(isExistCenter)
   if (isExistCenter == undefined) {
     return
   }

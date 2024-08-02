@@ -6,8 +6,6 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 import ClassFilter from '@/components/class/classFilter'
 import instance from '@/lib/api/axios'
 import { filterState, filterStateType } from '@/lib/filter/filterState'
-import { modalState } from '@/lib/state/modal'
-import { changePhoneNumberToString, formatLessonDate, formatStartTime } from '@/utils'
 import DetailClassModal from '@/components/modal/DetailClassModal'
 
 import ContentHeader from '@/components/common/ContentHeader'
@@ -166,7 +164,7 @@ export default function ClassPage() {
           </div>
         </div>
       )}
-      {isRefresh && classList.length === 0 && <NoneResult />} */}
+       */}
       {isModalOpen && (
         <DetailClassModal
           id={targetClass.id}

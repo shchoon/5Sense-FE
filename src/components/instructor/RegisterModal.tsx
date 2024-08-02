@@ -65,7 +65,6 @@ export default function RegisterModal({ onClose, onCloseState, onRigister }: IPr
           return
         }
         instance.post('/teachers', data).then((res: AxiosResponse) => {
-          console.log(res)
           onClose()
           if (onCloseState) {
             onCloseState()

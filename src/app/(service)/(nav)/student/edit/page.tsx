@@ -1,7 +1,5 @@
 'use client'
-import Link from 'next/link'
 import { useRouter, useParams } from 'next/navigation'
-import { AxiosResponse } from 'axios'
 import { SetStateAction, useEffect, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { Modal, Button } from 'flowbite-react'
@@ -10,7 +8,6 @@ import useInputNum from '@/hooks/useInputNum'
 import instance from '@/lib/api/axios'
 import UseModal from '@/hooks/useModal'
 import StudentAddClassModal from '@/components/modal/StudentAddClassModal'
-import { modalState } from '@/lib/state/modal'
 import StudentsSession from '@/components/studentsDetail/card/studentsSession'
 import StudentsDuration from '@/components/studentsDetail/card/studentsDuartion'
 import { sessionScheduleState } from '@/lib/state/studentSessionSchedule'
@@ -45,8 +42,6 @@ export default function StudentEdit() {
   const setDurationSchedule = useSetRecoilState(studentDurationScheduleState)
   const setSessionSchedule = useSetRecoilState(sessionScheduleState)
   const setDayCalenderState = useSetRecoilState(DayCalendarDateState)
-
-  console.log(sessionSchedule)
 
   const [Schedule, close, open] = UseModal()
 
@@ -170,7 +165,6 @@ export default function StudentEdit() {
     }))
     instance(`/students/${studentId}`).then(res => {
       const studentData = res.data.data
-      console.log(studentData)
       setStudentInfo(prev => ({
         ...prev,
         name: studentData.name,
@@ -193,8 +187,6 @@ export default function StudentEdit() {
       localStorage.removeItem('studentId')
     }
   }, [])
-
-  console.log(sessionSchedule, studentInfo)
 
   return (
     <div className="w-full flex flex-col items-center pb-[60px]">

@@ -4,8 +4,6 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { useRouter } from 'next/navigation'
 
 import { modalState } from '@/lib/state/modal'
-import DeleteModal from '@/components/modal/DeleteModal'
-import Modal from '@/components/common/modal'
 import { RoomDetailsState } from '@/lib/state/roomDetails'
 
 import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
@@ -155,12 +153,6 @@ export default function RoomList({ roomData, onChangeRoomList, indexOfRoomList }
             )
           })}
       </div>
-      {/* 룸 삭제 모달 */}
-      {/* {modal && (
-        <Modal small>
-          <DeleteModal onClose={() => setModal(false)} roomId={roomOption.roomId} />
-        </Modal>
-      )} */}
     </div>
   )
 }

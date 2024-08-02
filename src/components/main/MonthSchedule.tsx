@@ -38,8 +38,6 @@ export default function MonthSchedule({ dateData }: IProps) {
     }
   }, [dateData.month])
 
-  console.log('classData', classData)
-
   return (
     <div className="w-full flex flex-col gap-4 mx-auto xl:max-w-[1016px] pt-8">
       {/* 회차반 / 기간반 */}
@@ -80,7 +78,7 @@ export default function MonthSchedule({ dateData }: IProps) {
                   day = i - startDay
                 }
               } else {
-              /* 첫 주의 시작이 월요일인 경우 */
+                /* 첫 주의 시작이 월요일인 경우 */
                 day = i + 1
               }
               let durations = 0

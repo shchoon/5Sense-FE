@@ -1,19 +1,14 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import NotFoundPage from '@/components/common/NotFoundPage'
 import Loading from '@/components/common/Loading'
-import Modal from '@/components/common/modal'
-import { modalState } from '@/lib/state/modal'
 import instance from '@/lib/api/axios'
 import ContentHeader from '@/components/common/ContentHeader'
 import SearchInput from '@/components/common/SearchInput'
 import ListInfo from '@/components/view/ListInfo'
-import { PaymentType } from '../pay/page'
 import List from '@/components/view/List'
-import { studentForClass } from '@/lib/state/studentForClass'
 import { Drawer } from 'flowbite-react'
 import StudentsDetail from '@/components/studentsDetail/studentsDetail'
 
@@ -40,8 +35,6 @@ export default function StudentPage() {
   const router = useRouter()
   const target = useRef<HTMLDivElement>(null)
 
-  const setModal = useSetRecoilState(modalState)
-  const setStudentForClass = useSetRecoilState(studentForClass)
   const [targetedStudentData, setTargetedStudent] = useState({
     id: '',
     name: '',
@@ -194,10 +187,6 @@ export default function StudentPage() {
                     }))
                     setIsOpenDetail(true)
                     localStorage.setItem('studentId', id)
-                    /* setStudentForClass(prev => ({
-                    ...prev,
-                    id: id
-                  })) */
                   }}
                 />
               )

@@ -37,7 +37,6 @@ export default function ClassFilter() {
   })
 
   const [classType, setClassType] = useState<string>('')
-  const [checkedNameList, setCheckedNameList] = useState<string[]>([])
   const [categoryList, setCategoryList] = useState<categoryType>({
     mainCategory: [],
     subCategory: []
@@ -72,12 +71,6 @@ export default function ClassFilter() {
         mainClass: data.title,
         mainClassId: data.id
       }))
-      /* if (categoryData.subClass !== '') {
-        setFilterState(prev => ({
-          ...prev,
-          subCategoryId: ''
-        }))
-      } */
     } else if (type === 'sub') {
       setCategoryData(prev => ({
         ...prev,

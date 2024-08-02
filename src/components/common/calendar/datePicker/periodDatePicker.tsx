@@ -1,7 +1,6 @@
 'use client'
-import Image from 'next/image'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { dateDataType } from './dayDatePIcker'
 import { getCalendarData } from '../getCalendarData'
 import AllowLeftIcon from 'public/assets/icons/allow_left.svg'

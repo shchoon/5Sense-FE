@@ -221,7 +221,7 @@ export default function EditPage() {
 
   return (
     <div className="w-[640px] flex flex-col gap-5">
-      <ClassInfo
+      {/* <ClassInfo
         classInfo={classInfo}
         vaild={infoValid}
         checkValid={(newValue: { [key: string]: boolean }) => {
@@ -230,7 +230,7 @@ export default function EditPage() {
         onChange={(newValue: { [key: string]: string }) => {
           setClassInfo(prev => ({ ...prev, ...newValue }))
         }}
-      />
+      /> */}
       <ClassType classType={classType} valid={typeValid} setClassType={setClassType} />
       <TeacherInfo
         teacherInfo={teacherInfo}

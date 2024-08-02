@@ -6,12 +6,6 @@ import { changePhoneNumberToString, formatLessonDate, formatStartTime } from '@/
 import { Drawer } from 'flowbite-react'
 import instance from '@/lib/api/axios'
 
-/* interface IProps {
-  id: number
-  type: string
-  onClose: () => void
-} */
-
 interface IClassDetail {
   type: string
   categoryName: string
@@ -69,7 +63,6 @@ export default function DetailClassModal({ id, type, isOpen, handleClose }: IPro
 
   useEffect(() => {
     instance.get(`/${type}-lessons/${id}/details`).then(res => {
-      console.log(res)
       const classData = res.data.data
       setClassDetail(prev => ({
         ...prev,
@@ -210,7 +203,7 @@ export default function DetailClassModal({ id, type, isOpen, handleClose }: IPro
                 </button>
                 <button
                   className="w-full h-[52px] flex justify-center items-center text-white bg-primary-600 rounded-lg"
-                  onClick={() => editOfClass()}
+                  /* onClick={() => editOfClass()} */
                 >
                   <span className="text-[16px] font-semibold">수정하기</span>
                 </button>

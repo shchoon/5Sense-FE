@@ -3,7 +3,6 @@ import Image from 'next/image'
 
 import { IClassInfo } from '@/app/(service)/(nav)/class/edit/session/page'
 import CheckIcon from '@/icons/icon/category/check.svg'
-import InputForm from '@/components/common/InputForm'
 
 export type category = {
   id: number

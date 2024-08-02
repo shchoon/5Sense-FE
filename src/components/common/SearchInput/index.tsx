@@ -1,9 +1,8 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 
 import instance from '@/lib/api/axios'
 
-import { studentType, metaType } from '@/app/(service)/(nav)/student/page'
-import { PaymentType } from '@/app/(service)/(nav)/pay/page'
+import { metaType } from '@/app/(service)/(nav)/student/page'
 
 import SearchIconWhite from 'public/assets/icons/search_white.svg'
 
@@ -59,8 +58,6 @@ export default function SearchInput(props: IProps) {
       handleClickSearch()
     }
   }
-
-  console.log(inputValue)
 
   return (
     <div className="flex gap-2.5 lg:w-[377px] lg:h-[42px] w-[326px] h-[37px] mb-5">

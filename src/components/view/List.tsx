@@ -1,9 +1,6 @@
 'use client'
 import { useState } from 'react'
 
-import ToggleOnIcon from 'public/assets/icons/toggle_on.svg'
-import ToggleOffIcon from 'public/assets/icons/toggle_off.svg'
-
 interface IProps {
   type: string
   id: string

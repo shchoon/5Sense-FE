@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState, useRef } from 'react'
-import Image from 'next/image'
 import { useSetRecoilState, useRecoilValue } from 'recoil'
 
 import { instructorDataType } from '../class/classFilter'
@@ -22,7 +21,6 @@ export default function FilterSearchName(props: IProps) {
 
   const [listData, setListData] = useState<instructorDataType[]>([])
   const [searchName, setSearchName] = useState<string>('')
-  const [checkedNameList, setCheckedNameList] = useState<string[]>([])
   const [isFocudInput, setIsFocusInput] = useState<boolean>(false)
 
   const SearchName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -164,7 +162,6 @@ export default function FilterSearchName(props: IProps) {
                   id={data.name}
                   onClick={e => {
                     let teacherName = e.currentTarget.id
-                    console.log(checkedNameList, teacherName)
                     if (filterValue.teacherName.includes(teacherName)) {
                       setSearchName('')
                     } else {

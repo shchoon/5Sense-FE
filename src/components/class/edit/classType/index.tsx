@@ -1,5 +1,5 @@
 'use client'
-import { IClassType, ITypeValid } from '@/app/(service)/(nav)/class/register/page'
+import { IClassType, ITypeValid } from '@/app/(service)/(nav)/class/edit/session/page'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import Duration from './component/Duration'
 import Session from './component/Session'
