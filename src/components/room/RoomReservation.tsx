@@ -7,8 +7,6 @@ import LessonTimeModal from '../modal/RoundLessonTimeModal'
 import { durationClassScheduleState } from '@/lib/state/classDurationSchedule'
 import { lessonTimeState } from '@/lib/state/lessonTime'
 import { modalState } from '@/lib/state/modal'
-import RoomReservationCheck from '../check/RoomReservationCheck'
-import Modal from '../common/modal'
 import { dateDataType } from '../common/calendar/datePicker/dayDatePIcker'
 import DayDatePicker from '../common/calendar/datePicker/dayDatePIcker'
 import PeriodDatePicker from '../common/calendar/datePicker/periodDatePicker'
@@ -47,9 +45,6 @@ interface IProps {
 }
 
 export default function RoomReservation(props: IProps) {
-  console.log(props)
-  const router = useRouter()
-  const params = useParams()
   const refs = useRef<(HTMLDivElement | null)[]>([])
   const durationSchedules = useRecoilValue(durationClassScheduleState)
   const sessionSchedules = useRecoilValue(sessionScheduleState)
@@ -499,7 +494,6 @@ export default function RoomReservation(props: IProps) {
                     : lessonTime
                 const timeRange: number | undefined =
                   lessonTime === '시간' ? undefined : Number(calculatedLessonTime) / 30
-                console.log(calculatedLessonTime)
 
                 return (
                   <div key={i} className="relative flex flex-col gap-4">
@@ -520,11 +514,6 @@ export default function RoomReservation(props: IProps) {
                           /* 회차반 */
                           if (props.classType === 'session' && timeRange) {
                             const lessonTime = calculateLessonTimeOfRoom(timeRange)
-                            console.log(lessonTime)
-                            const day = calculateDay(
-                              new Date(calendarDate.year, calendarDate.month, calendarDate.date).getDay()
-                            )
-                            console.log('test')
                             setSessionSchedule(prev => [
                               ...prev,
                               {
@@ -540,6 +529,7 @@ export default function RoomReservation(props: IProps) {
                                 restOfSessions: restOfSessions
                               }
                             ])
+                            /* 모달 닫기 */
                             props.onClose && props.onClose()
                           } else if (props.classType === 'duration') {
                             /* 기간반 */

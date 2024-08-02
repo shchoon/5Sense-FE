@@ -183,6 +183,7 @@ export default function StudentEdit() {
 
     return () => {
       setSessionSchedule([])
+      setDurationSchedule([])
       const currentDate = new Date()
       setDayCalenderState({
         year: currentDate.getFullYear(),

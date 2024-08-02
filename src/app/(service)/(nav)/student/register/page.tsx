@@ -120,14 +120,12 @@ export default function StudentRegister() {
   }
 
   useEffect(() => {
+    /* 회차, 기간반 스케줄 초기화 */
     return () => {
       setSessionSchedule([])
       setDurationSchedule([])
     }
   }, [])
-
-  console.log(sessionSchedule)
-  console.log(durationSchedule)
 
   return (
     <div className="w-full flex flex-col items-center pb-[60px]">
