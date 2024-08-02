@@ -136,27 +136,27 @@ const nextConfig = {
         has: [
           {
             type: 'query',
-            name: 'page',
+            key: 'page',
             value: '(?<page>.*)'
           },
           {
             type: 'query',
-            name: 'take',
+            key: 'take',
             value: '(?<take>.*)'
           },
           {
             type: 'query',
-            name: 'type',
+            key: 'type',
             value: '(?<type>.*)'
           },
           {
             type: 'query',
-            name: 'teachers',
+            key: 'teachers',
             value: '(?<teachers>.*)'
           },
           {
             type: 'query',
-            name: 'categories',
+            key: 'categories',
             value: '(?<categories>.*)'
           }
         ],
@@ -167,7 +167,7 @@ const nextConfig = {
         has: [
           {
             type: 'query',
-            name: 'date',
+            key: 'date',
             value: '(?<date>.*)'
           }
         ],
@@ -178,17 +178,17 @@ const nextConfig = {
         has: [
           {
             type: 'query',
-            name: 'startDate',
+            key: 'startDate',
             value: '(?<startDate>.*)'
           },
           {
             type: 'query',
-            name: 'endDate',
+            key: 'endDate',
             value: '(?<endData>.*)'
           },
           {
             type: 'query',
-            name: 'repeatDate',
+            key: 'repeatDate',
             value: '(?<repeatDate>.*)'
           }
         ],
@@ -224,7 +224,7 @@ const nextConfig = {
         has: [
           {
             type: 'query',
-            name: 'isCheckRegistrationsCount',
+            key: 'isCheckRegistrationsCount',
             value: '(?<isCheckRegistrationsCount>.*)'
           }
         ],
