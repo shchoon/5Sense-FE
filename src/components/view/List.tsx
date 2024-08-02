@@ -38,6 +38,7 @@ export default function List(props: IProps) {
               return (
                 <>
                   <div
+                    key={i}
                     className={`${
                       data.type === 'duration' ? 'text-primary-600' : 'text-secondary-600'
                     } text-base font-bold`}

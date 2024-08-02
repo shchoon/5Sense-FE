@@ -49,11 +49,11 @@ export default function DetailInstructor() {
         <div className="w-full flex flex-col gap-4 max-h-[700px] overflow-auto">
           {instructorData.sessionLessons.length !== 0 &&
             instructorData.sessionLessons.map((data, i) => {
-              return <SessionDetailCard sessionData={data} />
+              return <SessionDetailCard key={i} sessionData={data} />
             })}
           {instructorData.durationLessons.length !== 0 &&
             instructorData.durationLessons.map((data, i) => {
-              return <DurationDetailCard durationData={data} />
+              return <DurationDetailCard key={i} durationData={data} />
             })}
         </div>
       </div>

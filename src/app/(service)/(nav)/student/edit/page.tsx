@@ -296,6 +296,7 @@ export default function StudentEdit() {
                 studentInfo.durationLessons.map((data, i) => {
                   return (
                     <StudentsDuration
+                      key={i}
                       className={data.name}
                       paymentStatus={data.paymentStatus}
                       type="check"

@@ -95,7 +95,6 @@ export default function StudentsDetail({ studentData }: IProps) {
             })}
           {studentsLessonData.sessionLessons.length !== 0 &&
             studentsLessonData.sessionLessons.map((data, i) => {
-              console.log(data.schedules)
               return (
                 <StudentsSession
                   key={i}

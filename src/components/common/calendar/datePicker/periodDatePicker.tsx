@@ -461,7 +461,6 @@ export default function PeriodDatePicker(props: IProps) {
                   const sorted = firstClickedData.date.sort()
                   first = sorted[0]
                   second = sorted[1]
-                  console.log(i, first, second, dateData)
                   return (
                     <div
                       key={i}

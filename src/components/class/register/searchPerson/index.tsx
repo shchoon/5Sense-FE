@@ -125,7 +125,6 @@ export default function SearchPerson({ type, setValue, errors }: IProps) {
             <div className=" w-full overflow-hidden">
               <div className="max-h-[185px] overflow-y-scroll">
                 {nameList.map((data, index) => {
-                  console.log(data)
                   let sessionCount = null
                   if (type === 'students' && data.sessionCount) {
                     sessionCount = Number(data.sessionCount.split('/')[1]) - Number(data.sessionCount.split('/')[0])

@@ -94,7 +94,6 @@ export default function SearchStudents({ handleChangeStudentId, classId }: IProp
           <div className=" w-full overflow-hidden">
             <div className="max-h-[185px] overflow-y-scroll">
               {nameList.map((data, index) => {
-                console.log(data)
                 const sessionCount = Number(data.sessionCount.split('/')[1]) - Number(data.sessionCount.split('/')[0])
 
                 if (data.name.includes(searchingName)) {
