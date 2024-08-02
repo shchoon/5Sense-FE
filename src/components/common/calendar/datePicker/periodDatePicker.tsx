@@ -2,15 +2,9 @@
 
 import { useState } from 'react'
 import { dateDataType } from './dayDatePIcker'
-import { getCalendarData } from '../getCalendarData'
+import { GetCalendarData } from '../getCalendarData'
 import AllowLeftIcon from 'public/assets/icons/allow_left.svg'
 import AllowRightIcon from 'public/assets/icons/allow_right.svg'
-
-interface clickedDateType {
-  year: undefined | number
-  month: undefined | number
-  date: undefined | number
-}
 
 interface IProps {
   changeParentDateData: (
@@ -22,10 +16,7 @@ interface IProps {
 export default function PeriodDatePicker(props: IProps) {
   const currentDate = new Date()
   const dateName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-  const currentdateData = {
-    year: currentDate.getFullYear(),
-    month: currentDate.getMonth()
-  }
+
   const [firstDateData, setFirstDateData] = useState<dateDataType>({
     year: currentDate.getFullYear(),
     month: currentDate.getMonth(),
@@ -39,9 +30,9 @@ export default function PeriodDatePicker(props: IProps) {
   })
 
   let firstDateList
-  firstDateList = getCalendarData(firstDateData, 'addClass')
+  firstDateList = GetCalendarData(firstDateData, 'addClass')
 
-  const secondDateList = getCalendarData(secondDateData)
+  const secondDateList = GetCalendarData(secondDateData)
   const [firstClickedData, setFirstClickedData] = useState<{
     year: number | undefined
     month: number | undefined
