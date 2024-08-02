@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import Image from 'next/image'
 
-import { IClassInfo, IInfoValid } from '@/app/(service)/(nav)/class/register/page'
+import { IClassInfo } from '@/app/(service)/(nav)/class/edit/session/page'
 import CheckIcon from '@/icons/icon/category/check.svg'
 import InputForm from '@/components/common/InputForm'
 

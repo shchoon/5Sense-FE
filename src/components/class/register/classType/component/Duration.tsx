@@ -73,7 +73,7 @@ export default function Duration({
       <Modal size="md" show={Schedule} onClose={close}>
         <Modal.Header>일정 추가</Modal.Header>
         <Modal.Body>
-          <RoomReservation classType="duration" viewType="modal" onClick={close} />
+          <RoomReservation classType="duration" viewType="modal" onClose={close} />
         </Modal.Body>
       </Modal>
     </div>

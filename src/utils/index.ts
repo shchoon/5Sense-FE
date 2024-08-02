@@ -23,7 +23,7 @@ export function changePhoneNumberToString(phoneNumber: string) {
 }
 
 export function formatStartTime(classTime: string) {
-  return classTime.slice(0, 5)
+  return classTime.slice(0, classTime.length - 3)
 }
 
 export function calculateEndTime(startTime: string, lessonTime: number) {
@@ -149,4 +149,18 @@ export const calculateRervationTime = (openTime: string, closeTime: string) => {
   const indexOfCloseTime = timeList.indexOf(closeTime)
 
   return timeList.slice(indexOfOpenTime, indexOfCloseTime + 1)
+}
+
+export const getTimeListByHour = (openTime: string, closeTime: string) => {
+  const timeList: string[] = []
+
+  const time = {
+    open: Number(openTime.split(':')[0]),
+    close: Number(closeTime.split(':')[0])
+  }
+  for (var i = time.open; i < time.close; i++) {
+    timeList.push(`${i}`)
+  }
+
+  return timeList
 }

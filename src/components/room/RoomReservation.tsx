@@ -7,8 +7,6 @@ import LessonTimeModal from '../modal/RoundLessonTimeModal'
 import { durationClassScheduleState } from '@/lib/state/classDurationSchedule'
 import { lessonTimeState } from '@/lib/state/lessonTime'
 import { modalState } from '@/lib/state/modal'
-import RoomReservationCheck from '../check/RoomReservationCheck'
-import Modal from '../common/modal'
 import { dateDataType } from '../common/calendar/datePicker/dayDatePIcker'
 import DayDatePicker from '../common/calendar/datePicker/dayDatePIcker'
 import PeriodDatePicker from '../common/calendar/datePicker/periodDatePicker'
@@ -17,9 +15,11 @@ import { centerInfoState } from '@/lib/state/centerInfoState'
 import { classType } from '../modal/StudentAddClassModal'
 import instance from '@/lib/api/axios'
 import { sessionScheduleState } from '@/lib/state/studentSessionSchedule'
+import { DayCalendarDateState } from '@/lib/state/calendar/DayCalendarDateState'
+import { calculateRervationTime, getTimeListByHour } from '@/utils'
 
-import ChevronLeftIcon from 'public/assets/icons/chevron/chevron-left.svg'
-import ChevronRightIcon from 'public/assets/icons/chevron/chevron-right.svg'
+import ChevronLeftIcon from '@/icons/icon/room/chevronLeft.svg'
+import ChevronRightIcon from '@/icons/icon/room/chevronRight.svg'
 import SearchIcon from 'public/assets/icons/search_white.svg'
 import UserIcon from 'public/assets/icons/user.svg'
 import CalendarIcon from '@/icons/icon/datePicker/calendar.svg'
@@ -39,30 +39,24 @@ interface IProps {
   class?: classType
   classType: string
   viewType: string
-  onClick?: () => void
+  onClose: () => void
   lessonTime?: string
   paymentStatus?: string
 }
 
 export default function RoomReservation(props: IProps) {
-  console.log(props)
-  const router = useRouter()
-  const params = useParams()
   const refs = useRef<(HTMLDivElement | null)[]>([])
-  const modal = useRecoilValue(modalState)
-  const setModal = useSetRecoilState(modalState)
   const durationSchedules = useRecoilValue(durationClassScheduleState)
+  const sessionSchedules = useRecoilValue(sessionScheduleState)
   const setDurationSchedule = useSetRecoilState(durationClassScheduleState)
   const setSessionSchedule = useSetRecoilState(sessionScheduleState)
   const setLessonTimeState = useSetRecoilState(lessonTimeState)
+  const calendarDate = useRecoilValue(DayCalendarDateState)
+  const setCalendarDate = useSetRecoilState(DayCalendarDateState)
   const centerInfo = useRecoilValue(centerInfoState)
+  const timeListByHalfHour = calculateRervationTime(centerInfo.open, centerInfo.close)
+  const timeListByHour = getTimeListByHour(centerInfo.open, centerInfo.close)
 
-  const currentDate = new Date()
-  const [dateData, setDateData] = useState<dateDataType>({
-    year: currentDate.getFullYear(),
-    month: currentDate.getMonth(),
-    date: currentDate.getDate()
-  })
   const [dateValue, setDateValue] = useState<string>('날짜')
   const [lessonTime, setLessonTime] = useState<string>('시간')
   const [isClickedTab, setIsClickedTab] = useState<{ date: boolean; time: boolean }>({
@@ -71,25 +65,20 @@ export default function RoomReservation(props: IProps) {
   })
   const [isClickedSearch, setIsClickedSearch] = useState<boolean>(false)
   const [clickedRoomData, setClickedRoomData] = useState<{
-    roomId: undefined | number
-    clickedTime: undefined | number
+    roomId: number
+    clickedTime: number
     room: string
   }>({
-    roomId: undefined,
-    clickedTime: undefined,
+    roomId: 0,
+    clickedTime: 0,
     room: ''
   })
   const [roomData, setRoomData] = useState<any>([])
   const [restOfSessions, setRestOfSessions] = useState<number>(0)
 
   const handleChangeDateDataFromChild = (data: dateDataType | any, type?: string) => {
+    console.log(calendarDate)
     if (type === 'session') {
-      setDateData({
-        ...dateData,
-        year: data.year,
-        month: data.month,
-        date: data.date
-      })
       setDateValue(`${data.year}.${data.month + 1}.${data.date}`)
     }
 
@@ -148,24 +137,11 @@ export default function RoomReservation(props: IProps) {
     }
   }
 
-  const openTimeList: string[] = []
-
-  if (centerInfo.name !== '') {
-    const time = {
-      open: Number(centerInfo.open.split(':')[0]),
-      close: Number(centerInfo.close.split(':')[0])
-    }
-    for (var i = time.open; i < time.close; i++) {
-      openTimeList.push(`${i}`)
-    }
-  }
-
-  const getRoomData = () => {
-    console.log(props.class)
-    console.log(props.classType)
+  const getSessionRoomData = (classId: number) => {
+    const date = dateValue.split('.')
     instance('/lesson-rooms/daily', {
       params: {
-        date: new Date(dateData.year, dateData.month, dateData.date).toISOString()
+        date: new Date(calendarDate.year, calendarDate.month, calendarDate.date).toISOString()
       }
     }).then(res => {
       const list = res.data.data
@@ -189,12 +165,7 @@ export default function RoomReservation(props: IProps) {
               absolutlyBookingFalse.push(n)
             }
           }
-          if (
-            test[k].lesonTime !== null &&
-            test[k].isOpenForBooking &&
-            props.class &&
-            Number(props.class.id) !== test[k].id
-          ) {
+          if (test[k].lesonTime !== null && test[k].isOpenForBooking && classId !== test[k].id) {
             const range = Number(test[k].lessonTime) / 30 - 1
             for (var n = k; n <= k + range; n++) {
               relativlyBookingFalse.push(n)
@@ -212,79 +183,22 @@ export default function RoomReservation(props: IProps) {
           }
         }
         /* 선택한 클래스와 룸에 예약되어 있는 클래스가 다른 경우 처리 -> 룸에 에약되어있는 클래스가 있는 경우에만 처리 */
-        console.log(relativlyBookingFalse)
       }
-      console.log(list)
+
       setRoomData(list)
     })
   }
 
   const getDurationRoomData = () => {
-    console.log(props.class)
-    console.log(props.classType)
-    instance('/lesson-rooms/daily', {
-      params: {
-        date: new Date(dateData.year, dateData.month, dateData.date).toISOString()
-      }
-    }).then(res => {
-      const list = res.data.data
-      for (var i = 0; i < list.length; i++) {
-        const test: any = []
-        const keys = Object.keys(list[i].workTime)
-        for (var j = 0; j < keys.length; j++) {
-          const key = keys[j]
-          let value = list[i].workTime[key]
-          value.time = key
-          test.push(value)
-        }
-        list[i].workTime = test
-        /* 예약 불가인 룸 처리(애초에 예약 가능 여부가 false) -> 무조건 필요한거 */
-        const absolutlyBookingFalse = []
-        const relativlyBookingFalse = []
-        for (var k = 0; k < test.length; k++) {
-          if (test[k].lesonTime !== null && !test[k].isOpenForBooking) {
-            const range = Number(test[k].lessonTime) / 30 - 1
-            for (var n = k + 1; n <= k + range; n++) {
-              absolutlyBookingFalse.push(n)
-            }
-          }
-          if (
-            test[k].lesonTime !== null &&
-            test[k].isOpenForBooking &&
-            props.class &&
-            Number(props.class.id) !== test[k].id
-          ) {
-            const range = Number(test[k].lessonTime) / 30 - 1
-            for (var n = k; n <= k + range; n++) {
-              relativlyBookingFalse.push(n)
-            }
-          }
-        }
-        if (absolutlyBookingFalse.length !== 0) {
-          for (var l = 0; l < absolutlyBookingFalse.length; l++) {
-            test[absolutlyBookingFalse[l]].isOpenForBooking = false
-          }
-        }
-        if (relativlyBookingFalse.length !== 0) {
-          for (var l = 0; l < relativlyBookingFalse.length; l++) {
-            test[relativlyBookingFalse[l]].isOpenForBooking = false
-          }
-        }
-        /* 선택한 클래스와 룸에 예약되어 있는 클래스가 다른 경우 처리 -> 룸에 에약되어있는 클래스가 있는 경우에만 처리 */
-        console.log(relativlyBookingFalse)
-      }
-      console.log(list)
-      setRoomData(list)
-    })
-  }
-
-  const test = () => {
-    console.log(dateValue, lessonTime)
     const date = {
       start: dateValue.split('~')[0].split('.'),
       end: dateValue.split('~')[1].split('.')
     }
-    const repeatDate = lessonTime.split(',')[0].replace('  반복', '').replace(' ', ',')
+    console.log(
+      lessonTime.split(',')[0].replace('  반복', '').replaceAll(' ', ','),
+      lessonTime.split(',')[0].replace('  반복', '').length
+    )
+    const repeatDate = lessonTime.split(',')[0].replace('  반복', '').replaceAll(' ', ',')
     const startDate = new Date(Number(date.start[0]), Number(date.start[1]) - 1, Number(date.start[2])).toISOString()
     const endDate = new Date(Number(date.end[0]), Number(date.end[1]) - 1, Number(date.end[2])).toISOString()
     instance('/lesson-rooms/range', {
@@ -316,30 +230,12 @@ export default function RoomReservation(props: IProps) {
               absolutlyBookingFalse.push(n)
             }
           }
-          /* if (
-            test[k].lesonTime !== null &&
-            test[k].isOpenForBooking &&
-            props.class &&
-            Number(props.class.id) !== test[k].id
-          ) {
-            const range = Number(test[k].lessonTime) / 30 - 1
-            for (var n = k; n <= k + range; n++) {
-              relativlyBookingFalse.push(n)
-            }
-          } */
         }
         if (absolutlyBookingFalse.length !== 0) {
           for (var l = 0; l < absolutlyBookingFalse.length; l++) {
             test[absolutlyBookingFalse[l]].isOpenForBooking = false
           }
         }
-        /* if (relativlyBookingFalse.length !== 0) {
-          for (var l = 0; l < relativlyBookingFalse.length; l++) {
-            test[relativlyBookingFalse[l]].isOpenForBooking = false
-          }
-        } */
-        /* 선택한 클래스와 룸에 예약되어 있는 클래스가 다른 경우 처리 -> 룸에 에약되어있는 클래스가 있는 경우에만 처리 */
-        //console.log(relativlyBookingFalse)
       }
       setRoomData(list)
     })
@@ -359,13 +255,6 @@ export default function RoomReservation(props: IProps) {
     }
   }
 
-  const calculateTime = (min: number) => {
-    if (min === 0.5) {
-      return '30'
-    } else {
-      return '00'
-    }
-  }
   const calculateDay = (day: number) => {
     const dayList = ['일', '월', '화', '수', '목', '금', '토']
     return dayList[day]
@@ -388,17 +277,17 @@ export default function RoomReservation(props: IProps) {
   const calculateLessonTimeOfRoom = (timeRange: number): { startTime: string; endTime: string } => {
     const index = Number(clickedRoomData.clickedTime)
     let startTime = {
-      hour: openTimeList[Number(Math.ceil((index + 1) / 2 - 1))],
+      hour: timeListByHour[Number(Math.ceil((index + 1) / 2 - 1))],
       min: (index + 1) % 2 === 0 ? '30' : '00'
     }
 
     let endTime = {
       hour:
         (index + timeRange) % 2 === 0
-          ? openTimeList[(index + timeRange) / 2] === undefined
-            ? Number(openTimeList[(index + timeRange) / 2 - 1]) + 1
-            : openTimeList[(index + timeRange) / 2]
-          : openTimeList[Math.ceil((index + timeRange) / 2) - 1],
+          ? timeListByHour[(index + timeRange) / 2] === undefined
+            ? Number(timeListByHour[(index + timeRange) / 2 - 1]) + 1
+            : timeListByHour[(index + timeRange) / 2]
+          : timeListByHour[Math.ceil((index + timeRange) / 2) - 1],
       min: (index + timeRange) % 2 === 0 ? '00' : '30'
     }
 
@@ -414,32 +303,45 @@ export default function RoomReservation(props: IProps) {
       endTime: `${endTime.hour}:${endTime.min}`
     }
   }
+
   useEffect(() => {
     if (props.lessonTime && props.lessonTime !== '') {
       setLessonTime(props.lessonTime)
       setClickedRoomData(prev => ({
         ...prev,
-        roomId: undefined,
-        clickedTime: undefined,
+        roomId: 0,
+        clickedTime: 0,
         room: ''
       }))
-    }
-    if (params.id) {
-      instance(`/students/${params.id}`).then(res => {
-        const sessionLessons = res.data.data.sessionLessons
-        console.log(sessionLessons)
-        const alreadyRigisteredLessons = sessionLessons.filter(
-          (data: any, i: number) => props.class && data.id === props.class.id
-        )
-        if (alreadyRigisteredLessons.length !== 0) {
-          console.log('alreadyRigisteredLessons', alreadyRigisteredLessons)
-          setRestOfSessions(alreadyRigisteredLessons[0].schedules[0].restOfSessions)
-        }
-      })
+      setDateValue('날짜')
+      setRoomData([])
+      setIsClickedSearch(false)
+
+      const studentId = localStorage.getItem('studentId') as string
+      if (studentId !== null) {
+        instance(`/students/${studentId}`).then(res => {
+          const sessionLessons = res.data.data.sessionLessons
+          console.log(sessionLessons)
+          const alreadyRigisteredLessons = sessionLessons.filter(
+            (data: any, i: number) => props.class && data.id === props.class.id
+          )
+          if (alreadyRigisteredLessons.length !== 0) {
+            console.log('alreadyRigisteredLessons', alreadyRigisteredLessons)
+            setRestOfSessions(alreadyRigisteredLessons[0].schedules[0].restOfSessions)
+          }
+        })
+      }
     }
   }, [props.lessonTime])
 
-  console.log(durationSchedules)
+  /* 회차반 선택 일자 변경시 룸 데이터 초기화 */
+  useEffect(() => {
+    return () => {
+      setIsClickedSearch(false)
+    }
+  }, [calendarDate])
+
+  console.log(sessionSchedules)
 
   return (
     <>
@@ -454,6 +356,7 @@ export default function RoomReservation(props: IProps) {
               : 'pl-6'
           } pr-2.5 py-2.5 rounded-full border border-1 border-gray-300`}
         >
+          {/* 날짜 */}
           <button
             className={`${
               isClickedTab.date
@@ -483,7 +386,7 @@ export default function RoomReservation(props: IProps) {
             </div>
           </button>
           {!isClickedTab.date && !isClickedTab.time && <div className="w-px h-7 bg-gray-300"></div>}
-
+          {/* 소요시간 / 요일 */}
           <button
             className={`${
               isClickedTab.time
@@ -520,10 +423,10 @@ export default function RoomReservation(props: IProps) {
               if (dateValue !== '날짜' && lessonTime !== '시간') {
                 setIsClickedSearch(true)
                 console.log(dateValue, lessonTime, durationSchedules, props.classType)
-                if (props.classType === 'session') {
-                  getRoomData()
+                if (props.classType === 'session' && props.class) {
+                  getSessionRoomData(props.class.id)
                 } else if (props.classType === 'duration') {
-                  test()
+                  getDurationRoomData()
                 }
               }
             }}
@@ -535,10 +438,15 @@ export default function RoomReservation(props: IProps) {
         <div className="absolute z-10 left-0 top-[120px]">
           {props.classType === 'session' && isClickedTab.date && (
             <DayDatePicker
-              parentsDateData={dateData}
               changeParentsDateData={handleChangeDateDataFromChild}
+              parentsDateData={calendarDate}
               type="addClass"
-              onClose={() => {}}
+              onClose={() => {
+                setIsClickedTab(prev => ({
+                  ...prev,
+                  date: false
+                }))
+              }}
             />
           )}
           {props.classType === 'duration' && isClickedTab.date && (
@@ -586,10 +494,7 @@ export default function RoomReservation(props: IProps) {
                     : lessonTime
                 const timeRange: number | undefined =
                   lessonTime === '시간' ? undefined : Number(calculatedLessonTime) / 30
-                console.log(calculatedLessonTime)
-                /* : lessonTime.length <= 3
-                    ? Number(lessonTime) / 30
-                    : calculatePeriodClassLessonTime() / 30 */
+
                 return (
                   <div key={i} className="relative flex flex-col gap-4">
                     <div className="flex justify-between">
@@ -609,23 +514,23 @@ export default function RoomReservation(props: IProps) {
                           /* 회차반 */
                           if (props.classType === 'session' && timeRange) {
                             const lessonTime = calculateLessonTimeOfRoom(timeRange)
-                            const day = calculateDay(new Date(dateData.year, dateData.month, dateData.date).getDay())
-                            console.log(restOfSessions)
                             setSessionSchedule(prev => [
                               ...prev,
                               {
                                 name: props.class !== undefined ? props.class.name : '',
-                                totalSessions: props.class !== undefined ? props.class.totalSessions : '',
+                                totalSessions: props.class !== undefined ? props.class.totalSessions : 0,
                                 lessonId: props.class !== undefined ? Number(props.class.id) : 0,
-                                sessionDate: new Date(dateData.year, dateData.month, dateData.date).toISOString(),
-                                startTime: calculateLessonTimeOfRoom(timeRange).startTime,
-                                endTime: calculateLessonTimeOfRoom(timeRange).endTime,
+                                sessionDate: dateValue,
+                                startTime: lessonTime.startTime,
+                                endTime: lessonTime.endTime,
                                 roomId: Number(clickedRoomData.roomId),
                                 paymentStatus: props.paymentStatus !== undefined ? props.paymentStatus : '',
                                 roomName: clickedRoomData.room,
                                 restOfSessions: restOfSessions
                               }
                             ])
+                            /* 모달 닫기 */
+                            props.onClose && props.onClose()
                           } else if (props.classType === 'duration') {
                             /* 기간반 */
                             if (timeRange !== undefined && durationSchedules.length === 0) {
@@ -646,13 +551,13 @@ export default function RoomReservation(props: IProps) {
                                   ).toISOString(),
                                   startTime: calculateLessonTimeOfRoom(timeRange).startTime,
                                   endTime: calculateLessonTimeOfRoom(timeRange).endTime,
-                                  repeatDate: lessonTime.split(',')[0].replace(' 반복', '').replace(/\s+/g, ','),
-                                  roomId: 1,
+                                  repeatDate: lessonTime.split(',')[0].replace('  반복', '').replaceAll(' ', ','),
+                                  roomId: roomId,
                                   lessonTime: calculatePeriodClassLessonTime()
                                 }
                               ])
                               /* 모달 닫기 */
-                              props.onClick && props.onClick()
+                              props.onClose && props.onClose()
                             } else if (timeRange !== undefined && durationSchedules.length >= 1) {
                               setDurationSchedule(prev => [
                                 ...prev,
@@ -661,8 +566,8 @@ export default function RoomReservation(props: IProps) {
                                   endDate: durationSchedules[0].endDate,
                                   startTime: calculateLessonTimeOfRoom(timeRange).startTime,
                                   endTime: calculateLessonTimeOfRoom(timeRange).endTime,
-                                  repeatDate: lessonTime.split(',')[0].replace(' 반복', '').replace(/\s+/g, ','),
-                                  roomId: 1,
+                                  repeatDate: lessonTime.split(',')[0].replace('  반복', '').replaceAll(' ', ','),
+                                  roomId: roomId,
                                   lessonTime: calculatePeriodClassLessonTime()
                                 }
                               ])
@@ -679,7 +584,7 @@ export default function RoomReservation(props: IProps) {
                         scrollLeft(i)
                       }}
                     >
-                      <ChevronLeftIcon className="z-10" width={16} height={16} />
+                      <ChevronLeftIcon className="z-10" />
                     </button>
                     <button
                       className="absolute z-10 -right-3 top-[60px] flex items-center justify-center w-6 h-6 border border-1 border-gray-200 bg-primary-50 rounded-full"
@@ -687,7 +592,7 @@ export default function RoomReservation(props: IProps) {
                         scrollRight(i)
                       }}
                     >
-                      <ChevronRightIcon className="z-10" width={16} height={16} />
+                      <ChevronRightIcon className="z-10" />
                     </button>
                     <div
                       ref={el => {
@@ -697,8 +602,8 @@ export default function RoomReservation(props: IProps) {
                     >
                       <div className="w-full flex flex-col">
                         <div className="w-full flex">
-                          {openTimeList.length !== 0 &&
-                            openTimeList.map((time, i: number) => {
+                          {timeListByHour.length !== 0 &&
+                            timeListByHour.map((time, i: number) => {
                               return (
                                 <div key={i} className={`w-[54px] flex flex-col`}>
                                   <div

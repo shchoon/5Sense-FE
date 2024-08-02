@@ -1,7 +1,5 @@
 'use client'
 // 모듈
-import Image from 'next/image'
-import Link from 'next/link'
 import { useRef } from 'react'
 import { useEffect, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
@@ -9,10 +7,9 @@ import { Button, Modal } from 'flowbite-react'
 import { Drawer } from 'flowbite-react'
 
 //내장
-import { getDataType, metaType } from '../student/page'
+import { metaType } from '../student/page'
 import { modalState } from '@/lib/state/modal'
 import instance from '@/lib/api/axios'
-import RegisterModal from '@/components/instructor/RegisterModal'
 import DetailInstructor from '@/components/modal/DetailInstructor'
 import SearchInput from '@/components/common/SearchInput'
 import NotFoundPage from '@/components/common/NotFoundPage'
@@ -20,10 +17,6 @@ import { changePhoneNumberToString } from '@/utils'
 
 //이미지
 import ChevronRightIcon from 'public/assets/icons/chevron/chevron_right_pri_600.svg'
-import PlusIcon from 'public/assets/icons/circle/plus.svg'
-import SearchIconWhite from 'public/assets/icons/search_white.svg'
-
-import SearchIconGray from 'public/assets/icons/search.svg'
 import ContentHeader from '@/components/common/ContentHeader'
 
 interface instructorType {
@@ -232,20 +225,22 @@ export default function InstructorPage() {
           </div>
         </div>
       )}
-      {isOpen.detail && <Drawer
-        open={isOpen.detail}
-        onClose={() => {
-          setIsOpen(prev => ({
-            ...prev,
-            detail: false
-          }))
-        }}
-      >
-        <Drawer.Header />
-        <Drawer.Items>
-          <DetailInstructor />
-        </Drawer.Items>
-      </Drawer>}
+      {isOpen.detail && (
+        <Drawer
+          open={isOpen.detail}
+          onClose={() => {
+            setIsOpen(prev => ({
+              ...prev,
+              detail: false
+            }))
+          }}
+        >
+          <Drawer.Header />
+          <Drawer.Items>
+            <DetailInstructor />
+          </Drawer.Items>
+        </Drawer>
+      )}
     </>
   )
 }

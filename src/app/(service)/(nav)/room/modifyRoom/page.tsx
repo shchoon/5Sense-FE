@@ -9,8 +9,6 @@ import instance from '@/lib/api/axios'
 import { RoomDetailsState } from '@/lib/state/roomDetails'
 import ContentHeader from '@/components/common/ContentHeader'
 
-import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
-import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
 import MinusIcon from 'public/assets/icons/minus_vector.svg'
 import PlusIcon from 'public/assets/icons/plus_vector.svg'
 
@@ -18,8 +16,6 @@ export default function ModifyRoom() {
   const roomDetails = useRecoilValue(RoomDetailsState)
   const setRoomDetails = useSetRecoilState(RoomDetailsState)
   const router = useRouter()
-  //const roomId = id
-  //const [inputValue, setInputValue] = useState<string>(roomName)
 
   const handleChangeRoomName = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value: string = e.target.value
@@ -36,19 +32,7 @@ export default function ModifyRoom() {
       name: value
     }))
   }
-  /* const [InputValue, handleChange] = useInputNum({
-    name: 'room',
-    submitData: inputValue,
-    setSubmitData: setInputValue
-  })
-  const roomNameProps: InputFormProps = {
-    title: '강의실 이름',
-    placeholder: '강의실 이름을 입력해주세요',
-    name: 'room',
-    maxLength: 20,
-    submitData: inputValue,
-    setSubmitData: setInputValue
-  } */
+
   useEffect(() => {
     const date = new Date()
     const roomId = localStorage.getItem('roomId') as string
@@ -70,8 +54,8 @@ export default function ModifyRoom() {
   }, [])
 
   return (
-    <div className='w-full flex flex-col items-center pb-[60px]'>
-        <ContentHeader title='강의실 수정' back onClick={() => router.push('/room')} />
+    <div className="w-full flex flex-col items-center pb-[60px]">
+      <ContentHeader title="강의실 수정" back onClick={() => router.push('/room')} />
       <div className="w-[640px] flex flex-col gap-[34px]">
         <div className="w-full px-6 py-8 flex flex-col gap-10 border rounded-xl border-1 border-gray-200">
           <div className="gray-900-bold text-xl">강의실 정보</div>

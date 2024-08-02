@@ -1,7 +1,4 @@
-import TrashIcon from 'public/assets/icons/trash.svg'
-
-import instance from '@/lib/api/axios'
-import { useEffect } from 'react'
+import TrashIcon from '@/icons/icon/trash.svg'
 
 interface IProps {
   className: string
@@ -9,22 +6,19 @@ interface IProps {
   startTime: string
   endTime: string
   roomName: string
-  restOfSessions?: number
-  totalSessions: string
+  restOfSessions: number
+  totalSessions: number
   onDelete: () => void
 }
 
 export function AddSessionLessonCheck(props: IProps) {
-  useEffect(() => {}, [])
-
   return (
     <div className="relative w-full px-4 py-3.5 flex flex-col rounded-lg border border-1 border-gray-200 bg-gray-50 ">
-      <button
-        type="button"
-        className="absolute top-[15px] right-4 w-[100px] h-[20px] px-3 py-2 flex items-center gap-1.5 "
-      >
-        <TrashIcon width={16} height={16} />
-        <div className="gray-500-normal text-[13px]" /* onClick={props.onDelete} */>삭제하기</div>
+      <button type="button" className="absolute top-[15px] right-4 flex items-center gap-1.5 ">
+        <TrashIcon className="text-gray-400" width={16} height={16} />
+        <div className="gray-500-normal text-[13px]" onClick={props.onDelete}>
+          삭제하기
+        </div>
       </button>
 
       <div className="w-full flex flex-col gap-6">
@@ -36,7 +30,10 @@ export function AddSessionLessonCheck(props: IProps) {
           <div className="w-full flex items-center gap-2">
             <div className="w-[80px] gray-500-medium text-sm">• 잔여회차</div>
             <div className="w-full gray-500-medium text-sm">
-              {props.restOfSessions ? props.restOfSessions : props.totalSessions}
+              <span className="gray-800-semibold">
+                {props.restOfSessions === 0 ? props.totalSessions - 1 : props.restOfSessions - 1}
+              </span>{' '}
+              / {props.totalSessions} 회
             </div>
           </div>
           <div className="w-full flex items-center gap-2">

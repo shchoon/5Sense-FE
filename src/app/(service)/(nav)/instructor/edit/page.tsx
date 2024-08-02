@@ -1,25 +1,15 @@
 'use client'
-import Image from 'next/image'
-import { SetStateAction, useEffect, useState } from 'react'
-import ArrowBack from 'public/assets/icons/allowBack.svg'
-import Ellipsis from 'public/assets/icons/ellipsis75.svg'
+import { useEffect, useState } from 'react'
 
 import instance from '@/lib/api/axios'
-import useInputNum from '@/hooks/useInputNum'
-import { AxiosResponse } from 'axios'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useRecoilState } from 'recoil'
-import InputForm, { InputFormProps } from '@/components/common/InputForm'
-import TextareaForm, { TextareaFormProps } from '@/components/common/TextareaForm'
-import { modalState } from '@/lib/state/modal'
 import ContentHeader from '@/components/common/ContentHeader'
 
 export default function InstructorRegister() {
   const router = useRouter()
   const instructorId = localStorage.getItem('instructorId') as string
 
-  const [instructorInfo, setInstructorInfo] = useState<{name: string, phone: string}>({
+  const [instructorInfo, setInstructorInfo] = useState<{ name: string; phone: string }>({
     name: '',
     phone: ''
   })
@@ -32,17 +22,17 @@ export default function InstructorRegister() {
   }
 
   const onSubmit = () => {
-    instance.put(`/teachers/${instructorId}`, {
-      ...instructorInfo
-    }).then(res => {
-      alert('강사정보 수정이 완료되었습니다.')
-    })
+    instance
+      .put(`/teachers/${instructorId}`, {
+        ...instructorInfo
+      })
+      .then(res => {
+        alert('강사정보 수정이 완료되었습니다.')
+      })
   }
 
   useEffect(() => {
-    
-
-    instance(`/teachers/${instructorId}`).then((res) => {
+    instance(`/teachers/${instructorId}`).then(res => {
       const data = res.data.data
       setInstructorInfo(prev => ({
         ...prev,
@@ -54,14 +44,21 @@ export default function InstructorRegister() {
 
   return (
     <>
-    <ContentHeader title='강사정보 수정' back onClick={() => {
-      router.push('/instructor')
-    }} />
-    <div className='w-full flex flex-col gap-5 items-center'>
-    <form className="flex flex-col gap-5" onSubmit={e => {
-      e.preventDefault()
-      onSubmit()
-    }}>
+      <ContentHeader
+        title="강사정보 수정"
+        back
+        onClick={() => {
+          router.push('/instructor')
+        }}
+      />
+      <div className="w-full flex flex-col gap-5 items-center">
+        <form
+          className="flex flex-col gap-5"
+          onSubmit={e => {
+            e.preventDefault()
+            onSubmit()
+          }}
+        >
           <div className="flex flex-col gap-10 w-[640px] px-6 py-8 border rounded-xl border-gray-200">
             <div className="gray-900-bold text-xl  leading-tight">강사 정보</div>
             <div className="flex flex-col gap-4 w-full">
@@ -93,20 +90,23 @@ export default function InstructorRegister() {
           </div>
           <div className="flex flex-col gap-10 w-[640px] px-6 py-8 border rounded-xl border-gray-200">
             <div className="gray-900-bold text-xl leading-tight">클래스 목록</div>
-            <div className='w-full flex h-[170px] rounded-lg bg-primary-50 items-center justify-center'>
-              <span className='text-gray-400 text-[16px] font-semibold'>담당 강사 변경은 해당 클래스 관리페이지에서 가능합니다.</span>
+            <div className="w-full flex h-[170px] rounded-lg bg-primary-50 items-center justify-center">
+              <span className="text-gray-400 text-[16px] font-semibold">
+                담당 강사 변경은 해당 클래스 관리페이지에서 가능합니다.
+              </span>
             </div>
           </div>
           <button type="submit" className="w-full py-3.5 px-6 btn-purple focus:ring-1 focus:ring-primary-200">
             <div className="text-white text-base font-semibold  leading-normal">수정하기</div>
           </button>
         </form>
-    </div>
-    </>    
+      </div>
+    </>
   )
 }
 
-{/* <div className="w-full">
+{
+  /* <div className="w-full">
       <div className="relative">
         <Link href={'/student'}>
           <Image className="absolute left-[48px] top-[61px]" src={Ellipsis} width={28} height={28} alt="" />
@@ -142,4 +142,5 @@ export default function InstructorRegister() {
           </button>
         </form>
       </div>
-    </div> */}
+    </div> */
+}

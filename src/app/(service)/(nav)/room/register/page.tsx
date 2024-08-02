@@ -1,15 +1,10 @@
 'use client'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import Image from 'next/image'
 
 import instance from '@/lib/api/axios'
-import InputForm, { InputFormProps } from '@/components/common/InputForm'
 import ContentHeader from '@/components/common/ContentHeader'
 
-import ArrowBackIcon from 'public/assets/icons/allowBack.svg'
-import EllipsisIcon from 'public/assets/icons/ellipsis75.svg'
 import MinusIcon from 'public/assets/icons/minus_vector.svg'
 import PlusIcon from 'public/assets/icons/plus_vector.svg'
 
@@ -29,8 +24,8 @@ export default function AddRoom() {
   }
 
   return (
-    <div className='w-full flex flex-col items-center pb-[60px]'>
-      <ContentHeader title='강의실 추가' back onClick={() => router.push('/room')} />
+    <div className="w-full flex flex-col items-center pb-[60px]">
+      <ContentHeader title="강의실 추가" back onClick={() => router.push('/room')} />
       <form
         className="w-[640px] flex flex-col gap-[34px]"
         onSubmit={e => {
