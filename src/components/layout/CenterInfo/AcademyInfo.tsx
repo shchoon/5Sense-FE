@@ -21,7 +21,9 @@ export default function AcademyInfo({ centerInfo, isExistCenter, drawer }: IProp
   return isExistCenter && centerInfo ? (
     <div className="w-full flex flex-col items-center gap-7">
       <div className="w-full flex flex-col items-center gap-4">
-        <Image className="rounded-full bg-[#D3C4F9]" src={centerInfo.profile} alt="profile" width={90} height={90} />
+        <div className={`w-[90px] h-[90px] rounded-full`}>
+          <Image className="rounded-full bg-[#D3C4F9]" src={centerInfo.profile} alt="profile" width={90} height={90} />
+        </div>
         <div className="w-full flex flex-col items-center gap-2">
           <p className={` text-[21px] font-bold ${drawer ? 'text-[#1F2A37' : 'text-white'} `}>{centerInfo.name}</p>
           <p className={` h-[14px] text-sm font-medium ${drawer ? 'text-[#4B5563]' : 'text-white'} `}>
