@@ -29,12 +29,13 @@ export const patchSesstionLessons = async (requestData: any) => {
 }
 
 export const getDurationLessons = async (requestData: any) => {
-  const lessonId = Number(requestData.id)
+  console.log('ruquestData', requestData)
+  const lessonId = Number(requestData)
   return instance.get(`/duration-lessons/${lessonId}/details`)
 }
 
 export const getSesstionLessons = async (requestData: any) => {
-  const lessonId = Number(requestData.id)
+  const lessonId = Number(requestData)
   return instance.get(`/session-lessons/${lessonId}/details`)
 }
 

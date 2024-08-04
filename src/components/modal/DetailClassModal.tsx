@@ -6,12 +6,6 @@ import { changePhoneNumberToString, formatLessonDate, formatStartTime } from '@/
 import { Drawer } from 'flowbite-react'
 import instance from '@/lib/api/axios'
 
-/* interface IProps {
-  id: number
-  type: string
-  onClose: () => void
-} */
-
 interface IClassDetail {
   type: string
   categoryName: string
@@ -45,6 +39,8 @@ interface ClassDetail {
 export default function DetailClassModal({ id, type, isOpen, handleClose }: IProps) {
   const router = useRouter()
 
+  console.log(id)
+
   const [classDetail, setClassDetail] = useState<ClassDetail>({
     type: '',
     categoryName: '',
@@ -55,7 +51,6 @@ export default function DetailClassModal({ id, type, isOpen, handleClose }: IPro
     students: [],
     schedules: []
   })
-  const [isClickedEdit, setIsClickedEdit] = useState<boolean>(false)
 
   const endOfClass = () => {
     instance.patch(`/${type}-lessons/${id}/close`).then(res => {
@@ -64,7 +59,10 @@ export default function DetailClassModal({ id, type, isOpen, handleClose }: IPro
   }
 
   const editOfClass = () => {
-    setIsClickedEdit(true)
+    if (type == 'session') {
+      return router.push(`/class/edit/session/${id}`)
+    }
+    return router.push(`/class/edit/duration/${id}`)
   }
 
   useEffect(() => {
@@ -84,19 +82,6 @@ export default function DetailClassModal({ id, type, isOpen, handleClose }: IPro
       }))
     })
   }, [])
-
-  useEffect(() => {
-    if (isClickedEdit) {
-      localStorage.setItem('editClassType', type)
-      localStorage.setItem('editClassId', String(id))
-
-      if (type === 'session') {
-        router.push('class/edit/session')
-      } else if (type === 'duration') {
-        router.push('class/edit/duration')
-      }
-    }
-  }, [editOfClass])
 
   return (
     <>
@@ -222,10 +207,3 @@ export default function DetailClassModal({ id, type, isOpen, handleClose }: IPro
     </>
   )
 }
-
-// 보내는 요청다르고
-// 받는 데이터 다르고
-// 뿌주는 UI는 비슷함
-// 그럼 뿌려주는 데이터를 같이 쓸건지를 일단 골라야지
-// 보자
-// 뿌려주는 데이터 optional 써서 같이 쓰자

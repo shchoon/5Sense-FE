@@ -16,15 +16,16 @@ import SearchIcon from 'public/assets/icons/search.svg'
 import UserCircle from 'public/assets/icons/user_circle.svg'
 import VecterIcon from 'public/assets/icons/vector.svg'
 import { useSetRecoilState } from 'recoil'
-import { error } from 'console'
 
 interface IProps {
   type: string
   setValue?: UseFormSetValue<classDataType>
   errors?: FieldErrors<classDataType>
+  getValues?: UseFormGetValues<classDataType>
+  teacherName?: string
 }
 
-export default function SearchPerson({ type, setValue, errors }: IProps) {
+export default function SearchPerson({ type, setValue, errors, teacherName, getValues }: IProps) {
   const inputClickRef = useRef<HTMLInputElement>(null)
   const autoCompleteTeacherNameRef = useRef<HTMLDivElement>(null)
 
@@ -79,6 +80,12 @@ export default function SearchPerson({ type, setValue, errors }: IProps) {
       }
     }
   }, [isClickedAddTeacher])
+
+  useEffect(() => {
+    if (teacherName) {
+      setSearchingName(teacherName)
+    }
+  }, [teacherName])
 
   return (
     <>

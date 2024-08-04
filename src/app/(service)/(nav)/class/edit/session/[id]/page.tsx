@@ -11,7 +11,7 @@ import SearchPerson from '@/components/class/register/searchPerson'
 import ContentHeader from '@/components/common/ContentHeader'
 import TextInput from '@/components/common/TextInput'
 import TextareaForm from '@/components/common/TextareaForm'
-import { getDurationLessons, postDurationLessons, postSessionLessons } from '@/lib/api/class'
+import { getDurationLessons, getSesstionLessons, postDurationLessons, postSessionLessons } from '@/lib/api/class'
 import { DurationScheduleType, durationClassScheduleState } from '@/lib/state/classDurationSchedule'
 
 export type classDataType = {
@@ -52,7 +52,7 @@ export default function RegisterPage() {
         subId: undefined,
         subName: undefined
       },
-      type: 'duration',
+      type: 'session',
       lessonTime: 30,
       tuitionFee: '',
       totalSessions: '',
@@ -79,17 +79,19 @@ export default function RegisterPage() {
       categoryName = data.category.subName
     }
 
-    if (data.type === 'duration') {
-      const result = await postDurationLessons({
+    if (data.type === 'session') {
+      const result = await postSessionLessons({
         name: data.name,
         memo: data.memo,
+        lessonTime: data.lessonTime,
         tuitionFee: Number(data.tuitionFee),
+        capacity: data.capacity,
+        totalSessions: Number(data.totalSessions),
         category: {
           id: categoryId,
           name: categoryName
         },
-        teacherId: data.teacherId,
-        schedules: data.schedules
+        teacherId: data.teacherId
       })
       if (result.success) {
         router.push('/class')
@@ -144,17 +146,17 @@ export default function RegisterPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await getDurationLessons(params.id)
+        const { data } = await getSesstionLessons(params.id)
         console.log(data)
         reset({
           name: data.data.name,
           memo: data.data.memo,
           category: data.data.category,
+          totalSessions: data.data.totalSessions,
           tuitionFee: data.data.tuitionFee,
           teacherId: data.data.teacher.id
         })
         setTeacehrName(data.data.teacher.name)
-        setDurationSchedule(data.data.schedules)
       } catch (error) {
         console.error('Error fetching data: ', error)
       }

@@ -1,4 +1,4 @@
-import { ReactElement, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import { Controller, UseFormReturn } from 'react-hook-form'
 
 import { classDataType } from '@/app/(service)/(nav)/class/register/page'
@@ -153,10 +153,17 @@ export default function Category({
     }
   }
 
-  const renderOptionsList = () => {
+  useEffect(() => {
+    const id = Number(getValues('category.id'))
+    setSelectedOptionList(categorydata[id - 1]?.options)
+  }, [getValues('category.id')])
+
+  const renderOptionsList = ({ id }: { id: number | undefined }) => {
+    console.log('id', id)
+
     return (
       <>
-        {watch('category.id') === 9 ? (
+        {id === 9 ? (
           <div className="flex flex-col gap-2">
             <p
               className={`${errors.category?.subName != null ? 'text-red-500' : 'text-gray-800'} text-base font-semibold leading-normal`}
@@ -177,7 +184,7 @@ export default function Category({
           </div>
         ) : (
           <div className="grid grid-cols-4 w-full gap-2">
-            {selectedOptionList.map((option: subCategory) => (
+            {selectedOptionList?.map((option: subCategory) => (
               <Controller
                 key={option.id}
                 name="category.subId"
@@ -272,7 +279,7 @@ export default function Category({
             )
           })}
         </div>
-        {watch('category.id') != null && renderOptionsList()}
+        {watch('category.id') && renderOptionsList({ id: getValues('category.id') })}
       </div>
     </div>
   )
