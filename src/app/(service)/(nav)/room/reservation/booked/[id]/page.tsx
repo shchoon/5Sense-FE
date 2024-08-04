@@ -9,19 +9,18 @@ import { AddSessionState } from '@/lib/state/addSessionState'
 import instance from '@/lib/api/axios'
 import { useEffect } from 'react'
 
-export default function BookedRoomReservation() {
+export default function BookedRoomReservation({ params }: { params: { id: string } }) {
+  const roomId = params.id
   const router = useRouter()
 
   const reservationData = useRecoilValue(AddSessionState)
 
   useEffect(() => {
     return () => {
-      localStorage.removeItem('classId')
+      localStorage.removeItem('className')
       localStorage.removeItem('reservationDate')
       localStorage.removeItem('reservationTime')
       localStorage.removeItem('classId')
-      localStorage.removeItem('roomId')
-      localStorage.removeItem('roomName')
     }
   }, [])
 
@@ -39,15 +38,13 @@ export default function BookedRoomReservation() {
               router.push('/room')
             })
             .catch(err => {
-              console.log(err)
               if (err.response.status === 409) {
                 alert(err.response.data.message)
               }
             })
-          console.log(reservationData)
         }}
       >
-        <SessionReservationCard />
+        <SessionReservationCard roomId={roomId} />
         <SearchPerson type="students" />
         <button
           type="submit"

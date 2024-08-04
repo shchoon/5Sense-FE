@@ -12,7 +12,8 @@ import ContentHeader from '@/components/common/ContentHeader'
 import MinusIcon from 'public/assets/icons/minus_vector.svg'
 import PlusIcon from 'public/assets/icons/plus_vector.svg'
 
-export default function ModifyRoom() {
+export default function ModifyRoom({ params }: { params: { id: string } }) {
+  const roomId = params.id
   const roomDetails = useRecoilValue(RoomDetailsState)
   const setRoomDetails = useSetRecoilState(RoomDetailsState)
   const router = useRouter()
@@ -35,15 +36,12 @@ export default function ModifyRoom() {
 
   useEffect(() => {
     const date = new Date()
-    const roomId = localStorage.getItem('roomId') as string
     instance('lesson-rooms/daily', {
       params: {
         date: new Date(date.getFullYear(), date.getMonth(), date.getDate()).toISOString()
       }
     }).then(res => {
-      console.log(res)
       const room = res.data.data.filter((data: { id: number }) => data.id === Number(roomId))
-      console.log(room)
       setRoomDetails(prev => ({
         ...prev,
         id: room[0].id,
