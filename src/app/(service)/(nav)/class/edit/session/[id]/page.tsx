@@ -154,7 +154,9 @@ export default function RegisterPage() {
           category: data.data.category,
           totalSessions: data.data.totalSessions,
           tuitionFee: data.data.tuitionFee,
-          teacherId: data.data.teacher.id
+          teacherId: data.data.teacher.id,
+          lessonTime: data.data.lessonTime,
+          capacity: data.data.capacity
         })
         setTeacehrName(data.data.teacher.name)
       } catch (error) {

@@ -189,7 +189,7 @@ export default function RegisterPage() {
             <Category {...Props} />
           </div>
         </div>
-        <ClassType {...Props} />
+        <ClassType {...Props}  />
         <SearchPerson type="teachers" setValue={setValue} errors={errors} />
         <Button type="submit" color="primary">
           등록하기
