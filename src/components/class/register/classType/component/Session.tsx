@@ -111,11 +111,11 @@ export default function Session({
                   disabled ? 'text-[#9CA3AF]' : 'text-indigo-500'
                 }`}
               >
-                {formatAddComma(watch('tuitionFee'), watch('totalSessions'))}원
+                {formatAddComma(Number(watch('tuitionFee')), Number(watch('totalSessions')))}원
               </span>
             </div>
             <p className="text-right text-gray-500 text-xs font-medium">
-              {geKoreanNumber(formatAddComma(watch('tuitionFee'), watch('totalSessions')))}원
+              {geKoreanNumber(formatAddComma(Number(watch('tuitionFee')), Number(watch('totalSessions'))))}원
             </p>
           </div>
         </div>
