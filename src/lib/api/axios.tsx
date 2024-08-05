@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosResponse } from 'axios'
-import { config } from 'process'
 
 const current = new Date()
 const checkToken = (accessTokenExp: string) => {
