@@ -8,7 +8,7 @@ import RoomReservation from '@/components/room/RoomReservation'
 import UseModal from '@/hooks/useModal'
 import PlusIcon from '@/icons/icon/plus.svg'
 import { getKoreanNumber } from '@/utils'
-import DurationScheduleCheck from '../../../../check/ClassDurationScheduleCheck'
+import DurationScheduleCheck from '@/components/check/ClassDurationScheduleCheck'
 
 export default function Duration({
   register,
@@ -17,7 +17,7 @@ export default function Duration({
   getValues
 }: UseFormReturn<classDataType, any, undefined>) {
   const { errors, defaultValues } = formState
-  const duarationSchedule = useRecoilValue(durationClassScheduleState)
+  const durationSchedule = useRecoilValue(durationClassScheduleState)
 
   const [Schedule, close, open] = UseModal()
 
@@ -42,6 +42,8 @@ export default function Duration({
   //   setIsParams(Boolean(params))
   //   console.log(isParams)
   // }, [params])
+
+  console.log(durationSchedule)
 
   return (
     <div className="flex flex-col gap-10">
@@ -68,7 +70,7 @@ export default function Duration({
           일정 추가
         </Button>
         {/**여기 일정 UI 들어가면 됩니다. */}
-        <DurationScheduleCheck />
+        {durationSchedule.length !== 0 && <DurationScheduleCheck />}
       </div>
       <Modal size="md" show={Schedule} onClose={close}>
         <Modal.Header>일정 추가</Modal.Header>

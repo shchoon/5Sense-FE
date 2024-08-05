@@ -151,7 +151,7 @@ export default function ClassPage() {
             </button>
           ))}
       </div>
-      {/* {!isLoading && <div ref={target}></div>}
+      {!isLoading && <div ref={target}></div>}
       {isLoading && (
         <div className="w-full h-[70px] pt-[50px] flex justify-center items-center">
           <div
@@ -164,7 +164,7 @@ export default function ClassPage() {
           </div>
         </div>
       )}
-       */}
+
       {isModalOpen && (
         <DetailClassModal
           id={targetClass.id}

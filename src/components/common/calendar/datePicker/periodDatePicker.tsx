@@ -159,9 +159,6 @@ export default function PeriodDatePicker(props: IProps) {
     }
   }
 
-  console.log('first', firstClickedData)
-  console.log('second', secondClickedData)
-
   return (
     <div className="w-[592px] bg-white p-4 flex gap-6 rounded-lg border border-1 border-primary-600 shadow">
       {/* 첫 번째 달력 */}
@@ -202,7 +199,6 @@ export default function PeriodDatePicker(props: IProps) {
                   const sorted = firstClickedData.date.sort()
                   first = sorted[0]
                   second = sorted[1]
-                  console.log(i, first, second, dateData)
                   return (
                     <div
                       key={i}

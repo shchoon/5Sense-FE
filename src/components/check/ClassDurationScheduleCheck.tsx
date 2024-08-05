@@ -3,10 +3,13 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { durationClassScheduleState } from '@/lib/state/classDurationSchedule'
 
 import TrashIcon from '@/icons/icon/trash.svg'
+import { useEffect, useState } from 'react'
+import instance from '@/lib/api/axios'
 
 export default function DurationScheduleCheck() {
   const setDurationScheduleState = useSetRecoilState(durationClassScheduleState)
   const titleList = ['기간', '시간', '요일', '강의실']
+  const [roomName, setRoomName] = useState('')
 
   const durationSchedules = useRecoilValue(durationClassScheduleState)
 
@@ -15,6 +18,18 @@ export default function DurationScheduleCheck() {
   }
 
   console.log(durationSchedules)
+
+  useEffect(() => {
+    instance('/lesson-rooms/daily', {
+      params: {
+        date: new Date().toISOString()
+      }
+    }).then(res => {
+      const roomData = res.data.data
+      const targetRoom = roomData.filter((room: { id: number }, i: number) => room.id === durationSchedules[0].roomId)
+      setRoomName(targetRoom[0].name)
+    })
+  }, [])
 
   return (
     <>
@@ -60,7 +75,7 @@ export default function DurationScheduleCheck() {
                     </div>
                     <div className="w-full flex gap-2">
                       <div className="w-[70px] gray-500-medium text-sm">• 강의실</div>
-                      <div className="w-full gray-800-normal text-sm">A 룸</div>
+                      <div className="w-full gray-800-normal text-sm">{roomName}</div>
                     </div>
                   </div>
                 </div>

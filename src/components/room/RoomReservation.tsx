@@ -50,11 +50,8 @@ export default function RoomReservation(props: IProps) {
   const sessionSchedules = useRecoilValue(sessionScheduleState)
   const setDurationSchedule = useSetRecoilState(durationClassScheduleState)
   const setSessionSchedule = useSetRecoilState(sessionScheduleState)
-  const setLessonTimeState = useSetRecoilState(lessonTimeState)
   const calendarDate = useRecoilValue(DayCalendarDateState)
-  const setCalendarDate = useSetRecoilState(DayCalendarDateState)
   const centerInfo = useRecoilValue(centerInfoState)
-  const timeListByHalfHour = calculateRervationTime(centerInfo.open, centerInfo.close)
   const timeListByHour = getTimeListByHour(centerInfo.open, centerInfo.close)
 
   const [dateValue, setDateValue] = useState<string>('날짜')
@@ -83,8 +80,9 @@ export default function RoomReservation(props: IProps) {
     }
 
     if (type === 'duration') {
-      console.log(data)
       if (data.length === 1) {
+        /* date 오름 차순으로 변경 */
+        data[0].date.sort((a: number, b: number) => a - b)
         setDateValue(
           `${data[0].year}.${data[0].month + 1}.${data[0].date[0]}~${data[0].year}.${data[0].month + 1}.${
             data[0].date[1]
@@ -321,7 +319,6 @@ export default function RoomReservation(props: IProps) {
       if (studentId !== null) {
         instance(`/students/${studentId}`).then(res => {
           const sessionLessons = res.data.data.sessionLessons
-          console.log(sessionLessons)
           const alreadyRigisteredLessons = sessionLessons.filter(
             (data: any, i: number) => props.class && data.id === props.class.id
           )
@@ -536,6 +533,7 @@ export default function RoomReservation(props: IProps) {
                             if (timeRange !== undefined && durationSchedules.length === 0) {
                               const startDateData = dateValue.split('~')[0].split('.')
                               const endDateData = dateValue.split('~')[1].split('.')
+                              console.log(startDateData, endDateData)
                               setDurationSchedule(prev => [
                                 ...prev,
                                 {
