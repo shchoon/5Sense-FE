@@ -24,7 +24,8 @@ export default function SocialLoginBtn() {
   const GOOGLE_AUTH_URL = process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL + state
   const GOOGLE_BETA_AUTH_URL = process.env.NEXT_PUBLIC_BETA_GOOGLE_AUTH_URL + state
 
-  const router = useRouter()
+  const isBrower = typeof window !== 'undefined'
+
   const loginBtnData: {
     title: string
     logo: any
@@ -42,7 +43,7 @@ export default function SocialLoginBtn() {
       textColor: 'text-[#381F1F]',
       alt: 'kakao',
       login: async function kakaoLogin() {
-        if (typeof window !== undefined && window.location.port === '3000') {
+        if (isBrower && window.location.port === '3000') {
           window.location.href = KAKAO_AUTH_URL
         } else {
           window.location.href = KAKAO_BETA_AUTH_URL
@@ -57,7 +58,7 @@ export default function SocialLoginBtn() {
       textColor: 'text-[#2BB500]',
       alt: 'naver',
       login: function naverLogin() {
-        if (typeof window !== undefined && window.location.port === '3000') {
+        if (isBrower && window.location.port === '3000') {
           window.location.href = NAVER_AUTH_URL
         } else {
           window.location.href = NAVER_BETA_AUTH_URL
@@ -72,7 +73,7 @@ export default function SocialLoginBtn() {
       textColor: 'text-[#374151]',
       alt: 'google',
       login: function googleLogin() {
-        if (typeof window !== undefined && window.location.port === '3000') {
+        if (isBrower && window.location.port === '3000') {
           window.location.href = GOOGLE_AUTH_URL
         } else {
           window.location.href = GOOGLE_BETA_AUTH_URL
