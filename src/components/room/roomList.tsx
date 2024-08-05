@@ -13,6 +13,7 @@ import Plus from '@/icons/icon/plus.svg'
 import Trash from '@/icons/icon/trash.svg'
 import ChevronLeftIcon from '@/icons/icon/room/chevronLeft.svg'
 import ChevronRightIcon from '@/icons/icon/room/chevronRight.svg'
+import instance from '@/lib/api/axios'
 
 interface IProps {
   roomData: { id: number; name: string; capacity: number; workTime: any }[][]
@@ -24,7 +25,6 @@ export default function RoomList({ roomData, onChangeRoomList, indexOfRoomList }
   const router = useRouter()
   const optionRef = useRef<HTMLButtonElement>(null)
 
-  const setModal = useSetRecoilState(modalState)
   const setRoomDetailsState = useSetRecoilState(RoomDetailsState)
 
   const [roomOption, setRoomOption] = useState<{
@@ -34,6 +34,16 @@ export default function RoomList({ roomData, onChangeRoomList, indexOfRoomList }
     isClicked: false,
     roomId: 0
   })
+
+  const onDeleteRoom = (roomId: number) => {
+    if (confirm('해당 룸을 삭제하시겠습니까?')) {
+      instance.delete(`/lesson-rooms/${roomId}`).then(res => {
+        router.refresh()
+      })
+    } else {
+      return
+    }
+  }
 
   return (
     <div className="relative mt-[32px] w-full pl-[84px]">
@@ -138,7 +148,7 @@ export default function RoomList({ roomData, onChangeRoomList, indexOfRoomList }
                       type="button"
                       className="w-full flex items-center justify-between px-2 py-1 rounded-[3px] hover:bg-primary-100"
                       onClick={() => {
-                        setModal(true)
+                        onDeleteRoom(data.id)
                       }}
                     >
                       <div className="w-[98px] gray-500-medium text-sm">삭제하기</div>

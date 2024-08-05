@@ -184,7 +184,7 @@ const nextConfig = {
           {
             type: 'query',
             key: 'endDate',
-            value: '(?<endData>.*)'
+            value: '(?<endDate>.*)'
           },
           {
             type: 'query',
@@ -193,7 +193,7 @@ const nextConfig = {
           }
         ],
         destination:
-          'http://43.203.231.217:3000/lesson-rooms/daily?startDate=:startDate&endDate=:endDate&repeatDate=:repeatDate'
+          'http://43.203.231.217:3000/lesson-rooms/range?startDate=:startDate&endDate=:endDate&repeatDate=:repeatDate'
       },
       {
         source: '/lesson-rooms/:path*',
