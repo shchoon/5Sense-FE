@@ -3,7 +3,6 @@ import { useState, useRef, useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { useRouter } from 'next/navigation'
 
-import { modalState } from '@/lib/state/modal'
 import { RoomDetailsState } from '@/lib/state/roomDetails'
 
 import UserIcon from 'public/assets/icons/user_icon.svg'
@@ -19,9 +18,10 @@ interface IProps {
   roomData: { id: number; name: string; capacity: number; workTime: any }[][]
   onChangeRoomList: (num: number) => void
   indexOfRoomList: number
+  onDeleteRoom: (roomId: number) => void
 }
 
-export default function RoomList({ roomData, onChangeRoomList, indexOfRoomList }: IProps) {
+export default function RoomList({ roomData, onChangeRoomList, indexOfRoomList, onDeleteRoom }: IProps) {
   const router = useRouter()
   const optionRef = useRef<HTMLButtonElement>(null)
 
@@ -34,16 +34,6 @@ export default function RoomList({ roomData, onChangeRoomList, indexOfRoomList }
     isClicked: false,
     roomId: 0
   })
-
-  const onDeleteRoom = (roomId: number) => {
-    if (confirm('해당 룸을 삭제하시겠습니까?')) {
-      instance.delete(`/lesson-rooms/${roomId}`).then(res => {
-        router.refresh()
-      })
-    } else {
-      return
-    }
-  }
 
   return (
     <div className="relative mt-[32px] w-full pl-[84px]">
