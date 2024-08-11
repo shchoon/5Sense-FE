@@ -40,12 +40,19 @@ export const getSesstionLessons = async (requestData: any) => {
 }
 
 export const putDurationLessons = async (id: string, requestData: any) => {
-  const lessonId = Number(id)
-  return instance.put(`/duration-lessons/${lessonId}`, requestData)
+  try {
+    const res = await instance.put(`/duration-lessons/${id}`, requestData)
+    return res.data
+  } catch (error: any) {
+    return error.response
+  }
 }
 
 export const putSesstionLessons = async (id: string, requestData: any) => {
-  const lessonId = Number(id)
-  console.log('hih', requestData)
-  return instance.put(`/session-lessons/${lessonId}`, requestData)
+  try {
+    const res = await instance.put(`/session-lessons/${id}`, requestData)
+    return res.data
+  } catch (error: any) {
+    return error.response
+  }
 }

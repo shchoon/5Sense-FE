@@ -11,7 +11,7 @@ import SearchPerson from '@/components/class/register/searchPerson'
 import ContentHeader from '@/components/common/ContentHeader'
 import TextInput from '@/components/common/TextInput'
 import TextareaForm from '@/components/common/TextareaForm'
-import { getDurationLessons, postDurationLessons, postSessionLessons } from '@/lib/api/class'
+import { getDurationLessons, putDurationLessons } from '@/lib/api/class'
 import { DurationScheduleType, durationClassScheduleState } from '@/lib/state/classDurationSchedule'
 
 export type classDataType = {
@@ -79,21 +79,24 @@ export default function RegisterPage() {
       categoryName = data.category.subName
     }
 
-    if (data.type === 'duration') {
-      const result = await postDurationLessons({
-        name: data.name,
-        memo: data.memo,
-        tuitionFee: Number(data.tuitionFee),
-        category: {
-          id: categoryId,
-          name: categoryName
-        },
-        teacherId: data.teacherId,
-        schedules: data.schedules
-      })
-      if (result.success) {
-        router.push('/class')
-      }
+    const subSchedule = data.schedules.map(({ room, ...rest }) => rest)
+
+    console.log('data', subSchedule)
+
+    const requestData = {
+      name: data.name,
+      memo: data.memo,
+      tuitionFee: Number(data.tuitionFee),
+      category: {
+        id: categoryId,
+        name: categoryName
+      },
+      teacherId: data.teacherId,
+      schedules: subSchedule[0]
+    }
+    const result = await putDurationLessons(params.id as string, requestData)
+    if (result.success) {
+      router.push('/class')
     }
   }
   const {
@@ -197,7 +200,7 @@ export default function RegisterPage() {
             <Category {...Props} />
           </div>
         </div>
-        <ClassType {...Props} />
+        <ClassType {...Props} edit />
         <SearchPerson
           type="teachers"
           setValue={setValue}

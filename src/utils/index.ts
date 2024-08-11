@@ -85,12 +85,12 @@ export const formatPhoneNum = (phoneNumber: string) => {
   return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
 }
 
-export const formatAddComma = (tutionFee: number, cnt: number) => {
-  const strTutionFee = tutionFee.toString()
+export const formatAddComma = (tutionFee: string, cnt: string) => {
+  const numCnt = Number(cnt)
+  console.log('tutionFee', tutionFee)
+  const removedCommaValue = Number(tutionFee)
 
-  const removedCommaValue = Number(strTutionFee.replaceAll(',', ''))
-
-  return (removedCommaValue * cnt).toLocaleString()
+  return (removedCommaValue * numCnt).toLocaleString()
 }
 
 export const formatDate = (date: string) => {

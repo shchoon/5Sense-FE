@@ -3,17 +3,10 @@
 import MinusIcon from 'public/assets/icons/minus_vector.svg'
 import PlusIcon from 'public/assets/icons/plus_vector.svg'
 
-import { classDataType } from '@/app/(service)/(nav)/class/register/page'
-import { UseFormReturn } from 'react-hook-form'
-import { watch } from 'fs'
 import { formatAddComma } from '@/utils'
+import { Props } from '..'
 
-export default function Session({
-  register,
-  watch,
-  setValue,
-  formState
-}: UseFormReturn<classDataType, any, undefined>) {
+export default function Session({ register, watch, setValue, formState, edit }: Props) {
   const { errors } = formState
   const disabled = false
 

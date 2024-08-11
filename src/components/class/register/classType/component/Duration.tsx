@@ -9,13 +9,9 @@ import UseModal from '@/hooks/useModal'
 import PlusIcon from '@/icons/icon/plus.svg'
 import { getKoreanNumber } from '@/utils'
 import DurationScheduleCheck from '../../../../check/ClassDurationScheduleCheck'
+import { Props } from '..'
 
-export default function Duration({
-  register,
-  watch,
-  formState,
-  getValues
-}: UseFormReturn<classDataType, any, undefined>) {
+export default function Duration({ register, watch, formState, getValues, edit }: Props) {
   const { errors, defaultValues } = formState
   const duarationSchedule = useRecoilValue(durationClassScheduleState)
 
@@ -63,10 +59,13 @@ export default function Duration({
       </div>
       <div className="w-full flex flex-col gap-2">
         <p className={`${errors.schedules ? 'text-red-500' : 'text-gray-800'} gray-800-semibold`}>일정</p>
-        <Button color="outline" fullSized onClick={open}>
-          <PlusIcon className="mr-2" />
-          일정 추가
-        </Button>
+        {!edit && (
+          <Button color="outline" fullSized onClick={open}>
+            <PlusIcon className="mr-2" />
+            일정 추가
+          </Button>
+        )}
+
         {/**여기 일정 UI 들어가면 됩니다. */}
         <DurationScheduleCheck />
       </div>

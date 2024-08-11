@@ -11,7 +11,7 @@ import SearchPerson from '@/components/class/register/searchPerson'
 import ContentHeader from '@/components/common/ContentHeader'
 import TextInput from '@/components/common/TextInput'
 import TextareaForm from '@/components/common/TextareaForm'
-import { getDurationLessons, getSesstionLessons, postDurationLessons, postSessionLessons } from '@/lib/api/class'
+import { getSesstionLessons, putDurationLessons, putSesstionLessons } from '@/lib/api/class'
 import { DurationScheduleType, durationClassScheduleState } from '@/lib/state/classDurationSchedule'
 
 export type classDataType = {
@@ -79,23 +79,23 @@ export default function RegisterPage() {
       categoryName = data.category.subName
     }
 
-    if (data.type === 'session') {
-      const result = await postSessionLessons({
-        name: data.name,
-        memo: data.memo,
-        lessonTime: data.lessonTime,
-        tuitionFee: Number(data.tuitionFee),
-        capacity: data.capacity,
-        totalSessions: Number(data.totalSessions),
-        category: {
-          id: categoryId,
-          name: categoryName
-        },
-        teacherId: data.teacherId
-      })
-      if (result.success) {
-        router.push('/class')
-      }
+    console.log('durl', data)
+
+    const requestData = {
+      name: data.name,
+      memo: data.memo,
+      category: {
+        id: categoryId,
+        name: categoryName
+      },
+      teacherId: data.teacherId
+    }
+
+    const result = await putSesstionLessons(params.id as string, requestData)
+
+    console.log('result', result)
+    if (result.success) {
+      router.push('/class')
     }
   }
   const {
@@ -169,7 +169,7 @@ export default function RegisterPage() {
 
   return (
     <div className="flex flex-col items-center pb-[60px]">
-      <ContentHeader title="클래스 관리" back onClick={() => router.push('/class')} />
+      <ContentHeader title="클래스 수정" back onClick={() => router.push('/class')} />
       <form className="w-[640px] flex flex-col gap-5" onSubmit={customHandleSubmit(onSubmit)}>
         <div className={`class-box`}>
           <div className={`gray-900-bold text-xl`}>클래스 정보</div>
@@ -201,7 +201,7 @@ export default function RegisterPage() {
             <Category {...Props} />
           </div>
         </div>
-        <ClassType {...Props} />
+        <ClassType {...Props} edit />
         <SearchPerson
           type="teachers"
           setValue={setValue}
