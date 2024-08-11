@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 import { CenterInfo } from '@/app/(service)/layout'
-import { formatPhoneNum } from '@/utils'
+import { changePhoneNumberToString } from '@/utils'
 import DefaultProfile from './DefualtProfile'
 
 interface IProps {
@@ -22,12 +22,22 @@ export default function AcademyInfo({ centerInfo, isExistCenter, drawer }: IProp
     <div className="w-full flex flex-col items-center gap-7">
       <div className="w-full flex flex-col items-center gap-4">
         <div className={`w-[90px] h-[90px] rounded-full`}>
-          <Image className="rounded-full bg-[#D3C4F9]" src={centerInfo.profile} alt="profile" width={90} height={90} />
+          <Image
+            className="bg-[#D3C4F9] w-[90px] h-[90px] rounded-full"
+            src={centerInfo.profile}
+            alt="profile"
+            width={90}
+            height={90}
+          />
         </div>
         <div className="w-full flex flex-col items-center gap-2">
-          <p className={` text-[21px] font-bold ${drawer ? 'text-[#1F2A37' : 'text-white'} `}>{centerInfo.name}</p>
+          <p
+            className={`${centerInfo.name.length >= 15 ? 'text-[18px]' : 'text-[21px]'}  font-bold ${drawer ? 'text-[#1F2A37' : 'text-white'} `}
+          >
+            {centerInfo.name}
+          </p>
           <p className={` h-[14px] text-sm font-medium ${drawer ? 'text-[#4B5563]' : 'text-white'} `}>
-            {formatPhoneNum(centerInfo.mainPhone)}
+            {changePhoneNumberToString(centerInfo.mainPhone)}
           </p>
           <p className={` h-3 text-xs font-medium ${drawer ? 'text-[#4B5563]' : 'text-white'} `}>
             {centerInfo.address}

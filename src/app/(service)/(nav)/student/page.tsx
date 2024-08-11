@@ -1,6 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import NotFoundPage from '@/components/common/NotFoundPage'
 import Loading from '@/components/common/Loading'
@@ -76,6 +76,59 @@ export default function StudentPage() {
     }))
   }
 
+  const infiniteScroll = useCallback(() => {
+    const getData = () => {
+      if (inputData.value === '') {
+        instance(`/students?searchBy=none&page=${metaData.page + 1}`).then(res => {
+          const studentsData = res.data.data.students
+          const meta = res.data.data.meta
+          setStudentList(prev => [...prev, ...studentsData])
+          setMetaData(prev => ({
+            ...prev,
+            page: meta.page,
+            hasNextPage: meta.hasNextPage
+          }))
+          setIsLoading(false)
+        })
+      } else {
+        instance(
+          `/students?searchBy=${inputData.searchBy}&${inputData.searchBy}=${inputData.value}&page=${metaData.page + 1}`
+        ).then(res => {
+          const studentsData = res.data.data.students
+          const meta = res.data.data.meta
+          setStudentList(prev => [...prev, ...studentsData])
+          setMetaData(prev => ({
+            ...prev,
+            page: meta.page,
+            hasNextPage: meta.hasNextPage
+          }))
+          setIsLoading(false)
+        })
+      }
+    }
+
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 1.0
+    }
+
+    const callback = (entry: any) => {
+      if (entry[0].isIntersecting) {
+        setIsLoading(true)
+        setTimeout(() => {
+          getData()
+        }, 500)
+      }
+    }
+
+    const observer = new IntersectionObserver(callback, options)
+
+    if (target.current) {
+      observer.observe(target.current)
+    }
+  }, [metaData])
+
   useEffect(() => {
     instance('/students?searchBy=none&page=1&take=10').then(res => {
       const studentsData = res.data.data.students
@@ -92,62 +145,7 @@ export default function StudentPage() {
 
   useEffect(() => {
     if (metaData.hasNextPage) {
-      const options = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 1.0
-      }
-
-      const getData = () => {
-        if (inputData.value === '') {
-          instance(`/students?searchBy=none&page=${metaData.page + 1}`).then(res => {
-            const studentsData = res.data.data.students
-            const meta = res.data.data.meta
-            setStudentList(prev => [...prev, ...studentsData])
-            setMetaData(prev => ({
-              ...prev,
-              page: meta.page,
-              hasNextPage: meta.hasNextPage
-            }))
-            setIsLoading(false)
-          })
-        } else {
-          instance(
-            `/students?searchBy=${inputData.searchBy}&${inputData.searchBy}=${inputData.value}&page=${
-              metaData.page + 1
-            }`
-          ).then(res => {
-            const studentsData = res.data.data.students
-            const meta = res.data.data.meta
-            setStudentList(prev => [...prev, ...studentsData])
-            setMetaData(prev => ({
-              ...prev,
-              page: meta.page,
-              hasNextPage: meta.hasNextPage
-            }))
-            setIsLoading(false)
-          })
-        }
-      }
-
-      const callback = (entry: any) => {
-        if (entry[0].isIntersecting) {
-          setIsLoading(true)
-          setTimeout(() => {
-            getData()
-          }, 500)
-        }
-      }
-      const observer = new IntersectionObserver(callback, options)
-      if (target.current) {
-        observer.observe(target.current)
-      }
-
-      return () => {
-        if (observer && target.current) {
-          observer.unobserve(target.current)
-        }
-      }
+      infiniteScroll()
     }
   }, [metaData])
 

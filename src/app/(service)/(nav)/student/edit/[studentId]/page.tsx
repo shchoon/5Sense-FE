@@ -226,6 +226,7 @@ export default function StudentEdit({ params }: { params: { studentId: string } 
                   placeholder="전화번호를 입력해주세요 (-제외)"
                   value={studentInfo.phone}
                   onChange={onInputHandler}
+                  onWheel={e => e.currentTarget.blur()}
                   maxLength={12}
                 />
                 <div className="w-full text-right gray-500-normal text-sm font-['Inter']">

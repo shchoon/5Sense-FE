@@ -47,8 +47,10 @@ export function calculateEndTime(startTime: string, lessonTime: number) {
 }
 
 export function formatLessonDate(date: string) {
+  const dayList = ['일', '월', '화', '수', '목', '금', '토']
   const formatDate = date.slice(0, 10).split('-')
-  return formatDate[0] + '.' + formatDate[1] + '.' + formatDate[2]
+  const targetedDate = new Date(Number(formatDate[0]), Number(formatDate[1]) - 1, Number(formatDate[2]))
+  return formatDate[0] + '.' + formatDate[1] + '.' + formatDate[2] + ` (${dayList[targetedDate.getDay()]})`
 }
 
 export function getKoreanNumber(value: string) {

@@ -21,6 +21,10 @@ const nextConfig = {
   async rewrites() {
     return [
       {
+        source: '/api/:path*',
+        destination: 'http://43.203.231.217:3000/api/:path*'
+      }
+      /* {
         source: '/students',
         has: [
           {
@@ -245,7 +249,7 @@ const nextConfig = {
       {
         source: '/duration-lesson-registrations/:path*',
         destination: 'http://43.203.231.217:3000/duration-lesson-registrations/:path*'
-      }
+      } */
     ]
   },
 

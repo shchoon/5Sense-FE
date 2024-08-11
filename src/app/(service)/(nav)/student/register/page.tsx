@@ -165,6 +165,9 @@ export default function StudentRegister() {
                   value={studentInfo.phone}
                   onChange={onInputHandler}
                   maxLength={12}
+                  onWheel={e => {
+                    e.currentTarget.blur()
+                  }}
                 />
                 <div className="w-full text-right gray-500-normal text-sm font-['Inter']">
                   {studentInfo.phone.length}/12
