@@ -13,7 +13,7 @@ export default function AddInstructor({ onClose }: IProps) {
   })
 
   const register = () => {
-    instance.post('/teachers', { ...instructorInfo }).then(() => {
+    instance.post('/api/teachers', { ...instructorInfo }).then(() => {
       onClose()
     })
   }

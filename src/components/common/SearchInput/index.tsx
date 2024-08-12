@@ -44,7 +44,7 @@ export default function SearchInput(props: IProps) {
         props.passInputData({ value: inputValue, searchBy: searchBy, list: data, meta: meta })
       })
     } else {
-      instance(`/${props.type}?searchBy=${searchBy}&${searchBy}=${inputValue}`).then(res => {
+      instance(`/api/${props.type}?searchBy=${searchBy}&${searchBy}=${inputValue}`).then(res => {
         const data = props.type === 'teachers' ? res.data.data.teachers : res.data.data.students
         const meta = res.data.data.meta
 

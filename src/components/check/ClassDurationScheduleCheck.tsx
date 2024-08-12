@@ -35,7 +35,7 @@ export default function DurationScheduleCheck({ edit, onClick }: IProps) {
 
   useEffect(() => {
     if (params.id !== undefined && durationSchedules.length !== 0) {
-      instance(`/duration-lessons/${params.id}/details`).then(res => {
+      instance(`/api/duration-lessons/${params.id}/details`).then(res => {
         const data = res.data.data
         let isUpdatedDurationSchedule: boolean
         if ('room' in durationSchedules[0]) {

@@ -18,7 +18,7 @@ export default function DetailInstructor({ id }: { id: string }) {
   })
 
   useEffect(() => {
-    instance(`/teachers/${id}`).then(res => {
+    instance(`/api/teachers/${id}`).then(res => {
       const data = res.data.data
       setInstructorData(prev => ({
         ...prev,

@@ -36,7 +36,7 @@ export default function ModifyRoom({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     const date = new Date()
-    instance('/lesson-rooms/daily', {
+    instance('/api/lesson-rooms/daily', {
       params: {
         date: new Date(date.getFullYear(), date.getMonth(), date.getDate()).toISOString()
       }

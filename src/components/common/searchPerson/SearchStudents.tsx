@@ -38,10 +38,10 @@ export default function SearchStudents({ handleChangeStudentId, classId }: IProp
   const [nameList, setNameList] = useState<{ id: string; name: string; phone: string; sessionCount: string }[]>([])
 
   useEffect(() => {
-    instance(`/session-lessons/${classId}/details`).then(res => {
+    instance(`/api/session-lessons/${classId}/details`).then(res => {
       let studentsData = res.data.data.registeredStudents
       setNameList(studentsData)
-      instance(`/students/lessons/${classId}`).then(res => {
+      instance(`/api/students/lessons/${classId}`).then(res => {
         const studentsList = res.data.data
         for (var i = 0; i < studentsData.length; i++) {
           const compareValue = studentsList.filter(

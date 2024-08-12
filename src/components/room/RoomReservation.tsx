@@ -127,7 +127,7 @@ export default function RoomReservation(props: IProps) {
 
   const getSessionRoomData = (classId: number) => {
     const date = dateValue.split('.')
-    instance('/lesson-rooms/daily', {
+    instance('/api/lesson-rooms/daily', {
       params: {
         date: new Date(calendarDate.year, calendarDate.month, calendarDate.date).toISOString()
       }
@@ -185,7 +185,7 @@ export default function RoomReservation(props: IProps) {
     const repeatDate = lessonTime.split(',')[0].replace('  반복', '').replaceAll(' ', ',')
     const startDate = new Date(Number(date.start[0]), Number(date.start[1]) - 1, Number(date.start[2])).toISOString()
     const endDate = new Date(Number(date.end[0]), Number(date.end[1]) - 1, Number(date.end[2])).toISOString()
-    instance('/lesson-rooms/range', {
+    instance('/api/lesson-rooms/range', {
       params: {
         startDate: startDate,
         endDate: endDate,
@@ -303,7 +303,7 @@ export default function RoomReservation(props: IProps) {
 
       const studentId = localStorage.getItem('studentId') as string
       if (studentId !== null) {
-        instance(`/students/${studentId}`).then(res => {
+        instance(`/api/students/${studentId}`).then(res => {
           const sessionLessons = res.data.data.sessionLessons
           const alreadyRigisteredLessons = sessionLessons.filter(
             (data: any, i: number) => props.class && data.id === props.class.id

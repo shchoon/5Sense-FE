@@ -164,7 +164,7 @@ export default function StudentEdit({ params }: { params: { studentId: string } 
       ...prev,
       id: Number(studentId)
     }))
-    instance(`/students/${studentId}`).then(res => {
+    instance(`/api/students/${studentId}`).then(res => {
       const studentData = res.data.data
       setStudentInfo(prev => ({
         ...prev,

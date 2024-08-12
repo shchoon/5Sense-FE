@@ -38,7 +38,7 @@ export default function WeekSchedule() {
   const [lessonData, setLessonData] = useState<any>([])
 
   useEffect(() => {
-    instance(`/lessons/${weekData.year}/${weekData.month + 1}`).then(res => {
+    instance(`/api/lessons/${weekData.year}/${weekData.month + 1}`).then(res => {
       const data = res.data.data
       setLessonData(WeekDataFormatter(data, weekData))
     })

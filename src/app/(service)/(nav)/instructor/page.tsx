@@ -65,7 +65,7 @@ export default function InstructorPage() {
 
   /* 첫 로딩 실행 */
   useEffect(() => {
-    instance('/teachers?searchBy=none').then(res => {
+    instance('/api/teachers?searchBy=none').then(res => {
       const instructorsData = res.data.data.teachers
       const meta = res.data.data.meta
       setInstructorList(instructorsData)
@@ -81,7 +81,7 @@ export default function InstructorPage() {
   /* 강사 등록하면 새로 강사 리스트 가져오기 */
   useEffect(() => {
     if (isRegistered) {
-      instance('/teachers?searchBy=none').then(res => {
+      instance('/api/teachers?searchBy=none').then(res => {
         const instructorsData = res.data.data.teachers
         const meta = res.data.data.meta
         setInstructorList(instructorsData)
@@ -106,7 +106,7 @@ export default function InstructorPage() {
 
       const getData = () => {
         if (inputData.value === '') {
-          instance(`/teachers?searchBy=none&page=${metaData.page + 1}`).then(res => {
+          instance(`/api/teachers?searchBy=none&page=${metaData.page + 1}`).then(res => {
             const instructorsData = res.data.data.teachers
             const meta = res.data.data.meta
             setInstructorList(prev => [...prev, ...instructorsData])

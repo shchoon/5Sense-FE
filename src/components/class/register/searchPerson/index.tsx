@@ -56,17 +56,17 @@ export default function SearchPerson({ type, setValue, errors, teacherName, getV
 
   useEffect(() => {
     if (type === 'teachers') {
-      instance(`/teachers?searchBy=none&take=100`).then(res => {
+      instance(`/api/teachers?searchBy=none&take=100`).then(res => {
         const data = res.data.data.teachers
         setNameList(data)
       })
     } else if (type === 'students') {
       const classId = localStorage.getItem('classId')
       if (classId !== 'null') {
-        instance(`/session-lessons/${classId}/details`).then(res => {
+        instance(`/api/session-lessons/${classId}/details`).then(res => {
           let studentsData = res.data.data.registeredStudents
           setNameList(studentsData)
-          instance(`/students/lessons/${classId}`).then(res => {
+          instance(`/api/students/lessons/${classId}`).then(res => {
             const studentsList = res.data.data
             for (var i = 0; i < studentsData.length; i++) {
               const compareValue = studentsList.filter(

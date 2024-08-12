@@ -19,7 +19,7 @@ export default function MonthSchedule({ dateData }: IProps) {
 
   const [classData, setClassData] = useState<any[]>([])
   useEffect(() => {
-    instance(`/lessons/${dateData.year}/${dateData.month + 1}`).then(res => {
+    instance(`/api/lessons/${dateData.year}/${dateData.month + 1}`).then(res => {
       const startDay = new Date(dateData.year, dateData.month, 0).getDay()
       const data = res.data.data
       let returnData = []

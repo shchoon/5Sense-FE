@@ -52,7 +52,7 @@ export default function StudentAddClassModal({ onClose }: IProps) {
   })
 
   const durationRigister = () => {
-    instance(`/duration-lessons/${selectedClass.id}/details`).then(res => {
+    instance(`/api/duration-lessons/${selectedClass.id}/details`).then(res => {
       const lessonData = res.data.data
       const schedule = lessonData.schedules[0]
       setDurationSchedule(prev => [
@@ -76,7 +76,7 @@ export default function StudentAddClassModal({ onClose }: IProps) {
 
   useEffect(() => {
     if (classType === 'duration') {
-      instance(`/duration-lessons`).then(res => {
+      instance(`/api/duration-lessons`).then(res => {
         const lessonData = res.data.data
         setDropDownProps(prev => ({
           ...prev,
@@ -84,7 +84,7 @@ export default function StudentAddClassModal({ onClose }: IProps) {
         }))
       })
     } else if (classType === 'session') {
-      instance(`/session-lessons`, {
+      instance(`/api/session-lessons`, {
         params: {
           isCheckRegistrationsCount: true
         }

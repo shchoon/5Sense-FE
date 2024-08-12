@@ -69,7 +69,7 @@ export default function StudentRegister() {
   const studentRigister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (sessionSchedule.length !== 0) {
-      instance.post('/students', studentInfo).then((res: AxiosResponse) => {
+      instance.post('/api/students', studentInfo).then((res: AxiosResponse) => {
         const studentData = res.data.data
         const studentId = studentData.id
         instance
@@ -99,7 +99,7 @@ export default function StudentRegister() {
           })
       })
     } else if (durationSchedule.length !== 0) {
-      instance.post('/students', studentInfo).then(res => {
+      instance.post('/api/students', studentInfo).then(res => {
         const studentData = res.data.data
         const studentId = studentData.id
         instance
@@ -113,7 +113,7 @@ export default function StudentRegister() {
           })
       })
     } else {
-      instance.post('/students', studentInfo).then(res => {
+      instance.post('/api/students', studentInfo).then(res => {
         router.push('/student')
       })
     }

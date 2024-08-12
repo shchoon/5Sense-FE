@@ -32,7 +32,7 @@ export default function InstructorRegister({ params }: { params: { id: string } 
   }
 
   useEffect(() => {
-    instance(`/teachers/${instructorId}`).then(res => {
+    instance(`/api/teachers/${instructorId}`).then(res => {
       const data = res.data.data
       setInstructorInfo(prev => ({
         ...prev,

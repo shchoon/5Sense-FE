@@ -79,7 +79,7 @@ export default function StudentPage() {
   const infiniteScroll = useCallback(() => {
     const getData = () => {
       if (inputData.value === '') {
-        instance(`/students?searchBy=none&page=${metaData.page + 1}`).then(res => {
+        instance(`/api/students?searchBy=none&page=${metaData.page + 1}`).then(res => {
           const studentsData = res.data.data.students
           const meta = res.data.data.meta
           setStudentList(prev => [...prev, ...studentsData])
@@ -130,7 +130,7 @@ export default function StudentPage() {
   }, [metaData])
 
   useEffect(() => {
-    instance('/students?searchBy=none&page=1&take=10').then(res => {
+    instance('/api/students?searchBy=none&page=1&take=10').then(res => {
       const studentsData = res.data.data.students
       const meta = res.data.data.meta
       setStudentList(studentsData)

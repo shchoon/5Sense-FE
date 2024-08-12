@@ -66,7 +66,7 @@ export default function PayPage() {
 
     const getData = () => {
       if (inputData.value === '') {
-        instance(`/billing-payments?searchBy=none&page=${metaData.page + 1}&PaymentStatus=All`).then(res => {
+        instance(`/api/billing-payments?searchBy=none&page=${metaData.page + 1}&PaymentStatus=All`).then(res => {
           const studentsData = res.data.data.billingPayments
           const meta = res.data.data.meta
           setStudentList(prev => [...prev, ...studentsData])

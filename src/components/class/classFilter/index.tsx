@@ -185,7 +185,7 @@ export default function ClassFilter() {
   }
 
   useEffect(() => {
-    instance.get('/lesson-categories').then(res => {
+    instance('/api/lesson-categories').then(res => {
       const data: categoryType = res.data.data
       const mainCategory = data.mainCategory.toSorted((a, b) => sortedMainCategory(a))
       setCategoryList(prev => ({

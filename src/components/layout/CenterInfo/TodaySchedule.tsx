@@ -22,7 +22,7 @@ export default function TodaySchedule() {
   })
 
   useEffect(() => {
-    instance(`/lessons/${formattedToday.year}/${formattedToday.month}`).then(res => {
+    instance(`/api/lessons/${formattedToday.year}/${formattedToday.month}`).then(res => {
       const data = res.data.data[formattedToday.date - 1]
       if (data.length !== 0) {
         /* 클래스 startTime 순으로 정렬 */

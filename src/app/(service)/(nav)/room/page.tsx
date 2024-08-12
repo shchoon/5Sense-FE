@@ -39,7 +39,7 @@ export default function RoomPage() {
 
   const onDeleteRoom = (roomId: number) => {
     if (confirm('해당 룸을 삭제하시겠습니까?')) {
-      instance.delete(`/lesson-rooms/${roomId}`).then(res => {
+      instance.delete(`/api/lesson-rooms/${roomId}`).then(res => {
         getRoomData()
       })
     } else {

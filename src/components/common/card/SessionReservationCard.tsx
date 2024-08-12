@@ -28,7 +28,7 @@ export default function SessionReservationCard({ roomId }: { roomId: string }) {
     const reservationDate = localStorage.getItem('reservationDate') as string
     const reservationTime = localStorage.getItem('reservationTime') as string
 
-    instance('/lesson-rooms/daily', {
+    instance('/api/lesson-rooms/daily', {
       params: {
         date: new Date().toISOString()
       }
@@ -43,7 +43,7 @@ export default function SessionReservationCard({ roomId }: { roomId: string }) {
       }))
     })
 
-    instance(`/session-lessons/${classId}/details`).then(res => {
+    instance(`/api/session-lessons/${classId}/details`).then(res => {
       const classDetail = res.data.data
       setClassData(prev => ({
         ...prev,

@@ -109,7 +109,7 @@ export default function UnbookedRoomReservatoin({ params }: { params: { id: stri
   const getRoomData = (classId: number, lessonTime: number) => {
     const reservationDate = localStorage.getItem('reservationDate') as string
     const date = reservationDate.split('.')
-    instance('/lesson-rooms/daily', {
+    instance('/api/lesson-rooms/daily', {
       params: {
         date: new Date(Number(date[0]), Number(date[1]) - 1, Number(date[2])).toISOString()
       }
@@ -203,7 +203,7 @@ export default function UnbookedRoomReservatoin({ params }: { params: { id: stri
 
   useEffect(() => {
     /* parmas 통해서 roomData 가져오기 */
-    instance('/lesson-rooms/daily', {
+    instance('/api/lesson-rooms/daily', {
       params: {
         date: new Date().toISOString()
       }
@@ -221,7 +221,7 @@ export default function UnbookedRoomReservatoin({ params }: { params: { id: stri
     })
 
     /* 회차반 리스트 가죠오기 */
-    instance(`/session-lessons`, {
+    instance(`/api/session-lessons`, {
       params: {
         isCheckRegistrationsCount: true
       }

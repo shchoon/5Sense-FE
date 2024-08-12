@@ -53,7 +53,7 @@ export default function StudentsDetail({ studentData }: IProps) {
   })
 
   useEffect(() => {
-    instance(`/students/${studentData.id}`).then(res => {
+    instance(`/api/students/${studentData.id}`).then(res => {
       const data = res.data.data
       setStudentLessonData(prev => ({
         ...prev,

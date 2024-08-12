@@ -52,7 +52,7 @@ export default function FilterSearchName(props: IProps) {
   let sortFilterName = filterName()
 
   useEffect(() => {
-    instance(`/${props.target}?searchBy=none&page=1&take=100`).then(res => {
+    instance(`/api/${props.target}?searchBy=none&page=1&take=100`).then(res => {
       const list = res.data.data[`${props.target}`]
       setListData(list)
     })

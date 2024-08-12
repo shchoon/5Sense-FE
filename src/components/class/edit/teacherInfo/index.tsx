@@ -52,7 +52,7 @@ export default function TeacherInfo({ onChange, valid, teacherInfo }: IProps) {
 
   const [teacherList, setTeacherList] = useState<{ id: string; name: string; phone: string }[]>([])
   useEffect(() => {
-    instance('/teachers?searchBy=none&take=100').then(res => {
+    instance('/api/teachers?searchBy=none&take=100').then(res => {
       setTeacherList(res.data.data.teachers)
     })
   }, [isClickedAddTeacher])
