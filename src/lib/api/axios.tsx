@@ -34,7 +34,7 @@ instance.interceptors.request.use(
       if (accessTokenExp && checkToken(accessTokenExp) < 5) {
         try {
           const { data } = await axios.post(
-            process.env.NEXT_PUBLIC_IP_ADDRESS + '/auth/reissue',
+            process.env.NEXT_PUBLIC_IP_ADDRESS + '/api/auth/reissue',
             {},
             {
               headers: {
@@ -50,7 +50,7 @@ instance.interceptors.request.use(
         }
       } else {
         // 탈퇴 회원 요청
-        if (config.url === '/auth/cancelMembership') {
+        if (config.url === '/api/auth/cancelMembership') {
           config.headers.Authorization = `Bearer ${refreshToken}`
         }
         config.headers.Authorization = `Bearer ${accessToken}`
@@ -72,7 +72,7 @@ instance.interceptors.response.use(
     if (url === '/centers' && method === 'post') {
       const refreshToken = localStorage.getItem('refreshToken')
       const { data } = await axios.post(
-        process.env.NEXT_PUBLIC_IP_ADDRESS + '/auth/reissue',
+        process.env.NEXT_PUBLIC_IP_ADDRESS + '/api/auth/reissue',
         {},
         {
           headers: {
