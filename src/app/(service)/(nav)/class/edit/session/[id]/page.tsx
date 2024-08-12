@@ -1,7 +1,7 @@
 'use client'
 import { Button } from 'flowbite-react'
-import { useRouter } from 'next/navigation'
-import { BaseSyntheticEvent, useEffect } from 'react'
+import { useParams, useRouter } from 'next/navigation'
+import { BaseSyntheticEvent, useEffect, useState } from 'react'
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
@@ -11,9 +11,9 @@ import SearchPerson from '@/components/class/register/searchPerson'
 import ContentHeader from '@/components/common/ContentHeader'
 import TextInput from '@/components/common/TextInput'
 import TextareaForm from '@/components/common/TextareaForm'
-import { postDurationLessons, postSessionLessons } from '@/lib/api/class'
+import { getSesstionLessons, putDurationLessons, putSesstionLessons } from '@/lib/api/class'
 import { DurationScheduleType, durationClassScheduleState } from '@/lib/state/classDurationSchedule'
-import { durationClassName } from '@/lib/state/durationClassName'
+import { sessionScheduleState } from '@/lib/state/studentSessionSchedule'
 
 export type classDataType = {
   name: string
@@ -36,9 +36,14 @@ export type classDataType = {
 export default function RegisterPage() {
   const router = useRouter()
 
+  const params = useParams()
+
+  const [teacherName, setTeacehrName] = useState('')
+
   const durationSchedule = useRecoilValue(durationClassScheduleState)
   const setDurationSchedule = useSetRecoilState(durationClassScheduleState)
-  const setDurationClassName = useSetRecoilState(durationClassName)
+  const sessionScheduele = useRecoilValue(sessionScheduleState)
+  const setSessionSchedule = useSetRecoilState(sessionScheduleState)
 
   const Props = useForm<classDataType>({
     defaultValues: {
@@ -50,7 +55,7 @@ export default function RegisterPage() {
         subId: undefined,
         subName: undefined
       },
-      type: 'duration',
+      type: 'session',
       lessonTime: 30,
       tuitionFee: '',
       totalSessions: '',
@@ -77,40 +82,23 @@ export default function RegisterPage() {
       categoryName = data.category.subName
     }
 
-    if (data.type === 'duration') {
-      const result = await postDurationLessons({
-        name: data.name,
-        memo: data.memo,
-        tuitionFee: Number(data.tuitionFee),
-        category: {
-          id: categoryId,
-          name: categoryName
-        },
-        teacherId: data.teacherId,
-        schedules: data.schedules
-      })
-      if (result.success) {
-        router.push('/class')
-      }
+    console.log('durl', data)
+
+    const requestData = {
+      name: data.name,
+      memo: data.memo,
+      category: {
+        id: categoryId,
+        name: categoryName
+      },
+      teacherId: data.teacherId
     }
 
-    if (data.type === 'session') {
-      const result = await postSessionLessons({
-        name: data.name,
-        memo: data.memo,
-        lessonTime: data.lessonTime,
-        tuitionFee: Number(data.tuitionFee),
-        capacity: data.capacity,
-        totalSessions: Number(data.totalSessions),
-        category: {
-          id: categoryId,
-          name: categoryName
-        },
-        teacherId: data.teacherId
-      })
-      if (result.success) {
-        router.push('/class')
-      }
+    const result = await putSesstionLessons(params.id as string, requestData)
+
+    console.log('result', result)
+    if (result.success) {
+      router.push('/class')
     }
   }
   const {
@@ -122,13 +110,13 @@ export default function RegisterPage() {
     setFocus,
     setError,
     clearErrors,
+    reset,
     formState: { errors }
   } = Props
 
   useEffect(() => {
     return () => {
-      setDurationSchedule([])
-      setDurationClassName('')
+      setSessionSchedule([])
     }
   }, [])
 
@@ -154,14 +142,37 @@ export default function RegisterPage() {
       } else {
         clearErrors('schedules')
       }
+
       handleSubmit(onValid, onInvalid)(event)
     }
 
-  setDurationClassName(watch('name'))
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await getSesstionLessons(params.id)
+        console.log(data)
+        reset({
+          name: data.data.name,
+          memo: data.data.memo,
+          category: data.data.category,
+          totalSessions: data.data.totalSessions,
+          tuitionFee: data.data.tuitionFee,
+          teacherId: data.data.teacher.id,
+          lessonTime: data.data.lessonTime,
+          capacity: data.data.capacity
+        })
+        setTeacehrName(data.data.teacher.name)
+      } catch (error) {
+        console.error('Error fetching data: ', error)
+      }
+    }
+
+    fetchData()
+  }, [params.id])
 
   return (
     <div className="flex flex-col items-center pb-[60px]">
-      <ContentHeader title="클래스 관리" back onClick={() => router.push('/class')} />
+      <ContentHeader title="클래스 수정" back onClick={() => router.push('/class')} />
       <form className="w-[640px] flex flex-col gap-5" onSubmit={customHandleSubmit(onSubmit)}>
         <div className={`class-box`}>
           <div className={`gray-900-bold text-xl`}>클래스 정보</div>
@@ -193,10 +204,16 @@ export default function RegisterPage() {
             <Category {...Props} />
           </div>
         </div>
-        <ClassType {...Props} edit={false} />
-        <SearchPerson type="teachers" setValue={setValue} errors={errors} />
+        <ClassType {...Props} edit />
+        <SearchPerson
+          type="teachers"
+          setValue={setValue}
+          errors={errors}
+          teacherName={teacherName}
+          getValues={getValues}
+        />
         <Button type="submit" color="primary">
-          등록하기
+          수정하기
         </Button>
       </form>
     </div>

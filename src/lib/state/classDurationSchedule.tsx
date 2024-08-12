@@ -9,6 +9,7 @@ export interface DurationScheduleType {
   repeatDate: string
   roomId: number
   lessonTime: number
+  room?: any
 }
 
 export const durationClassScheduleState = atom<DurationScheduleType[]>({

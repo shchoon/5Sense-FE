@@ -1,245 +1,235 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { Button } from 'flowbite-react'
+import { useParams, useRouter } from 'next/navigation'
+import { BaseSyntheticEvent, useEffect, useState } from 'react'
+import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import { useParams, useRouter } from 'next/navigation'
-import { durationClassScheduleState } from '@/lib/state/classDurationSchedule'
-import ClassInfo from '@/components/class/edit/classInfo'
-import ClassType from '@/components/class/edit/classType'
-import TeacherInfo from '@/components/class/edit/teacherInfo'
+import Category from '@/components/class/classInfo/Category'
+import ClassType from '@/components/class/register/classType'
+import SearchPerson from '@/components/class/register/searchPerson'
+import ContentHeader from '@/components/common/ContentHeader'
+import TextInput from '@/components/common/TextInput'
+import TextareaForm from '@/components/common/TextareaForm'
 import { getDurationLessons, putDurationLessons } from '@/lib/api/class'
+import { DurationScheduleType, durationClassScheduleState } from '@/lib/state/classDurationSchedule'
+import { calculateLessonTime } from '@/utils'
 
-export interface IClassInfo {
+export type classDataType = {
   name: string
   memo: string
   category: {
-    id: number
-    name: string
-    subId: number
-    subName: string
+    id: number | undefined
+    name: string | undefined
+    subId: number | undefined
+    subName: string | undefined
   }
-  categoryId: string
-  categoryName: string
-}
-
-export interface IInfoValid {
-  valid: boolean
-  name: boolean
-  category: boolean
-}
-
-export interface ITypeValid {
-  valid: boolean
-  fee: boolean
-  schedule: boolean
-}
-
-export interface IClassType {
   type: string
   lessonTime: number
   tuitionFee: string
   totalSessions: string
   capacity: number
+  schedules: DurationScheduleType[]
+  teacherId: string
 }
 
-export interface ITeacherInfo {
-  id: string
-  name: string
-}
-
-export default function EditPage() {
+export default function RegisterPage() {
   const router = useRouter()
 
-  const params = useParams<{ type: string; id: string }>()
+  const params = useParams()
 
-  const [classInfo, setClassInfo] = useState({
-    name: '',
-    memo: '',
-    category: {
-      id: 0,
-      name: '',
-      subId: 0,
-      subName: ''
-    }
-  })
-
-  const [classType, setClassType] = useState({
-    type: 'duration',
-    lessonTime: 30,
-    tuitionFee: '',
-    totalSessions: '',
-    capacity: 1
-  })
-
-  const [teacherInfo, setTeacherInfo] = useState({
-    id: '',
-    name: ''
-  })
+  const [teacherName, setTeacehrName] = useState('')
 
   const durationSchedule = useRecoilValue(durationClassScheduleState)
   const setDurationSchedule = useSetRecoilState(durationClassScheduleState)
 
-  const [infoValid, setInfoValid] = useState({
-    valid: true,
-    name: true,
-    category: true
+  const Props = useForm<classDataType>({
+    defaultValues: {
+      name: '',
+      memo: '',
+      category: {
+        id: undefined,
+        name: undefined,
+        subId: undefined,
+        subName: undefined
+      },
+      type: 'duration',
+      lessonTime: 30,
+      tuitionFee: '',
+      totalSessions: '',
+      capacity: 1,
+      schedules: durationSchedule,
+      teacherId: ''
+    },
+    mode: 'onSubmit',
+    reValidateMode: 'onSubmit'
   })
 
-  const [typeValid, setTypeValid] = useState({
-    valid: true,
-    fee: true,
-    schedule: true
-  })
+  const onSubmit: SubmitHandler<classDataType> = async (data, e) => {
+    let categoryId
+    let categoryName
 
-  const [teacherValid, setTeacherValid] = useState(true)
+    if (data.category.subId == undefined && data.category.subName == undefined) {
+      categoryId = data.category.id
+      categoryName = data.category.name
+    } else if (data.category.id === 9) {
+      categoryId = 0
+      categoryName = data.category.subName
+    } else {
+      categoryId = data.category.subId
+      categoryName = data.category.subName
+    }
+
+    const subSchedule = data.schedules.map(({ room, ...rest }) => rest)
+
+    let isUpdatedDurationScehdule: boolean
+    if ('room' in durationSchedule[0]) {
+      isUpdatedDurationScehdule = false
+    } else {
+      isUpdatedDurationScehdule = true
+    }
+    console.log('data', subSchedule)
+    console.log('lessonTime', calculateLessonTime(durationSchedule[0].startTime, durationSchedule[0].endTime))
+    const requestData = {
+      name: data.name,
+      memo: data.memo,
+      tuitionFee: Number(data.tuitionFee),
+      category: {
+        id: categoryId,
+        name: categoryName
+      },
+      teacherId: data.teacherId,
+      schedules: [
+        {
+          id: Number(params.id),
+          startTime: durationSchedule[0].startTime,
+          endTime: durationSchedule[0].endTime,
+          repeatDate: durationSchedule[0].repeatDate,
+          lessonTime: isUpdatedDurationScehdule
+            ? durationSchedule[0].lessonTime
+            : calculateLessonTime(durationSchedule[0].startTime, durationSchedule[0].endTime),
+          roomId: isUpdatedDurationScehdule ? durationSchedule[0].roomId : durationSchedule[0].room.id
+        }
+      ]
+    }
+    const result = await putDurationLessons(params.id as string, requestData)
+    if (result.success) {
+      router.push('/class')
+    }
+  }
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setValue,
+    watch,
+    setFocus,
+    setError,
+    clearErrors,
+    reset,
+    formState: { errors }
+  } = Props
 
   useEffect(() => {
-    getDurationLessons({ id: params.id }).then((res): any => {
-      const result = res.data.data
-      console.log('result', result)
-      if (result.category.subId === null || result.category.id === 0) {
-        console.log('jojo')
-        setClassInfo(prev => ({
-          ...prev,
-          name: result.name,
-          memo: result.memo,
-          category: {
-            id: result.category.id,
-            name: result.category.name,
-            subId: result.category.id,
-            subName: result.category.name
-          }
-        }))
-        setTeacherInfo({ ...result.teacher })
-        setClassType(prev => ({
-          ...prev,
-          type: params.type,
-          lessonTime: result.lessonTime,
-          tuitionFee: result.tuitionFee.toLocaleString(),
-          totalSessions: result.totalSessions,
-          capacity: result.capacity
-        }))
-        setDurationSchedule([...result.schedules])
-      } else {
-        setClassInfo(prev => ({
-          ...prev,
-          name: result.name,
-          memo: result.memo,
-          category: {
-            ...result.category
-          }
-        }))
-        setTeacherInfo({ ...result.teacher })
-        setClassType(prev => ({
-          ...prev,
-          type: params.type,
-          lessonTime: result.lessonTime,
-          tuitionFee: result.tuitionFee.toLocaleString(),
-          totalSessions: result.totalSessions,
-          capacity: result.capacity
-        }))
-        setDurationSchedule([...result.schedules])
-      }
-    })
+    return () => {
+      setDurationSchedule([])
+    }
   }, [])
 
   useEffect(() => {
-    console.log(classInfo)
-    console.log(classType)
-    console.log(teacherInfo)
-  }, [classInfo, classType, teacherInfo])
+    setValue('schedules', durationSchedule)
+  }, [durationSchedule])
 
-  console.log(durationSchedule)
-
-  // if (classInfo.category.subName === null) {
-  //   setClassInfo(prev => ({
-  //     ...prev,
-  //     category: {
-  //       id: classInfo.category.id,
-  //       name: classInfo.category.name,
-  //       subId: classInfo.category.id,
-  //       subName: classInfo.category.name
-  //     }
-  //   }))
-  // } else {
-
-  const handleEditClass = () => {
-    if (classInfo.name.length === 0) {
-      return setInfoValid(prev => ({ ...prev, valid: false, name: false }))
-    } else {
-      setInfoValid(prev => ({ ...prev, valid: true, name: true }))
-    }
-
-    if (classInfo.category.id == 0 || classInfo.category.subName.length === 0) {
-      return setInfoValid(prev => ({ ...prev, valid: false, category: false }))
-    } else {
-      setInfoValid(prev => ({ ...prev, category: true }))
-    }
-
-    if (classType.tuitionFee.length === 0) {
-      return setTypeValid(prev => ({ ...prev, valid: false, fee: false }))
-    } else {
-      setTypeValid(prev => ({ ...prev, valid: true, fee: true }))
-    }
-
-    if (classType.type === 'duration') {
-      if (durationSchedule.length === 0) {
-        return setTypeValid(prev => ({ ...prev, valid: false, schedule: false }))
+  const customHandleSubmit =
+    (onValid: SubmitHandler<classDataType>, onInvalid?: SubmitErrorHandler<classDataType>) =>
+    (event?: BaseSyntheticEvent) => {
+      event?.preventDefault()
+      if (isNaN(parseInt(getValues('teacherId')))) {
+        setError('teacherId', {
+          type: 'required'
+        })
       } else {
-        setTypeValid(prev => ({ ...prev, schedule: true }))
+        clearErrors('teacherId')
+      }
+      if (getValues('type') === 'duration' && getValues('schedules').length < 1) {
+        setError('schedules', {
+          type: 'required'
+        })
+      } else {
+        clearErrors('schedules')
+      }
+
+      handleSubmit(onValid, onInvalid)(event)
+    }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await getDurationLessons(params.id)
+        console.log(data)
+        reset({
+          name: data.data.name,
+          memo: data.data.memo,
+          category: data.data.category,
+          tuitionFee: data.data.tuitionFee,
+          teacherId: data.data.teacher.id
+        })
+        setTeacehrName(data.data.teacher.name)
+        setDurationSchedule(data.data.schedules)
+      } catch (error) {
+        console.error('Error fetching data: ', error)
       }
     }
 
-    if (teacherInfo.id.length === 0) {
-      return setTeacherValid(false)
-    }
-
-    let data
-    const tuition = classType.tuitionFee.replaceAll(',', '')
-
-    data = {
-      name: classInfo.name,
-      memo: classInfo.memo,
-      category: {
-        id: classInfo.category.subId,
-        name: classInfo.category.subName
-      },
-      tuitionFee: Number(tuition),
-      teacherId: Number(teacherInfo.id),
-      schedules: durationSchedule
-    }
-
-    console.log(params.id)
-
-    console.log(data)
-
-    return putDurationLessons(params.id, data).then(res => {
-      console.log('res', res)
-      // router.push('/class')
-    })
-  }
+    fetchData()
+  }, [params.id])
 
   return (
-    <div className="w-[640px] flex flex-col gap-5">
-      {/* <ClassInfo
-        classInfo={classInfo}
-        vaild={infoValid}
-        checkValid={(newValue: { [key: string]: boolean }) => {
-          setClassType(prev => ({ ...prev, ...newValue }))
-        }}
-        onChange={(newValue: { [key: string]: string }) => {
-          setClassInfo(prev => ({ ...prev, ...newValue }))
-        }}
-      /> */}
-      <ClassType classType={classType} valid={typeValid} setClassType={setClassType} />
-      <TeacherInfo
-        teacherInfo={teacherInfo}
-        valid={teacherValid}
-        onChange={(value: string) => setTeacherInfo(prev => ({ ...prev, id: value }))}
-      />
-      <div className="Button w-full btn-purple-lg" onClick={handleEditClass}>
-        수정하기
-      </div>
+    <div className="flex flex-col items-center pb-[60px]">
+      <ContentHeader title="클래스 관리" back onClick={() => router.push('/class')} />
+      <form className="w-[640px] flex flex-col gap-5" onSubmit={customHandleSubmit(onSubmit)}>
+        <div className={`class-box`}>
+          <div className={`gray-900-bold text-xl`}>클래스 정보</div>
+          <div className="info-detail flex flex-col gap-2">
+            <TextInput
+              register={register('name', { required: true })}
+              errors={errors}
+              value={watch('name')}
+              title="클래스 명"
+              placeholder="클래스명을 입력해 주세요"
+              maxLength={20}
+            />
+            <TextareaForm
+              register={register('memo', {
+                required: true,
+                onChange: e => {
+                  const element = e.target as HTMLTextAreaElement
+                  element.style.height = 'auto'
+                  element.style.height = `${element.scrollHeight}px`
+                }
+              })}
+              setFocus={setFocus}
+              errors={errors}
+              value={watch('memo')}
+              title="클래스 메모"
+              placeholder="클래스관련 메모를 적어주세요"
+              maxLength={300}
+            />
+            <Category {...Props} />
+          </div>
+        </div>
+        <ClassType {...Props} edit />
+        <SearchPerson
+          type="teachers"
+          setValue={setValue}
+          errors={errors}
+          teacherName={teacherName}
+          getValues={getValues}
+        />
+        <Button type="submit" color="primary">
+          수정하기
+        </Button>
+      </form>
     </div>
   )
 }

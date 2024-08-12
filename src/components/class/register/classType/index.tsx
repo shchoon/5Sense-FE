@@ -12,10 +12,14 @@ export type scheduleItem = {
   modal: boolean
 }
 
-export default function ClassType(props: UseFormReturn<classDataType, any, undefined>) {
-  const { reset, getValues } = props
+export interface Props extends UseFormReturn<classDataType> {
+  edit: boolean
+}
 
-  const [isDuration, setIsDuration] = useState<boolean>(true)
+export default function ClassType(props: Props) {
+  const { reset, getValues, edit } = props
+
+  const [isDuration, setIsDuration] = useState<string>(getValues('type'))
 
   const onInitClassType = (data: string) => {
     if (data === '기간반') {
@@ -27,7 +31,7 @@ export default function ClassType(props: UseFormReturn<classDataType, any, undef
         totalSessions: '',
         capacity: 1
       })
-      setIsDuration(true)
+      setIsDuration('duration')
     } else {
       reset({
         ...getValues(),
@@ -37,7 +41,7 @@ export default function ClassType(props: UseFormReturn<classDataType, any, undef
         totalSessions: '',
         capacity: 1
       })
-      setIsDuration(false)
+      setIsDuration('session')
     }
   }
 
@@ -47,10 +51,14 @@ export default function ClassType(props: UseFormReturn<classDataType, any, undef
         className={`w-[290px] h-10 rounded-md flex justify-center items-center text-base leading-normal ${
           isActive ? 'bg-primary-600 text-white font-semibold' : 'text-gray-500 font-medium'
         }`}
-        onClick={e => {
-          e.preventDefault()
-          onInitClassType(content)
-        }}
+        onClick={
+          edit
+            ? undefined
+            : e => {
+                e.preventDefault()
+                onInitClassType(content)
+              }
+        }
       >
         {content}
       </button>
@@ -61,10 +69,10 @@ export default function ClassType(props: UseFormReturn<classDataType, any, undef
     <div className={`class-box`}>
       <div className="Title gray-900-bold text-xl">클래스 유형</div>
       <div className="flex w-full h-[52px] p-1.5 rounded-md border border-gray-300 ">
-        {ClassType('기간반', isDuration)}
-        {ClassType('회차반', !isDuration)}
+        {ClassType('기간반', isDuration == 'duration')}
+        {ClassType('회차반', !(isDuration == 'duration'))}
       </div>
-      {isDuration ? <Duration {...props} /> : <Session {...props} />}
+      {isDuration == 'duration' ? <Duration {...props} /> : <Session {...props} />}
     </div>
   )
 }

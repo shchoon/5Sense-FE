@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import Image from 'next/image'
 
-import { IClassInfo } from '@/app/(service)/(nav)/class/edit/session/page'
+import { IClassInfo } from '@/app/(service)/(nav)/class/edit/session/[id]/page'
 import CheckIcon from '@/icons/icon/category/check.svg'
 
 export type category = {

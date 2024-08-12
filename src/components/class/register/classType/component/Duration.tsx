@@ -3,21 +3,18 @@ import { Button, Modal } from 'flowbite-react'
 import { UseFormReturn } from 'react-hook-form'
 import { useRecoilValue } from 'recoil'
 
-import { classDataType } from '@/app/(service)/(nav)/class/register/page'
 import RoomReservation from '@/components/room/RoomReservation'
 import UseModal from '@/hooks/useModal'
 import PlusIcon from '@/icons/icon/plus.svg'
 import { getKoreanNumber } from '@/utils'
-import DurationScheduleCheck from '@/components/check/ClassDurationScheduleCheck'
+import DurationScheduleCheck from '../../../../check/ClassDurationScheduleCheck'
+import { Props } from '..'
+import { useParams } from 'next/navigation'
 
-export default function Duration({
-  register,
-  watch,
-  formState,
-  getValues
-}: UseFormReturn<classDataType, any, undefined>) {
+export default function Duration({ register, watch, formState, getValues, edit }: Props) {
   const { errors, defaultValues } = formState
-  const durationSchedule = useRecoilValue(durationClassScheduleState)
+  const duarationSchedule = useRecoilValue(durationClassScheduleState)
+  const params = useParams()
 
   const [Schedule, close, open] = UseModal()
 
@@ -43,8 +40,6 @@ export default function Duration({
   //   console.log(isParams)
   // }, [params])
 
-  console.log(durationSchedule)
-
   return (
     <div className="flex flex-col gap-10">
       <div className="w-full flex flex-col gap-2">
@@ -65,17 +60,20 @@ export default function Duration({
       </div>
       <div className="w-full flex flex-col gap-2">
         <p className={`${errors.schedules ? 'text-red-500' : 'text-gray-800'} gray-800-semibold`}>일정</p>
-        <Button color="outline" fullSized onClick={open}>
-          <PlusIcon className="mr-2" />
-          일정 추가
-        </Button>
+        {!edit && (
+          <Button color="outline" fullSized onClick={open}>
+            <PlusIcon className="mr-2" />
+            일정 추가
+          </Button>
+        )}
+
         {/**여기 일정 UI 들어가면 됩니다. */}
-        {durationSchedule.length !== 0 && <DurationScheduleCheck />}
+        <DurationScheduleCheck edit={edit} onClick={open} />
       </div>
       <Modal size="md" show={Schedule} onClose={close}>
         <Modal.Header>일정 추가</Modal.Header>
         <Modal.Body>
-          <RoomReservation classType="duration" viewType="modal" onClose={close} />
+          <RoomReservation classType="duration" viewType="modal" onClose={close} edit={edit} />
         </Modal.Body>
       </Modal>
     </div>

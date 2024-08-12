@@ -3,16 +3,10 @@
 import MinusIcon from 'public/assets/icons/minus_vector.svg'
 import PlusIcon from 'public/assets/icons/plus_vector.svg'
 
-import { classDataType } from '@/app/(service)/(nav)/class/register/page'
-import { UseFormReturn } from 'react-hook-form'
 import { formatAddComma } from '@/utils'
+import { Props } from '..'
 
-export default function Session({
-  register,
-  watch,
-  setValue,
-  formState
-}: UseFormReturn<classDataType, any, undefined>) {
+export default function Session({ register, watch, setValue, formState, edit }: Props) {
   const { errors } = formState
   const disabled = false
 
@@ -87,6 +81,7 @@ export default function Session({
                 type="number"
                 className="flex-grow text-right placeholder:text-gray-400 text-base font-normal border-none outline-none disabled:bg-inherit disabled:text-[#9CA3AF] focus:shadow-none focus:border-current focus:ring-0 focus:ring-transparent"
                 placeholder="0"
+                disabled={edit}
                 {...register('tuitionFee', { required: true })}
               />
               <span className="text-gray-400 text-base font-normal">원</span>
@@ -98,6 +93,7 @@ export default function Session({
                 type="number"
                 className="flex-grow text-right placeholder:text-gray-400 text-base font-normal border-none outline-none disabled:bg-inherit disabled:text-[#9CA3AF] focus:shadow-none focus:border-current focus:ring-0 focus:ring-transparent"
                 placeholder="0"
+                disabled={edit}
                 {...register('totalSessions', { required: true })}
               />
               <span className="text-gray-400 text-base font-normal">회</span>
@@ -107,15 +103,13 @@ export default function Session({
             <div className="flex w-full">
               <span className="gray-900-semibold text-base">총 금액</span>
               <span
-                className={`flex-grow text-right text-[22px] font-bold ${
-                  disabled ? 'text-[#9CA3AF]' : 'text-indigo-500'
-                }`}
+                className={`flex-grow text-right text-[22px] font-bold ${edit ? 'text-[#9CA3AF]' : 'text-indigo-500'}`}
               >
-                {formatAddComma(Number(watch('tuitionFee')), Number(watch('totalSessions')))}원
+                {formatAddComma(watch('tuitionFee'), watch('totalSessions'))}원
               </span>
             </div>
             <p className="text-right text-gray-500 text-xs font-medium">
-              {geKoreanNumber(formatAddComma(Number(watch('tuitionFee')), Number(watch('totalSessions'))))}원
+              {geKoreanNumber(formatAddComma(watch('tuitionFee'), watch('totalSessions')))}원
             </p>
           </div>
         </div>
@@ -134,10 +128,12 @@ export default function Session({
       {/* 소요 시간*/}
       <div className="time w-full flex flex-col gap-2 mt-10">
         <div className="gray-800-semibold text-base">소요 시간</div>
-        <div className="w-full flex justify-between h-16 p-3 border border-1 border-gray-300 rounded-full">
+        <div
+          className={`w-full flex justify-between h-16 p-3 border border-1 border-gray-300 rounded-full ${edit && 'bg-gray-50'}`}
+        >
           <button
-            disabled={watch('lessonTime') === 30}
-            className={`w-10 h-full flex justify-center items-center rounded-full bg-primary-600 cursor-pointer disabled:bg-gray-200`}
+            disabled={watch('lessonTime') === 30 || edit}
+            className={`w-10 h-full flex justify-center items-center rounded-full ${edit ? 'bg-gray-200' : 'bg-primary-600'} cursor-pointer`}
             onClick={e => {
               e.preventDefault()
               handleLessonTime('minus')
@@ -153,8 +149,8 @@ export default function Session({
             {watch('lessonTime')}분
           </div>
           <button
-            disabled={disabled}
-            className="w-10 h-full flex justify-center items-center rounded-full bg-primary-600 cursor-pointer disabled:bg-gray-200"
+            disabled={edit}
+            className={`w-10 h-full flex justify-center items-center rounded-full ${edit ? 'bg-gray-200' : 'bg-primary-600'} cursor-pointer`}
             onClick={e => {
               e.preventDefault()
               handleLessonTime('plus')
@@ -167,10 +163,12 @@ export default function Session({
       {/* 최대 수업 정원*/}
       <div className="w-full flex flex-col gap-2 mt-8">
         <div className="text-base gray-800-semibold">최대 수업 정원</div>
-        <div className="w-full flex justify-between h-16 p-3 border border-1 border-gray-300 rounded-full">
+        <div
+          className={`w-full flex justify-between h-16 p-3 border border-1 border-gray-300 rounded-full ${edit && 'bg-gray-50'}`}
+        >
           <button
-            disabled={watch('capacity') === 1}
-            className="w-10 h-full flex items-center justify-center rounded-full bg-primary-600 cursor-pointer disabled:bg-gray-200"
+            disabled={watch('capacity') === 1 || edit}
+            className={`w-10 h-full flex justify-center items-center rounded-full ${edit ? 'bg-gray-200' : 'bg-primary-600'} cursor-pointer`}
             onClick={e => {
               e.preventDefault()
               handleStudentCnt('minus')
@@ -186,8 +184,8 @@ export default function Session({
             {watch('capacity')}명
           </div>
           <button
-            disabled={disabled}
-            className="w-10 h-full flex items-center justify-center rounded-full bg-primary-600 cursor-pointer disabled:bg-gray-200"
+            disabled={edit}
+            className={`w-10 h-full flex justify-center items-center rounded-full ${edit ? 'bg-gray-200' : 'bg-primary-600'} cursor-pointer`}
             onClick={e => {
               e.preventDefault()
               handleStudentCnt('plus')

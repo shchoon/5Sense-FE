@@ -47,10 +47,8 @@ export function calculateEndTime(startTime: string, lessonTime: number) {
 }
 
 export function formatLessonDate(date: string) {
-  const dayList = ['일', '월', '화', '수', '목', '금', '토']
-  const formatDate = date.slice(0, 10).split('-')
-  const targetedDate = new Date(Number(formatDate[0]), Number(formatDate[1]) - 1, Number(formatDate[2]))
-  return formatDate[0] + '.' + formatDate[1] + '.' + formatDate[2] + ` (${dayList[targetedDate.getDay()]})`
+  const revertToKoreaTime = new Date(date)
+  return `${revertToKoreaTime.getFullYear()}.${revertToKoreaTime.getMonth() + 1}.${revertToKoreaTime.getDate()}`
 }
 
 export function getKoreanNumber(value: string) {
@@ -87,12 +85,12 @@ export const formatPhoneNum = (phoneNumber: string) => {
   return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
 }
 
-export const formatAddComma = (tutionFee: number, cnt: number) => {
-  const strTutionFee = tutionFee.toString()
+export const formatAddComma = (tutionFee: string, cnt: string) => {
+  const numCnt = Number(cnt)
+  console.log('tutionFee', tutionFee)
+  const removedCommaValue = Number(tutionFee)
 
-  const removedCommaValue = Number(strTutionFee.replaceAll(',', ''))
-
-  return (removedCommaValue * cnt).toLocaleString()
+  return (removedCommaValue * numCnt).toLocaleString()
 }
 
 export const formatDate = (date: string) => {
@@ -165,4 +163,23 @@ export const getTimeListByHour = (openTime: string, closeTime: string) => {
   }
 
   return timeList
+}
+
+export const calculateLessonTime = (startTime: string, endTime: string) => {
+  const start = {
+    hour: Number(startTime.split(':')[0]),
+    min: Number(startTime.split(':')[1])
+  }
+
+  const end = {
+    hour: Number(endTime.split(':')[0]),
+    min: Number(endTime.split(':')[1])
+  }
+
+  const divideTimeByHalf = {
+    hour: (end.hour - start.hour) * 60,
+    min: end.min - start.min
+  }
+
+  return divideTimeByHalf.hour + divideTimeByHalf.min
 }

@@ -29,22 +29,30 @@ export const patchSesstionLessons = async (requestData: any) => {
 }
 
 export const getDurationLessons = async (requestData: any) => {
-  const lessonId = Number(requestData.id)
+  console.log('ruquestData', requestData)
+  const lessonId = Number(requestData)
   return instance.get(`/duration-lessons/${lessonId}/details`)
 }
 
 export const getSesstionLessons = async (requestData: any) => {
-  const lessonId = Number(requestData.id)
+  const lessonId = Number(requestData)
   return instance.get(`/session-lessons/${lessonId}/details`)
 }
 
 export const putDurationLessons = async (id: string, requestData: any) => {
-  const lessonId = Number(id)
-  return instance.put(`/duration-lessons/${lessonId}`, requestData)
+  try {
+    const res = await instance.put(`/duration-lessons/${id}`, requestData)
+    return res.data
+  } catch (error: any) {
+    return error.response
+  }
 }
 
 export const putSesstionLessons = async (id: string, requestData: any) => {
-  const lessonId = Number(id)
-  console.log('hih', requestData)
-  return instance.put(`/session-lessons/${lessonId}`, requestData)
+  try {
+    const res = await instance.put(`/session-lessons/${id}`, requestData)
+    return res.data
+  } catch (error: any) {
+    return error.response
+  }
 }
