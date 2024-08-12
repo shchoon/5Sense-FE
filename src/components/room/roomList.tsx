@@ -7,12 +7,11 @@ import { RoomDetailsState } from '@/lib/state/roomDetails'
 
 import UserIcon from 'public/assets/icons/user_icon.svg'
 import DotsIcon from 'public/assets/icons/dotsVertical.svg'
-import ModifyIcon from 'public/assets/icons/modify.svg'
+import ModifyIcon from '@/icons/icon/modify.svg'
 import Plus from '@/icons/icon/plus.svg'
 import Trash from '@/icons/icon/trash.svg'
 import ChevronLeftIcon from '@/icons/icon/room/chevronLeft.svg'
 import ChevronRightIcon from '@/icons/icon/room/chevronRight.svg'
-import instance from '@/lib/api/axios'
 
 interface IProps {
   roomData: { id: number; name: string; capacity: number; workTime: any }[][]
