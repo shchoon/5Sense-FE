@@ -3,12 +3,12 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import InputForm, { InputFormProps } from '@/components/common/InputForm'
 //import TextareaForm, { TextareaFormProps } from '@/components/common/TextareaForm'
 import Category from './Category'
-import { IClassInfo, IInfoValid } from '@/app/(service)/(nav)/class/edit/session/page'
+//import { IClassInfo, IInfoValid } from '@/app/(service)/(nav)/class/edit/session/page'
 import CustomInput from '@/components/common/InputForm'
 
 interface IProps {
-  classInfo: IClassInfo
-  vaild: IInfoValid
+  classInfo: any
+  vaild: any
   checkValid: (vlaue: any) => void
   onChange: (vlaue: any) => void
 }
