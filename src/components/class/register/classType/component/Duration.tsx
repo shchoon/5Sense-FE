@@ -3,17 +3,18 @@ import { Button, Modal } from 'flowbite-react'
 import { UseFormReturn } from 'react-hook-form'
 import { useRecoilValue } from 'recoil'
 
-import { classDataType } from '@/app/(service)/(nav)/class/register/page'
 import RoomReservation from '@/components/room/RoomReservation'
 import UseModal from '@/hooks/useModal'
 import PlusIcon from '@/icons/icon/plus.svg'
 import { getKoreanNumber } from '@/utils'
 import DurationScheduleCheck from '../../../../check/ClassDurationScheduleCheck'
 import { Props } from '..'
+import { useParams } from 'next/navigation'
 
 export default function Duration({ register, watch, formState, getValues, edit }: Props) {
   const { errors, defaultValues } = formState
   const duarationSchedule = useRecoilValue(durationClassScheduleState)
+  const params = useParams()
 
   const [Schedule, close, open] = UseModal()
 
@@ -38,6 +39,8 @@ export default function Duration({ register, watch, formState, getValues, edit }
   //   setIsParams(Boolean(params))
   //   console.log(isParams)
   // }, [params])
+
+  console.log(edit)
 
   return (
     <div className="flex flex-col gap-10">
@@ -67,12 +70,12 @@ export default function Duration({ register, watch, formState, getValues, edit }
         )}
 
         {/**여기 일정 UI 들어가면 됩니다. */}
-        <DurationScheduleCheck />
+        <DurationScheduleCheck edit={edit} onClick={open} />
       </div>
       <Modal size="md" show={Schedule} onClose={close}>
         <Modal.Header>일정 추가</Modal.Header>
         <Modal.Body>
-          <RoomReservation classType="duration" viewType="modal" onClose={close} />
+          <RoomReservation classType="duration" viewType="modal" onClose={close} edit={edit} />
         </Modal.Body>
       </Modal>
     </div>

@@ -145,7 +145,8 @@ export default function DetailClassModal({ id, type, isOpen, handleClose }: IPro
                         (data: { startTime: string; endTime: string; repeatDate: string }, i) => {
                           return (
                             <div key={i} className="w-full gray-800-medium text-base">
-                              {formatStartTime(data.startTime)} ~ {formatStartTime(data.endTime)} / {data.repeatDate}
+                              {formatStartTime(data.startTime)} ~ {formatStartTime(data.endTime)} / {data.repeatDate}{' '}
+                              반복
                             </div>
                           )
                         }
