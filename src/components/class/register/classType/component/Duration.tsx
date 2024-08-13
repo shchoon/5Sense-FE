@@ -53,6 +53,7 @@ export default function Duration({ register, watch, formState, getValues, edit }
           className="w-full h-[60px] border-b-2 border-x-0 border-t-0 flex-col justify-center items-start gray-900-semibold text-2xl placeholder:text-gray-300 focus:shadow-none focus:border-current focus:ring-0 focus:ring-transparent"
           placeholder="0 원"
           {...register('tuitionFee', { required: true })}
+          onWheel={e => e.currentTarget.blur()}
         />
         <p className="text-gray-500 text-sm font-normal font-['Inter']">
           {getKoreanNumber(watch('tuitionFee').toString())}원

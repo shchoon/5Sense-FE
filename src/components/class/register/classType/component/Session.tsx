@@ -83,6 +83,7 @@ export default function Session({ register, watch, setValue, formState, edit }: 
                 placeholder="0"
                 disabled={edit}
                 {...register('tuitionFee', { required: true })}
+                onWheel={e => e.currentTarget.blur()}
               />
               <span className="text-gray-400 text-base font-normal">원</span>
             </div>

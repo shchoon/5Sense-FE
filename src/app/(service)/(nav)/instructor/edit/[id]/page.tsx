@@ -84,6 +84,7 @@ export default function InstructorRegister({ params }: { params: { id: string } 
                   value={instructorInfo.phone}
                   onChange={e => onChangeInstructorInfo('phone', e)}
                   maxLength={12}
+                  onWheel={e => e.currentTarget.blur()}
                 />
               </div>
             </div>
