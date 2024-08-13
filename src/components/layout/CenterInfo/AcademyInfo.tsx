@@ -10,9 +10,10 @@ interface IProps {
   centerInfo: CenterInfo | undefined
   isExistCenter: boolean | undefined
   drawer?: boolean
+  onClose?: any
 }
 
-export default function AcademyInfo({ centerInfo, isExistCenter, drawer }: IProps) {
+export default function AcademyInfo({ centerInfo, isExistCenter, drawer, onClose }: IProps) {
   const router = useRouter()
   if (isExistCenter == undefined) {
     return
@@ -48,7 +49,12 @@ export default function AcademyInfo({ centerInfo, isExistCenter, drawer }: IProp
         className={`${
           drawer ? 'bg-primary-600' : 'bg-slate-50 bg-opacity-20'
         } max-w-[200px] w-full px-4 py-3  rounded-md text-center text-sm font-bold leading-[21px] cursor-pointer text-white`}
-        onClick={() => router.push('/centerInfo')}
+        onClick={() => {
+          router.push('/centerInfo')
+          if (onClose) {
+            onClose()
+          }
+        }}
       >
         내 프로필 관리
       </button>

@@ -195,7 +195,7 @@ export default function DetailClassModal({ id, type, isOpen, handleClose }: IPro
                 </button>
                 <button
                   className="w-full h-[52px] flex justify-center items-center text-white bg-primary-600 rounded-lg"
-                  /* onClick={() => editOfClass()} */
+                  onClick={() => editOfClass()}
                 >
                   <span className="text-[16px] font-semibold">수정하기</span>
                 </button>

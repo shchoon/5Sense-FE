@@ -139,7 +139,7 @@ export default function ManageMent() {
   const handleClickPatch = () => {
     instance
       .patch(
-        '/centers',
+        '/api/centers',
         { ...checkDiff() },
         {
           headers: {
