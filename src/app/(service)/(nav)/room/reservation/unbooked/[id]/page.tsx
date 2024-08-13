@@ -415,7 +415,7 @@ export default function UnbookedRoomReservatoin({ params }: { params: { id: stri
           onClick={() => {
             const date = reservationData.reservationDate.split('.')
             instance
-              .post('/session-lesson-schedules', {
+              .post('/api/session-lesson-schedules', {
                 lessonId: selectedClass.id,
                 studentId: studentId,
                 sessionDate: date && new Date(Number(date[0]), Number(date[1]) - 1, Number(date[2])).toISOString(),

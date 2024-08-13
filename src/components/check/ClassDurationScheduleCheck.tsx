@@ -50,7 +50,7 @@ export default function DurationScheduleCheck({ edit, onClick }: IProps) {
         }))
 
         /* 룸 정보 */
-        instance('lesson-rooms/daily', {
+        instance('/api/lesson-rooms/daily', {
           params: {
             date: new Date(date.getFullYear(), date.getMonth(), date.getDate()).toISOString()
           }
@@ -64,7 +64,7 @@ export default function DurationScheduleCheck({ edit, onClick }: IProps) {
         })
       })
     } else if (durationSchedules.length !== 0) {
-      instance('lesson-rooms/daily', {
+      instance('/api/lesson-rooms/daily', {
         params: {
           date: new Date(date.getFullYear(), date.getMonth(), date.getDate()).toISOString()
         }

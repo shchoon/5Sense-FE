@@ -114,7 +114,7 @@ export default function ModifyRoom({ params }: { params: { id: string } }) {
           className="w-full h-[52px] flex justify-center items-center text-white text-base font-semibold btn-purple"
           onClick={() => {
             instance
-              .put(`/lesson-rooms/${roomDetails.id}`, {
+              .put(`/api/lesson-rooms/${roomDetails.id}`, {
                 name: roomDetails.name,
                 capacity: roomDetails.capacity
               })

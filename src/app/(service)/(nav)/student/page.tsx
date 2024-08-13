@@ -92,7 +92,7 @@ export default function StudentPage() {
         })
       } else {
         instance(
-          `/students?searchBy=${inputData.searchBy}&${inputData.searchBy}=${inputData.value}&page=${metaData.page + 1}`
+          `/api/students?searchBy=${inputData.searchBy}&${inputData.searchBy}=${inputData.value}&page=${metaData.page + 1}`
         ).then(res => {
           const studentsData = res.data.data.students
           const meta = res.data.data.meta

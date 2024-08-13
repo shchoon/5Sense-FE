@@ -32,7 +32,7 @@ export default function BookedRoomReservation({ params }: { params: { id: string
         onSubmit={e => {
           e.preventDefault()
           instance
-            .post('/session-lesson-schedules', { ...reservationData })
+            .post('/api/session-lesson-schedules', { ...reservationData })
             .then(res => {
               alert('예약이 완료되었습니다')
               router.push('/room')

@@ -36,7 +36,7 @@ export default function SearchInput(props: IProps) {
     }
     if (props.type === 'payment') {
       instance(
-        `/billing-payments?searchBy=${searchBy}&${searchBy}=${inputValue}&PaymentStatus=${props.paymentStatus}`
+        `/api/billing-payments?searchBy=${searchBy}&${searchBy}=${inputValue}&PaymentStatus=${props.paymentStatus}`
       ).then(res => {
         const data = res.data.data.billingPayments
         const meta = res.data.data.meta

@@ -79,7 +79,7 @@ export default function PayPage() {
         })
       } else {
         instance(
-          `/billing-payments?searchBy=${inputData.searchBy}&${inputData.searchBy}=${inputData.value}&page=${
+          `/api/billing-payments?searchBy=${inputData.searchBy}&${inputData.searchBy}=${inputData.value}&page=${
             metaData.page + 1
           }&PaymentStatus=${currentPaymentStatus}`
         ).then(res => {
@@ -113,8 +113,8 @@ export default function PayPage() {
   useEffect(() => {
     let requestUrl =
       inputData.value === ''
-        ? `/billing-payments?page=1&take=10&searchBy=none&PaymentStatus=${currentPaymentStatus}`
-        : `/billing-payments?page=1&take=10&searchBy=${inputData.searchBy}&${inputData.searchBy}=${inputData.value}&PaymentStatus=${currentPaymentStatus}`
+        ? `/api/billing-payments?page=1&take=10&searchBy=none&PaymentStatus=${currentPaymentStatus}`
+        : `/api/billing-payments?page=1&take=10&searchBy=${inputData.searchBy}&${inputData.searchBy}=${inputData.value}&PaymentStatus=${currentPaymentStatus}`
     instance(requestUrl).then(res => {
       const studentsData = res.data.data.billingPayments
       const meta = res.data.data.meta
@@ -251,12 +251,12 @@ export default function PayPage() {
                         onClick={() => {
                           if (confirm('결제상태를 변경하시겠습니까?')) {
                             instance
-                              .patch(`/billing-payments/${data.id}`, {
+                              .patch(`/api/billing-payments/${data.id}`, {
                                 paymentStatus: 'Unpaid'
                               })
                               .then(res => {
                                 instance(
-                                  `/billing-payments?page=1&take=10&searchBy=none&PaymentStatus=${currentPaymentStatus}`
+                                  `/api/billing-payments?page=1&take=10&searchBy=none&PaymentStatus=${currentPaymentStatus}`
                                 ).then(res => {
                                   const studentsData = res.data.data.billingPayments
                                   const meta = res.data.data.meta
@@ -278,12 +278,12 @@ export default function PayPage() {
                         onClick={() => {
                           if (confirm('결제상태를 변경하시겠습니까?')) {
                             instance
-                              .patch(`/billing-payments/${data.id}`, {
+                              .patch(`/api/billing-payments/${data.id}`, {
                                 paymentStatus: 'Paid'
                               })
                               .then(res => {
                                 instance(
-                                  `/billing-payments?page=1&take=10&searchBy=none&PaymentStatus=${currentPaymentStatus}`
+                                  `/api/billing-payments?page=1&take=10&searchBy=none&PaymentStatus=${currentPaymentStatus}`
                                 ).then(res => {
                                   const studentsData = res.data.data.billingPayments
                                   const meta = res.data.data.meta

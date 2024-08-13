@@ -119,7 +119,7 @@ export default function InstructorPage() {
           })
         } else {
           instance(
-            `/teachers?searchBy=${inputData.searchBy}&${inputData.searchBy}=${inputData.value}&page=${
+            `/api/teachers?searchBy=${inputData.searchBy}&${inputData.searchBy}=${inputData.value}&page=${
               metaData.page + 1
             }`
           ).then(res => {

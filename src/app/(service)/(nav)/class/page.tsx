@@ -40,7 +40,7 @@ export default function ClassPage() {
   const [isRefresh, setIsRefresh] = useState<boolean>(false)
 
   const checkLessonUrl = (data: filterStateType, page: number) => {
-    let baseUrl = ['lessons/filters?']
+    let baseUrl = ['/api/lessons/filters?']
     if (data.classType !== '') {
       baseUrl.push(`type=${data.classType}`)
     } else {

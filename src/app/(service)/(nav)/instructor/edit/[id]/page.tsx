@@ -23,7 +23,7 @@ export default function InstructorRegister({ params }: { params: { id: string } 
 
   const onSubmit = () => {
     instance
-      .put(`/teachers/${instructorId}`, {
+      .put(`/api/teachers/${instructorId}`, {
         ...instructorInfo
       })
       .then(res => {

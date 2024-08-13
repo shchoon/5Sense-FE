@@ -87,14 +87,14 @@ export default function StudentEdit({ params }: { params: { studentId: string } 
         }
         /* 수강생 정보 수정에서 새로운 회차반 클래스 추가하고 일정추가를 하는 경우 */
         instance
-          .post('/session-lesson-registrations', {
+          .post('/api/session-lesson-registrations', {
             studentId: studentInfo.id,
             lessonId: sessionSchedule[0].lessonId,
             paymentStatus: sessionSchedule[0].paymentStatus
           })
           .then(res => {
             instance
-              .post('/session-lesson-schedules', {
+              .post('/api/session-lesson-schedules', {
                 lessonId: sessionSchedule[0].lessonId,
                 studentId: studentInfo.id,
                 sessionDate: new Date(sessionDate.year, sessionDate.month, sessionDate.date).toISOString(),
@@ -114,7 +114,7 @@ export default function StudentEdit({ params }: { params: { studentId: string } 
           date: Number(sessionSchedule[0].sessionDate.split('.')[2])
         }
         instance
-          .post('/session-lesson-schedules', {
+          .post('/api/session-lesson-schedules', {
             lessonId: sessionSchedule[0].lessonId,
             studentId: studentInfo.id,
             sessionDate: new Date(sessionDate.year, sessionDate.month, sessionDate.date).toISOString(),
@@ -123,12 +123,12 @@ export default function StudentEdit({ params }: { params: { studentId: string } 
             roomId: sessionSchedule[0].roomId
           })
           .then(res => {
-            router.push('/student')
+            router.push('/api/student')
           })
       }
     } else if (durationSchedule.length !== 0) {
       instance
-        .post('/duration-lesson-registrations', {
+        .post('/api/duration-lesson-registrations', {
           studentId: studentInfo.id,
           lessonId: durationSchedule[0].classId,
           paymentStatus: durationSchedule[0].paymentStatus
@@ -139,7 +139,7 @@ export default function StudentEdit({ params }: { params: { studentId: string } 
     } else if (sessionSchedule.length === 0 && durationSchedule.length === 0) {
       /* 단순 수강생 정보 수정 */
       instance
-        .put(`students/${studentInfo.id}`, {
+        .put(`/api/students/${studentInfo.id}`, {
           name: studentInfo.name,
           phone: studentInfo.phone,
           particulars: studentInfo.particulars

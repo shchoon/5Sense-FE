@@ -26,7 +26,7 @@ export default function RoomPage() {
   }
 
   const getRoomData = () => {
-    instance('lesson-rooms/daily', {
+    instance('/api/lesson-rooms/daily', {
       params: {
         date: new Date(calendarDate.year, calendarDate.month, calendarDate.date).toISOString()
       }

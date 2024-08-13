@@ -73,7 +73,7 @@ export default function StudentRegister() {
         const studentData = res.data.data
         const studentId = studentData.id
         instance
-          .post('/session-lesson-registrations', {
+          .post('/api/session-lesson-registrations', {
             studentId: studentId,
             lessonId: sessionSchedule[0].lessonId,
             paymentStatus: sessionSchedule[0].paymentStatus
@@ -85,7 +85,7 @@ export default function StudentRegister() {
               date: Number(sessionSchedule[0].sessionDate.split('.')[2])
             }
             instance
-              .post('/session-lesson-schedules', {
+              .post('/api/session-lesson-schedules', {
                 lessonId: sessionSchedule[0].lessonId,
                 studentId: studentId,
                 sessionDate: new Date(sessionDate.year, sessionDate.month, sessionDate.date).toISOString(),
@@ -103,7 +103,7 @@ export default function StudentRegister() {
         const studentData = res.data.data
         const studentId = studentData.id
         instance
-          .post('/duration-lesson-registrations', {
+          .post('/api/duration-lesson-registrations', {
             studentId: Number(studentId),
             lessonId: durationSchedule[0].classId,
             paymentStatus: durationSchedule[0].paymentStatus
